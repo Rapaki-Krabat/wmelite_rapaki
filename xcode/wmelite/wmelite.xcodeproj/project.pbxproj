@@ -1006,6 +1006,7 @@
 					"-DUSE_SDL_MIXER",
 					"-D__EXCLUDE_LIBTHEORA_PLAYER__",
 				);
+				OTHER_LDFLAGS = "-lbz2 ";
 				PRODUCT_NAME = "WME Lite";
 				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
@@ -1054,6 +1055,7 @@
 					"-DUSE_SDL_MIXER",
 					"-D__EXCLUDE_LIBTHEORA_PLAYER__",
 				);
+				OTHER_LDFLAGS = "-lbz2";
 				PRODUCT_NAME = "WME Lite";
 				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
