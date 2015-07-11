@@ -88,9 +88,11 @@ HRESULT CBSoundMgr::Initialize()
 	m_SoundAvailable = false;
 
 
+#ifndef USE_SDL_MIXER
 #ifdef __IPHONEOS__
 	#define BASS_CONFIG_IOS_MIXAUDIO 34
     BASS_SetConfig(BASS_CONFIG_IOS_MIXAUDIO, 6);
+#endif
 #endif
 
 	// check proper version of SDL_mixer

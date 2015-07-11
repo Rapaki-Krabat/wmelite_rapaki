@@ -9,22 +9,14 @@
 /* Begin PBXBuildFile section */
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
-		1E3C29FB175B5B6900B79FCB /* VidDataSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C29F5175B5A7B00B79FCB /* VidDataSource.cpp */; };
-		1E3C29FC175B5B6900B79FCB /* VidManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C29F7175B5A7B00B79FCB /* VidManager.cpp */; };
-		1E3C29FD175B5B6900B79FCB /* VidTheoraPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E3C29F9175B5A7B00B79FCB /* VidTheoraPlayer.cpp */; };
 		1E3C2A03175B604300B79FCB /* DejaVuSans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E3C2A02175B603200B79FCB /* DejaVuSans.ttf */; };
 		1E6BACA0178703630017D579 /* DirectoryOperations.c in Sources */ = {isa = PBXBuildFile; fileRef = 1E6BAC9C178703630017D579 /* DirectoryOperations.c */; };
 		1E6BACA1178703630017D579 /* FileOperations.c in Sources */ = {isa = PBXBuildFile; fileRef = 1E6BAC9E178703630017D579 /* FileOperations.c */; };
 		1EE8C095174FFBD4000B5435 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE8C094174FFBD4000B5435 /* AVFoundation.framework */; };
 		1EE8C097174FFC2C000B5435 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE8C096174FFC2C000B5435 /* CoreMedia.framework */; };
 		1EE8C099174FFC65000B5435 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE8C098174FFC65000B5435 /* CoreVideo.framework */; };
-		1EE8C09E174FFDB7000B5435 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE8C09A174FFDB7000B5435 /* libogg.a */; };
-		1EE8C09F174FFDB7000B5435 /* libtheora.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE8C09B174FFDB7000B5435 /* libtheora.a */; };
-		1EE8C0A0174FFDB7000B5435 /* libtheoraplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE8C09C174FFDB7000B5435 /* libtheoraplayer.a */; };
-		1EE8C0A1174FFDB7000B5435 /* libtremor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EE8C09D174FFDB7000B5435 /* libtremor.a */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
-		461507A813520AFD000E96C4 /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 461507A713520AFD000E96C4 /* libbass.a */; };
 		4615089A13520B93000E96C4 /* AdActor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 461507B313520B93000E96C4 /* AdActor.cpp */; };
 		4615089B13520B93000E96C4 /* AdActorDir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 461507B513520B93000E96C4 /* AdActorDir.cpp */; };
 		4615089C13520B93000E96C4 /* AdEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 461507B713520B93000E96C4 /* AdEntity.cpp */; };
@@ -89,8 +81,6 @@
 		461508D713520B93000E96C4 /* BScriptable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615082E13520B93000E96C4 /* BScriptable.cpp */; };
 		461508D813520B93000E96C4 /* BScriptHolder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615083013520B93000E96C4 /* BScriptHolder.cpp */; };
 		461508D913520B93000E96C4 /* BSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615083213520B93000E96C4 /* BSound.cpp */; };
-		461508DA13520B93000E96C4 /* BSoundBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615083413520B93000E96C4 /* BSoundBuffer.cpp */; };
-		461508DB13520B93000E96C4 /* BSoundMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615083613520B93000E96C4 /* BSoundMgr.cpp */; };
 		461508DC13520B93000E96C4 /* BSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615083813520B93000E96C4 /* BSprite.cpp */; };
 		461508DD13520B93000E96C4 /* BStringTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615083A13520B93000E96C4 /* BStringTable.cpp */; };
 		461508DE13520B93000E96C4 /* BSubFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615083C13520B93000E96C4 /* BSubFrame.cpp */; };
@@ -139,7 +129,6 @@
 		4615090913520B93000E96C4 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615089413520B93000E96C4 /* utils.cpp */; };
 		4615090A13520B93000E96C4 /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4615089613520B93000E96C4 /* Vector2.cpp */; };
 		4615094013521059000E96C4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4615093F13521059000E96C4 /* CFNetwork.framework */; };
-		461509531352207F000E96C4 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 461509521352207F000E96C4 /* libfreetype.a */; };
 		469528CB1391348600A42BB9 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 469528C61391348600A42BB9 /* Icon-72.png */; };
 		469528CC1391348600A42BB9 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 469528C71391348600A42BB9 /* Icon-Small-50.png */; };
 		469528CD1391348600A42BB9 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 469528C81391348600A42BB9 /* Icon-Small.png */; };
@@ -149,10 +138,15 @@
 		46D0ADFD13E1A39A00CBDA40 /* SXStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D0ADFB13E1A39A00CBDA40 /* SXStore.cpp */; };
 		46D0AE0313E1A50800CBDA40 /* IOS_StoreKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D0AE0213E1A50800CBDA40 /* IOS_StoreKit.m */; };
 		46D0AE0513E1A73000CBDA40 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D0AE0413E1A73000CBDA40 /* StoreKit.framework */; };
-		46EA217415C01C2E00A18708 /* libfreeimage-iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA217215C01C2E00A18708 /* libfreeimage-iphone.a */; };
-		46EA217515C01C2E00A18708 /* libfreeimage-iphonesimulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA217315C01C2E00A18708 /* libfreeimage-iphonesimulator.a */; };
-		46EA218115C03A2200A18708 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46EA218015C03A2200A18708 /* libSDL.a */; };
 		46EB701A1359B54A00E280F6 /* data.dcp in Resources */ = {isa = PBXBuildFile; fileRef = 46EB70191359B54A00E280F6 /* data.dcp */; };
+		659C7CE81B51167400D2F190 /* BSoundBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659C7CE61B51167400D2F190 /* BSoundBuffer.cpp */; };
+		659C7CE91B51167400D2F190 /* BSoundMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659C7CE71B51167400D2F190 /* BSoundMgr.cpp */; };
+		659C7CEB1B511A2C00D2F190 /* libecho.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CEA1B511A2C00D2F190 /* libecho.a */; };
+		659C7CED1B511A3900D2F190 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CEC1B511A3900D2F190 /* libfreeimage.a */; };
+		659C7CEF1B511A4600D2F190 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CEE1B511A4600D2F190 /* libfreetype.a */; };
+		659C7CF11B511A5200D2F190 /* libreverb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CF01B511A5200D2F190 /* libreverb.a */; };
+		659C7CF31B511A6100D2F190 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CF21B511A6100D2F190 /* libSDL2.a */; };
+		659C7CF51B511A7000D2F190 /* libSDL2_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CF41B511A7000D2F190 /* libSDL2_mixer.a */; };
 		FD779EDE0E26BA1200F39101 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD779EDD0E26BA1200F39101 /* CoreAudio.framework */; };
 		FD77A07D0E26BD8C00F39101 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FD77A07C0E26BD8C00F39101 /* Icon.png */; };
 		FD77A07F0E26BDA900F39101 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = FD77A07E0E26BDA900F39101 /* Default.png */; };
@@ -164,12 +158,6 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* wmelite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wmelite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		1E3C29F5175B5A7B00B79FCB /* VidDataSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VidDataSource.cpp; path = ../../src/VidDataSource.cpp; sourceTree = "<group>"; };
-		1E3C29F6175B5A7B00B79FCB /* VidDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VidDataSource.h; path = ../../src/VidDataSource.h; sourceTree = "<group>"; };
-		1E3C29F7175B5A7B00B79FCB /* VidManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VidManager.cpp; path = ../../src/VidManager.cpp; sourceTree = "<group>"; };
-		1E3C29F8175B5A7B00B79FCB /* VidManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VidManager.h; path = ../../src/VidManager.h; sourceTree = "<group>"; };
-		1E3C29F9175B5A7B00B79FCB /* VidTheoraPlayer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VidTheoraPlayer.cpp; path = ../../src/VidTheoraPlayer.cpp; sourceTree = "<group>"; };
-		1E3C29FA175B5A7B00B79FCB /* VidTheoraPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VidTheoraPlayer.h; path = ../../src/VidTheoraPlayer.h; sourceTree = "<group>"; };
 		1E3C2A02175B603200B79FCB /* DejaVuSans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = DejaVuSans.ttf; sourceTree = "<group>"; };
 		1E6BAC9C178703630017D579 /* DirectoryOperations.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = DirectoryOperations.c; path = ../../src/DirectoryOperations.c; sourceTree = "<group>"; };
 		1E6BAC9D178703630017D579 /* DirectoryOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DirectoryOperations.h; path = ../../src/DirectoryOperations.h; sourceTree = "<group>"; };
@@ -178,13 +166,8 @@
 		1EE8C094174FFBD4000B5435 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		1EE8C096174FFC2C000B5435 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		1EE8C098174FFC65000B5435 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
-		1EE8C09A174FFDB7000B5435 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = ../dep/libtheoraplayer/lib/libogg.a; sourceTree = "<group>"; };
-		1EE8C09B174FFDB7000B5435 /* libtheora.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtheora.a; path = ../dep/libtheoraplayer/lib/libtheora.a; sourceTree = "<group>"; };
-		1EE8C09C174FFDB7000B5435 /* libtheoraplayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtheoraplayer.a; path = ../dep/libtheoraplayer/lib/libtheoraplayer.a; sourceTree = "<group>"; };
-		1EE8C09D174FFDB7000B5435 /* libtremor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtremor.a; path = ../dep/libtheoraplayer/lib/libtremor.a; sourceTree = "<group>"; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		461507A713520AFD000E96C4 /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbass.a; path = ../dep/bass/lib/libbass.a; sourceTree = SOURCE_ROOT; };
 		461507B313520B93000E96C4 /* AdActor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdActor.cpp; path = ../../src/AdActor.cpp; sourceTree = SOURCE_ROOT; };
 		461507B413520B93000E96C4 /* AdActor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdActor.h; path = ../../src/AdActor.h; sourceTree = SOURCE_ROOT; };
 		461507B513520B93000E96C4 /* AdActorDir.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdActorDir.cpp; path = ../../src/AdActorDir.cpp; sourceTree = SOURCE_ROOT; };
@@ -314,9 +297,7 @@
 		4615083113520B93000E96C4 /* BScriptHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BScriptHolder.h; path = ../../src/BScriptHolder.h; sourceTree = SOURCE_ROOT; };
 		4615083213520B93000E96C4 /* BSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSound.cpp; path = ../../src/BSound.cpp; sourceTree = SOURCE_ROOT; };
 		4615083313520B93000E96C4 /* BSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSound.h; path = ../../src/BSound.h; sourceTree = SOURCE_ROOT; };
-		4615083413520B93000E96C4 /* BSoundBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSoundBuffer.cpp; path = ../../src/BSoundBuffer.cpp; sourceTree = SOURCE_ROOT; };
 		4615083513520B93000E96C4 /* BSoundBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSoundBuffer.h; path = ../../src/BSoundBuffer.h; sourceTree = SOURCE_ROOT; };
-		4615083613520B93000E96C4 /* BSoundMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSoundMgr.cpp; path = ../../src/BSoundMgr.cpp; sourceTree = SOURCE_ROOT; };
 		4615083713520B93000E96C4 /* BSoundMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSoundMgr.h; path = ../../src/BSoundMgr.h; sourceTree = SOURCE_ROOT; };
 		4615083813520B93000E96C4 /* BSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSprite.cpp; path = ../../src/BSprite.cpp; sourceTree = SOURCE_ROOT; };
 		4615083913520B93000E96C4 /* BSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSprite.h; path = ../../src/BSprite.h; sourceTree = SOURCE_ROOT; };
@@ -417,7 +398,6 @@
 		4615089813520B93000E96C4 /* wintypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wintypes.h; path = ../../src/wintypes.h; sourceTree = SOURCE_ROOT; };
 		4615089913520B93000E96C4 /* wme_debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wme_debugger.h; path = ../../src/wme_debugger.h; sourceTree = SOURCE_ROOT; };
 		4615093F13521059000E96C4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		461509521352207F000E96C4 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../dep/freetype/lib/libfreetype.a; sourceTree = SOURCE_ROOT; };
 		469528C61391348600A42BB9 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		469528C71391348600A42BB9 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
 		469528C81391348600A42BB9 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
@@ -431,10 +411,15 @@
 		46D0AE0213E1A50800CBDA40 /* IOS_StoreKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOS_StoreKit.m; path = ../../src/IOS_StoreKit.m; sourceTree = "<group>"; };
 		46D0AE0413E1A73000CBDA40 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		46D0AE0613E1A8DB00CBDA40 /* IOS_StoreKit_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOS_StoreKit_interface.h; path = ../../src/IOS_StoreKit_interface.h; sourceTree = "<group>"; };
-		46EA217215C01C2E00A18708 /* libfreeimage-iphone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfreeimage-iphone.a"; path = "../dep/FreeImage/lib/libfreeimage-iphone.a"; sourceTree = "<group>"; };
-		46EA217315C01C2E00A18708 /* libfreeimage-iphonesimulator.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfreeimage-iphonesimulator.a"; path = "../dep/FreeImage/lib/libfreeimage-iphonesimulator.a"; sourceTree = "<group>"; };
-		46EA218015C03A2200A18708 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = ../dep/SDL/lib/libSDL.a; sourceTree = "<group>"; };
 		46EB70191359B54A00E280F6 /* data.dcp */ = {isa = PBXFileReference; lastKnownFileType = file; path = data.dcp; sourceTree = "<group>"; };
+		659C7CE61B51167400D2F190 /* BSoundBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSoundBuffer.cpp; path = ../../src/snd_SDL_mixer/BSoundBuffer.cpp; sourceTree = "<group>"; };
+		659C7CE71B51167400D2F190 /* BSoundMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSoundMgr.cpp; path = ../../src/snd_SDL_mixer/BSoundMgr.cpp; sourceTree = "<group>"; };
+		659C7CEA1B511A2C00D2F190 /* libecho.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libecho.a; path = ../dep/libecho/libsimulator/libecho.a; sourceTree = "<group>"; };
+		659C7CEC1B511A3900D2F190 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../dep/libfreeimage/libsimulator/libfreeimage.a; sourceTree = "<group>"; };
+		659C7CEE1B511A4600D2F190 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../dep/libfreetype/libsimulator/libfreetype.a; sourceTree = "<group>"; };
+		659C7CF01B511A5200D2F190 /* libreverb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreverb.a; path = ../dep/libreverb/libsimulator/libreverb.a; sourceTree = "<group>"; };
+		659C7CF21B511A6100D2F190 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = ../dep/libSDL2/libsimulator/libSDL2.a; sourceTree = "<group>"; };
+		659C7CF41B511A7000D2F190 /* libSDL2_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2_mixer.a; path = ../dep/libSDL2_Mixer/libsimulator/libSDL2_mixer.a; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD779EDD0E26BA1200F39101 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		FD77A07C0E26BD8C00F39101 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -448,27 +433,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				659C7CF51B511A7000D2F190 /* libSDL2_mixer.a in Frameworks */,
 				1EE8C099174FFC65000B5435 /* CoreVideo.framework in Frameworks */,
 				1EE8C097174FFC2C000B5435 /* CoreMedia.framework in Frameworks */,
+				659C7CEF1B511A4600D2F190 /* libfreetype.a in Frameworks */,
 				1EE8C095174FFBD4000B5435 /* AVFoundation.framework in Frameworks */,
+				659C7CED1B511A3900D2F190 /* libfreeimage.a in Frameworks */,
 				46D0AE0513E1A73000CBDA40 /* StoreKit.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				659C7CF11B511A5200D2F190 /* libreverb.a in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				659C7CEB1B511A2C00D2F190 /* libecho.a in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
 				FD779EDE0E26BA1200F39101 /* CoreAudio.framework in Frameworks */,
 				FD77A0850E26BDB800F39101 /* AudioToolbox.framework in Frameworks */,
 				FDB8BFC60E5A0F6A00980157 /* CoreGraphics.framework in Frameworks */,
-				461507A813520AFD000E96C4 /* libbass.a in Frameworks */,
 				4615094013521059000E96C4 /* CFNetwork.framework in Frameworks */,
-				461509531352207F000E96C4 /* libfreetype.a in Frameworks */,
-				46EA217415C01C2E00A18708 /* libfreeimage-iphone.a in Frameworks */,
-				46EA217515C01C2E00A18708 /* libfreeimage-iphonesimulator.a in Frameworks */,
-				46EA218115C03A2200A18708 /* libSDL.a in Frameworks */,
-				1EE8C09E174FFDB7000B5435 /* libogg.a in Frameworks */,
-				1EE8C09F174FFDB7000B5435 /* libtheora.a in Frameworks */,
-				1EE8C0A0174FFDB7000B5435 /* libtheoraplayer.a in Frameworks */,
-				1EE8C0A1174FFDB7000B5435 /* libtremor.a in Frameworks */,
+				659C7CF31B511A6100D2F190 /* libSDL2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,16 +479,12 @@
 		29B97315FDCFA39411CA2CEA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				659C7CE61B51167400D2F190 /* BSoundBuffer.cpp */,
+				659C7CE71B51167400D2F190 /* BSoundMgr.cpp */,
 				1E6BAC9C178703630017D579 /* DirectoryOperations.c */,
 				1E6BAC9D178703630017D579 /* DirectoryOperations.h */,
 				1E6BAC9E178703630017D579 /* FileOperations.c */,
 				1E6BAC9F178703630017D579 /* FileOperations.h */,
-				1E3C29F5175B5A7B00B79FCB /* VidDataSource.cpp */,
-				1E3C29F6175B5A7B00B79FCB /* VidDataSource.h */,
-				1E3C29F7175B5A7B00B79FCB /* VidManager.cpp */,
-				1E3C29F8175B5A7B00B79FCB /* VidManager.h */,
-				1E3C29F9175B5A7B00B79FCB /* VidTheoraPlayer.cpp */,
-				1E3C29FA175B5A7B00B79FCB /* VidTheoraPlayer.h */,
 				46D0ADFB13E1A39A00CBDA40 /* SXStore.cpp */,
 				46D0AE0613E1A8DB00CBDA40 /* IOS_StoreKit_interface.h */,
 				46D0ADFC13E1A39A00CBDA40 /* SXStore.h */,
@@ -639,9 +617,7 @@
 				4615083113520B93000E96C4 /* BScriptHolder.h */,
 				4615083213520B93000E96C4 /* BSound.cpp */,
 				4615083313520B93000E96C4 /* BSound.h */,
-				4615083413520B93000E96C4 /* BSoundBuffer.cpp */,
 				4615083513520B93000E96C4 /* BSoundBuffer.h */,
-				4615083613520B93000E96C4 /* BSoundMgr.cpp */,
 				4615083713520B93000E96C4 /* BSoundMgr.h */,
 				4615083813520B93000E96C4 /* BSprite.cpp */,
 				4615083913520B93000E96C4 /* BSprite.h */,
@@ -769,6 +745,12 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				659C7CF41B511A7000D2F190 /* libSDL2_mixer.a */,
+				659C7CF21B511A6100D2F190 /* libSDL2.a */,
+				659C7CF01B511A5200D2F190 /* libreverb.a */,
+				659C7CEE1B511A4600D2F190 /* libfreetype.a */,
+				659C7CEC1B511A3900D2F190 /* libfreeimage.a */,
+				659C7CEA1B511A2C00D2F190 /* libecho.a */,
 				1EE8C098174FFC65000B5435 /* CoreVideo.framework */,
 				1EE8C096174FFC2C000B5435 /* CoreMedia.framework */,
 				1EE8C094174FFBD4000B5435 /* AVFoundation.framework */,
@@ -781,15 +763,6 @@
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
-				461509521352207F000E96C4 /* libfreetype.a */,
-				46EA218015C03A2200A18708 /* libSDL.a */,
-				46EA217315C01C2E00A18708 /* libfreeimage-iphonesimulator.a */,
-				46EA217215C01C2E00A18708 /* libfreeimage-iphone.a */,
-				461507A713520AFD000E96C4 /* libbass.a */,
-				1EE8C09A174FFDB7000B5435 /* libogg.a */,
-				1EE8C09B174FFDB7000B5435 /* libtheora.a */,
-				1EE8C09C174FFDB7000B5435 /* libtheoraplayer.a */,
-				1EE8C09D174FFDB7000B5435 /* libtremor.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -865,9 +838,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E3C29FB175B5B6900B79FCB /* VidDataSource.cpp in Sources */,
-				1E3C29FC175B5B6900B79FCB /* VidManager.cpp in Sources */,
-				1E3C29FD175B5B6900B79FCB /* VidTheoraPlayer.cpp in Sources */,
 				4615089A13520B93000E96C4 /* AdActor.cpp in Sources */,
 				4615089B13520B93000E96C4 /* AdActorDir.cpp in Sources */,
 				4615089C13520B93000E96C4 /* AdEntity.cpp in Sources */,
@@ -932,8 +902,6 @@
 				461508D713520B93000E96C4 /* BScriptable.cpp in Sources */,
 				461508D813520B93000E96C4 /* BScriptHolder.cpp in Sources */,
 				461508D913520B93000E96C4 /* BSound.cpp in Sources */,
-				461508DA13520B93000E96C4 /* BSoundBuffer.cpp in Sources */,
-				461508DB13520B93000E96C4 /* BSoundMgr.cpp in Sources */,
 				461508DC13520B93000E96C4 /* BSprite.cpp in Sources */,
 				461508DD13520B93000E96C4 /* BStringTable.cpp in Sources */,
 				461508DE13520B93000E96C4 /* BSubFrame.cpp in Sources */,
@@ -961,6 +929,8 @@
 				461508F413520B93000E96C4 /* StringUtil.cpp in Sources */,
 				461508F513520B93000E96C4 /* SXArray.cpp in Sources */,
 				461508F613520B93000E96C4 /* SXDate.cpp in Sources */,
+				659C7CE91B51167400D2F190 /* BSoundMgr.cpp in Sources */,
+				659C7CE81B51167400D2F190 /* BSoundBuffer.cpp in Sources */,
 				461508F713520B93000E96C4 /* SXFile.cpp in Sources */,
 				461508F813520B93000E96C4 /* SXMath.cpp in Sources */,
 				461508F913520B93000E96C4 /* SXMemBuffer.cpp in Sources */,
@@ -996,39 +966,61 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7s,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/bass/include\"",
-					"\"$(SRCROOT)/../dep/FreeImage/include\"",
-					"\"$(SRCROOT)/../dep/freetype/include\"",
-					"\"$(SRCROOT)/../dep/SDL/include\"",
-					"\"$(SRCROOT)/../dep/libtheoraplayer/include\"",
+					"\"$(SRCROOT)/../dep/libfreeimage/include\"",
+					"\"$(SRCROOT)/../dep/libfreetype/include\"",
+					"\"$(SRCROOT)/../dep/libSDL2/include\"",
+					"\"$(SRCROOT)/../dep/libSDL2_Mixer/include\"",
+					"\"$(SRCROOT)/../dep/libecho/include\"",
+					"\"$(SRCROOT)/../dep/libreverb/include\"",
+					"\"$(SRCROOT)/../dep/libreverb/include/Reverb/lib/\"",
+					"\"$(SRCROOT)/../dep/libreverb/include/Common/lib/\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/bass/lib\"",
-					"\"$(SRCROOT)/../dep/FreeImage/lib\"",
-					"\"$(SRCROOT)/../dep/freetype/lib\"",
-					"\"$(SRCROOT)/../dep/SDL/lib\"",
-					"\"$(SRCROOT)/../dep/libtheoraplayer/lib\"",
+					"\"$(SRCROOT)/../dep/libfreeimage/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libfreetype/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libSDL2/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libSDL2_Mixer/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libecho/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libreverb/libsimulator\"",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreeimage/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreetype/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libreverb/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2_Mixer/libsimulator",
 				);
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-lz";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DUSE_SDL_MIXER",
+					"-D__EXCLUDE_LIBTHEORA_PLAYER__",
+				);
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-lbz2",
+				);
 				PRODUCT_NAME = wmelite;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv6 i386";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WARNING_CFLAGS = "-Wno-deprecated-writable-strings";
 			};
 			name = Debug;
@@ -1037,37 +1029,59 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7s,
+				);
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/bass/include\"",
-					"\"$(SRCROOT)/../dep/FreeImage/include\"",
-					"\"$(SRCROOT)/../dep/freetype/include\"",
-					"\"$(SRCROOT)/../dep/SDL/include\"",
-					"\"$(SRCROOT)/../dep/libtheoraplayer/include\"",
+					"\"$(SRCROOT)/../dep/libfreeimage/include\"",
+					"\"$(SRCROOT)/../dep/libfreetype/include\"",
+					"\"$(SRCROOT)/../dep/libSDL2/include\"",
+					"\"$(SRCROOT)/../dep/libSDL2_Mixer/include\"",
+					"\"$(SRCROOT)/../dep/libecho/include\"",
+					"\"$(SRCROOT)/../dep/libreverb/include\"",
+					"\"$(SRCROOT)/../dep/libreverb/include/Reverb/lib/\"",
+					"\"$(SRCROOT)/../dep/libreverb/include/Common/lib/\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/bass/lib\"",
-					"\"$(SRCROOT)/../dep/FreeImage/lib\"",
-					"\"$(SRCROOT)/../dep/freetype/lib\"",
-					"\"$(SRCROOT)/../dep/SDL/lib\"",
-					"\"$(SRCROOT)/../dep/libtheoraplayer/lib\"",
+					"\"$(SRCROOT)/../dep/libfreeimage/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libfreetype/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libSDL2/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libSDL2_Mixer/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libecho/libsimulator\"",
+					"\"$(SRCROOT)/../dep/libreverb/libsimulator\"",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreeimage/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreetype/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libreverb/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2/libsimulator",
+					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2_Mixer/libsimulator",
 				);
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-lz";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DUSE_SDL_MIXER",
+					"-D__EXCLUDE_LIBTHEORA_PLAYER__",
+				);
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-lbz2",
+				);
 				PRODUCT_NAME = wmelite;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 armv6 i386";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WARNING_CFLAGS = "-Wno-deprecated-writable-strings";
 			};
 			name = Release;
