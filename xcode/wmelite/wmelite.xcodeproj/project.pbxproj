@@ -12,8 +12,6 @@
 		1E3D7C3C1743F21F0038FD9C /* data.dcp in Resources */ = {isa = PBXBuildFile; fileRef = 1E3D7C3B1743F21F0038FD9C /* data.dcp */; };
 		1E6BAC9A1787006B0017D579 /* DirectoryOperations.c in Sources */ = {isa = PBXBuildFile; fileRef = 1E6BAC961787006B0017D579 /* DirectoryOperations.c */; };
 		1E6BAC9B1787006B0017D579 /* FileOperations.c in Sources */ = {isa = PBXBuildFile; fileRef = 1E6BAC981787006B0017D579 /* FileOperations.c */; };
-		1EDECB6817456DB5008020C3 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EDECB6717456DB5008020C3 /* SDL2.framework */; };
-		1EDECB6917456DBD008020C3 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 1EDECB6717456DB5008020C3 /* SDL2.framework */; };
 		46D40E4D134A44DC002829D8 /* AdActor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D40D66134A44DB002829D8 /* AdActor.cpp */; };
 		46D40E4E134A44DC002829D8 /* AdActorDir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D40D68134A44DB002829D8 /* AdActorDir.cpp */; };
 		46D40E4F134A44DC002829D8 /* AdEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D40D6A134A44DB002829D8 /* AdEntity.cpp */; };
@@ -125,12 +123,14 @@
 		46D40EBB134A44DC002829D8 /* UIWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D40E45134A44DC002829D8 /* UIWindow.cpp */; };
 		46D40EBC134A44DC002829D8 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D40E47134A44DC002829D8 /* utils.cpp */; };
 		46D40EBD134A44DC002829D8 /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D40E49134A44DC002829D8 /* Vector2.cpp */; };
-		46D40F6C134A5D0F002829D8 /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D40F6B134A5D0F002829D8 /* libz.a */; };
-		46D40F72134A5D45002829D8 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D40F71134A5D45002829D8 /* libfreeimage.a */; };
-		46D40F79134A5D92002829D8 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D40F78134A5D92002829D8 /* libfreetype.a */; };
-		656744151B35B06F00D96DAD /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 656744141B35B06F00D96DAD /* SDL2_mixer.framework */; };
 		6567454E1B35BB3A00D96DAD /* BSoundBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6567454C1B35BB3A00D96DAD /* BSoundBuffer.cpp */; };
 		6567454F1B35BB3A00D96DAD /* BSoundMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6567454D1B35BB3A00D96DAD /* BSoundMgr.cpp */; };
+		659C7CDB1B510A0300D2F190 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CDA1B510A0300D2F190 /* SDL2.framework */; };
+		659C7CDD1B510A1300D2F190 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CDC1B510A1300D2F190 /* SDL2_mixer.framework */; };
+		659C7CDF1B510A3300D2F190 /* libreverb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CDE1B510A3300D2F190 /* libreverb.a */; };
+		659C7CE11B510A3E00D2F190 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CE01B510A3E00D2F190 /* libfreetype.a */; };
+		659C7CE31B510A4D00D2F190 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CE21B510A4D00D2F190 /* libfreeimage.a */; };
+		659C7CE51B510A5700D2F190 /* libecho.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CE41B510A5700D2F190 /* libecho.a */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -142,7 +142,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1EDECB6917456DBD008020C3 /* SDL2.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,7 +160,6 @@
 		1E6BAC971787006B0017D579 /* DirectoryOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DirectoryOperations.h; path = ../../src/DirectoryOperations.h; sourceTree = "<group>"; };
 		1E6BAC981787006B0017D579 /* FileOperations.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = FileOperations.c; path = ../../src/FileOperations.c; sourceTree = "<group>"; };
 		1E6BAC991787006B0017D579 /* FileOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileOperations.h; path = ../../src/FileOperations.h; sourceTree = "<group>"; };
-		1EDECB6717456DB5008020C3 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../dep/SDL/SDL2.framework; sourceTree = "<group>"; };
 		256AC3F00F4B6AF500CF3369 /* wmelite_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wmelite_Prefix.pch; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -394,12 +392,14 @@
 		46D40E4A134A44DC002829D8 /* Vector2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector2.h; path = ../../src/Vector2.h; sourceTree = SOURCE_ROOT; };
 		46D40E4B134A44DC002829D8 /* wintypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wintypes.h; path = ../../src/wintypes.h; sourceTree = SOURCE_ROOT; };
 		46D40E4C134A44DC002829D8 /* wme_debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wme_debugger.h; path = ../../src/wme_debugger.h; sourceTree = SOURCE_ROOT; };
-		46D40F6B134A5D0F002829D8 /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = ../dep/zlib/lib/libz.a; sourceTree = SOURCE_ROOT; };
-		46D40F71134A5D45002829D8 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../dep/FreeImage/lib/libfreeimage.a; sourceTree = SOURCE_ROOT; };
-		46D40F78134A5D92002829D8 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../dep/freetype/lib/libfreetype.a; sourceTree = SOURCE_ROOT; };
-		656744141B35B06F00D96DAD /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../dep/SDL_mixer/SDL2_mixer.framework; sourceTree = "<group>"; };
 		6567454C1B35BB3A00D96DAD /* BSoundBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSoundBuffer.cpp; path = ../../src/snd_SDL_mixer/BSoundBuffer.cpp; sourceTree = "<group>"; };
 		6567454D1B35BB3A00D96DAD /* BSoundMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSoundMgr.cpp; path = ../../src/snd_SDL_mixer/BSoundMgr.cpp; sourceTree = "<group>"; };
+		659C7CDA1B510A0300D2F190 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../dep/libSDL2/framework/SDL2.framework; sourceTree = "<group>"; };
+		659C7CDC1B510A1300D2F190 /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../dep/libSDL2_Mixer/framework/SDL2_mixer.framework; sourceTree = "<group>"; };
+		659C7CDE1B510A3300D2F190 /* libreverb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreverb.a; path = ../dep/libreverb/lib/libreverb.a; sourceTree = "<group>"; };
+		659C7CE01B510A3E00D2F190 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../dep/libfreetype/lib/libfreetype.a; sourceTree = "<group>"; };
+		659C7CE21B510A4D00D2F190 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../dep/libfreeimage/lib/libfreeimage.a; sourceTree = "<group>"; };
+		659C7CE41B510A5700D2F190 /* libecho.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libecho.a; path = ../dep/libecho/lib/libecho.a; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* wmelite-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "wmelite-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* WME Lite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WME Lite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -409,12 +409,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				656744151B35B06F00D96DAD /* SDL2_mixer.framework in Frameworks */,
+				659C7CDB1B510A0300D2F190 /* SDL2.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				46D40F6C134A5D0F002829D8 /* libz.a in Frameworks */,
-				46D40F72134A5D45002829D8 /* libfreeimage.a in Frameworks */,
-				46D40F79134A5D92002829D8 /* libfreetype.a in Frameworks */,
-				1EDECB6817456DB5008020C3 /* SDL2.framework in Frameworks */,
+				659C7CE11B510A3E00D2F190 /* libfreetype.a in Frameworks */,
+				659C7CE51B510A5700D2F190 /* libecho.a in Frameworks */,
+				659C7CE31B510A4D00D2F190 /* libfreeimage.a in Frameworks */,
+				659C7CDD1B510A1300D2F190 /* SDL2_mixer.framework in Frameworks */,
+				659C7CDF1B510A3300D2F190 /* libreverb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -725,13 +726,14 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				656744141B35B06F00D96DAD /* SDL2_mixer.framework */,
-				1EDECB6717456DB5008020C3 /* SDL2.framework */,
+				659C7CE41B510A5700D2F190 /* libecho.a */,
+				659C7CE21B510A4D00D2F190 /* libfreeimage.a */,
+				659C7CE01B510A3E00D2F190 /* libfreetype.a */,
+				659C7CDE1B510A3300D2F190 /* libreverb.a */,
+				659C7CDC1B510A1300D2F190 /* SDL2_mixer.framework */,
+				659C7CDA1B510A0300D2F190 /* SDL2.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
-				46D40F6B134A5D0F002829D8 /* libz.a */,
-				46D40F71134A5D45002829D8 /* libfreeimage.a */,
-				46D40F78134A5D92002829D8 /* libfreetype.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -965,17 +967,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_WARN_EMPTY_BODY = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					/Library/Frameworks,
-					"\"$(SRCROOT)/../dep/SDL\"",
-					"\"$(SRCROOT)/../dep/libtheoraplayer\"",
-					"/Users/daniel/wmelite-rapaki-edition/xcode/dep/SDL_mixer",
-					"$(SRCROOT)/../dep/SDL_mixer",
+					"\"$(SRCROOT)/../dep/libSDL2/framework\"",
+					"\"$(SRCROOT)/../dep/libSDL2_mixer/framework\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
@@ -985,21 +984,23 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				HEADER_SEARCH_PATHS = (
-					../dep/SDL/SDL2.framework/Headers,
-					../dep/freetype/include,
-					../dep/FreeImage/include,
-					../dep/zlib/include,
-					../dep/SDL_mixer/SDL2_mixer.framework/Headers,
-					../dep/libeffects/,
-					../dep/libecho/,
+					../dep/libSDL2/framework/SDL2.framework/Headers,
+					../dep/libSDL2_mixer/framework/SDL2_mixer.framework/Headers,
+					../dep/libfreetype/include,
+					../dep/libfreeimage/include,
+					../dep/libreverb/include/,
+					../dep/libecho/include/,
+					../dep/libreverb/include/Reverb/lib/,
+					../dep/libreverb/include/Common/lib/,
 				);
 				INFOPLIST_FILE = "wmelite-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/zlib/lib\"",
-					"\"$(SRCROOT)/../dep/FreeImage/lib\"",
-					"\"$(SRCROOT)/../dep/freetype/lib\"",
+					"\"$(SRCROOT)/../dep/libfreeimage/lib\"",
+					"\"$(SRCROOT)/../dep/libfreetype/lib\"",
+					"\"$(SRCROOT)/../dep/libecho/lib\"",
+					"\"$(SRCROOT)/../dep/libreverb/lib\"",
 				);
 				OTHER_CFLAGS = (
 					"-DUSE_SDL_MIXER",
@@ -1007,6 +1008,7 @@
 				);
 				PRODUCT_NAME = "WME Lite";
 				SDKROOT = macosx;
+				VALID_ARCHS = "i386 x86_64";
 				WARNING_CFLAGS = "-Wno-deprecated-writable-strings";
 			};
 			name = Debug;
@@ -1015,17 +1017,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_WARN_EMPTY_BODY = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
-					/Library/Frameworks,
-					"\"$(SRCROOT)/../dep/SDL\"",
-					"\"$(SRCROOT)/../dep/libtheoraplayer\"",
-					"/Users/daniel/wmelite-rapaki-edition/xcode/dep/SDL_mixer",
-					"$(SRCROOT)/../dep/SDL_mixer",
+					"\"$(SRCROOT)/../dep/libSDL2/framework\"",
+					"\"$(SRCROOT)/../dep/libSDL2_mixer/framework\"",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1033,21 +1032,23 @@
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				HEADER_SEARCH_PATHS = (
-					../dep/SDL/SDL2.framework/Headers,
-					../dep/freetype/include,
-					../dep/FreeImage/include,
-					../dep/zlib/include,
-					../dep/SDL_mixer/SDL2_mixer.framework/Headers,
-					../dep/libeffects/,
-					../dep/libecho/,
+					../dep/libSDL2/framework/SDL2.framework/Headers,
+					../dep/libSDL2_mixer/framework/SDL2_mixer.framework/Headers,
+					../dep/libfreetype/include,
+					../dep/libfreeimage/include,
+					../dep/libreverb/include/,
+					../dep/libecho/include/,
+					../dep/libreverb/include/Reverb/lib/,
+					../dep/libreverb/include/Common/lib/,
 				);
 				INFOPLIST_FILE = "wmelite-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/zlib/lib\"",
-					"\"$(SRCROOT)/../dep/FreeImage/lib\"",
-					"\"$(SRCROOT)/../dep/freetype/lib\"",
+					"\"$(SRCROOT)/../dep/libfreeimage/lib\"",
+					"\"$(SRCROOT)/../dep/libfreetype/lib\"",
+					"\"$(SRCROOT)/../dep/libecho/lib\"",
+					"\"$(SRCROOT)/../dep/libreverb/lib\"",
 				);
 				OTHER_CFLAGS = (
 					"-DUSE_SDL_MIXER",
@@ -1055,7 +1056,7 @@
 				);
 				PRODUCT_NAME = "WME Lite";
 				SDKROOT = macosx;
-				VALID_ARCHS = i386;
+				VALID_ARCHS = "i386 x86_64";
 				WARNING_CFLAGS = "-Wno-deprecated-writable-strings";
 			};
 			name = Release;
