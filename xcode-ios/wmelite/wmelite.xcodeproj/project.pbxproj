@@ -139,6 +139,7 @@
 		46D0AE0313E1A50800CBDA40 /* IOS_StoreKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D0AE0213E1A50800CBDA40 /* IOS_StoreKit.m */; };
 		46D0AE0513E1A73000CBDA40 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46D0AE0413E1A73000CBDA40 /* StoreKit.framework */; };
 		46EB701A1359B54A00E280F6 /* data.dcp in Resources */ = {isa = PBXBuildFile; fileRef = 46EB70191359B54A00E280F6 /* data.dcp */; };
+		656FD1B41B5130820014DC46 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 656FD1B31B5130820014DC46 /* CoreMotion.framework */; };
 		659C7CE81B51167400D2F190 /* BSoundBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659C7CE61B51167400D2F190 /* BSoundBuffer.cpp */; };
 		659C7CE91B51167400D2F190 /* BSoundMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659C7CE71B51167400D2F190 /* BSoundMgr.cpp */; };
 		659C7CEB1B511A2C00D2F190 /* libecho.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CEA1B511A2C00D2F190 /* libecho.a */; };
@@ -412,6 +413,7 @@
 		46D0AE0413E1A73000CBDA40 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		46D0AE0613E1A8DB00CBDA40 /* IOS_StoreKit_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOS_StoreKit_interface.h; path = ../../src/IOS_StoreKit_interface.h; sourceTree = "<group>"; };
 		46EB70191359B54A00E280F6 /* data.dcp */ = {isa = PBXFileReference; lastKnownFileType = file; path = data.dcp; sourceTree = "<group>"; };
+		656FD1B31B5130820014DC46 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		659C7CE61B51167400D2F190 /* BSoundBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSoundBuffer.cpp; path = ../../src/snd_SDL_mixer/BSoundBuffer.cpp; sourceTree = "<group>"; };
 		659C7CE71B51167400D2F190 /* BSoundMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BSoundMgr.cpp; path = ../../src/snd_SDL_mixer/BSoundMgr.cpp; sourceTree = "<group>"; };
 		659C7CEA1B511A2C00D2F190 /* libecho.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libecho.a; path = ../dep/libecho/libsimulator/libecho.a; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				656FD1B41B5130820014DC46 /* CoreMotion.framework in Frameworks */,
 				659C7CF51B511A7000D2F190 /* libSDL2_mixer.a in Frameworks */,
 				1EE8C099174FFC65000B5435 /* CoreVideo.framework in Frameworks */,
 				1EE8C097174FFC2C000B5435 /* CoreMedia.framework in Frameworks */,
@@ -745,6 +748,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				656FD1B31B5130820014DC46 /* CoreMotion.framework */,
 				659C7CF41B511A7000D2F190 /* libSDL2_mixer.a */,
 				659C7CF21B511A6100D2F190 /* libSDL2.a */,
 				659C7CF01B511A5200D2F190 /* libreverb.a */,
@@ -1090,11 +1094,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -1109,11 +1114,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";

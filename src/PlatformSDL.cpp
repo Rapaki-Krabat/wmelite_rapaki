@@ -44,6 +44,9 @@ THE SOFTWARE.
 #ifdef __MACOSX__
 #   include <locale.h>
 #endif
+#if defined(__IPHONEOS__)
+#   include <locale.h>
+#endif
 
 CBGame* CBPlatform::Game = NULL;
 
