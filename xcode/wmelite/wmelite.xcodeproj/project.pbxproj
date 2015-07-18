@@ -125,6 +125,8 @@
 		46D40EBD134A44DC002829D8 /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D40E49134A44DC002829D8 /* Vector2.cpp */; };
 		6567454E1B35BB3A00D96DAD /* BSoundBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6567454C1B35BB3A00D96DAD /* BSoundBuffer.cpp */; };
 		6567454F1B35BB3A00D96DAD /* BSoundMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6567454D1B35BB3A00D96DAD /* BSoundMgr.cpp */; };
+		6585D1461B5A4CF80083EA67 /* SDL2_mixer.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CDC1B510A1300D2F190 /* SDL2_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6585D1471B5A4D060083EA67 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CDA1B510A0300D2F190 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		659C7CDB1B510A0300D2F190 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CDA1B510A0300D2F190 /* SDL2.framework */; };
 		659C7CDD1B510A1300D2F190 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CDC1B510A1300D2F190 /* SDL2_mixer.framework */; };
 		659C7CDF1B510A3300D2F190 /* libreverb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659C7CDE1B510A3300D2F190 /* libreverb.a */; };
@@ -142,6 +144,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				6585D1471B5A4D060083EA67 /* SDL2.framework in Copy Frameworks */,
+				6585D1461B5A4CF80083EA67 /* SDL2_mixer.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,6 +429,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				6567454C1B35BB3A00D96DAD /* BSoundBuffer.cpp */,
+				6567454D1B35BB3A00D96DAD /* BSoundMgr.cpp */,
 				1E6BAC961787006B0017D579 /* DirectoryOperations.c */,
 				1E6BAC971787006B0017D579 /* DirectoryOperations.h */,
 				1E6BAC981787006B0017D579 /* FileOperations.c */,
@@ -693,8 +699,6 @@
 		29B97314FDCFA39411CA2CEA /* wmelite */ = {
 			isa = PBXGroup;
 			children = (
-				6567454C1B35BB3A00D96DAD /* BSoundBuffer.cpp */,
-				6567454D1B35BB3A00D96DAD /* BSoundMgr.cpp */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -813,7 +817,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "install_name_tool -change \"@loader_path/libbass.dylib\" \"@executable_path/../Frameworks/libbass.dylib\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_NAME.app/Contents/MacOS/$EXECUTABLE_NAME\"";
+			shellScript = "install_name_tool -change \"@loader_path/libbass.dylib\" \"@executable_path/../Frameworks/libbass.dylib\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_NAME.app/Contents/MacOS/$EXECUTABLE_NAME\"\ninstall_name_tool -change \"@rpath/SDL2_mixer.framework/Versions/A/SDL2_mixer\" \"@executable_path/../Frameworks/SDL2_mixer.framework/Versions/A/SDL2_mixer\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_NAME.app/Contents/MacOS/$EXECUTABLE_NAME\"\ninstall_name_tool -change \"@rpath/SDL2.framework/Versions/A/SDL2\" \"@executable_path/../Frameworks/SDL2.framework/Versions/A/SDL2\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_NAME.app/Contents/MacOS/$EXECUTABLE_NAME\"\ninstall_name_tool -change \"@rpath/SDL2.framework/Versions/A/SDL2\" \"@executable_path/../Frameworks/SDL2.framework/Versions/A/SDL2\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_NAME.app/Contents/Frameworks/SDL2_mixer.framework/Versions/A/SDL2_mixer\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
