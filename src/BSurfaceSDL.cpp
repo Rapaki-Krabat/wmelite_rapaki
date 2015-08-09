@@ -63,7 +63,11 @@ HRESULT CBSurfaceSDL::Create(char* Filename, bool default_ck, BYTE ck_red, BYTE 
 
 
 	CBFile* file = Game->m_FileManager->OpenFile(Filename);
-	if (!file) return E_FAIL;
+	if (!file) 
+	{
+		Game->LOG(0, "Error loading image %s when opening file!", Filename);
+		return E_FAIL;
+	}
 
 
 	if(default_ck)
@@ -78,7 +82,11 @@ HRESULT CBSurfaceSDL::Create(char* Filename, bool default_ck, BYTE ck_red, BYTE 
 	FIBITMAP* img = FreeImage_LoadFromHandle(imgFormat, &io, (fi_handle)file, 0);
 	Game->m_FileManager->CloseFile(file);
 	
-	if (!img) return E_FAIL;
+	if (!img) 
+	{
+		Game->LOG(0, "Error loading image %s from handle!", Filename);
+		return E_FAIL;	
+	}
 
 	m_Width = FreeImage_GetWidth(img);
 	m_Height = FreeImage_GetHeight(img);
