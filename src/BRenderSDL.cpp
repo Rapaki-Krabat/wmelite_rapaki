@@ -292,6 +292,10 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	m_Renderer = SDL_CreateRenderer(m_Win, -1, 0);
 	if (!m_Renderer) return E_FAIL;
 
+	SDL_RendererInfo info;
+	SDL_GetRendererInfo(m_Renderer, &info);
+	Game->LOG(0, "Renderer max texture sizes: x=%d y=%d.\n", info.max_texture_width, info.max_texture_height);
+
 	if (m_PixelPerfect == true) {
 		// try to make texture scaling look as nice as possible
 		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");

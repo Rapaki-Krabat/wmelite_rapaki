@@ -115,6 +115,7 @@ HRESULT CBSurfaceSDL::Create(char* Filename, bool default_ck, BYTE ck_red, BYTE 
 		else
 		{
 			FreeImage_Unload(img);
+			Game->LOG(0, "Error converting image %s to 24 bit image!", Filename);
 			return -1;
 		}
 	}
@@ -136,6 +137,8 @@ HRESULT CBSurfaceSDL::Create(char* Filename, bool default_ck, BYTE ck_red, BYTE 
 	{
 		SDL_FreeSurface(surf);
 		FreeImage_Unload(img);
+		Game->LOG(0, "Error converting image %s from surface to texture!", Filename);
+		Game->LOG(0, "SDL_GetError(): %s\n", SDL_GetError());
 		return E_FAIL;
 	}
 
