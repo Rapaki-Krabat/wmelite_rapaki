@@ -62,7 +62,6 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 
 
 	bool windowedMode = false;
-	
 
 	// parse command line
 	char* SaveGame = NULL;

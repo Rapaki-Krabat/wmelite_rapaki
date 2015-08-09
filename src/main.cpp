@@ -39,6 +39,19 @@ THE SOFTWARE.
 #	include "../visualc/resource.h"
 #endif
 
+static CAdGame* Game = NULL;
+
+static void FreeImageErrorHandler(FREE_IMAGE_FORMAT fif, const char *message) {
+	if (Game != NULL)
+	{
+		Game->LOG(0, "FreeImage error handler:"); 
+		if(fif != FIF_UNKNOWN) {
+			Game->LOG(0, "%s Format\n", FreeImage_GetFormatFromFIF(fif));
+		}
+		Game->LOG(0, message);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])
 {
@@ -55,8 +68,11 @@ int main(int argc, char* argv[])
 #endif
 	int ret = 1;
 
-	CAdGame* Game = new CAdGame;
+	Game = new CAdGame;
 	Game->m_SmartCache = true;
+
+	// set handling of freeimage error strings so they are at least logged
+	FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
 	ret = CBPlatform::Initialize(Game, argc, argv);
 	if (ret == 0)
