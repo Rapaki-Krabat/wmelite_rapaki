@@ -492,13 +492,27 @@ HRESULT CBSoundBuffer::ApplyFX(TSFXType Type, float Param1, float Param2, float 
 		break;
 
 	case SFX_REVERB_PRESET:
-		// TODO need to check whether context is already in use
 #ifdef USE_LIBEFFECTS_REVERB
 		int status;
 		uint32_t replyCount;
 		char replydata[8];
 
-		m_context.hInstance  = NULL;
+		if (m_BASS_DSP_handle != 0)
+		{
+			if (BASS_ChannelRemoveDSP(m_Stream, m_BASS_DSP_handle) == FALSE)
+			{
+				Game->LOG(0, "BASS error: %d while removing old DSP effect", BASS_ErrorGetCode());
+			}
+			m_BASS_DSP_handle = 0;
+		}
+		if (m_context.hInstance != NULL)
+		{
+			free(m_context.InFrames32);
+			free(m_context.OutFrames32);
+			Reverb_free(&m_context);
+			m_context.hInstance = NULL;
+		}
+
 		m_context.boolAuxiliary  = 0;
 
 	    m_context.boolPreset     = 1;
