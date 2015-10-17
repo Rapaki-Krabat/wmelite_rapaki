@@ -2175,7 +2175,7 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 				Stack->PushString(Hex);
 			}
 			else
-				Stack->PushInt(checksum);
+				Stack->PushInt((int) checksum);
 
 			m_FileManager->CloseFile(File);
 			File = NULL;

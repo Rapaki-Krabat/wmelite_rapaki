@@ -174,7 +174,7 @@ HRESULT CBPersistMgr::InitSave(char* Desc)
 
 		DWORD DataOffset = m_Offset + 
 							sizeof(DWORD) + // data offset
-							sizeof(DWORD) + strlen(Desc) + 1 + // description
+							sizeof(DWORD) + ((DWORD) strlen(Desc)) + 1 + // description
 							sizeof(DWORD); // timestamp
 
 		PutDWORD(DataOffset);
@@ -350,8 +350,8 @@ void CBPersistMgr::PutString(const char* Val)
 	if(!Val) PutString("(null)");
 	else
 	{
-		PutDWORD(strlen(Val)+1);
-		PutBytes((BYTE*)Val, strlen(Val)+1);
+		PutDWORD(((DWORD) strlen(Val))+1);
+		PutBytes((BYTE*)Val, ((DWORD) strlen(Val))+1);
 	}
 }
 

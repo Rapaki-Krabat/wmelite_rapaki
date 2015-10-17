@@ -162,12 +162,12 @@ CScValue* CScValue::GetProp(char *Name)
 
 		if (Game->m_TextEncoding == TEXT_ANSI)
 		{
-			Game->m_ScValue->SetInt(strlen(m_ValString));
+			Game->m_ScValue->SetInt(((int) strlen(m_ValString)));
 		}
 		else
 		{
 			WideString wstr = StringUtil::Utf8ToWide(m_ValString);
-			Game->m_ScValue->SetInt(wstr.length());
+			Game->m_ScValue->SetInt(((int) wstr.length()));
 		}
 		
 		return Game->m_ScValue;
@@ -761,7 +761,7 @@ HRESULT CScValue::Persist(CBPersistMgr* PersistMgr)
 	int size;
 	char* str;
 	if(PersistMgr->m_Saving){
-		size = m_ValObject.size();
+		size = ((int) m_ValObject.size());
 		PersistMgr->Transfer("", &size);
 		m_ValIter = m_ValObject.begin();
 		while(m_ValIter!=m_ValObject.end()){
@@ -1051,7 +1051,7 @@ bool CScValue::DbgSetVal()
 int CScValue::DbgGetNumProperties()
 {
 	if(m_ValNative && m_ValNative->m_ScProp) return m_ValNative->m_ScProp->DbgGetNumProperties();
-	else return m_ValObject.size();
+	else return ((int) m_ValObject.size());
 }
 
 //////////////////////////////////////////////////////////////////////////

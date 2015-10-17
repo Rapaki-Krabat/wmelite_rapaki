@@ -807,7 +807,7 @@ bool CBFileManager::FindPackageSignature(generic_file_ops *ops, FILEHANDLE f, DW
 	((DWORD*)Signature)[1] = PACKAGE_MAGIC_2;
 
 	ops->file_seek(f, 0, SEEK_END);
-	DWORD FileSize = ops->file_tell(f);
+	DWORD FileSize = ((DWORD) ops->file_tell(f));
 
 	int StartPos = 1024*1024;
 	
@@ -817,7 +817,7 @@ bool CBFileManager::FindPackageSignature(generic_file_ops *ops, FILEHANDLE f, DW
 	{
 		int ToRead = MIN(32768, FileSize - BytesRead);
 		ops->file_seek(f, StartPos, SEEK_SET);
-		int ActuallyRead = ops->file_read((char *) buf, ToRead, f);
+		int ActuallyRead = ((int) ops->file_read((char *) buf, ToRead, f));
 		if(ActuallyRead != ToRead) return false;
 
 		for (int i = 0; i<ToRead-8; i++)

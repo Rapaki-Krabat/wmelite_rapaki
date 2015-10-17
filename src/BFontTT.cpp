@@ -809,11 +809,11 @@ unsigned long CBFontTT::FTReadSeekProc(FT_Stream stream, unsigned long offset,	u
 	CBFile* f = static_cast<CBFile*>(stream->descriptor.pointer);
 	if (!f) return 0;
 
-	f->Seek(offset, SEEK_TO_BEGIN);
+	f->Seek(((DWORD) offset), SEEK_TO_BEGIN);
 	if (count)
 	{
 		DWORD oldPos = f->GetPos();
-		f->Read(buffer, count);
+		f->Read(buffer, ((DWORD) count));
 		return f->GetPos() - oldPos;
 	}
 	else return 0;
@@ -853,7 +853,7 @@ int CBFontTT::WrapText(const WideString& text, int maxWidth, int maxHeight, Text
 		 */
 		if (ch == L' ')
 		{
-			prevSpaceIndex = i;
+			prevSpaceIndex = ((int) i);
 			prevSpaceWidth = currWidth;
 		}
 
@@ -904,7 +904,7 @@ int CBFontTT::WrapText(const WideString& text, int maxWidth, int maxHeight, Text
 			else
 			{
 				/* need to break at the current position */
-				breakPoint = i;
+				breakPoint = ((int) i);
 				breakWidth = currWidth;
 
 				breakOnSpace = (ch == L'\n');
@@ -1016,7 +1016,7 @@ void CBFontTT::CacheGlyph(wchar_t ch)
 		tempBuffer = new BYTE[m_FTFace->glyph->bitmap.width * m_FTFace->glyph->bitmap.rows];
 		for (int j = 0; j < m_FTFace->glyph->bitmap.rows; j++)
 		{
-			int rowOffset = stride * j;
+			int rowOffset = ((int) stride) * j;
 			for (int i = 0; i < m_FTFace->glyph->bitmap.width; i++)
 			{
 				int byteOffset = i / 8;

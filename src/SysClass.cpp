@@ -121,7 +121,7 @@ void* CSysClass::IDToPointer(int savedID)
 //////////////////////////////////////////////////////////////////////////
 int CSysClass::GetNumInstances()
 {
-	return m_Instances.size();
+	return ((int) m_Instances.size());
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ void CSysClass::SaveTable(CBGame* Game, CBPersistMgr* PersistMgr)
 {
 	PersistMgr->PutString(m_Name.c_str());
 	PersistMgr->PutDWORD(m_ID);
-	PersistMgr->PutDWORD(m_Instances.size());
+	PersistMgr->PutDWORD(((DWORD) m_Instances.size()));
 
 	Instances::iterator it;
 	for (it = m_Instances.begin(); it != m_Instances.end(); ++it)

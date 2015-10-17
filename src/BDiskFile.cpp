@@ -126,7 +126,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 		{
 			m_Pos = 0;
 			ops->file_seek(m_File, 0, SEEK_END);
-			m_Size = ops->file_tell(m_File) - m_PrefixSize;
+			m_Size = ((DWORD) ops->file_tell(m_File)) - m_PrefixSize;
 			ops->file_seek(m_File, m_PrefixSize, SEEK_SET);
 		}
 
@@ -207,7 +207,7 @@ HRESULT CBDiskFile::Seek(DWORD Pos, TSeek Origin)
 		}
 		if(ret==0)
 		{
-			m_Pos = ops->file_tell(m_File) - m_PrefixSize;
+			m_Pos = ((DWORD) ops->file_tell(m_File)) - m_PrefixSize;
 			return S_OK;
 		}
 		else return E_FAIL;

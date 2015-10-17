@@ -757,7 +757,7 @@ Sint64 CBSoundBuffer::FileSeekImpl(SDL_RWops *ops, Sint64 offset, int whence)
     if (whence == RW_SEEK_END) {
         Origin = SEEK_TO_END;
     }
-    file->Seek(offset, Origin);
+    file->Seek(((DWORD) offset), Origin);
 
     return file->GetPos();
 }
@@ -767,7 +767,7 @@ size_t CBSoundBuffer::FileReadImpl(SDL_RWops *ops, void *buffer, size_t size, si
 {
 	CBFile* file = static_cast<CBFile*>(ops->hidden.unknown.data1);
 	DWORD oldPos = file->GetPos();
-	file->Read(buffer, (nmemb * size));
+	file->Read(buffer, ((DWORD) (nmemb * size)));
 	return file->GetPos() - oldPos;
 }
 

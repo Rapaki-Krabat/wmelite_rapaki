@@ -80,7 +80,7 @@ void GlyphInfo::SetGlyphImage(size_t width, size_t height, size_t stride, BYTE* 
 {
 	if (m_Image) SDL_FreeSurface(m_Image);
 
-	m_Image = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+	m_Image = SDL_CreateRGBSurface(SDL_SWSURFACE, ((int) width), ((int) height), 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
 	SDL_LockSurface(m_Image);
 
 	Uint8* buf = (Uint8*)m_Image->pixels;

@@ -376,7 +376,7 @@ HRESULT CSXMemBuffer::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack 
 		int Start = Stack->Pop()->GetInt();
 		char* Val = Stack->Pop()->GetString();
 
-		if(!CheckBounds(Script, Start, strlen(Val)+1)) Stack->PushBool(false);
+		if(!CheckBounds(Script, Start, ((int) strlen(Val)+1))) Stack->PushBool(false);
 		else
 		{
 			memcpy((BYTE*)m_Buffer+Start, Val, strlen(Val)+1);

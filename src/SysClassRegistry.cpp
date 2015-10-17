@@ -158,7 +158,7 @@ void* CSysClassRegistry::IDToPointer(int classID, int instanceID)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CSysClassRegistry::SaveTable(CBGame* Game, CBPersistMgr* PersistMgr, bool quickSave)
 {
-	PersistMgr->PutDWORD(m_Classes.size());
+	PersistMgr->PutDWORD(((DWORD) m_Classes.size()));
 
 	int counter = 0;
 

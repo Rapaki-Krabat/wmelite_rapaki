@@ -148,8 +148,8 @@ void CBDynBuffer::PutString(const char* Val)
 {
 	if(!Val) PutString("(null)");
 	else{
-		PutDWORD(strlen(Val)+1);
-		PutBytes((BYTE*)Val, strlen(Val)+1);
+		PutDWORD(((int) strlen(Val))+1);
+		PutBytes((BYTE*)Val, ((int) strlen(Val))+1);
 	}
 }
 
@@ -196,5 +196,5 @@ void CBDynBuffer::PutTextForm(const char *format, va_list argptr)
 {
 	char buff[32768];
 	vsprintf(buff, format, argptr);
-	PutBytes((BYTE*)buff, strlen(buff));
+	PutBytes((BYTE*)buff, ((int) strlen(buff)));
 }

@@ -598,7 +598,7 @@ HRESULT CSXFile::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 			return S_OK;
 		}
 
-		DWORD Size = strlen(Val);
+		DWORD Size = ((DWORD) strlen(Val));
 		fwrite(&Size, sizeof(Size), 1, m_WriteFile);
 		fwrite(Val, Size, 1, m_WriteFile);
 
@@ -696,7 +696,7 @@ HRESULT CSXFile::ScSetProperty(char *Name, CScValue *Value)
 DWORD CSXFile::GetPos()
 {
 	if(m_Mode==1 && m_ReadFile) return m_ReadFile->GetPos();
-	else if((m_Mode==2 || m_Mode==3) && m_WriteFile) return ftell(m_WriteFile);
+	else if((m_Mode==2 || m_Mode==3) && m_WriteFile) return ((DWORD) ftell(m_WriteFile));
 	else return 0;
 }
 
@@ -714,9 +714,9 @@ DWORD CSXFile::GetLength()
 	if(m_Mode==1 && m_ReadFile) return m_ReadFile->GetSize();
 	else if((m_Mode==2 || m_Mode==3) && m_WriteFile)
 	{
-		DWORD CurrentPos = ftell(m_WriteFile);
+		DWORD CurrentPos = ((DWORD) ftell(m_WriteFile));
 		fseek(m_WriteFile, 0, SEEK_END);
-		int Ret = ftell(m_WriteFile);
+		int Ret = ((int) ftell(m_WriteFile));
 		fseek(m_WriteFile, CurrentPos, SEEK_SET);
 		return Ret;
 	}

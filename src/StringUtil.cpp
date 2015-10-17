@@ -335,7 +335,7 @@ int StringUtil::IndexOf(const WideString& str, const WideString& toFind, size_t 
 {
 	size_t pos = str.find(toFind, startFrom);
 	if (pos == str.npos) return -1;
-	else return pos;
+	else return ((int) pos);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -343,7 +343,7 @@ int StringUtil::LastIndexOf(const WideString& str, const WideString& toFind, siz
 {
 	size_t pos = str.rfind(toFind, startFrom);
 	if (pos == str.npos) return -1;
-	else return pos;
+	else return ((int) pos);
 }
 
 //////////////////////////////////////////////////////////////////////////

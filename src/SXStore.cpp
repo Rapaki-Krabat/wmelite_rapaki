@@ -279,7 +279,7 @@ CScValue* CSXStore::ScGetProperty(char* name)
 	//////////////////////////////////////////////////////////////////////////
 	else if (strcmp(name, "NumInvalidProducts") == 0)
 	{
-		m_ScValue->SetInt(m_InvalidProducts.size());
+		m_ScValue->SetInt(((int) m_InvalidProducts.size()));
 		return m_ScValue;
 	}
 	//////////////////////////////////////////////////////////////////////////

@@ -451,7 +451,7 @@ unsigned CBSurfaceSDL::ReadProc(void *buffer, unsigned size, unsigned count, fi_
 int CBSurfaceSDL::SeekProc(fi_handle handle, long offset, int origin)
 {
 	CBFile* file = static_cast<CBFile*>(handle);
-	file->Seek(offset, (TSeek)origin);
+	file->Seek(((DWORD) offset), (TSeek)origin);
 	return 0;
 }
 

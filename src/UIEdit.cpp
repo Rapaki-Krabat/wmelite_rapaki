@@ -473,7 +473,7 @@ HRESULT CUIEdit::ScSetProperty(char *Name, CScValue *Value)
 	{
 		m_SelStart = Value->GetInt();
 		m_SelStart = MAX(m_SelStart, 0);
-		m_SelStart = MIN(m_SelStart, strlen(m_Text));
+		m_SelStart = MIN(m_SelStart, ((int) strlen(m_Text)));
 		return S_OK;
 	}
 
@@ -484,7 +484,7 @@ HRESULT CUIEdit::ScSetProperty(char *Name, CScValue *Value)
 	{
 		m_SelEnd = Value->GetInt();
 		m_SelEnd = MAX(m_SelEnd, 0);
-		m_SelEnd = MIN(m_SelEnd, strlen(m_Text));
+		m_SelEnd = MIN(m_SelEnd, ((int) strlen(m_Text)));
 		return S_OK;
 	}
 
@@ -590,8 +590,8 @@ HRESULT CUIEdit::Display(int OffsetX, int OffsetY)
 	m_SelStart = MAX(m_SelStart, 0);
 	m_SelEnd   = MAX(m_SelEnd, 0);
 
-	m_SelStart = MIN(m_SelStart, strlen(m_Text));
-	m_SelEnd   = MIN(m_SelEnd,   strlen(m_Text));
+	m_SelStart = MIN(m_SelStart, ((int) strlen(m_Text)));
+	m_SelEnd   = MIN(m_SelEnd,   ((int) strlen(m_Text)));
 
 	//int CursorWidth = font->GetCharWidth(m_CursorChar[0]);
 	int CursorWidth = font->GetTextWidth((BYTE*)m_CursorChar);
@@ -739,7 +739,7 @@ bool CUIEdit::HandleKeypress(SDL_Event* event)
 			if (CBKeyboardState::IsControlDown())
 			{
 				m_SelStart = 0;
-				m_SelEnd = strlen(m_Text);
+				m_SelEnd = ((int) strlen(m_Text));
 				Handled = true;
 			}
 			break;
@@ -774,7 +774,7 @@ bool CUIEdit::HandleKeypress(SDL_Event* event)
 		case SDLK_HOME:
 			if (Game->m_TextRTL)
 			{
-				m_SelEnd = strlen(m_Text);
+				m_SelEnd = ((int) strlen(m_Text));
 				if(!CBKeyboardState::IsShiftDown()) m_SelStart = m_SelEnd;
 			}
 			else
@@ -793,7 +793,7 @@ bool CUIEdit::HandleKeypress(SDL_Event* event)
 			}
 			else
 			{
-				m_SelEnd = strlen(m_Text);
+				m_SelEnd = ((int) strlen(m_Text));
 				if (!CBKeyboardState::IsShiftDown()) m_SelStart = m_SelEnd;
 			}
 			Handled = true;
@@ -844,7 +844,7 @@ int CUIEdit::DeleteChars(int Start, int End)
 	if(Start>End) CBUtils::Swap(&Start, &End);
 	
 	Start = MAX(Start, 0);
-	End = MIN(End, strlen(m_Text));
+	End = MIN(End, ((int) strlen(m_Text)));
 
 	char* str = new char[strlen(m_Text)-(End-Start)+1];
 	if(str)
@@ -870,7 +870,7 @@ int CUIEdit::InsertChars(int Pos, BYTE* Chars, int Num)
 	}
 
 	Pos = MAX(Pos, 0);
-	Pos = MIN(Pos, strlen(m_Text));
+	Pos = MIN(Pos, ((int) strlen(m_Text)));
 	
 	char* str = new char[strlen(m_Text) + Num + 1];
 	if(str)

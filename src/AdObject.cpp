@@ -901,7 +901,7 @@ void CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTe
 
 	// set duration by text length
 	if(m_Sentence->m_Duration<=0){
-		m_Sentence->m_Duration = MAX(1000, Game->m_SubtitlesSpeed * strlen(m_Sentence->m_Text));
+		m_Sentence->m_Duration = MAX(1000, Game->m_SubtitlesSpeed * ((int) strlen(m_Sentence->m_Text)));
 	}
 
 

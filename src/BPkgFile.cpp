@@ -126,7 +126,7 @@ HRESULT CBPkgFile::Read(void *Buffer, DWORD Size)
 
 	if(m_Compressed)
 	{
-		DWORD InitOut = m_Stream.total_out;
+		DWORD InitOut = ((DWORD) m_Stream.total_out);
 
 		m_Stream.avail_out = Size;
 		m_Stream.next_out = (BYTE*)Buffer;
@@ -134,8 +134,8 @@ HRESULT CBPkgFile::Read(void *Buffer, DWORD Size)
 		while (m_Stream.total_out - InitOut < Size && m_Stream.total_in < m_FileEntry->m_CompressedLength){
 			// needs to read more data?
 			if(m_Stream.avail_in==0){
-				m_Stream.avail_in = MIN(COMPRESSED_BUFFER_SIZE, m_FileEntry->m_CompressedLength - m_Stream.total_in);
-				m_FileEntry->m_Package->Read(m_File, m_FileEntry->m_Offset + m_Stream.total_in, m_CompBuffer, m_Stream.avail_in);
+				m_Stream.avail_in = MIN(COMPRESSED_BUFFER_SIZE, m_FileEntry->m_CompressedLength - ((DWORD) m_Stream.total_in));
+				m_FileEntry->m_Package->Read(m_File, m_FileEntry->m_Offset + ((DWORD) m_Stream.total_in), m_CompBuffer, m_Stream.avail_in);
 				m_Stream.next_in = m_CompBuffer;
 			}
 
@@ -200,15 +200,15 @@ HRESULT CBPkgFile::SeekToPos(DWORD NewPos)
 		while (m_Stream.total_out < NewPos && m_Stream.total_in < m_FileEntry->m_CompressedLength){
 			// needs to read more data?
 			if(m_Stream.avail_in==0){
-				m_Stream.avail_in = MIN(COMPRESSED_BUFFER_SIZE, m_FileEntry->m_CompressedLength - m_Stream.total_in);
-				m_FileEntry->m_Package->Read(m_File, m_FileEntry->m_Offset + m_Stream.total_in, m_CompBuffer, m_Stream.avail_in);
+				m_Stream.avail_in = MIN(COMPRESSED_BUFFER_SIZE, m_FileEntry->m_CompressedLength - ((DWORD) m_Stream.total_in));
+				m_FileEntry->m_Package->Read(m_File, m_FileEntry->m_Offset + ((DWORD) m_Stream.total_in), m_CompBuffer, m_Stream.avail_in);
 				m_Stream.next_in = m_CompBuffer;
 			}
 
 			// needs more space?
 			if(m_Stream.avail_out==0){
 				m_Stream.next_out = StreamBuffer;
-				m_Stream.avail_out = MIN(STREAM_BUFFER_SIZE, NewPos - m_Stream.total_out);
+				m_Stream.avail_out = MIN(STREAM_BUFFER_SIZE, NewPos - ((DWORD) m_Stream.total_out));
 			}
 
 			// stream on!

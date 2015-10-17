@@ -66,7 +66,7 @@ CSXString::~CSXString()
 //////////////////////////////////////////////////////////////////////////
 void CSXString::SetStringVal(const char *Val)
 {
-	int Len = strlen(Val);
+	int Len = ((int) strlen(Val));
 	if(Len>=m_Capacity){
 		m_Capacity = Len + 1;
 		SAFE_DELETE_ARRAY(m_String);
@@ -146,7 +146,7 @@ HRESULT CSXString::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Th
 			return S_OK;
 		}
 
-		if (val->IsNULL()) len = strlen(m_String) - start;
+		if (val->IsNULL()) len = ((int) strlen(m_String)) - start;
 
 		try
 		{
@@ -343,10 +343,10 @@ CScValue* CSXString::ScGetProperty(char *Name)
 		if (Game->m_TextEncoding == TEXT_UTF8)
 		{
 			WideString wstr = StringUtil::Utf8ToWide(m_String);
-			m_ScValue->SetInt(wstr.length());
+			m_ScValue->SetInt(((int) wstr.length()));
 		}
 		else
-			m_ScValue->SetInt(strlen(m_String));
+			m_ScValue->SetInt(((int) strlen(m_String)));
 
 		return m_ScValue;
 	}
