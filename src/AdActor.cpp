@@ -224,7 +224,7 @@ HRESULT CAdActor::LoadBuffer(BYTE * Buffer, bool Complete)
 	TOKEN_TABLE_END
 	
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(Complete)
@@ -1460,7 +1460,7 @@ HRESULT CAdActor::MergeAnims(char* AnimsFilename)
 
 	BYTE* Buffer = FileBuffer;
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	HRESULT Ret = S_OK;

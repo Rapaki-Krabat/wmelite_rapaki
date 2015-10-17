@@ -176,7 +176,7 @@ HRESULT CUITiledImage::LoadBuffer(BYTE * Buffer, bool Complete)
 	TOKEN_TABLE_END
 	
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 	bool HTiles=false, VTiles=false;
 	int H1=0, H2=0, H3=0;

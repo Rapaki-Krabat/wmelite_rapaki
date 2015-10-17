@@ -95,7 +95,7 @@ HRESULT CBBase::ParseEditorProperty(BYTE* Buffer, bool Complete)
 	
 
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(Complete){

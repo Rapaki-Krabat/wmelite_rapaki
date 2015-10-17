@@ -104,7 +104,7 @@ HRESULT CAdWaypointGroup::LoadBuffer(BYTE * Buffer, bool Complete)
 	TOKEN_TABLE_END
 	
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(Complete){

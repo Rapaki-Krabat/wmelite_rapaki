@@ -98,7 +98,7 @@ HRESULT CBSubFrame::LoadBuffer(BYTE * Buffer, int LifeTime, bool KeepLoaded)
 	TOKEN_TABLE_END
 	
 	char* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 	RECT rect;
 	int r=255,g=255,b=255;

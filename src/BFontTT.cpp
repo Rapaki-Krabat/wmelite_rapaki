@@ -504,7 +504,7 @@ HRESULT CBFontTT::LoadBuffer(BYTE * Buffer)
 	TOKEN_TABLE_END
 
 	char* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(parser.GetCommand ((char**)&Buffer, commands, (char**)&params)!=TOKEN_TTFONT){
@@ -612,7 +612,7 @@ HRESULT CBFontTT::ParseLayer(CBTTFontLayer* Layer, BYTE* Buffer)
 	TOKEN_TABLE_END
 
 	char* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	while ((cmd = parser.GetCommand ((char**)&Buffer, commands, (char**)&params)) > 0)

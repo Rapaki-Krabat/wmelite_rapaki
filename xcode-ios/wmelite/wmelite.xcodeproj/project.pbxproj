@@ -798,6 +798,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0430;
+				TargetAttributes = {
+					1D6058900D05DD3D006BFB54 = {
+						DevelopmentTeam = 2SC7NG3U65;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "wmelite" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -975,6 +980,7 @@
 					armv7s,
 				);
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -994,21 +1000,9 @@
 					"\"$(SRCROOT)/../dep/libreverb/include/Common/lib/\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/libfreeimage/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libfreetype/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libSDL2/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libSDL2_Mixer/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libecho/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libreverb/libsimulator\"",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreeimage/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreetype/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libreverb/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2_Mixer/libsimulator",
 					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libcombined",
 					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreeimage/libcombined",
 					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreetype/libcombined",
@@ -1026,6 +1020,7 @@
 					"-lz",
 					"-lbz2",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.dead-code.wmelite.demo";
 				PRODUCT_NAME = wmelite;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -1044,6 +1039,7 @@
 					armv7s,
 				);
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -1061,21 +1057,9 @@
 					"\"$(SRCROOT)/../dep/libreverb/include/Common/lib/\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/libfreeimage/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libfreetype/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libSDL2/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libSDL2_Mixer/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libecho/libsimulator\"",
-					"\"$(SRCROOT)/../dep/libreverb/libsimulator\"",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreeimage/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreetype/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libreverb/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2/libsimulator",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2_Mixer/libsimulator",
 					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libcombined",
 					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreeimage/libcombined",
 					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreetype/libcombined",
@@ -1093,6 +1077,7 @@
 					"-lz",
 					"-lbz2",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.dead-code.wmelite.demo";
 				PRODUCT_NAME = wmelite;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -1107,7 +1092,9 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: daniel.sobe@googlemail.com (E9TB7QFFZ3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: daniel.sobe@googlemail.com (E9TB7QFFZ3)";
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1127,7 +1114,9 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: daniel.sobe@googlemail.com (E9TB7QFFZ3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: daniel.sobe@googlemail.com (E9TB7QFFZ3)";
+				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

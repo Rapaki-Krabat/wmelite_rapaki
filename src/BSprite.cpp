@@ -208,7 +208,7 @@ HRESULT CBSprite::LoadBuffer(BYTE* Buffer, bool Complete, int LifeTime, TSpriteC
 	TOKEN_TABLE_END
 	
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	Cleanup();

@@ -1210,7 +1210,7 @@ HRESULT CAdGame::LoadBuffer(BYTE * Buffer, bool Complete)
 	
 	BYTE* params;
 	BYTE* params2;
-	int cmd = 1;
+	long cmd = 1;
 	CBParser parser(Game);
 
 	bool ItemFound=false, ItemsFound=false;
@@ -1473,7 +1473,7 @@ HRESULT CAdGame::LoadItemsBuffer(BYTE * Buffer, bool Merge)
 	TOKEN_TABLE_END
 
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(!Merge)
@@ -1565,7 +1565,7 @@ HRESULT CAdGame::WindowLoadHook(CUIWindow *Win, char** Buffer, char** params)
 		TOKEN_TABLE (ENTITY_CONTAINER)
 	TOKEN_TABLE_END
 
-	int cmd = PARSERR_GENERIC;
+	long cmd = PARSERR_GENERIC;
 	CBParser parser(Game);
 	
 	cmd = parser.GetCommand (Buffer, commands, params);

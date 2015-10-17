@@ -794,7 +794,7 @@ HRESULT CBGame::LoadBuffer(BYTE * Buffer, bool Complete)
 	TOKEN_TABLE_END
 
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(Complete)
@@ -3785,7 +3785,7 @@ HRESULT CBGame::LoadSettings(char *Filename)
 
 	BYTE* Buffer = OrigBuffer;
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(parser.GetCommand ((char**)&Buffer, commands, (char**)&params)!=TOKEN_SETTINGS)

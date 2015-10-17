@@ -309,7 +309,7 @@ HRESULT CBFontBitmap::LoadBuffer(BYTE * Buffer)
 		TOKEN_TABLE_END
 
 		char* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(parser.GetCommand ((char**)&Buffer, commands, (char**)&params)!=TOKEN_FONT)

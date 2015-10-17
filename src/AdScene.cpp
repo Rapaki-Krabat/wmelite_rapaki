@@ -645,7 +645,7 @@ HRESULT CAdScene::LoadBuffer(BYTE * Buffer, bool Complete)
 	Cleanup();
 
 	BYTE* params;
-	int cmd;
+	long cmd;
 	CBParser parser(Game);
 
 	if(Complete)

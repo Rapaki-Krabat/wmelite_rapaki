@@ -293,7 +293,7 @@ HRESULT CUIWindow::LoadBuffer(BYTE* Buffer, bool Complete)
 	TOKEN_TABLE_END
 	
 	BYTE* params;
-	int cmd=2;
+	long cmd=2;
 	CBParser parser(Game);
 
 	int FadeR=0, FadeG=0, FadeB=0, FadeA=0;

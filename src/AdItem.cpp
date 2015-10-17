@@ -146,7 +146,7 @@ HRESULT CAdItem::LoadBuffer(BYTE* Buffer, bool Complete)
 	TOKEN_TABLE_END
 	
 	BYTE* params;
-	int cmd=2;
+	long cmd=2;
 	CBParser parser(Game);
 
 	if(Complete){
