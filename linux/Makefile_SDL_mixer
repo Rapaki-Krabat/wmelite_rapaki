@@ -3,10 +3,10 @@ CC=gcc
 
 DEFINES=USE_SDL_MIXER
 
-CFLAGS=-I$(IDIR) -I. -O2 `sdl2-config --cflags` `freetype-config --cflags`
+CFLAGS=-I$(IDIR) -I. -O2 `sdl2-config --cflags` `freetype-config --cflags` -Wall -Wextra
 
 CPP=g++
-CPPFLAGS=-I$(IDIR) -I. -I../dependencies/libeffects-android/jni/ -I../dependencies/libeffects-android/jni/Reverb/lib/ -I../dependencies/libeffects-android/jni/Common/lib/ -I../dependencies/libecho/jni/ -D$(DEFINES) -O2 -Wno-write-strings -Wno-conversion-null `freetype-config --cflags` `sdl2-config --cflags`
+CPPFLAGS=-I$(IDIR) -I. -I../dependencies/libeffects-android/jni/ -I../dependencies/libeffects-android/jni/Reverb/lib/ -I../dependencies/libeffects-android/jni/Common/lib/ -I../dependencies/libecho/jni/ -D$(DEFINES) -O2 `freetype-config --cflags` `sdl2-config --cflags` -Wall -Wextra -Wno-write-strings -Wno-conversion-null -Wno-unused
 
 SRCDIR=../src
 
@@ -28,28 +28,34 @@ wmelite_sdl_mixer: $(OBJC) $(OBJCPP) $(OBJSND)
 	g++ -o $@ $^ $(CFLAGS) $(LIBS)
 
 $(ODIR)/ConvertUTF.o: $(SRCDIR)/ConvertUTF.c
-	mkdir -p $(ODIR)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	@mkdir -p $(ODIR)
+	@echo " (CC) $<"
+	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/DirectoryOperations.o: $(SRCDIR)/DirectoryOperations.c
-	mkdir -p $(ODIR)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	@mkdir -p $(ODIR)
+	@echo " (CC) $<"
+	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/FileOperations.o: $(SRCDIR)/FileOperations.c
-	mkdir -p $(ODIR)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	@mkdir -p $(ODIR)
+	@echo " (CC) $<"
+	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/BSoundBuffer.o: $(SRCDIR)/snd_SDL_mixer/BSoundBuffer.cpp
-	mkdir -p $(ODIR)
-	$(CC) -c -o $@ $< $(CPPFLAGS)
+	@mkdir -p $(ODIR)
+	@echo " (CC) $<"
+	@$(CC) -c -o $@ $< $(CPPFLAGS)
 
 $(ODIR)/BSoundMgr.o: $(SRCDIR)/snd_SDL_mixer/BSoundMgr.cpp
-	mkdir -p $(ODIR)
-	$(CC) -c -o $@ $< $(CPPFLAGS)
+	@mkdir -p $(ODIR)
+	@echo " (CC) $<"
+	@$(CC) -c -o $@ $< $(CPPFLAGS)
 
 $(ODIR)/%.o: $(SRCDIR)/%.cpp
-	mkdir -p $(ODIR)
-	$(CPP) -c -o $@ $< $(CPPFLAGS)
+	@mkdir -p $(ODIR)
+	@echo " (CPP) $<"
+	@$(CPP) -c -o $@ $< $(CPPFLAGS)
 
 .PHONY: clean
 
