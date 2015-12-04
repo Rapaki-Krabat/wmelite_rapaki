@@ -800,7 +800,7 @@
 				LastUpgradeCheck = 0430;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = 2SC7NG3U65;
+						DevelopmentTeam = GEG75DQ787;
 					};
 				};
 			};
@@ -1000,7 +1000,7 @@
 					"\"$(SRCROOT)/../dep/libreverb/include/Common/lib/\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libcombined",
@@ -1020,7 +1020,7 @@
 					"-lz",
 					"-lbz2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.dead-code.wmelite.demo";
+				PRODUCT_BUNDLE_IDENTIFIER = org.deadcode.wmelitedemo;
 				PRODUCT_NAME = wmelite;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -1057,7 +1057,7 @@
 					"\"$(SRCROOT)/../dep/libreverb/include/Common/lib/\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libcombined",
@@ -1077,7 +1077,7 @@
 					"-lz",
 					"-lbz2",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.dead-code.wmelite.demo";
+				PRODUCT_BUNDLE_IDENTIFIER = org.deadcode.wmelitedemo;
 				PRODUCT_NAME = wmelite;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
@@ -1098,7 +1098,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -1120,7 +1120,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
