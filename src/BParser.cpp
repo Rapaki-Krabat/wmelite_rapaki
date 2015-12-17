@@ -347,9 +347,21 @@ int CBParser::ScanStr(const char * in, const char * format, ...)
 					const char* in2 = in + strspn (in, "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 					int l = (int)(in2-in);
 
-					*a = (bool)(!CBPlatform::strnicmp (in, "yes", l) || !CBPlatform::strnicmp (in, "true", l) || !CBPlatform::strnicmp (in, "on", l) ||
-						!CBPlatform::strnicmp (in, "1", l));
+					// explicitly convert to bool
+					if ((CBPlatform::strnicmp (in, "yes", l) == 0)
+							|| (CBPlatform::strnicmp (in, "true", l) == 0)
+							|| (CBPlatform::strnicmp (in, "on", l) == 0)
+							|| (CBPlatform::strnicmp (in, "1", l) == 0))
+					{
+						*a = true;
+					}
+					else
+					{
+						*a = false;
+					}
 
+					//*a = (bool)(!CBPlatform::strnicmp (in, "yes", l) || !CBPlatform::strnicmp (in, "true", l) || !CBPlatform::strnicmp (in, "on", l) ||
+					//	!CBPlatform::strnicmp (in, "1", l));
 
 					in = in2 + strspn (in2, " \t\n\f");
 					num++;
