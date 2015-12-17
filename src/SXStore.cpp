@@ -86,7 +86,7 @@ HRESULT CSXStore::ScCallMethod(CScScript* script, CScStack* stack, CScStack* thi
 	{
 		stack->CorrectParams(0);
 		SetEventsEnabled(script, true);
-		stack->PushBool(GetEventsEnabled() == true);
+		stack->PushBool(GetEventsEnabled());
 		return S_OK;
 	}
 	//////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ HRESULT CSXStore::ScCallMethod(CScScript* script, CScStack* stack, CScStack* thi
 	{
 		stack->CorrectParams(0);
 		SetEventsEnabled(script, false);
-		stack->PushBool(GetEventsEnabled() == false);
+		stack->PushBool(!GetEventsEnabled());
 		return S_OK;
 	}
 	//////////////////////////////////////////////////////////////////////////

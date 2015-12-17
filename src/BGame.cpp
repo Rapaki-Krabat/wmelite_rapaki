@@ -479,7 +479,7 @@ HRESULT CBGame::Initialize3() // renderer is initialized
 //////////////////////////////////////////////////////////////////////
 void CBGame::DEBUG_DebugEnable(const char* Filename, bool writeLogOnly)
 {
-	if (writeLogOnly == true)
+	if (writeLogOnly)
 	{
 		m_DEBUG_LogWriteMode = true;
 	}

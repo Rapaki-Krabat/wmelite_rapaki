@@ -312,13 +312,13 @@ AnsiString PathUtil::GetAbsolutePath(const AnsiString& path)
 	char fullPath[32768]; // UNIX paths can be longer
 
 #ifdef __ANDROID__
-	if (StringUtil::StartsWith(path, assetIdentifier, false) == true) {
+	if (StringUtil::StartsWith(path, assetIdentifier, false)) {
 		return path;
 	}
-	if (StringUtil::StartsWith(path, obbPlainIdentifier, false) == true) {
+	if (StringUtil::StartsWith(path, obbPlainIdentifier, false)) {
 		return path;
 	}
-	if (StringUtil::StartsWith(path, obbMountIdentifier, false) == true) {
+	if (StringUtil::StartsWith(path, obbMountIdentifier, false)) {
 		return path;
 	}
 #endif
@@ -378,15 +378,15 @@ generic_directory_ops* PathUtil::GetDirectoryAccessMethod(const AnsiString &path
 #else
 	dir_access_variant variant = DIR_ACCESS_VARIANT_PLAIN;
 
-	if (StringUtil::StartsWith(path, assetIdentifier, false) == true)
+	if (StringUtil::StartsWith(path, assetIdentifier, false))
 	{
 		variant = DIR_ACCESS_VARIANT_ANDROID_ASSET;
 	}
-	if (StringUtil::StartsWith(path, obbPlainIdentifier, false) == true)
+	if (StringUtil::StartsWith(path, obbPlainIdentifier, false))
 	{
 		variant = DIR_ACCESS_VARIANT_ANDROID_OBB_PLAIN;
 	}
-	if (StringUtil::StartsWith(path, obbMountIdentifier, false) == true)
+	if (StringUtil::StartsWith(path, obbMountIdentifier, false))
 	{
 		variant = DIR_ACCESS_VARIANT_ANDROID_OBB_MOUNT;
 	}
@@ -403,15 +403,15 @@ generic_file_ops* PathUtil::GetFileAccessMethod(const AnsiString &path)
 #else
 	file_access_variant variant = FILE_ACCESS_VARIANT_PLAIN;
 
-	if (StringUtil::StartsWith(path, assetIdentifier, false) == true)
+	if (StringUtil::StartsWith(path, assetIdentifier, false))
 	{
 		variant = FILE_ACCESS_VARIANT_ANDROID_ASSET;
 	}
-	if (StringUtil::StartsWith(path, obbPlainIdentifier, false) == true)
+	if (StringUtil::StartsWith(path, obbPlainIdentifier, false))
 	{
 		variant = FILE_ACCESS_VARIANT_ANDROID_OBB_PLAIN;
 	}
-	if (StringUtil::StartsWith(path, obbMountIdentifier, false) == true)
+	if (StringUtil::StartsWith(path, obbMountIdentifier, false))
 	{
 		variant = FILE_ACCESS_VARIANT_ANDROID_OBB_MOUNT;
 	}

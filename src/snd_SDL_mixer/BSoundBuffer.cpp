@@ -177,7 +177,7 @@ HRESULT CBSoundBuffer::LoadFromFile(const char* Filename, bool ForceReload)
 	m_rwops->hidden.unknown.data1 = m_File;
 
 	// check whether to load the file as music (streamed) or chunk (not streamed)
-	if ((m_Streamed == true) || (FileSizeImpl(m_rwops) > MAX_NONSTREAMED_FILE_SIZE))
+	if ((m_Streamed) || (FileSizeImpl(m_rwops) > MAX_NONSTREAMED_FILE_SIZE))
 	{
 		m_music = Mix_LoadMUS_RW(m_rwops, 0);
 		if (!m_music)
@@ -213,13 +213,13 @@ HRESULT CBSoundBuffer::Play(bool Looping, DWORD StartSample)
 
 	if (m_chunk)
 	{
-		m_currChannel = Mix_PlayChannelTimed(-1, m_chunk, (Looping == true) ? -1 : 0, -1, StartSample);
+		m_currChannel = Mix_PlayChannelTimed(-1, m_chunk, (Looping) ? -1 : 0, -1, StartSample);
 		Game->LOG(0, "Started non-streaming play.");
 	}
 	if (m_music)
 	{
 		double position_s = ((double) StartSample) / 1000.0f;
-		m_currChannel = Mix_FadeInMusicPosCh(m_music, (Looping == true) ? -1 : 0, 0, -1, position_s);
+		m_currChannel = Mix_FadeInMusicPosCh(m_music, (Looping) ? -1 : 0, 0, -1, position_s);
 		Game->LOG(0, "Started streaming play.");
 	}
 
@@ -284,11 +284,11 @@ void CBSoundBuffer::SetLooping(bool looping)
 	// change the looping parameter of the already playing stream
 	if ((m_chunk) && (m_currChannel >= 0))
 	{
-		Mix_SetLoops(m_currChannel, (looping == true) ? -1 : 0);
+		Mix_SetLoops(m_currChannel, (looping) ? -1 : 0);
 	}
 	if ((m_music) && (m_currChannel >= 0))
 	{
-		Mix_SetMusicLoops(m_music, m_currChannel, (looping == true) ? -1 : 0);
+		Mix_SetMusicLoops(m_music, m_currChannel, (looping) ? -1 : 0);
 	}
 }
 

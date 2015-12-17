@@ -59,7 +59,7 @@ CBFontTT::CBFontTT(CBGame* inGame):CBFont(inGame)
 
 	m_FontYOffsetCompensation = inGame->m_Registry->ReadInt("Font", "FontYOffsetCompensation", 0);
 
-	inGame->LOG(0, "Font alpha hack is %s.", (m_FontAlphaHack == true) ? "on" : "off");
+	inGame->LOG(0, "Font alpha hack is %s.", (m_FontAlphaHack) ? "on" : "off");
 	inGame->LOG(0, "Font Y offset value=%d.", m_FontYOffsetCompensation);
 }
 
@@ -416,7 +416,7 @@ void CBFontTT::BlitSurface(SDL_Surface* src, SDL_Surface* target, SDL_Rect* targ
 		Uint32* srcBuf32 = (Uint32*)srcBuf;
 		Uint32* tgtBuf32 = (Uint32*)tgtBuf;
 
-		if (m_FontAlphaHack == true)
+		if (m_FontAlphaHack)
 		{
 			// hack that resolves the issue with fonts where characters that "overlap"
 			// when being rendered, so that they are not partly cut off

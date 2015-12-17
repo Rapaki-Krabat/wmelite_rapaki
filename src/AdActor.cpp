@@ -881,7 +881,7 @@ void CAdActor::GetNextStep()
 		ApplyEvent("ActorIsBlocked");
 		
 		// stop and set the block flag
-		if (m_StopOnBlocked == true)
+		if (m_StopOnBlocked)
 		{
 			m_ActorIsBlocked = true;
 			m_State = m_NextState;

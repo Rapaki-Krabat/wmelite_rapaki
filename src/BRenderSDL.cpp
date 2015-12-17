@@ -68,8 +68,8 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 	bool doubleBuffering = Game->m_Registry->ReadBool("Rendering", "DoubleBuffering", false);
 
-	Game->LOG(0, "Double buffering flag set to: %s.", (doubleBuffering == true) ? "ON" : "default");
-	if (doubleBuffering == true)
+	Game->LOG(0, "Double buffering flag set to: %s.", (doubleBuffering) ? "ON" : "default");
+	if (doubleBuffering)
 	{
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	}
@@ -271,7 +271,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 #endif
 
-	if (StringUtil::CompareNoCase(renderingHint, "default") == true) {
+	if (StringUtil::CompareNoCase(renderingHint, "default")) {
 		Game->LOG(0, "Set rendering hint default value: %s", defaultRenderingHint.c_str());
 		SDL_SetHint(SDL_HINT_RENDER_DRIVER, defaultRenderingHint.c_str());
 	} else {
@@ -280,7 +280,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	}
 
 
-	if (vsync == true) SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
+	if (vsync) SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
 
 #ifdef __ANDROID__
 
@@ -296,7 +296,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	SDL_GetRendererInfo(m_Renderer, &info);
 	Game->LOG(0, "Renderer max texture sizes: x=%d y=%d.\n", info.max_texture_width, info.max_texture_height);
 
-	if (m_PixelPerfect == true) {
+	if (m_PixelPerfect) {
 		// try to make texture scaling look as nice as possible
 		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
 		m_Texture = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, m_Width, m_Height);
@@ -349,8 +349,8 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 /////////////////////////////////////////////////////
 HRESULT CBRenderSDL::SendRenderingHintSceneComplete()
 {
-	if (m_PixelPerfect == true) {
-		if (m_RenderOffscreen == true) {
+	if (m_PixelPerfect) {
+		if (m_RenderOffscreen) {
 			SDL_SetRenderTarget(m_Renderer, NULL);
 			SDL_RenderSetViewport(m_Renderer, NULL);
 			SDL_RenderCopy(m_Renderer, m_Texture, NULL, &m_PixelPerfectTargetRect);
@@ -433,7 +433,7 @@ HRESULT CBRenderSDL::Flip()
 		m_AccumulatedSleepTime += m_FrameSleepTime - renderDiffTime;
 
 		// if the brake is active, sleep here
-		if ((m_FrameRateLimitBrakeActive == true) && (renderDiffTime < m_FrameSleepTime))
+		if ((m_FrameRateLimitBrakeActive) && (renderDiffTime < m_FrameSleepTime))
 		{
 			CBPlatform::SleepMs(m_FrameSleepTime - renderDiffTime);
 		}
@@ -445,7 +445,7 @@ HRESULT CBRenderSDL::Flip()
 		if ((m_LastRenderTime - m_SecondTickTime) > 1000)
 		{
 			// modify the sleep time if the actual frame rate diverts from the requested one
-			if ((m_FrameRateLimitBrakeActive == true) && (m_FrameCounter != m_FrameRateLimit))
+			if ((m_FrameRateLimitBrakeActive) && (m_FrameCounter != m_FrameRateLimit))
 			{
 				if (m_FrameCounter > (m_FrameRateLimit + 1))
 				{
@@ -492,7 +492,7 @@ HRESULT CBRenderSDL::EraseBackground()
 
 	// in case of pixelperfect rendering, both on- and offscreen
 	// image need to be erased
-	if (m_PixelPerfect == true) {
+	if (m_PixelPerfect) {
 		SDL_SetRenderTarget(m_Renderer, m_Texture);
 		SDL_RenderSetViewport(m_Renderer, NULL);
 		Fill(0, 0, 0, NULL);
