@@ -31,6 +31,10 @@ THE SOFTWARE.
 #include "StringUtil.h"
 #include <math.h>
 
+#ifdef __IPHONEOS__
+// #define EMULATE_VIEWPORT_SETTING
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 CBRenderSDL::CBRenderSDL(CBGame* inGame) : CBRenderer(inGame)
 {
@@ -249,7 +253,8 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 #ifdef __IPHONEOS__
 	// SDL defaults to OGL ES2, which doesn't work on old devices
-	AnsiString defaultRenderingHint = "opengles";
+    // 20151219: changed to opengles2, assume all active devices will work
+	AnsiString defaultRenderingHint = "opengles2";
 #else
 
 #ifdef __ANDROID__
@@ -355,7 +360,7 @@ HRESULT CBRenderSDL::SendRenderingHintSceneComplete()
 			SDL_RenderSetViewport(m_Renderer, NULL);
 			SDL_RenderCopy(m_Renderer, m_Texture, NULL, &m_PixelPerfectTargetRect);
 
-#ifndef __IPHONEOS__
+#ifndef EMULATE_VIEWPORT_SETTING
 			SDL_RenderSetViewport(m_Renderer, &m_PixelPerfectTargetRect);
 #endif
 
@@ -370,7 +375,7 @@ HRESULT CBRenderSDL::SendRenderingHintSceneComplete()
 HRESULT CBRenderSDL::Flip()
 {
 	
-#ifdef __IPHONEOS__
+#ifdef EMULATE_VIEWPORT_SETTING
 	// hack: until viewports work correctly, we just paint black bars instead
     
 	SDL_SetRenderDrawColor(m_Renderer, 0x00, 0x00, 0x00, 0xFF);
@@ -568,7 +573,7 @@ HRESULT CBRenderSDL::DrawLine(int X1, int Y1, int X2, int Y2, DWORD Color)
 	SDL_SetRenderDrawColor(m_Renderer, r, g, b, a);
 	SDL_SetRenderDrawBlendMode(m_Renderer, SDL_BLENDMODE_BLEND);
 
-#ifdef __IPHONEOS__
+#ifdef EMULATE_VIEWPORT_SETTING
 	// maybe on iOS viewport setting still doesn't work...
 	POINT point1, point2;
 	point1.x = X1;
@@ -661,7 +666,7 @@ HRESULT CBRenderSDL::SetViewport(int left, int top, int right, int bottom)
 		rect.h = (bottom - top) * m_RatioY;
 
 		// TODO fix this once viewports work correctly in SDL/landscape
-#ifndef __IPHONEOS__	
+#ifndef EMULATE_VIEWPORT_SETTING
 		SDL_RenderSetViewport(GetSdlRenderer(), &rect);
 #endif
 	}
