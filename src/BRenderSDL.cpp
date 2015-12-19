@@ -714,16 +714,16 @@ void CBRenderSDL::ModOrigin(SDL_Point* origin)
 //////////////////////////////////////////////////////////////////////////
 void CBRenderSDL::PointFromScreen(POINT* point)
 {
-	point->x = point->x / m_RatioX - m_BorderLeft;
-	point->y = point->y / m_RatioY - m_BorderTop;
+	point->x = (point->x  - m_BorderLeft) / m_RatioX;
+	point->y = (point->y  - m_BorderTop) / m_RatioY;
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 void CBRenderSDL::PointToScreen(POINT* point)
 {
-	point->x = MathUtil::Round(point->x * m_RatioX + m_BorderLeft);
-	point->y = MathUtil::Round(point->y * m_RatioY + m_BorderTop);
+	point->x = MathUtil::Round((point->x * m_RatioX) + m_BorderLeft);
+	point->y = MathUtil::Round((point->y * m_RatioY) + m_BorderTop);
 }
 
 //////////////////////////////////////////////////////////////////////////

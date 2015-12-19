@@ -148,6 +148,11 @@
 		659DAA5D1B58CB9F002C9A2E /* libreverb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659DAA5C1B58CB9F002C9A2E /* libreverb.a */; };
 		659DAA5F1B58CBAC002C9A2E /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659DAA5E1B58CBAC002C9A2E /* libSDL2.a */; };
 		659DAA611B58CBB7002C9A2E /* libSDL2_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659DAA601B58CBB7002C9A2E /* libSDL2_mixer.a */; };
+		65B42FE81C12EC8000D58A6D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65B42FE71C12EC8000D58A6D /* Default-568h@2x.png */; };
+		65B42FEA1C12F2AD00D58A6D /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65B42FE91C12F2AD00D58A6D /* Icon-60@2x.png */; };
+		65B42FED1C12F2B700D58A6D /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 65B42FEB1C12F2B700D58A6D /* Icon-76.png */; };
+		65B42FEE1C12F2B700D58A6D /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65B42FEC1C12F2B700D58A6D /* Icon-76@2x.png */; };
+		65C5DE4C1C25752D00FBEE13 /* settings.xml in Resources */ = {isa = PBXBuildFile; fileRef = 65C5DE4B1C25752D00FBEE13 /* settings.xml */; };
 		FD779EDE0E26BA1200F39101 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD779EDD0E26BA1200F39101 /* CoreAudio.framework */; };
 		FD77A07D0E26BD8C00F39101 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FD77A07C0E26BD8C00F39101 /* Icon.png */; };
 		FD77A07F0E26BDA900F39101 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = FD77A07E0E26BDA900F39101 /* Default.png */; };
@@ -422,6 +427,11 @@
 		659DAA5C1B58CB9F002C9A2E /* libreverb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libreverb.a; path = ../dep/libreverb/libcombined/libreverb.a; sourceTree = "<group>"; };
 		659DAA5E1B58CBAC002C9A2E /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = ../dep/libSDL2/libcombined/libSDL2.a; sourceTree = "<group>"; };
 		659DAA601B58CBB7002C9A2E /* libSDL2_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2_mixer.a; path = ../dep/libSDL2_Mixer/libcombined/libSDL2_mixer.a; sourceTree = "<group>"; };
+		65B42FE71C12EC8000D58A6D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		65B42FE91C12F2AD00D58A6D /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
+		65B42FEB1C12F2B700D58A6D /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
+		65B42FEC1C12F2B700D58A6D /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
+		65C5DE4B1C25752D00FBEE13 /* settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = settings.xml; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD779EDD0E26BA1200F39101 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		FD77A07C0E26BD8C00F39101 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -731,6 +741,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				65C5DE4B1C25752D00FBEE13 /* settings.xml */,
+				65B42FE71C12EC8000D58A6D /* Default-568h@2x.png */,
+				65B42FEB1C12F2B700D58A6D /* Icon-76.png */,
+				65B42FEC1C12F2B700D58A6D /* Icon-76@2x.png */,
+				65B42FE91C12F2AD00D58A6D /* Icon-60@2x.png */,
 				469528C61391348600A42BB9 /* Icon-72.png */,
 				469528C71391348600A42BB9 /* Icon-Small-50.png */,
 				469528C81391348600A42BB9 /* Icon-Small.png */,
@@ -830,7 +845,12 @@
 			files = (
 				1E3C2A03175B604300B79FCB /* DejaVuSans.ttf in Resources */,
 				FD77A07D0E26BD8C00F39101 /* Icon.png in Resources */,
+				65C5DE4C1C25752D00FBEE13 /* settings.xml in Resources */,
 				FD77A07F0E26BDA900F39101 /* Default.png in Resources */,
+				65B42FEE1C12F2B700D58A6D /* Icon-76@2x.png in Resources */,
+				65B42FE81C12EC8000D58A6D /* Default-568h@2x.png in Resources */,
+				65B42FEA1C12F2AD00D58A6D /* Icon-60@2x.png in Resources */,
+				65B42FED1C12F2B700D58A6D /* Icon-76.png in Resources */,
 				46EB701A1359B54A00E280F6 /* data.dcp in Resources */,
 				469528CB1391348600A42BB9 /* Icon-72.png in Resources */,
 				469528CC1391348600A42BB9 /* Icon-Small-50.png in Resources */,
@@ -979,8 +999,9 @@
 					"$(ARCHS_STANDARD)",
 					armv7s,
 				);
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_ENTITLEMENTS[sdk=*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -990,25 +1011,25 @@
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/libfreeimage/include\"",
-					"\"$(SRCROOT)/../dep/libfreetype/include\"",
-					"\"$(SRCROOT)/../dep/libSDL2/include\"",
-					"\"$(SRCROOT)/../dep/libSDL2_Mixer/include\"",
-					"\"$(SRCROOT)/../dep/libecho/include\"",
-					"\"$(SRCROOT)/../dep/libreverb/include\"",
-					"\"$(SRCROOT)/../dep/libreverb/include/Reverb/lib/\"",
-					"\"$(SRCROOT)/../dep/libreverb/include/Common/lib/\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libfreeimage/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libfreetype/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libSDL2/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libSDL2_Mixer/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libecho/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libreverb/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libreverb/include/Reverb/lib/\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libreverb/include/Common/lib/\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreeimage/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreetype/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libreverb/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2_Mixer/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libecho/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libfreeimage/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libfreetype/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libreverb/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libSDL2/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libSDL2_Mixer/libcombined",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -1022,7 +1043,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.deadcode.wmelitedemo;
 				PRODUCT_NAME = wmelite;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -1038,8 +1059,8 @@
 					"$(ARCHS_STANDARD)",
 					armv7s,
 				);
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -1047,25 +1068,25 @@
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../dep/libfreeimage/include\"",
-					"\"$(SRCROOT)/../dep/libfreetype/include\"",
-					"\"$(SRCROOT)/../dep/libSDL2/include\"",
-					"\"$(SRCROOT)/../dep/libSDL2_Mixer/include\"",
-					"\"$(SRCROOT)/../dep/libecho/include\"",
-					"\"$(SRCROOT)/../dep/libreverb/include\"",
-					"\"$(SRCROOT)/../dep/libreverb/include/Reverb/lib/\"",
-					"\"$(SRCROOT)/../dep/libreverb/include/Common/lib/\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libfreeimage/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libfreetype/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libSDL2/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libSDL2_Mixer/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libecho/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libreverb/include\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libreverb/include/Reverb/lib/\"",
+					"\"$(SRCROOT)/../../xcode-ios/dep/libreverb/include/Common/lib/\"",
 				);
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libecho/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreeimage/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libfreetype/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libreverb/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2/libcombined",
-					"/Users/daniel/wmelite-rapaki-edition/xcode-ios/dep/libSDL2_Mixer/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libecho/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libfreeimage/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libfreetype/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libreverb/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libSDL2/libcombined",
+					"$(SRCROOT)/../../xcode-ios/dep/libSDL2_Mixer/libcombined",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CPLUSPLUSFLAGS = (
@@ -1079,7 +1100,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.deadcode.wmelitedemo;
 				PRODUCT_NAME = wmelite;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -1092,8 +1113,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: daniel.sobe@googlemail.com (E9TB7QFFZ3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: daniel.sobe@googlemail.com (E9TB7QFFZ3)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1102,7 +1123,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1114,8 +1136,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: daniel.sobe@googlemail.com (E9TB7QFFZ3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: daniel.sobe@googlemail.com (E9TB7QFFZ3)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1124,7 +1146,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
