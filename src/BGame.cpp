@@ -241,7 +241,7 @@ CBGame::CBGame():CBObject(this)
 	m_UsedMem = 0;
 
 
-	m_AutoSaveOnExit = true;
+	m_AutoSaveOnExit = false; // changed because autosave should not kick in when in main menu
 	m_AutoSaveSlot = 999;
 	m_CursorHidden = false;
 
