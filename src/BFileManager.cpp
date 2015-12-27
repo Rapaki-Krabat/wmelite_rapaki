@@ -176,7 +176,11 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 	CBUtils::CreatePath(Filename, false);
 	
-	FILE* f = fopen(Filename, "wb");
+	char *tmpFile = new char[strlen(Filename) + 5];
+	strcpy(tmpFile, Filename);
+	strcat(tmpFile, ".tmp");
+
+	FILE* f = fopen(tmpFile, "wb");
 	if(!f)
 	{
 		Game->LOG(0, "Error opening file '%s' for writing.", Filename);
@@ -199,7 +203,11 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		}
 		else
 		{
-			if(compress(CompBuffer, (uLongf*)&CompSize, Buffer, BufferSize)==Z_OK)
+			int compStatus;
+
+			compStatus = compress(CompBuffer, (uLongf*)&CompSize, Buffer, BufferSize);
+
+			if (compStatus == Z_OK)
 			{
 				DWORD magic = DCGF_MAGIC;
 				fwrite(&magic, sizeof(DWORD), 1, f);
@@ -216,7 +224,7 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 			}
 			else
 			{
-				Game->LOG(0, "Error compressing data while saving '%s'", Filename);
+				Game->LOG(0, "Error %d compressing data while saving '%s'", compStatus, Filename);
 				Compressed = false;
 			}
 
@@ -227,6 +235,10 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	if(!Compressed) fwrite(Buffer, BufferSize, 1, f);
 
 	fclose(f);
+
+	rename(tmpFile, Filename);
+
+	delete [] tmpFile;
 
 	return S_OK;
 }

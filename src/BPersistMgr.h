@@ -48,7 +48,7 @@ public:
 	void PutString(const char* Val);
 	void Cleanup();
 	HRESULT InitLoad(char* Filename);
-	HRESULT InitSave(char* Desc);
+	HRESULT InitSave(char* Desc, bool quickSave);
 	HRESULT GetBytes(BYTE* Buffer, DWORD Size);
 	HRESULT PutBytes(BYTE* Buffer, DWORD Size);
 	DWORD m_Offset;

@@ -3457,7 +3457,7 @@ HRESULT CBGame::SaveGame(int slot, char* desc, bool quickSave)
 	m_IndicatorDisplay = true;
 	m_IndicatorProgress = 0;
 	CBPersistMgr* pm = new CBPersistMgr(Game);
-	if(FAILED(ret = pm->InitSave(desc))) goto save_finish;
+	if(FAILED(ret = pm->InitSave(desc, quickSave))) goto save_finish;
 
 	if (!quickSave)
 	{
@@ -5019,13 +5019,20 @@ bool CBGame::IsDoubleClick(int buttonIndex)
 //////////////////////////////////////////////////////////////////////////
 void CBGame::AutoSaveOnExit()
 {
-	m_SoundMgr->SaveSettings();
-	m_Registry->SaveValues();
+	if ((!m_AutoSaveOnExit) || (m_State == GAME_FROZEN))
+	{
+		m_SoundMgr->SaveSettings();
+		m_Registry->SaveValues();
+	}
+	else
+	{
+		m_SoundMgr->SaveSettings();
+		SaveGame(m_AutoSaveSlot, "autosave", true);
 
-	if (!m_AutoSaveOnExit) return;
-	if (m_State == GAME_FROZEN) return;
-
-	SaveGame(m_AutoSaveSlot, "autosave", true);
+		// save registry values AFTER saving the game, so that "System.MostRecentSaveSlot"
+		// points to the autosaved game
+		m_Registry->SaveValues();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

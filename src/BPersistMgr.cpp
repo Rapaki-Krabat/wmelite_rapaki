@@ -103,7 +103,7 @@ void CBPersistMgr::Cleanup()
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBPersistMgr::InitSave(char* Desc)
+HRESULT CBPersistMgr::InitSave(char* Desc, bool quickSave)
 {
 	if(!Desc) return E_FAIL;
 
@@ -123,8 +123,8 @@ HRESULT CBPersistMgr::InitSave(char* Desc)
 
 	if(SUCCEEDED(res))
 	{
-		// get thumbnails
-		if(!Game->m_CachedThumbnail)
+		// get thumbnails (unless for quick save)
+		if ((!Game->m_CachedThumbnail) && (!quickSave))
 		{
 			Game->m_CachedThumbnail = new CBSaveThumbHelper(Game);
 			if(FAILED(Game->m_CachedThumbnail->StoreThumbnail(true)))
@@ -152,7 +152,8 @@ HRESULT CBPersistMgr::InitSave(char* Desc)
 		// thumbnail data size
 		bool ThumbnailOK = false;
 
-		if(Game->m_CachedThumbnail)
+		// do not save the thumbnail in quick save mode
+		if ((Game->m_CachedThumbnail) && (!quickSave))
 		{
 			if(Game->m_CachedThumbnail->m_Thumbnail)
 			{
