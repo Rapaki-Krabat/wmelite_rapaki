@@ -29,11 +29,20 @@ THE SOFTWARE.
 #include <algorithm>
 #include <vector>
 
-
+#ifdef __LINUX__
+#include <dlfcn.h>
+#endif
 
 IMPLEMENT_PERSISTENT(CScEngine, true);
 
+#ifdef __WIN32__
 #define COMPILER_DLL "dcscomp.dll"
+#else
+#ifdef __LINUX__
+#define COMPILER_DLL "libdcscomp.so"
+#endif
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 CScEngine::CScEngine(CBGame* inGame):CBBase(inGame)
 {
@@ -89,8 +98,85 @@ CScEngine::CScEngine(CBGame* inGame):CBBase(inGame)
 	}
 	else m_CompilerAvailable = false;
 #else
+#ifndef __ANDROID__
+#ifdef __LINUX__
+	char CompilerPath[MAX_PATH];
+	strcpy(CompilerPath, "/home/daniel/wmelite-rapaki-edition/projects/wme_demo_touch/data/");
+	strcat(CompilerPath, COMPILER_DLL);
+	char *errorStr;
+	
+	m_CompilerDLL = dlopen(CompilerPath, RTLD_LAZY);
+	if(m_CompilerDLL != NULL)
+	{
+		Game->LOG(0, "dlopen success!");
+		// bind compiler's functionality
+		ExtCompileBuffer  = (DLL_COMPILE_BUFFER)  dlsym(m_CompilerDLL, "CompileBuffer");
+		if (ExtCompileBuffer == NULL) Game->LOG(0, "dlsym CompileBuffer not found!");
+		errorStr = dlerror();
+		if (errorStr != NULL) Game->LOG(0, "compiler library ExtCompileBuffer dlsym error: '%s'", errorStr);
+
+		ExtCompileFile    = (DLL_COMPILE_FILE)    dlsym(m_CompilerDLL, "CompileFile");   
+		if (ExtCompileFile == NULL) Game->LOG(0, "dlsym ExtCompileFile not found!");
+		errorStr = dlerror();
+		if (errorStr != NULL) Game->LOG(0, "compiler library ExtCompileFile dlsym error: '%s'", errorStr);
+
+		ExtReleaseBuffer  = (DLL_RELEASE_BUFFER)  dlsym(m_CompilerDLL, "ReleaseBuffer"); 
+		if (ExtReleaseBuffer == NULL) Game->LOG(0, "dlsym ExtReleaseBuffer not found!");
+		errorStr = dlerror();
+		if (errorStr != NULL) Game->LOG(0, "compiler library ExtReleaseBuffer dlsym error: '%s'", errorStr);
+
+		ExtSetCallbacks   = (DLL_SET_CALLBACKS)   dlsym(m_CompilerDLL, "SetCallbacks");  
+		if (ExtSetCallbacks == NULL) Game->LOG(0, "dlsym ExtSetCallbacks not found!");
+		errorStr = dlerror();
+		if (errorStr != NULL) Game->LOG(0, "compiler library ExtSetCallbacks dlsym error: '%s'", errorStr);
+
+		ExtDefineFunction = (DLL_DEFINE_FUNCTION) dlsym(m_CompilerDLL, "DefineFunction");
+		if (ExtDefineFunction == NULL) Game->LOG(0, "dlsym ExtDefineFunction not found!");
+		errorStr = dlerror();
+		if (errorStr != NULL) Game->LOG(0, "compiler library ExtDefineFunction dlsym error: '%s'", errorStr);
+
+		ExtDefineVariable = (DLL_DEFINE_VARIABLE) dlsym(m_CompilerDLL, "DefineVariable");
+		if (ExtDefineVariable == NULL) Game->LOG(0, "dlsym ExtDefineVariable not found!");
+		errorStr = dlerror();
+		if (errorStr != NULL) Game->LOG(0, "compiler library ExtDefineVariable dlsym error: '%s'", errorStr);
+
+		if(!ExtCompileBuffer||!ExtCompileFile||!ExtReleaseBuffer||!ExtSetCallbacks||!ExtDefineFunction||!ExtDefineVariable)
+		{
+			Game->LOG(0, "at least one compiler symbol was not found!");
+			m_CompilerAvailable = false;
+			dlclose(m_CompilerDLL);
+			m_CompilerDLL = NULL;
+		}
+		else
+		{
+			Game->LOG(0, "success, compiler available!");
+			/*
+			// publish external methods to the compiler
+			CALLBACKS c;
+			c.Dll_AddError = AddError;
+			c.Dll_CloseFile = CloseFile;
+			c.Dll_LoadFile = LoadFile;
+			ExtSetCallbacks(&c, Game);
+			*/
+
+			m_CompilerAvailable = true;
+		}
+	}
+	else 
+	{
+		Game->LOG(0, "dlopen FAILED!");
+		errorStr = dlerror();
+		if (errorStr != NULL) Game->LOG(0, "open compiler library error: '%s'", errorStr);
+		m_CompilerAvailable = false;
+	}
+#else
 	m_CompilerAvailable = false;
 	m_CompilerDLL = NULL;
+#endif
+#else
+	m_CompilerAvailable = false;
+	m_CompilerDLL = NULL;
+#endif
 #endif
 
 

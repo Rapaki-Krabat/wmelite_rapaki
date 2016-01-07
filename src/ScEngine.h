@@ -131,7 +131,11 @@ public:
 	CScValue* m_Globals;
 	CScScript* RunScript(char* Filename, CBScriptHolder* Owner=NULL);
 	bool m_CompilerAvailable;
+#ifdef __LINUX__
+	void *m_CompilerDLL;
+#else
 	HINSTANCE m_CompilerDLL;
+#endif
 	CScEngine(CBGame* inGame);
 	virtual ~CScEngine();
 	static void WINAPI AddError (void* Data, int Line, char* Text);
