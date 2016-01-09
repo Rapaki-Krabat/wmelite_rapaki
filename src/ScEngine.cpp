@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include <algorithm>
 #include <vector>
 
-#ifdef __LINUX__
+#if defined(__LINUX__) || defined(__ANDROID__)
 #include <dlfcn.h>
 #endif
 
@@ -38,7 +38,7 @@ IMPLEMENT_PERSISTENT(CScEngine, true);
 #ifdef __WIN32__
 #define COMPILER_DLL "dcscomp.dll"
 #else
-#ifdef __LINUX__
+#if defined(__LINUX__) || defined(__ANDROID__)
 #define COMPILER_DLL "libdcscomp.so"
 #endif
 #endif
@@ -98,12 +98,10 @@ CScEngine::CScEngine(CBGame* inGame):CBBase(inGame)
 	}
 	else m_CompilerAvailable = false;
 #else
-#ifndef __ANDROID__
-#ifdef __LINUX__
+#if defined(__LINUX__) || defined(__ANDROID__)
 	char CompilerPath[MAX_PATH];
-	strcpy(CompilerPath, "/home/daniel/wmelite-rapaki-edition/projects/wme_demo_touch/data/");
-	strcat(CompilerPath, COMPILER_DLL);
-	char *errorStr;
+	strcpy(CompilerPath, COMPILER_DLL);
+	const char *errorStr;
 	
 	m_CompilerDLL = dlopen(CompilerPath, RTLD_LAZY);
 	if(m_CompilerDLL != NULL)
@@ -169,10 +167,6 @@ CScEngine::CScEngine(CBGame* inGame):CBBase(inGame)
 		if (errorStr != NULL) Game->LOG(0, "open compiler library error: '%s'", errorStr);
 		m_CompilerAvailable = false;
 	}
-#else
-	m_CompilerAvailable = false;
-	m_CompilerDLL = NULL;
-#endif
 #else
 	m_CompilerAvailable = false;
 	m_CompilerDLL = NULL;

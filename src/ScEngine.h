@@ -131,7 +131,7 @@ public:
 	CScValue* m_Globals;
 	CScScript* RunScript(char* Filename, CBScriptHolder* Owner=NULL);
 	bool m_CompilerAvailable;
-#ifdef __LINUX__
+#if defined(__LINUX__) || defined(__ANDROID__)
 	void *m_CompilerDLL;
 #else
 	HINSTANCE m_CompilerDLL;
