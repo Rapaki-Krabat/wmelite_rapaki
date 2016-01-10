@@ -31,7 +31,7 @@ static long       file_read_plain(char *buffer, long size, FILEHANDLE handle);
 static long       file_write_plain(const char *buffer, long size, FILEHANDLE handle);
 static long       file_print_plain(FILEHANDLE handle, const char *format, ...);
 static int        file_putc_plain(int character, FILEHANDLE handle);
-static int        file_seek_plain(FILEHANDLE handle, long offset, int whence);
+static int        file_seek_plain(FILEHANDLE handle, off_t offset, int whence);
 static long       file_tell_plain(FILEHANDLE handle);
 static int        file_error_plain(FILEHANDLE handle);
 static int        file_close_plain(FILEHANDLE handle);
@@ -46,7 +46,7 @@ static long       file_read_android_asset(char *buffer, long size, FILEHANDLE ha
 static long       file_write_android_asset(const char *buffer, long size, FILEHANDLE handle);
 static long       file_print_android_asset(FILEHANDLE handle, const char *format, ...);
 static int        file_putc_android_asset(int character, FILEHANDLE handle);
-static int        file_seek_android_asset(FILEHANDLE handle, long offset, int whence);
+static int        file_seek_android_asset(FILEHANDLE handle, off_t offset, int whence);
 static long       file_tell_android_asset(FILEHANDLE handle);
 static int        file_error_android_asset(FILEHANDLE handle);
 static int        file_close_android_asset(FILEHANDLE handle);
@@ -57,7 +57,7 @@ static long       file_read_android_obb_plain(char *buffer, long size, FILEHANDL
 static long       file_write_android_obb_plain(const char *buffer, long size, FILEHANDLE handle);
 static long       file_print_android_obb_plain(FILEHANDLE handle, const char *format, ...);
 static int        file_putc_android_obb_plain(int character, FILEHANDLE handle);
-static int        file_seek_android_obb_plain(FILEHANDLE handle, long offset, int whence);
+static int        file_seek_android_obb_plain(FILEHANDLE handle, off_t offset, int whence);
 static long       file_tell_android_obb_plain(FILEHANDLE handle);
 static int        file_error_android_obb_plain(FILEHANDLE handle);
 static int        file_close_android_obb_plain(FILEHANDLE handle);
@@ -68,7 +68,7 @@ static long       file_read_android_obb_mount(char *buffer, long size, FILEHANDL
 static long       file_write_android_obb_mount(const char *buffer, long size, FILEHANDLE handle);
 static long       file_print_android_obb_mount(FILEHANDLE handle, const char *format, ...);
 static int        file_putc_android_obb_mount(int character, FILEHANDLE handle);
-static int        file_seek_android_obb_mount(FILEHANDLE handle, long offset, int whence);
+static int        file_seek_android_obb_mount(FILEHANDLE handle, off_t offset, int whence);
 static long       file_tell_android_obb_mount(FILEHANDLE handle);
 static int        file_error_android_obb_mount(FILEHANDLE handle);
 static int        file_close_android_obb_mount(FILEHANDLE handle);
