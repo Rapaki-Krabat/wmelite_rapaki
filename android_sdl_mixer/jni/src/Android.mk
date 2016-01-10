@@ -69,6 +69,17 @@ include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
+LOCAL_MODULE := dcscomp
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
+LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libdcscomp.so
+else
+LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libdcscomp.so
+endif
+
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
 LOCAL_MODULE := main
 
 SDL_PATH := ../../../dependencies/SDL/jni/
@@ -85,7 +96,9 @@ $(LOCAL_PATH)/../../../dependencies/libeffects-android/jni/Common/lib/ \
 $(LOCAL_PATH)/../../../dependencies/libecho/jni/ \
 $(LOCAL_PATH)/../../../src/
 
-LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-write-strings -Wno-conversion-null -DUSE_SDL_MIXER
+LOCAL_CFLAGS += -Wcast-align
+
+LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-write-strings -Wno-conversion-null -DUSE_SDL_MIXER -Wcast-align
 
 # LOCAL_ARM_MODE := arm
 

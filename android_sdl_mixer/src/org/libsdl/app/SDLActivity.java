@@ -84,7 +84,8 @@ public class SDLActivity extends Activity {
             // "SDL2_ttf",
             "effectsprivate",
             "echo",
-            "main"
+            "main",
+            "dcscomp"
         };
     }
 
