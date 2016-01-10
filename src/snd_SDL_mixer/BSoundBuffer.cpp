@@ -757,7 +757,7 @@ Sint64 CBSoundBuffer::FileSeekImpl(SDL_RWops *ops, Sint64 offset, int whence)
     if (whence == RW_SEEK_END) {
         Origin = SEEK_TO_END;
     }
-    file->Seek(((DWORD) offset), Origin);
+    file->Seek(((LONG) offset), Origin);
 
     return file->GetPos();
 }
