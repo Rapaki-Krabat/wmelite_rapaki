@@ -208,9 +208,9 @@ static int        file_putc_plain(int character, FILEHANDLE handle)
 	return fputc(character, (FILE*) handle);
 }
 
-static int        file_seek_plain(FILEHANDLE handle, long offset, int whence)
+static int        file_seek_plain(FILEHANDLE handle, off_t offset, int whence)
 {
-	return fseek((FILE*) handle, offset, whence);
+	return fseeko((FILE*) handle, offset, whence);
 }
 
 static long       file_tell_plain(FILEHANDLE handle)
@@ -319,7 +319,7 @@ static int        file_putc_android_asset(int character, FILEHANDLE handle)
     return 0;
 }
 
-static int        file_seek_android_asset(FILEHANDLE handle, long offset, int whence)
+static int        file_seek_android_asset(FILEHANDLE handle, off_t offset, int whence)
 {
     int retval = AAsset_seek((AAsset *) handle, offset, whence);
 	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "AssetFile: seek=%d", retval);
@@ -436,9 +436,9 @@ static int        file_putc_android_obb_plain(int character, FILEHANDLE handle)
   return 0;
 }
 
-static int        file_seek_android_obb_plain(FILEHANDLE handle, long offset, int whence)
+static int        file_seek_android_obb_plain(FILEHANDLE handle, off_t offset, int whence)
 {
-  return fseek((FILE*) handle, offset, whence);
+  return fseeko((FILE*) handle, offset, whence);
 }
 
 static long       file_tell_android_obb_plain(FILEHANDLE handle)
@@ -531,9 +531,9 @@ static int        file_putc_android_obb_mount(int character, FILEHANDLE handle)
   return 0;
 }
 
-static int        file_seek_android_obb_mount(FILEHANDLE handle, long offset, int whence)
+static int        file_seek_android_obb_mount(FILEHANDLE handle, off_t offset, int whence)
 {
-  return fseek((FILE*) handle, offset, whence);
+  return fseeko((FILE*) handle, offset, whence);
 }
 
 static long       file_tell_android_obb_mount(FILEHANDLE handle)

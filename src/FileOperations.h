@@ -31,7 +31,7 @@ typedef struct generic_file_ops_t
 	long       (*file_write)  (const char *buffer, long size, FILEHANDLE handle);
 	long       (*file_print)  (FILEHANDLE handle, const char *format, ...);
 	int        (*file_putc)   (int character, FILEHANDLE handle);
-	int        (*file_seek)   (FILEHANDLE handle, long offset, int whence);
+	int        (*file_seek)   (FILEHANDLE handle, off_t offset, int whence);
 	long       (*file_tell)   (FILEHANDLE handle);
 	int        (*file_error)  (FILEHANDLE handle);
 	int        (*file_close)  (FILEHANDLE handle);
