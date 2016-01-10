@@ -79,7 +79,7 @@ HRESULT CBResourceFile::Read(void *Buffer, DWORD Size)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBResourceFile::Seek(DWORD Pos, TSeek Origin)
+HRESULT CBResourceFile::Seek(LONG Pos, TSeek Origin)
 {
 	if(!m_Data) return E_FAIL;
 

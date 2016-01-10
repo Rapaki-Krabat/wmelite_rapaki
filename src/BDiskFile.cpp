@@ -176,7 +176,7 @@ HRESULT CBDiskFile::Read(void *Buffer, DWORD Size)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBDiskFile::Seek(DWORD Pos, TSeek Origin)
+HRESULT CBDiskFile::Seek(LONG Pos, TSeek Origin)
 {
 	if(m_Compressed)
 	{

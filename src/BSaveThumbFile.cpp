@@ -118,7 +118,7 @@ HRESULT CBSaveThumbFile::Read(void *Buffer, DWORD Size)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBSaveThumbFile::Seek(DWORD Pos, TSeek Origin)
+HRESULT CBSaveThumbFile::Seek(LONG Pos, TSeek Origin)
 {
 	if(!m_Data) return E_FAIL;
 

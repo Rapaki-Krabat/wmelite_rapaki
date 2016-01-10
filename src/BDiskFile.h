@@ -35,7 +35,7 @@ class CBDiskFile : public CBFile
 public:
 	CBDiskFile(CBGame* inGame);
 	virtual ~CBDiskFile();
-	virtual HRESULT Seek(DWORD Pos, TSeek Origin=SEEK_TO_BEGIN);
+	virtual HRESULT Seek(LONG Pos, TSeek Origin=SEEK_TO_BEGIN);
 	virtual HRESULT Read(void* Buffer, DWORD Size);
 	virtual HRESULT Close();
     virtual HRESULT Open(const char* Filename);

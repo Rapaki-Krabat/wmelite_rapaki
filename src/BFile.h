@@ -36,7 +36,7 @@ public:
 	DWORD m_Size;
 	virtual DWORD GetSize(){ return m_Size; };
 	virtual DWORD GetPos() { return m_Pos; };
-	virtual HRESULT Seek(DWORD Pos, TSeek Origin=SEEK_TO_BEGIN)=0;
+	virtual HRESULT Seek(LONG Pos, TSeek Origin=SEEK_TO_BEGIN)=0;
 	virtual HRESULT Read(void* Buffer, DWORD Size)=0;
 	virtual HRESULT Close()=0;
 	virtual HRESULT Open(const char* Filename)=0;

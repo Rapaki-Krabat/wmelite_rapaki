@@ -160,7 +160,7 @@ HRESULT CBPkgFile::Read(void *Buffer, DWORD Size)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBPkgFile::Seek(DWORD Pos, TSeek Origin)
+HRESULT CBPkgFile::Seek(LONG Pos, TSeek Origin)
 {
 	if(!m_FileEntry) return E_FAIL;
 
