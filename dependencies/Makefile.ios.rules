@@ -1,0 +1,40 @@
+
+VAR_FLAGS_IOS_CFLAGS= \
+-pipe -std=c99 -Wno-trigraphs -fpascal-strings -O2 -Wreturn-type \
+-Wunused-variable -fmessage-length=0 -fvisibility=hidden \
+-fexceptions -fasm-blocks
+
+VAR_FLAGS_IOS_CXXFLAGS= \
+-pipe -Wno-trigraphs -fpascal-strings -O2 -Wreturn-type -Wunused-variable \
+-fmessage-length=0 -fvisibility=hidden -fexceptions -fasm-blocks \
+-stdlib=libc++
+
+VAR_FLAGS_IOS_LDFLAGS= \
+-Wl,-dead_strip
+
+VAR_FLAGS_IOS_PLATFORM_BIN_DIR= \
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/
+
+VAR_FLAGS_IOS_PLATFORM_SIM_SDK_ROOT_DIR= \
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/
+
+VAR_FLAGS_IOS_PLATFORM_PHONE_SDK_ROOT_DIR= \
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/
+
+VAR_FLAGS_IOS_DEPLOYMENT_TARGET= \
+6.0
+
+VAR_FLAGS_IOS_CC= \
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+
+VAR_FLAGS_IOS_CXX= \
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+
+VAR_FLAGS_IOS_LIBTOOL= \
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool
+
+VAR_FLAGS_IOS_AR= \
+$(VAR_FLAGS_IOS_PLATFORM_BIN_DIR)/ar
+
+VAR_FLAGS_IOS_LIPO= \
+lipo
