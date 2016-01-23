@@ -1,8 +1,8 @@
---- android_sdl_mixer/src/org/libsdl/app/SDLActivity.java.orig	2015-05-30 19:40:43.384818361 +0200
-+++ android_sdl_mixer/src/org/libsdl/app/SDLActivity.java	2015-05-30 19:37:35.788809018 +0200
-@@ -28,6 +28,9 @@
- import android.media.*;
+--- android_sdl_mixer/src/org/libsdl/app/SDLActivity.java.orig	2016-01-23 16:40:58.427831335 +0100
++++ android_sdl_mixer/src/org/libsdl/app/SDLActivity.java	2016-01-23 16:36:22.359817586 +0100
+@@ -30,6 +30,9 @@
  import android.hardware.*;
+ import android.content.pm.ActivityInfo;
  
 +// WMELite addition
 +import org.deadcode.wmelite.WMELiteFunctions;
@@ -10,7 +10,7 @@
  /**
      SDL Activity
  */
-@@ -58,6 +61,9 @@
+@@ -60,6 +63,9 @@
      // Audio
      protected static AudioTrack mAudioTrack;
  
@@ -20,7 +20,7 @@
      /**
       * This method is called by SDL before loading the native shared libraries.
       * It can be overridden to provide names of shared libraries to be loaded.
-@@ -68,11 +74,15 @@
+@@ -70,12 +76,17 @@
       */
      protected String[] getLibraries() {
          return new String[] {
@@ -32,13 +32,16 @@
 +            "SDL2_mixer",
              // "SDL2_net",
              // "SDL2_ttf",
+-            "main"
 +            "effectsprivate",
 +            "echo",
-             "main"
++            "main",
++            "dcscomp"
          };
      }
-@@ -119,6 +129,9 @@
-         Log.v(TAG, "onCreate():" + mSingleton);
+ 
+@@ -121,6 +132,9 @@
+         Log.v(TAG, "onCreate(): " + mSingleton);
          super.onCreate(savedInstanceState);
  
 +        // WMELite added
@@ -47,7 +50,7 @@
          SDLActivity.initialize();
          // So we can call stuff from static callbacks
          mSingleton = this;
-@@ -162,6 +175,13 @@
+@@ -164,6 +178,13 @@
          // Set up the surface
          mSurface = new SDLSurface(getApplication());
  
@@ -61,7 +64,7 @@
          if(Build.VERSION.SDK_INT >= 12) {
              mJoystickHandler = new SDLJoystickHandler_API12();
          }
-@@ -209,6 +229,8 @@
+@@ -211,6 +232,8 @@
          }
  
          SDLActivity.handleResume();
@@ -70,7 +73,7 @@
      }
  
  
-@@ -321,6 +343,20 @@
+@@ -323,6 +346,20 @@
          mSingleton.finish();
      }
  
@@ -91,7 +94,7 @@
  
      // Messages from the SDLMain thread
      static final int COMMAND_CHANGE_TITLE = 1;
-@@ -431,6 +467,11 @@
+@@ -432,6 +469,11 @@
                                                 int is_accelerometer, int nbuttons,
                                                 int naxes, int nhats, int nballs);
      public static native int nativeRemoveJoystick(int device_id);
@@ -103,7 +106,7 @@
      public static native String nativeGetHint(String name);
  
      /**
-@@ -929,6 +970,9 @@
+@@ -953,6 +995,9 @@
  class SDLMain implements Runnable {
      @Override
      public void run() {
