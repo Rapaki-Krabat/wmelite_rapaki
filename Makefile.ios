@@ -1,0 +1,249 @@
+# Configuration for iPhone OS, making static libs
+# this will generate both iPhone (arm) and iPhoneSimulator (i686) libs
+
+TARGET = wmelite
+INCLUDE=-Ixcode-ios/dep/libfreeimage/include/ -Ixcode-ios/dep/libfreetype/include \
+-Ixcode-ios/dep/libSDL2/include -Ixcode-ios/dep/libSDL2_Mixer/include \
+-Ixcode-ios/dep/libecho/include -Ixcode-ios/dep/libreverb/include \
+-Ixcode-ios/dep/libreverb/include/Reverb/lib \
+-Ixcode-ios/dep/libreverb/include/Common/lib -Isrc -I.
+SRCS=\
+ConvertUTF.c \
+DirectoryOperations.c \
+FileOperations.c \
+AdActor.cpp \
+AdActorDir.cpp \
+AdEntity.cpp \
+AdGame.cpp \
+AdInventoryBox.cpp \
+AdInventory.cpp \
+AdItem.cpp \
+AdLayer.cpp \
+AdNodeState.cpp \
+AdObject.cpp \
+AdPath.cpp \
+AdPathPoint.cpp \
+AdRegion.cpp \
+AdResponseBox.cpp \
+AdResponseContext.cpp \
+AdResponse.cpp \
+AdRotLevel.cpp \
+AdScaleLevel.cpp \
+AdScene.cpp \
+AdSceneNode.cpp \
+AdSceneState.cpp \
+AdSentence.cpp \
+AdSpriteSet.cpp \
+AdTalkDef.cpp \
+AdTalkHolder.cpp \
+AdTalkNode.cpp \
+AdWaypointGroup.cpp \
+BActiveRect.cpp \
+BBase.cpp \
+BDebugger.cpp \
+BDiskFile.cpp \
+BDynBuffer.cpp \
+BEvent.cpp \
+BFader.cpp \
+BFile.cpp \
+BFileEntry.cpp \
+BFileManager.cpp \
+BFontBitmap.cpp \
+BFont.cpp \
+BFontStorage.cpp \
+BFontTT.cpp \
+BFrame.cpp \
+BGame.cpp \
+BImage.cpp \
+BKeyboardState.cpp \
+BNamedObject.cpp \
+BObject.cpp \
+BPackage.cpp \
+BParser.cpp \
+BPersistMgr.cpp \
+BPkgFile.cpp \
+BPoint.cpp \
+BQuickMsg.cpp \
+BRegion.cpp \
+BRegistry.cpp \
+BRenderer.cpp \
+BRenderSDL.cpp \
+BResourceFile.cpp \
+BResources.cpp \
+BSaveThumbFile.cpp \
+BSaveThumbHelper.cpp \
+BScriptable.cpp \
+BScriptHolder.cpp \
+BSoundBuffer.cpp \
+BSound.cpp \
+BSoundMgr.cpp \
+BSprite.cpp \
+BStringTable.cpp \
+BSubFrame.cpp \
+BSurface.cpp \
+BSurfaceSDL.cpp \
+BSurfaceStorage.cpp \
+BTransitionMgr.cpp \
+BViewport.cpp \
+crc.cpp \
+FontGlyphCache.cpp \
+main.cpp \
+MathUtil.cpp \
+Matrix4.cpp \
+PartEmitter.cpp \
+PartForce.cpp \
+PartParticle.cpp \
+PathUtil.cpp \
+PlatformSDL.cpp \
+ScEngine.cpp \
+ScScript.cpp \
+ScStack.cpp \
+ScValue.cpp \
+SdlUtil.cpp \
+StringUtil.cpp \
+SXArray.cpp \
+SXDate.cpp \
+SXFile.cpp \
+SXMath.cpp \
+SXMemBuffer.cpp \
+SxObject.cpp \
+SXStore.cpp \
+SXString.cpp \
+SysClass.cpp \
+SysClassRegistry.cpp \
+SysInstance.cpp \
+tinyxml.cpp \
+tinyxmlerror.cpp \
+tinyxmlparser.cpp \
+UIButton.cpp \
+UIEdit.cpp \
+UIEntity.cpp \
+UIObject.cpp \
+UIText.cpp \
+UITiledImage.cpp \
+UIWindow.cpp \
+utils.cpp \
+Vector2.cpp
+
+ifeq ($(CUSTOM_PLATFORM_CONFIG),)
+PLATFORM_CONFIG=../../ios_platform_config.sh
+else
+PLATFORM_CONFIG=$(CUSTOM_PLATFORM_CONFIG)
+endif
+
+STD_CFLAGS_PHONE = `$(PLATFORM_CONFIG) --cflags`
+STD_CXXFLAGS_PHONE = `$(PLATFORM_CONFIG) --cxxflags`
+STD_CFLAGS_SIM = `$(PLATFORM_CONFIG) --cflags_sim`
+STD_CXXFLAGS_SIM = `$(PLATFORM_CONFIG) --cxxflags_sim`
+
+IPHONEOS_DEPLOYMENT_TARGET = `$(PLATFORM_CONFIG) --minversion`
+IPHONESIM_DEPLOYMENT_TARGET = `$(PLATFORM_CONFIG) --minversion`
+
+ARCH_SIM_I386 = i386
+ARCH_SIM_X86_64 = x86_64
+ARCH_PHONE_ARMV7 = armv7
+ARCH_PHONE_ARMV7S = armv7s
+ARCH_PHONE_ARM64 = arm64
+
+SDKROOT_SIM = `$(PLATFORM_CONFIG) --sysroot-sim`
+SDKROOT_PHONE = `$(PLATFORM_CONFIG) --sysroot-phone`
+
+EXTRA_CFLAGS_SIM   += $(INCLUDE)
+EXTRA_CFLAGS_PHONE += $(INCLUDE)
+SRCS_TO_COMPILE=$(SRCS)
+
+EXTRA_CFLAGS_SIM += -isysroot $(SDKROOT_SIM)
+EXTRA_CFLAGS_SIM += -mios-simulator-version-min=$(IPHONESIM_DEPLOYMENT_TARGET)
+
+EXTRA_CFLAGS_PHONE += -isysroot $(SDKROOT_PHONE)
+EXTRA_CFLAGS_PHONE += -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET)
+
+AR_SIM = `$(PLATFORM_CONFIG) --ar`
+AR_PHONE = `$(PLATFORM_CONFIG) --ar`
+
+CC_SIM = `$(PLATFORM_CONFIG) --cc`
+CXX_SIM = `$(PLATFORM_CONFIG) --cxx`
+LIBTOOL_SIM = `$(PLATFORM_CONFIG) --libtool`
+CC_PHONE = `$(PLATFORM_CONFIG) --cc`
+CXX_PHONE = `$(PLATFORM_CONFIG) --cxx`
+LIBTOOL_PHONE = `$(PLATFORM_CONFIG) --libtool`
+LIPO = `$(PLATFORM_CONFIG) --lipo`
+
+CFLAGS_SIM = $(STD_CFLAGS_SIM) $(EXTRA_CFLAGS_SIM)
+CXXFLAGS_SIM += $(STD_CXXFLAGS_SIM) $(EXTRA_CFLAGS_SIM)
+
+CFLAGS_PHONE = $(STD_CFLAGS_PHONE) $(EXTRA_CFLAGS_PHONE)
+CXXFLAGS_PHONE += $(STD_CXXFLAGS_PHONE) $(EXTRA_CFLAGS_PHONE)
+
+LDFLAGS_SIM = libfreeimage.a libSDL2.a libfreetype.a libreverb.a libSDL2_mixer.a \
+libecho.a -framework CoreMotion -framework CoreVideo -framework CoreMedia \
+-framework AVFoundation -framework StoreKit -framework Foundation \
+-framework UIKit -framework OpenGLES -framework QuartzCore -framework CoreAudio \
+-framework AudioToolbox -framework CoreGraphics -framework CFNetwork
+LDFLAGS_PHONE = libfreeimage.a libSDL2.a libfreetype.a libreverb.a libSDL2_mixer.a \
+libecho.a -framework CoreMotion -framework CoreVideo -framework CoreMedia \
+-framework AVFoundation -framework StoreKit -framework Foundation \
+-framework UIKit -framework OpenGLES -framework QuartzCore -framework CoreAudio \
+-framework AudioToolbox -framework CoreGraphics -framework CFNetwork
+
+.SUFFIXES: .o-i386 .o-x86_64 .o-armv7 .o-armv7s .o-arm64
+MODULES_ARMV7 =  $(SRCS_TO_COMPILE:.c=.o-armv7)
+MODULES_ARMV7 := $(MODULES_ARMV7:.cpp=.o-armv7)
+MODULES_ARMV7S =  $(SRCS_TO_COMPILE:.c=.o-armv7s)
+MODULES_ARMV7S := $(MODULES_ARMV7S:.cpp=.o-armv7s)
+MODULES_ARM64 =  $(SRCS_TO_COMPILE:.c=.o-arm64)
+MODULES_ARM64 := $(MODULES_ARM64:.cpp=.o-arm64)
+MODULES_i386 = $(SRCS_TO_COMPILE:.c=.o-i386)
+MODULES_i386 := $(MODULES_i386:.cpp=.o-i386)
+MODULES_x86_64 = $(SRCS_TO_COMPILE:.c=.o-x86_64)
+MODULES_x86_64 := $(MODULES_x86_64:.cpp=.o-x86_64)
+
+default: all
+
+all: $(TARGET)
+
+$(TARGET): $(MODULES_ARMV7) $(MODULES_ARMV7S) $(MODULES_ARM64) $(MODULES_i386) $(MODULES_x86_64) 
+
+.c.o-i386:
+	@echo " (CC-i386) $<"
+	@$(CC_SIM) -arch $(ARCH_SIM_I386) $(CFLAGS_SIM) -c $< -o $@
+
+.cpp.o-i386:
+	@echo " (C++-i386) $<"
+	@$(CXX_SIM) -arch $(ARCH_SIM_I386) $(CXXFLAGS_SIM) -c $< -o $@
+
+.c.o-x86_64:
+	@echo " (CC-x86_64) $<"
+	@$(CC_SIM) -arch $(ARCH_SIM_X86_64) $(CFLAGS_SIM) -c $< -o $@
+
+.cpp.o-x86_64:
+	@echo " (C++-x86_64) $<"
+	@$(CXX_SIM) -arch $(ARCH_SIM_X86_64) $(CXXFLAGS_SIM) -c $< -o $@
+
+.c.o-armv7:
+	@echo " (CC-armv7) $<"
+	@$(CC_PHONE) -arch $(ARCH_PHONE_ARMV7) $(CFLAGS_PHONE) -c $< -o $@
+
+.cpp.o-armv7:
+	@echo " (C++-armv7) $<"
+	@$(CXX_PHONE) -arch $(ARCH_PHONE_ARMV7) $(CXXFLAGS_PHONE) -c $< -o $@
+
+.c.o-armv7s:
+	@echo " (CC-armv7s) $<"
+	@$(CC_PHONE) -arch $(ARCH_PHONE_ARMV7S) $(CFLAGS_PHONE) -c $< -o $@
+
+.cpp.o-armv7s:
+	@echo " (C++-armv7s) $<"
+	@$(CXX_PHONE) -arch $(ARCH_PHONE_ARMV7S) $(CXXFLAGS_PHONE) -c $< -o $@
+
+.c.o-arm64:
+	@echo " (CC-arm64) $<"
+	@$(CC_PHONE) -arch $(ARCH_PHONE_ARM64) $(CFLAGS_PHONE) -c $< -o $@
+
+.cpp.o-arm64:
+	@echo " (C++-arm64) $<"
+	@$(CXX_PHONE) -arch $(ARCH_PHONE_ARM64) $(CXXFLAGS_PHONE) -c $< -o $@
+
+clean:
+	rm -f core Dist/*.* u2dtmp* $(MODULES_i386) $(MODULES_x86_64) $(MODULES_ARMV7) $(MODULES_ARMV7S) $(MODULES_ARM64)
+
