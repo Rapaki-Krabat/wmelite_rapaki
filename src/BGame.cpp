@@ -538,7 +538,7 @@ void CBGame::DEBUG_DebugDisable()
 void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 {
 #if !defined(__IPHONEOS__) && !defined(__ANDROID__)
-	if ((!m_DEBUG_DebugMode) && (!m_DEBUG_LogWriteMode)) return;
+	// if ((!m_DEBUG_DebugMode) && (!m_DEBUG_LogWriteMode)) return;
 #endif
 	time_t timeNow;
 	time(&timeNow);
@@ -551,10 +551,10 @@ void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 	vsprintf(buff, fmt, va);
 	va_end(va);
 
-#ifdef __IPHONEOS__
+//#ifdef __IPHONEOS__
 	printf("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
 	fflush(stdout);
-#else
+//#else
 
 #ifdef __ANDROID__
 	// that one should not have performance impact
@@ -572,7 +572,7 @@ void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 
 	fprintf(m_DEBUG_LogFile, "%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, buff);
 	fflush(m_DEBUG_LogFile);
-#endif
+//#endif
 
 	//QuickMessage(buff);
 }
