@@ -192,7 +192,8 @@ xcode-ios/dep/libecho/libcombined/libecho.a \
 -framework CoreMotion -framework CoreVideo -framework CoreMedia \
 -framework AVFoundation -framework StoreKit -framework Foundation \
 -framework UIKit -framework OpenGLES -framework QuartzCore -framework CoreAudio \
--framework AudioToolbox -framework CoreGraphics -framework CFNetwork
+-framework AudioToolbox -framework CoreGraphics -framework CFNetwork \
+-lz -lc++
 
 .SUFFIXES: .o-i386 .o-x86_64 .o-armv7 .o-armv7s .o-arm64
 MODULES_ARMV7 =  $(SRCS_TO_COMPILE:.c=.o-armv7)
