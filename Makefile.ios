@@ -3,7 +3,7 @@
 
 TARGET = wmelite
 INCLUDE=-Ixcode-ios/dep/libfreeimage/include/ -Ixcode-ios/dep/libfreetype/include \
--Ixcode-ios/dep/libSDL/include -Ixcode-ios/dep/libSDL_mixer/include \
+-Ixcode-ios/dep/libSDL2/include -Ixcode-ios/dep/libSDL2_mixer/include \
 -Ixcode-ios/dep/libecho/include -Ixcode-ios/dep/libreverb/include \
 -Ixcode-ios/dep/libreverb/include/Reverb/lib \
 -Ixcode-ios/dep/libreverb/include/Common/lib -Isrc -I.
@@ -184,16 +184,16 @@ libecho.a -framework CoreMotion -framework CoreVideo -framework CoreMedia \
 -framework UIKit -framework OpenGLES -framework QuartzCore -framework CoreAudio \
 -framework AudioToolbox -framework CoreGraphics -framework CFNetwork
 LDFLAGS_PHONE = xcode-ios/dep/libfreeimage/libcombined/libfreeimage.a \
-xcode-ios/dep/libSDL/libcombined/libSDL.a \
+xcode-ios/dep/libSDL2/libcombined/libSDL2.a \
 xcode-ios/dep/libfreetype/libcombined/libfreetype.a \
 xcode-ios/dep/libreverb/libcombined/libreverb.a \
-xcode-ios/dep/libSDL_mixer/libcombined/libSDL_mixer.a \
+xcode-ios/dep/libSDL2_mixer/libcombined/libSDL2_mixer.a \
 xcode-ios/dep/libecho/libcombined/libecho.a \
 -framework CoreMotion -framework CoreVideo -framework CoreMedia \
 -framework AVFoundation -framework StoreKit -framework Foundation \
 -framework UIKit -framework OpenGLES -framework QuartzCore -framework CoreAudio \
 -framework AudioToolbox -framework CoreGraphics -framework CFNetwork \
--lz -lc++
+-lz -lbz2 -lc++
 
 .SUFFIXES: .o-i386 .o-x86_64 .o-armv7 .o-armv7s .o-arm64
 MODULES_ARMV7 =  $(SRCS_TO_COMPILE:.c=.o-armv7)
@@ -221,7 +221,7 @@ $(TARGET)-sim: $(MODULES_i386) $(MODULES_x86_64)
 $(TARGET)-phone: $(MODULES_ARMV7) $(MODULES_ARMV7S) $(MODULES_ARM64) 
 
 $(TARGET)-app-armv7:
-	$(CC_PHONE) -arch armv7 -isysroot $(SDKROOT_PHONE) -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET) -o $(TARGET)-armv7.app $(MODULES_ARMV7) $(LDFLAGS_PHONE)
+	$(CXX_PHONE) -arch armv7 -isysroot $(SDKROOT_PHONE) -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET) -fobjc-arc -fobjc-link-runtime -o $(TARGET)-armv7.app $(MODULES_ARMV7) $(LDFLAGS_PHONE)
 
 .c.o-i386:
 	@echo " (CC-i386) $<"
