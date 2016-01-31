@@ -38,6 +38,8 @@ public:
 	int m_RealHeight;
 	int m_DrawOffsetX;
 	int m_DrawOffsetY;
+	int m_RealDensityX;
+	int m_RealDensityY;
 
 	virtual void DumpData(char* Filename){};
 	virtual CBImage* TakeScreenshot();

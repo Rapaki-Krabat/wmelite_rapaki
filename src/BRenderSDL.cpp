@@ -209,8 +209,6 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	m_BorderTop = (m_RealHeight - (m_Height * ratio)) / 2;
 	m_BorderBottom = m_RealHeight - (m_Height * ratio) - m_BorderTop;
 
-
-
 	m_RatioX = (float)(m_RealWidth - m_BorderLeft - m_BorderRight) / (float)m_Width;
 	m_RatioY = (float)(m_RealHeight - m_BorderTop - m_BorderBottom) / (float)m_Height;
 
@@ -221,6 +219,19 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	Game->LOG(0, "BorderLeft=%d BorderRight=%d BorderTop=%d BorderBottom=%d",
 			m_BorderLeft, m_BorderRight, m_BorderTop, m_BorderBottom);
 // #endif
+
+	float fDensityX;
+	float fDensityY;
+	if (SDL_GetDisplayDPI(deviceNumber, NULL, &fDensityX, &fDensityY) == 0)
+	{
+		m_RealDensityX = (int) fDensityX;
+		m_RealDensityY = (int) fDensityY;
+	}
+	else
+	{
+		m_RealDensityX = 0;
+		m_RealDensityY = 0;
+	}
 
 	Uint32 flags = SDL_WINDOW_SHOWN;
 #ifdef __IPHONEOS__
