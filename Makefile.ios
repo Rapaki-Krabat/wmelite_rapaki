@@ -129,9 +129,7 @@ MSRCS=\
 src/IOS_StoreKit.m \
 src/ios_utils.m
 
-
 DEPS_INSTALLDIR=`$(PLATFORM_CONFIG) --installdir`
-
 
 ifeq ($(CUSTOM_PLATFORM_CONFIG),)
 PLATFORM_CONFIG=./ios_platform_config.sh
@@ -184,17 +182,24 @@ LIPO = `$(PLATFORM_CONFIG) --lipo`
 
 CFLAGS_SIM = $(STD_CFLAGS_SIM) $(EXTRA_CFLAGS_SIM)
 CXXFLAGS_SIM += $(STD_CXXFLAGS_SIM) $(EXTRA_CFLAGS_SIM)
-COBJFLAGS_SIM += $(STD_COBJFLAGS_SIM) $(EXTRA_CFLAGS_SIM)
+COBJFLAGS_SIM += $(STD_COBJFLAGS_SIM) -fno-objc-arc $(EXTRA_CFLAGS_SIM)
 
 CFLAGS_PHONE = $(STD_CFLAGS_PHONE) $(EXTRA_CFLAGS_PHONE)
 CXXFLAGS_PHONE += $(STD_CXXFLAGS_PHONE) $(EXTRA_CFLAGS_PHONE)
-COBJFLAGS_PHONE += $(STD_COBJFLAGS_PHONE) $(EXTRA_CFLAGS_PHONE)
+COBJFLAGS_PHONE += $(STD_COBJFLAGS_PHONE) -fno-objc-arc $(EXTRA_CFLAGS_PHONE)
 
-LDFLAGS_SIM = libfreeimage.a libSDL2.a libfreetype.a libreverb.a libSDL2_mixer.a \
-libecho.a -framework CoreMotion -framework CoreVideo -framework CoreMedia \
+LDFLAGS_SIM = xcode-ios/dep/libfreeimage/libcombined/libfreeimage.a \
+xcode-ios/dep/libSDL2/libcombined/libSDL2.a \
+xcode-ios/dep/libfreetype/libcombined/libfreetype.a \
+xcode-ios/dep/libreverb/libcombined/libreverb.a \
+xcode-ios/dep/libSDL2_mixer/libcombined/libSDL2_mixer.a \
+xcode-ios/dep/libecho/libcombined/libecho.a \
+-framework CoreMotion -framework CoreVideo -framework CoreMedia \
 -framework AVFoundation -framework StoreKit -framework Foundation \
 -framework UIKit -framework OpenGLES -framework QuartzCore -framework CoreAudio \
--framework AudioToolbox -framework CoreGraphics -framework CFNetwork
+-framework AudioToolbox -framework CoreGraphics -framework CFNetwork \
+-framework GameController -lz -lbz2 -lc++ -fobjc-link-runtime
+
 LDFLAGS_PHONE = xcode-ios/dep/libfreeimage/libcombined/libfreeimage.a \
 xcode-ios/dep/libSDL2/libcombined/libSDL2.a \
 xcode-ios/dep/libfreetype/libcombined/libfreetype.a \
@@ -205,7 +210,7 @@ xcode-ios/dep/libecho/libcombined/libecho.a \
 -framework AVFoundation -framework StoreKit -framework Foundation \
 -framework UIKit -framework OpenGLES -framework QuartzCore -framework CoreAudio \
 -framework AudioToolbox -framework CoreGraphics -framework CFNetwork \
--framework GameController -lz -lbz2 -lc++
+-framework GameController -lz -lbz2 -lc++ -fobjc-link-runtime
 
 .SUFFIXES: .o-i386 .o-x86_64 .o-armv7 .o-armv7s .o-arm64 .m
 MODULES_ARMV7 =  $(SRCS_TO_COMPILE:.c=.o-armv7) $(MSRCS_TO_COMPILE:.m=.o-armv7)
@@ -232,8 +237,26 @@ $(TARGET)-sim: $(MODULES_i386) $(MODULES_x86_64)
 
 $(TARGET)-phone: $(MODULES_ARMV7) $(MODULES_ARMV7S) $(MODULES_ARM64) 
 
+$(TARGET)-app: $(TARGET)-app-sim $(TARGET)-app-phone
+
+$(TARGET)-app-sim: $(TARGET)-app-i386 $(TARGET)-app-x86_64
+
+$(TARGET)-app-phone: $(TARGET)-app-armv7 $(TARGET)-app-armv7s $(TARGET)-app-arm64
+
 $(TARGET)-app-armv7:
-	$(CXX_PHONE) -arch armv7 -isysroot $(SDKROOT_PHONE) -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET) -fobjc-arc -fobjc-link-runtime -o $(TARGET)-armv7.app $(MODULES_ARMV7) $(LDFLAGS_PHONE)
+	$(CXX_PHONE) -arch armv7 -isysroot $(SDKROOT_PHONE) -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET) -o $(TARGET)-armv7.app $(MODULES_ARMV7) $(LDFLAGS_PHONE)
+
+$(TARGET)-app-armv7s:
+	$(CXX_PHONE) -arch armv7s -isysroot $(SDKROOT_PHONE) -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET) -o $(TARGET)-armv7s.app $(MODULES_ARMV7S) $(LDFLAGS_PHONE)
+
+$(TARGET)-app-arm64:
+	$(CXX_PHONE) -arch arm64 -isysroot $(SDKROOT_PHONE) -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET) -o $(TARGET)-arm64.app $(MODULES_ARM64) $(LDFLAGS_PHONE)
+
+$(TARGET)-app-i386:
+	$(CXX_PHONE) -arch i386 -isysroot $(SDKROOT_PHONE) -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET) -o $(TARGET)-i386.app $(MODULES_i386) $(LDFLAGS_PHONE)
+
+$(TARGET)-app-x86_64:
+	$(CXX_PHONE) -arch x86_64 -isysroot $(SDKROOT_PHONE) -miphoneos-version-min=$(IPHONEOS_DEPLOYMENT_TARGET) -o $(TARGET)-x86_64.app $(MODULES_x86_64) $(LDFLAGS_PHONE)
 
 .c.o-i386:
 	@echo " (CC-i386) $<"
