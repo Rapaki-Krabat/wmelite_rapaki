@@ -1504,7 +1504,7 @@ HRESULT CScScript::ExternalCall(CScStack *Stack, CScStack *ThisStack, CScScript:
 #endif
 }
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__MINGW32__)
 //////////////////////////////////////////////////////////////////////////
 DWORD CScScript::Call_cdecl(const void* args, size_t sz, DWORD func, bool* StackCorrupt)
 {

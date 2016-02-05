@@ -29,7 +29,9 @@ THE SOFTWARE.
 #include "PathUtil.h"
 
 #ifdef __WIN32__
+#ifndef __MINGW32__
 #	include <dbghelp.h>
+#endif
 #	include <direct.h>
 #else
 #	include <unistd.h>

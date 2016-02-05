@@ -3,11 +3,13 @@ CC=i586-mingw32msvc-gcc
 
 DEFINES=USE_SDL_MIXER
 
-CFLAGS=-I$(IDIR) -I. -O2 -Idependencies/SDL2-2.0.4/include/ -Idependencies/freetype/include/freetype2/ -Wall -Wextra
+CFLAGS=-I$(IDIR) -I. -O2 -Idependencies/SDL2-2.0.4/include/ -Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Wall -Wextra
 
 CPP=i586-mingw32msvc-g++
 CPPFLAGS=-I$(IDIR) -I. -Idependencies/libreverb/ -Idependencies/libreverb/Reverb/lib/ -Idependencies/libreverb/Common/lib/ -Idependencies/libecho/ -D$(DEFINES) -O2 \
--Idependencies/freetype/include/freetype2/ -Idependencies/SDL2-2.0.4/include/ -Idependencies/SDL_mixer/ -Idependencies/zlib/include/ -Wall -Wextra -Wno-write-strings -Wno-unused
+-Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Idependencies/SDL2-2.0.4/include/ -Idependencies/SDL_mixer/ -Idependencies/zlib/include/ \
+-Idependencies/FreeImage/Dist/x32/ \
+-Wall -Wextra -Wno-write-strings -Wno-unused
 
 SRCDIR=../src
 

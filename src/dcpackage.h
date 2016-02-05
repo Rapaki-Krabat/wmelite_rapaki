@@ -42,7 +42,7 @@ typedef struct{
 	BYTE Priority;
 	BYTE CD;
 	bool MasterIndex;
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__MINGW32__)
 	__time32_t CreationTime;
 #else
 	time_t CreationTime;
