@@ -18,7 +18,7 @@ SRCDIR=../src
 
 ODIR=obj_sdl_mixer
 
-LIBS= dependencies/libraries/libecho/libecho.a dependencies/libraries/libreverb/libeffects.a \
+LIBS= dependencies/libraries/libecho/libecho.a dependencies/libraries/libeffects/libeffects.a \
 dependencies/libraries/SDL_mixer/libSDL_mixer.a \
 dependencies/libraries/SDL/libSDL2main.a \
 -Ldependencies/freetype/bin/ -lfreetype6 \
