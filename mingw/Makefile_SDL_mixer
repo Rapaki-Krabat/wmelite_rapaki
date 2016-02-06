@@ -3,11 +3,11 @@ CC=i586-mingw32msvc-gcc
 
 DEFINES=USE_SDL_MIXER
 
-CFLAGS=-I$(IDIR) -I. -O2 -Idependencies/SDL2-2.0.4/include/ -Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Wall -Wextra
+CFLAGS=-I$(IDIR) -I. -O2 -Idependencies/headers/SDL/include/ -Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Wall -Wextra
 
 CPP=i586-mingw32msvc-g++
-CPPFLAGS=-I$(IDIR) -I. -Idependencies/libreverb/ -Idependencies/libreverb/Reverb/lib/ -Idependencies/libreverb/Common/lib/ -Idependencies/libecho/ -D$(DEFINES) -O2 \
--Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Idependencies/SDL2-2.0.4/include/ -Idependencies/SDL_mixer/ -Idependencies/zlib/include/ \
+CPPFLAGS=-I$(IDIR) -I. -Idependencies/headers/libreverb/ -Idependencies/headers/libreverb/Reverb/lib/ -Idependencies/headers/libreverb/Common/lib/ -Idependencies/headers/libecho/ -D$(DEFINES) -O2 \
+-Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Idependencies/headers/SDL/include/ -Idependencies/headers/SDL_mixer/ -Idependencies/zlib/include/ \
 -Idependencies/FreeImage/Dist/x32/ \
 -Wall -Wextra -Wno-write-strings -Wno-unused -Wno-unused-parameter \
 -fstrict-aliasing \
@@ -18,12 +18,12 @@ SRCDIR=../src
 
 ODIR=obj_sdl_mixer
 
-LIBS= dependencies/libecho/libecho.a dependencies/libreverb/libeffects.a \
-dependencies/SDL_mixer/libSDL_mixer.a \
-dependencies/SDL2-2.0.4/lib/x86/SDL2main.lib \
+LIBS= dependencies/libraries/libecho/libecho.a dependencies/libraries/libreverb/libeffects.a \
+dependencies/libraries/SDL_mixer/libSDL_mixer.a \
+dependencies/libraries/SDL/libSDL2main.a \
 -Ldependencies/freetype/bin/ -lfreetype6 \
 -Ldependencies/FreeImage/Dist/x32/ -lFreeImage \
--Ldependencies/SDL2-2.0.4/lib/x86/ -lSDL2 \
+-Ldependencies/libraries/SDL2/ -lSDL2 \
 -Ldependencies/zlib/ -lzlib1
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o
