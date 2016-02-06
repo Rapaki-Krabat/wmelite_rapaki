@@ -210,7 +210,11 @@ static int        file_putc_plain(int character, FILEHANDLE handle)
 
 static int        file_seek_plain(FILEHANDLE handle, off_t offset, int whence)
 {
+#ifdef __MINGW32__
+	return fseek((FILE*) handle, offset, whence);
+#else
 	return fseeko((FILE*) handle, offset, whence);
+#endif
 }
 
 static long       file_tell_plain(FILEHANDLE handle)

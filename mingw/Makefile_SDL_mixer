@@ -9,14 +9,22 @@ CPP=i586-mingw32msvc-g++
 CPPFLAGS=-I$(IDIR) -I. -Idependencies/libreverb/ -Idependencies/libreverb/Reverb/lib/ -Idependencies/libreverb/Common/lib/ -Idependencies/libecho/ -D$(DEFINES) -O2 \
 -Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Idependencies/SDL2-2.0.4/include/ -Idependencies/SDL_mixer/ -Idependencies/zlib/include/ \
 -Idependencies/FreeImage/Dist/x32/ \
--Wall -Wextra -Wno-write-strings -Wno-unused -Wno-unused-parameter
+-Wall -Wextra -Wno-write-strings -Wno-unused -Wno-unused-parameter \
+-fstrict-aliasing \
+-D__EXCLUDE_LIBTHEORA_PLAYER__ -DLIBEFFECTS_NO_EXPORT_DLL_SYMBOLS -DLIBECHO_NO_EXPORT_DLL_SYMBOLS
 
 
 SRCDIR=../src
 
 ODIR=obj_sdl_mixer
 
-LIBS=`sdl2-config --libs` `freetype-config --libs` -lfreeimage -L. -lSDL2_mixer -lSDL2 -leffects -lecho -ldl
+LIBS= dependencies/libecho/libecho.a dependencies/libreverb/libeffects.a \
+dependencies/SDL_mixer/libSDL_mixer.a \
+dependencies/SDL2-2.0.4/lib/x86/SDL2main.lib \
+-Ldependencies/freetype/bin/ -lfreetype6 \
+-Ldependencies/FreeImage/Dist/x32/ -lFreeImage \
+-Ldependencies/SDL2-2.0.4/lib/x86/ -lSDL2 \
+-Ldependencies/zlib/ -lzlib1
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o
 OBJC = $(patsubst %,$(ODIR)/%,$(_OBJC))
@@ -29,7 +37,7 @@ _OBJSND = BSoundBuffer.o BSoundMgr.o
 OBJSND = $(patsubst %,$(ODIR)/%,$(_OBJSND))
 
 wmelite_sdl_mixer.exe: $(OBJC) $(OBJCPP) $(OBJSND)
-	g++ -o $@ $^ $(CFLAGS) $(LIBS)
+	i586-mingw32msvc-g++ -o $@ $^ $(CFLAGS) -mwindows $(LIBS)
 
 $(ODIR)/ConvertUTF.o: $(SRCDIR)/ConvertUTF.c
 	@mkdir -p $(ODIR)

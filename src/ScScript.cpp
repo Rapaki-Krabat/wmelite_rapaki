@@ -1375,7 +1375,7 @@ CScScript::TExternalFunction* CScScript::GetExternal(char *Name)
 HRESULT CScScript::ExternalCall(CScStack *Stack, CScStack *ThisStack, CScScript::TExternalFunction *Function)
 {
 
-#ifndef __WIN32__
+#if !defined(__WIN32__) || defined(__MINGW32__)
 	
 	Game->LOG(0, "External functions are not supported on this platform.");
 	Stack->CorrectParams(0);

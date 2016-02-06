@@ -48,7 +48,7 @@ public:
 
 	void AfterLoad();
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__MINGW32__)
 	static DWORD Call_cdecl(const void* args, size_t sz, DWORD func, bool* StackCorrupt);
 	static DWORD Call_stdcall(const void* args, size_t sz, DWORD func, bool* StackCorrupt);
 	static DWORD GetST0(void);
