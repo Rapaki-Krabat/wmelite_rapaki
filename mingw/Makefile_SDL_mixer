@@ -37,7 +37,7 @@ _OBJSND = BSoundBuffer.o BSoundMgr.o
 OBJSND = $(patsubst %,$(ODIR)/%,$(_OBJSND))
 
 wmelite_sdl_mixer.exe: $(OBJC) $(OBJCPP) $(OBJSND)
-	i586-mingw32msvc-g++ -static -static-libgcc -static-libstdc++ -o $@ $^ $(CFLAGS) -mwindows $(LIBS)
+	i586-mingw32msvc-g++ -static-libgcc -static-libstdc++ -o $@ $^ $(CFLAGS) -mwindows $(LIBS)
 
 $(ODIR)/ConvertUTF.o: $(SRCDIR)/ConvertUTF.c
 	@mkdir -p $(ODIR)
