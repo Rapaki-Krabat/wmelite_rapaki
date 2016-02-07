@@ -20,7 +20,7 @@ ODIR=obj_sdl_mixer
 
 LIBS= dependencies/libraries/libecho/libecho.a dependencies/libraries/libeffects/libeffects.a \
 dependencies/libraries/SDL_mixer/libSDL_mixer.a \
-dependencies/libraries/SDL/libSDL2main.a \
+dependencies/SDL2main.lib \
 -Ldependencies/freetype/bin/ -lfreetype6 \
 -Ldependencies/FreeImage/Dist/x32/ -lFreeImage \
 -Ldependencies/libraries/SDL/ -lSDL2 \
@@ -37,7 +37,7 @@ _OBJSND = BSoundBuffer.o BSoundMgr.o
 OBJSND = $(patsubst %,$(ODIR)/%,$(_OBJSND))
 
 wmelite_sdl_mixer.exe: $(OBJC) $(OBJCPP) $(OBJSND)
-	i586-mingw32msvc-g++ -static-libgcc -static-libstdc++ -o $@ $^ $(CFLAGS) -mwindows $(LIBS)
+	i586-mingw32msvc-g++ --verbose -static-libgcc -static-libstdc++ -o $@ $^ $(CFLAGS) -mwindows $(LIBS)
 
 $(ODIR)/ConvertUTF.o: $(SRCDIR)/ConvertUTF.c
 	@mkdir -p $(ODIR)
