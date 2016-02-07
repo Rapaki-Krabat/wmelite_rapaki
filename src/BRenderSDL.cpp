@@ -222,15 +222,12 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 	float fDensityX;
 	float fDensityY;
-#ifndef __WIN32__
-#warning Include newer SDL2 then remove this ifdef
 	if (SDL_GetDisplayDPI(deviceNumber, NULL, &fDensityX, &fDensityY) == 0)
 	{
 		m_RealDensityX = (int) fDensityX;
 		m_RealDensityY = (int) fDensityY;
 	}
 	else
-#endif		
 	{
 		m_RealDensityX = 0;
 		m_RealDensityY = 0;
