@@ -23,7 +23,7 @@ dependencies/libraries/SDL_mixer/libSDL_mixer.a \
 dependencies/libraries/SDL/libSDL2main.a \
 -Ldependencies/freetype/bin/ -lfreetype6 \
 -Ldependencies/FreeImage/Dist/x32/ -lFreeImage \
--Ldependencies/libraries/SDL2/ -lSDL2 \
+-Ldependencies/libraries/SDL/ -lSDL2 \
 -Ldependencies/zlib/ -lzlib1
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o
