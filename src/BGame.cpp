@@ -3000,6 +3000,24 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 		return S_OK;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// MaxObjectDistanceX
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "MaxObjectDistanceX")==0)
+	{
+		m_Renderer->m_MaxObjectDistanceX = Value->GetInt();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// MaxObjectDistanceY
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "MaxObjectDistanceY")==0)
+	{
+		m_Renderer->m_MaxObjectDistanceY = Value->GetInt();
+		return S_OK;
+	}
+
 	else return CBObject::ScSetProperty(Name, Value);
 }
 

@@ -41,6 +41,9 @@ public:
 	int m_RealDensityX;
 	int m_RealDensityY;
 
+	int m_MaxObjectDistanceX;
+	int m_MaxObjectDistanceY;
+
 	virtual void DumpData(char* Filename){};
 	virtual CBImage* TakeScreenshot();
 	virtual HRESULT SetViewport(int left, int top, int right, int bottom);
