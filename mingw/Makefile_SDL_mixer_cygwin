@@ -3,10 +3,12 @@ CC=i686-pc-mingw32-gcc
 
 DEFINES=USE_SDL_MIXER
 
-CFLAGS=-I$(IDIR) -I. -O2 -Idependencies/headers/SDL/include/ -Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Wall -Wextra
+DEBUG=-g3
+
+CFLAGS=-I$(IDIR) -I. $(DEBUG) -O2 -Idependencies/headers/SDL/include/ -Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Wall -Wextra
 
 CPP=i686-pc-mingw32-g++
-CPPFLAGS=-I$(IDIR) -I. -Idependencies/headers/libeffects/ -Idependencies/headers/libeffects/Reverb/lib/ -Idependencies/headers/libeffects/Common/lib/ -Idependencies/headers/libecho/ -D$(DEFINES) -O2 \
+CPPFLAGS=-I$(IDIR) -I. -Idependencies/headers/libeffects/ -Idependencies/headers/libeffects/Reverb/lib/ -Idependencies/headers/libeffects/Common/lib/ -Idependencies/headers/libecho/ -D$(DEFINES) $(DEBUG) -O2 \
 -Idependencies/freetype/include/ -Idependencies/freetype/include/freetype2/ -Idependencies/headers/SDL/include/ -Idependencies/headers/SDL_mixer/ -Idependencies/zlib/include/ \
 -Idependencies/FreeImage/Dist/x32/ \
 -Wall -Wextra -Wno-write-strings -Wno-unused -Wno-unused-parameter \
@@ -36,7 +38,7 @@ OBJCPP = $(patsubst %,$(ODIR)/%,$(_OBJCPP))
 _OBJSND = BSoundBuffer.o BSoundMgr.o
 OBJSND = $(patsubst %,$(ODIR)/%,$(_OBJSND))
 
-wmelite_sdl_mixer.exe: $(OBJC) $(OBJCPP) $(OBJSND)
+wme_D3D9.exe: $(OBJC) $(OBJCPP) $(OBJSND)
 	$(CPP) --verbose -static-libgcc -static-libstdc++ -o $@ $^ $(CFLAGS) -mwindows $(LIBS)
 
 $(ODIR)/ConvertUTF.o: $(SRCDIR)/ConvertUTF.c
@@ -71,7 +73,7 @@ $(ODIR)/%.o: $(SRCDIR)/%.cpp
 
 .PHONY: clean
 
-all: wmelite_sdl_mixer.exe
+all: wme_D3D9.exe
 
 clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ wmelite_sdl_mixer.exe

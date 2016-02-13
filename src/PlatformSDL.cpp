@@ -23,6 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#include <stdlib.h>
+#include <math.h>
+
 #include "dcgf.h"
 #include "PlatformSDL.h"
 #include "BRenderSDL.h"
@@ -185,7 +188,9 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 	Game->LOG(0, "");
 
 #if __WIN32__
+	// TODO crashes when invoked here?
 	Game->m_DoubleClickMaxTime  = GetDoubleClickTime();
+	// Game->m_DoubleClickMaxTime  = 500;
 	Game->m_DoubleClickMaxXDiff = GetSystemMetrics(SM_CXDOUBLECLK);
 	Game->m_DoubleClickMaxYDiff = GetSystemMetrics(SM_CYDOUBLECLK);
 #elif __IPHONEOS__
@@ -649,6 +654,17 @@ BOOL CBPlatform::EqualRect(LPRECT rect1, LPRECT rect2)
 	return rect1->left == rect2->left && rect1->right == rect2->right && rect1->top == rect2->top && rect1->bottom == rect2->bottom;
 }
 
+//////////////////////////////////////////////////////////////////////////
+int CBPlatform::DistanceRectMiddle(LPRECT lprc, POINT p)
+{
+	LONG xDist;
+	LONG yDist;
+
+	xDist = abs(((lprc->left + lprc->right) / 2) - p.x);
+	yDist = abs(((lprc->bottom + lprc->top) / 2) - p.y);
+
+	return (int) (sqrt((xDist * xDist) + (yDist * yDist)));
+}
 
 //////////////////////////////////////////////////////////////////////////
 AnsiString CBPlatform::GetSystemFontPath()

@@ -26,6 +26,7 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "BRenderer.h"
 
+#include <math.h>
 
 //////////////////////////////////////////////////////////////////////
 CBRenderer::CBRenderer(CBGame* inGame):CBBase(inGame)
@@ -67,6 +68,10 @@ void CBRenderer::InitLoop()
 //////////////////////////////////////////////////////////////////////
 CBObject* CBRenderer::GetObjectAt(int X, int Y)
 {
+	LONG bestDistance = 0;
+	CBObject *bestObject = NULL;
+	LONG bestOuterDistance = 0;
+	CBObject *bestOuterObject = NULL;
 	POINT point;
 	point.x = X;
 	point.y = Y;
@@ -102,11 +107,86 @@ CBObject* CBRenderer::GetObjectAt(int X, int Y)
 				{
 					if(m_RectList[i]->m_Region->PointInRegion(X+m_RectList[i]->m_OffsetX, Y+m_RectList[i]->m_OffsetY)) return m_RectList[i]->m_Owner;
 				}
+
+				if ((m_RectList[i]->m_Frame) || (m_RectList[i]->m_Region))
+				{
+					// not a precise match but inside the defined rect --> possible candidate for later
+					if (bestObject == NULL)
+					{
+						// first object candidate, remember values
+						bestObject = m_RectList[i]->m_Owner;
+						bestDistance = CBPlatform::DistanceRectMiddle(&m_RectList[i]->m_Rect, point);
+
+						Game->LOG(0, "New near inside object candidate: '%s', dist=%d", bestObject->m_Name, bestDistance);
+					}
+					else
+					{
+						LONG newDistance = CBPlatform::DistanceRectMiddle(&m_RectList[i]->m_Rect, point);
+						if (newDistance < bestDistance)
+						{
+							bestObject = m_RectList[i]->m_Owner;
+							bestDistance = newDistance;
+
+							Game->LOG(0, "Better near inside object candidate: '%s', dist=%d", bestObject->m_Name, bestDistance);
+						}
+					}
+				}
 			}
 			else return m_RectList[i]->m_Owner;
 		}
+		else
+		{
+			if ((m_RectList[i]->m_Frame) || (m_RectList[i]->m_Region))
+			{
+				// as long as there is no better "inner" object, remember "outer" objects as well
+				if (bestObject == NULL)
+				{
+					if (bestOuterObject == NULL)
+					{
+						// first object candidate, remember values
+						bestOuterObject = m_RectList[i]->m_Owner;
+						bestOuterDistance = CBPlatform::DistanceRectMiddle(&m_RectList[i]->m_Rect, point);
+
+						Game->LOG(0, "New near outside object candidate: '%s', dist=%d", bestOuterObject->m_Name, bestOuterDistance);
+					}
+					else
+					{
+						LONG newDistance = CBPlatform::DistanceRectMiddle(&m_RectList[i]->m_Rect, point);
+						if (newDistance < bestOuterDistance)
+						{
+							bestOuterObject = m_RectList[i]->m_Owner;
+							bestOuterDistance = newDistance;
+
+							Game->LOG(0, "Better near outside object candidate: '%s', dist=%d", bestOuterObject->m_Name, bestOuterDistance);
+						}
+					}
+				}
+			}
+		}
 	}
 	
+	if ((m_MaxObjectDistanceX > 0) || (m_MaxObjectDistanceY > 0))
+	{
+		LONG maxDistance = sqrt((m_MaxObjectDistanceX * m_MaxObjectDistanceX) + (m_MaxObjectDistanceY * m_MaxObjectDistanceY));
+
+		// use the "outer" object if no "inner" object was found
+		if ((bestObject == NULL) && (bestOuterObject != NULL))
+		{
+			bestObject = bestOuterObject;
+			bestDistance = bestOuterDistance;
+		}
+
+		if (bestObject != NULL)
+		{
+			Game->LOG(0, "Final near object candidate: '%s', dist=%d", bestObject->m_Name, bestDistance);
+
+		}
+		else
+		{
+			Game->LOG(0, "No near object candidate found!");
+		}
+	}
+
 	return (CBObject*)NULL;
 }
 

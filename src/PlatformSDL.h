@@ -82,6 +82,7 @@ public:
 	static BOOL CopyRect(LPRECT lprcDst, RECT* lprcSrc);
 	static BOOL OffsetRect(LPRECT lprc, int dx, int dy);
 	static BOOL EqualRect(LPRECT rect1, LPRECT rect2);
+	static int  DistanceRectMiddle(LPRECT lprc, POINT p);
 
 
 	// string functions
