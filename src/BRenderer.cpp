@@ -69,9 +69,9 @@ void CBRenderer::InitLoop()
 CBObject* CBRenderer::GetObjectAt(int X, int Y)
 {
 	LONG bestDistance = 0;
-	CBObject *bestObject = NULL;
+	CBActiveRect *bestObject = NULL;
 	LONG bestOuterDistance = 0;
-	CBObject *bestOuterObject = NULL;
+	CBActiveRect *bestOuterObject = NULL;
 	POINT point;
 	point.x = X;
 	point.y = Y;
@@ -114,20 +114,20 @@ CBObject* CBRenderer::GetObjectAt(int X, int Y)
 					if (bestObject == NULL)
 					{
 						// first object candidate, remember values
-						bestObject = m_RectList[i]->m_Owner;
+						bestObject = m_RectList[i];
 						bestDistance = CBPlatform::DistanceRectMiddle(&m_RectList[i]->m_Rect, point);
 
-						Game->LOG(0, "New near inside object candidate: '%s', dist=%d", bestObject->m_Name, bestDistance);
+						Game->LOG(0, "New near inside object candidate: '%s', dist=%d", bestObject->m_Owner->m_Name, bestDistance);
 					}
 					else
 					{
 						LONG newDistance = CBPlatform::DistanceRectMiddle(&m_RectList[i]->m_Rect, point);
 						if (newDistance < bestDistance)
 						{
-							bestObject = m_RectList[i]->m_Owner;
+							bestObject = m_RectList[i];
 							bestDistance = newDistance;
 
-							Game->LOG(0, "Better near inside object candidate: '%s', dist=%d", bestObject->m_Name, bestDistance);
+							Game->LOG(0, "Better near inside object candidate: '%s', dist=%d", bestObject->m_Owner->m_Name, bestDistance);
 						}
 					}
 				}
@@ -144,20 +144,20 @@ CBObject* CBRenderer::GetObjectAt(int X, int Y)
 					if (bestOuterObject == NULL)
 					{
 						// first object candidate, remember values
-						bestOuterObject = m_RectList[i]->m_Owner;
+						bestOuterObject = m_RectList[i];
 						bestOuterDistance = CBPlatform::DistanceRectMiddle(&m_RectList[i]->m_Rect, point);
 
-						Game->LOG(0, "New near outside object candidate: '%s', dist=%d", bestOuterObject->m_Name, bestOuterDistance);
+						Game->LOG(0, "New near outside object candidate: '%s', dist=%d", bestOuterObject->m_Owner->m_Name, bestOuterDistance);
 					}
 					else
 					{
 						LONG newDistance = CBPlatform::DistanceRectMiddle(&m_RectList[i]->m_Rect, point);
 						if (newDistance < bestOuterDistance)
 						{
-							bestOuterObject = m_RectList[i]->m_Owner;
+							bestOuterObject = m_RectList[i];
 							bestOuterDistance = newDistance;
 
-							Game->LOG(0, "Better near outside object candidate: '%s', dist=%d", bestOuterObject->m_Name, bestOuterDistance);
+							Game->LOG(0, "Better near outside object candidate: '%s', dist=%d", bestOuterObject->m_Owner->m_Name, bestOuterDistance);
 						}
 					}
 				}
@@ -178,8 +178,44 @@ CBObject* CBRenderer::GetObjectAt(int X, int Y)
 
 		if (bestObject != NULL)
 		{
-			Game->LOG(0, "Final near object candidate: '%s', dist=%d", bestObject->m_Name, bestDistance);
+			Game->LOG(0, "Final near object candidate: '%s', dist=%d", bestObject->m_Owner->m_Name, bestDistance);
 
+			if(bestObject->m_Frame)
+			{
+				int XX = (int)((bestObject->m_Frame->m_Rect.left + X - bestObject->m_Rect.left + bestObject->m_OffsetX)/(float)((float)bestObject->m_ZoomX/(float)100));
+				int YY = (int)((bestObject->m_Frame->m_Rect.top  + Y - bestObject->m_Rect.top  + bestObject->m_OffsetY) /(float)((float)bestObject->m_ZoomY/(float)100));
+
+				if(bestObject->m_Frame->m_MirrorX)
+				{
+					int Width = bestObject->m_Frame->m_Rect.right - bestObject->m_Frame->m_Rect.left;
+					XX = Width - XX;
+				}
+
+				if(bestObject->m_Frame->m_MirrorY)
+				{
+					int Height = bestObject->m_Frame->m_Rect.bottom - bestObject->m_Frame->m_Rect.top;
+					YY = Height - YY;
+				}
+
+				for (int xOff = -m_MaxObjectDistanceX; xOff <= m_MaxObjectDistanceX; xOff++)
+				{
+					for (int yOff = -m_MaxObjectDistanceY; yOff <= m_MaxObjectDistanceY; yOff++)
+					{
+						if(!bestObject->m_Frame->m_Surface->IsTransparentAt(XX + xOff, YY + yOff)) return bestObject->m_Owner;
+					}
+				}
+			}
+			// region
+			else if(bestObject->m_Region)
+			{
+				for (int xOff = -m_MaxObjectDistanceX; xOff <= m_MaxObjectDistanceX; xOff++)
+				{
+					for (int yOff = -m_MaxObjectDistanceY; yOff <= m_MaxObjectDistanceY; yOff++)
+					{
+						if(bestObject->m_Region->PointInRegion(X+bestObject->m_OffsetX + xOff, Y+bestObject->m_OffsetY + yOff)) return bestObject->m_Owner;
+					}
+				}
+			}
 		}
 		else
 		{
