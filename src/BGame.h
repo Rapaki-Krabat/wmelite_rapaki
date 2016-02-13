@@ -205,6 +205,10 @@ public:
 	virtual HRESULT ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name);
 	virtual char* ScToString();
 
+	int m_DoubleClickMaxTime;
+	int m_DoubleClickMaxXDiff;
+	int m_DoubleClickMaxYDiff;
+
 	// compatibility bits
 	bool m_CompatKillMethodThreads;
 	

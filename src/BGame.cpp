@@ -258,7 +258,6 @@ CBGame::CBGame():CBObject(this)
 
 	m_Store = NULL;
 
-	//FileSystemTests();
 }
 
 
@@ -2728,6 +2727,34 @@ CScValue* CBGame::ScGetProperty(char *Name)
 		return m_ScValue;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// DoubleClickMaxTime
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DoubleClickMaxTime")==0)
+	{
+		m_ScValue->SetInt(m_DoubleClickMaxTime);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// DoubleClickMaxXDiff
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DoubleClickMaxXDiff")==0)
+	{
+		m_ScValue->SetInt(m_DoubleClickMaxXDiff);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// DoubleClickMaxYDiff
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DoubleClickMaxYDiff")==0)
+	{
+		m_ScValue->SetInt(m_DoubleClickMaxYDiff);
+		return m_ScValue;
+	}
+
+
 	else return CBObject::ScGetProperty(Name);
 }
 
@@ -2943,6 +2970,33 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 	else if(strcmp(Name, "CursorHidden")==0)
 	{
 		m_CursorHidden = Value->GetBool();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// DoubleClickMaxTime
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DoubleClickMaxTime")==0)
+	{
+		m_DoubleClickMaxTime = Value->GetInt();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// DoubleClickMaxXDiff
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DoubleClickMaxXDiff")==0)
+	{
+		m_DoubleClickMaxXDiff = Value->GetInt();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// DoubleClickMaxYDiff
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DoubleClickMaxYDiff")==0)
+	{
+		m_DoubleClickMaxYDiff = Value->GetInt();
 		return S_OK;
 	}
 
@@ -5014,23 +5068,6 @@ bool CBGame::IsRightDoubleClick()
 //////////////////////////////////////////////////////////////////////////
 bool CBGame::IsDoubleClick(int buttonIndex)
 {
-	DWORD maxDoubleCLickTime = 500;
-	int maxMoveX = 4;
-	int maxMoveY = 4;
-
-#if __WIN32__
-	maxDoubleCLickTime = GetDoubleClickTime();
-	maxMoveX = GetSystemMetrics(SM_CXDOUBLECLK);
-	maxMoveY = GetSystemMetrics(SM_CYDOUBLECLK);
-#elif __IPHONEOS__
-	maxMoveX = 16;
-	maxMoveY = 16;
-#elif __ANDROID__
-	// do the same as IOS does
-	maxMoveX = 16;
-	maxMoveY = 16;
-#endif
-
 	POINT pos;
 	CBPlatform::GetCursorPos(&pos);
 
@@ -5038,7 +5075,7 @@ bool CBGame::IsDoubleClick(int buttonIndex)
 	int moveY = abs(pos.y - m_LastClick[buttonIndex].PosY);
 
 
-	if (m_LastClick[buttonIndex].Time == 0 || CBPlatform::GetTime() - m_LastClick[buttonIndex].Time > maxDoubleCLickTime || moveX > maxMoveX || moveY > maxMoveY)
+	if (m_LastClick[buttonIndex].Time == 0 || CBPlatform::GetTime() - m_LastClick[buttonIndex].Time > m_DoubleClickMaxTime || moveX > m_DoubleClickMaxXDiff || moveY > m_DoubleClickMaxYDiff)
 	{
 		m_LastClick[buttonIndex].Time = CBPlatform::GetTime();
 		m_LastClick[buttonIndex].PosX = pos.x;

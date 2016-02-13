@@ -184,6 +184,23 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 	Game->LOG(0, "Engine initialized in %d ms", GetTime() - DataInitStart);
 	Game->LOG(0, "");
 
+#if __WIN32__
+	Game->m_DoubleClickMaxTime  = GetDoubleClickTime();
+	Game->m_DoubleClickMaxXDiff = GetSystemMetrics(SM_CXDOUBLECLK);
+	Game->m_DoubleClickMaxYDiff = GetSystemMetrics(SM_CYDOUBLECLK);
+#elif __IPHONEOS__
+	Game->m_DoubleClickMaxTime  = 500;
+	Game->m_DoubleClickMaxXDiff = 16;
+	Game->m_DoubleClickMaxYDiff = 16;
+#elif __ANDROID__
+	Game->m_DoubleClickMaxTime  = 500;
+	Game->m_DoubleClickMaxXDiff = 16;
+	Game->m_DoubleClickMaxYDiff = 16;
+#else
+	Game->m_DoubleClickMaxTime  = 500;
+	Game->m_DoubleClickMaxXDiff = 4;
+	Game->m_DoubleClickMaxYDiff = 4;
+#endif
 	
 	if(SaveGame)
 	{
