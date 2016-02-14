@@ -55,6 +55,7 @@ public:
 	virtual HRESULT OnMouseRightUp();
 	virtual HRESULT OnMouseMiddleDown();
 	virtual HRESULT OnMouseMiddleUp();
+	virtual HRESULT OnMouseDrag();
 	virtual HRESULT OnPaint();
 	virtual HRESULT OnWindowClose();
 
