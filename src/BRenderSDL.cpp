@@ -220,9 +220,10 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 			m_BorderLeft, m_BorderRight, m_BorderTop, m_BorderBottom);
 // #endif
 
+	float fDensityDiag;
 	float fDensityX;
 	float fDensityY;
-	if (SDL_GetDisplayDPI(deviceNumber, NULL, &fDensityX, &fDensityY) == 0)
+	if (SDL_GetDisplayDPI(deviceNumber, &fDensityDiag, &fDensityX, &fDensityY) == 0)
 	{
 		m_RealDensityX = (int) fDensityX;
 		m_RealDensityY = (int) fDensityY;
