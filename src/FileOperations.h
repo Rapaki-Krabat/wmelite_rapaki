@@ -13,6 +13,10 @@
 extern "C" {
 #endif
 
+#ifdef WIN32
+#include <sys/types.h>
+#endif
+
 typedef void* FILEHANDLE;
 
 typedef enum file_access_variant_t

@@ -667,7 +667,7 @@ int CBPlatform::DistanceRectMiddle(LPRECT lprc, POINT p)
 	xDist = abs(((lprc->left + lprc->right) / 2) - p.x);
 	yDist = abs(((lprc->bottom + lprc->top) / 2) - p.y);
 
-	return (int) (sqrt((xDist * xDist) + (yDist * yDist)));
+	return (int) (sqrt((float) ((xDist * xDist) + (yDist * yDist))));
 }
 
 //////////////////////////////////////////////////////////////////////////

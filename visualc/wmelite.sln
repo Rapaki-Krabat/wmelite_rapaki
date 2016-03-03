@@ -1,9 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wmelite", "wmelite.vcproj", "{C0336B3E-F11B-4A39-8A7A-525D66FCE6B7}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wmelite", "wmelite.vcxproj", "{C0336B3E-F11B-4A39-8A7A-525D66FCE6B7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wmelite_sdl_mixer", "wmelite_sdl_mixer.vcproj", "{C0336B3E-F11B-4A39-8A7A-525D66FCE6A7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wmelite_sdl_mixer", "wmelite_sdl_mixer.vcxproj", "{C0336B3E-F11B-4A39-8A7A-525D66FCE6A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

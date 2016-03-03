@@ -26,6 +26,9 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "BRenderer.h"
 
+#ifdef __WIN32__
+#define _USE_MATH_DEFINES // for C++
+#endif
 #include <math.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -167,7 +170,7 @@ CBObject* CBRenderer::GetObjectAt(int X, int Y)
 	
 	if ((m_MaxObjectDistanceX > 0) || (m_MaxObjectDistanceY > 0))
 	{
-		LONG maxDistance = sqrt((m_MaxObjectDistanceX * m_MaxObjectDistanceX) + (m_MaxObjectDistanceY * m_MaxObjectDistanceY));
+		LONG maxDistance = (LONG) sqrt((float) ((m_MaxObjectDistanceX * m_MaxObjectDistanceX) + (m_MaxObjectDistanceY * m_MaxObjectDistanceY)));
 
 		// use the "outer" object if no "inner" object was found
 		if ((bestObject == NULL) && (bestOuterObject != NULL))
