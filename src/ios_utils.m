@@ -27,6 +27,7 @@ THE SOFTWARE.
 #include <string.h>
 #import <Foundation/NSPathUtilities.h>
 #import <UIKit/UIApplication.h>
+#include <sys/utsname.h>
 
 void IOS_GetDataDir(char* buffer)
 {
