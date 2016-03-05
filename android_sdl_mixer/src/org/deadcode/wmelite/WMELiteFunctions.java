@@ -131,4 +131,9 @@ public class WMELiteFunctions {
 	  Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlToShow));
 	  c.startActivity(myIntent);
 	}
+	
+	public String getPlatformIdentifierString()
+	{
+		return Build.MANUFACTURER + ":" + Build.PRODUCT + ":" + Build.MODEL + ":" + Build.VERSION.SDK_INT;
+	}
 }
