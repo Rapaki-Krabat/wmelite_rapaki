@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 
+import android.os.Build;
+
 import android.net.Uri;
 
 public class WMELiteFunctions {
