@@ -222,7 +222,7 @@ int CBPlatform::Run(CBGame* inGame, int argc, char* argv[])
 {
 	int ret;
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__MINGW32__)
 #ifdef ADD_CRASH_REPORT
 	__try
 #endif
@@ -234,7 +234,7 @@ int CBPlatform::Run(CBGame* inGame, int argc, char* argv[])
 			ret = CBPlatform::MessageLoop();
 		}
 	}
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__MINGW32__)
 #ifdef ADD_CRASH_REPORT
 	__except(CBPlatform::HandleCrashReport(inGame, GetExceptionInformation()))
 	{
