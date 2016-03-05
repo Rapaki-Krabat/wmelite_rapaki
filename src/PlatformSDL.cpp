@@ -193,6 +193,63 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 	return 0;
 }
 
+//////////////////////////////////////////////////////////////////////////
+int CBPlatform::Run(CBGame* inGame, int argc, char* argv[])
+{
+	int ret;
+
+#if defined(__WIN32__) && !defined(__MINGW32__)
+#ifdef ADD_CRASH_REPORT
+	__try
+#endif
+#endif
+	{
+		ret = CBPlatform::Initialize(inGame, argc, argv);
+		if (ret == 0)
+		{
+			ret = CBPlatform::MessageLoop();
+		}
+	}
+#if defined(__WIN32__) && !defined(__MINGW32__)
+#ifdef ADD_CRASH_REPORT
+	__except(CBPlatform::HandleCrashReport(inGame, GetExceptionInformation()))
+	{
+		ret = 1;
+	}
+#endif
+#endif
+
+	return ret;
+}
+
+//////////////////////////////////////////////////////////////////////////
+#ifdef __WIN32__
+#ifdef ADD_CRASH_REPORT
+typedef void (*DllCreateReport)(const char* AppName, int VerMajor, int VerMinor, int VerBuild, EXCEPTION_POINTERS* pExPtrs, bool SendReport);
+LONG CBPlatform::HandleCrashReport(CBGame* Game, EXCEPTION_POINTERS* pExPtrs)
+{	
+	LONG Ret = EXCEPTION_CONTINUE_SEARCH;
+	if(IsDebuggerPresent()) return Ret;
+
+	HMODULE  hMod = LoadLibrary("wme_report.dll");
+	if(hMod)
+	{
+		DllCreateReport CreateReport = (DllCreateReport)GetProcAddress(hMod, "CreateReport");
+		if(CreateReport)
+		{
+			if(Game && Game->m_Renderer && Game->m_Renderer->m_Window)
+			{
+				ShowWindow(Game->m_Renderer->m_Window, SW_HIDE);
+			}
+			CreateReport("wme", DCGF_VER_MAJOR, DCGF_VER_MINOR, DCGF_VER_BUILD, pExPtrs, true);
+			Ret = EXCEPTION_EXECUTE_HANDLER;
+		}		
+		FreeLibrary(hMod);
+	}
+	return Ret;
+}
+#endif
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 int CBPlatform::MessageLoop()

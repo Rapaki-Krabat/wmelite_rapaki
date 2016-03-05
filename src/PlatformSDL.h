@@ -43,6 +43,9 @@ THE SOFTWARE.
 #	include "wintypes.h"
 #endif // __WIN32__
 
+#ifdef __WIN32__
+#define ADD_CRASH_REPORT
+#endif
 
 class CBGame;
 
@@ -52,8 +55,16 @@ class CBPlatform
 {
 public:
 	static int Initialize(CBGame* inGame, int argc, char* argv[]);
+	static int Run(CBGame* inGame, int argc, char* argv[]);
 	static int MessageLoop();
 	static void HandleEvent(SDL_Event* event);
+
+#ifdef __WIN32__
+#ifdef ADD_CRASH_REPORT
+	// debugging
+	static LONG HandleCrashReport(CBGame* Game, EXCEPTION_POINTERS* pExPtrs);
+#endif
+#endif
 
 	static AnsiString GetSystemFontPath();
 	static AnsiString GetPlatformName();

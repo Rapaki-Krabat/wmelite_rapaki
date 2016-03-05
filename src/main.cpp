@@ -74,12 +74,12 @@ int main(int argc, char* argv[])
 	// set handling of freeimage error strings so they are at least logged
 	FreeImage_SetOutputMessage(FreeImageErrorHandler);
 
-	ret = CBPlatform::Initialize(Game, argc, argv);
-	if (ret == 0)
-	{
-		ret = CBPlatform::MessageLoop();
-	}
-
+//	ret = CBPlatform::Initialize(Game, argc, argv);
+//	if (ret == 0)
+//	{
+//		ret = CBPlatform::MessageLoop();
+//	}
+	ret = CBPlatform::Run(Game, argc, argv);
 
 #ifndef __WIN32__
 	FreeImage_DeInitialise();
