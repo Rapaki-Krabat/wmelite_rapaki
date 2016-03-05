@@ -55,3 +55,25 @@ void IOS_GetDeviceType(char* buffer)
 	else
 		strcpy(buffer, "phone");
 }
+
+NSString *getMachineName()
+{
+    struct utsname systemInfo;
+    if (uname(&systemInfo) < 0) {
+        return nil;
+    } else {
+        return [NSString stringWithCString:systemInfo.machine
+                              encoding:NSUTF8StringEncoding];
+    }
+}
+
+void IOS_GetPlatformIdentifierString(char *buffer)
+{
+	NSString *ver = [[UIDevice currentDevice] systemVersion];
+	NSString* machName = getMachineName();
+	const char* utf8path = [machName UTF8String];
+	strcpy(buffer, utf8path);
+	strcat(buffer, ":");
+	const char* utf8path2 = [ver UTF8String];
+	strcat(buffer, utf8path2);
+}

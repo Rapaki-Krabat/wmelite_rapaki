@@ -2708,6 +2708,15 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	// DeviceType (RO)
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "PlatformIdentifier")==0)
+	{
+		m_ScValue->SetString(GetPlatformIdentifier().c_str());
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	// MostRecentSaveSlot (RO)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "MostRecentSaveSlot")==0)
@@ -5165,6 +5174,23 @@ AnsiString CBGame::GetDeviceType() const
 	return "computer";
 #endif
 }
+
+//////////////////////////////////////////////////////////////////////////
+AnsiString CBGame::GetPlatformIdentifier() const
+{
+#ifdef __IPHONEOS__
+	char id[1024];
+	IOS_GetPlatformIdentifierString(id);
+	return AnsiString(id);
+#elif __ANDROID__
+	char id[1024];
+	android_getPlatformIdentifierString(id, 1024);
+	return AnsiString(id);
+#else
+	return "computer";
+#endif
+}
+
 /*
 //////////////////////////////////////////////////////////////////////////
 void CBGame::FileSystemTests()

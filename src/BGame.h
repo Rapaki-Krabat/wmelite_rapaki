@@ -336,6 +336,8 @@ public:
 	bool m_TouchInterface;
 	bool m_ConstrainedMemory;
 	AnsiString GetDeviceType() const;
+	AnsiString GetPlatformIdentifier() const;
+
 
 private:	
 	CBDebugger* m_DebugMgr;
