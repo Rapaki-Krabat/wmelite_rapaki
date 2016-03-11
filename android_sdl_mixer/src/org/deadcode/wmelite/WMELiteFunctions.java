@@ -136,6 +136,7 @@ public class WMELiteFunctions {
 	
 	public String getPlatformIdentifierString()
 	{
-		return Build.MANUFACTURER + ":" + Build.PRODUCT + ":" + Build.MODEL + ":" + Build.VERSION.SDK_INT;
+	    String platformIdentifier = Build.MANUFACTURER + ":" + Build.PRODUCT + ":" + Build.MODEL + ":" + Build.VERSION.SDK_INT;
+		return platformIdentifier.replaceAll("\\s","_");
 	}
 }
