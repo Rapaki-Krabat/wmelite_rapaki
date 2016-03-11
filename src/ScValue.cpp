@@ -27,6 +27,8 @@ THE SOFTWARE.
 #include "ScValue.h"
 #include "StringUtil.h"
 
+#define INVALID_REFERENCE_WORKAROUND
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -786,6 +788,19 @@ HRESULT CScValue::Persist(CBPersistMgr* PersistMgr)
 
 	PersistMgr->Transfer(TMEMBER(m_ValRef));
 	PersistMgr->Transfer(TMEMBER(m_ValString));
+
+#ifdef INVALID_REFERENCE_WORKAROUND
+
+	// if the savegame contains a problematic instance, apply a workaround here
+	if (m_Type == VAL_VARIABLE_REF)
+	{
+		if (m_ValRef == NULL)
+		{
+			m_Type = VAL_NULL;
+		}
+	}
+
+#endif
 
 	/*
 	FILE* f = fopen("c:\\val.log", "a+");
