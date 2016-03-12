@@ -44,6 +44,11 @@ public:
 	int m_MaxObjectDistanceX;
 	int m_MaxObjectDistanceY;
 
+	int m_BorderLeft;
+	int m_BorderTop;
+	int m_BorderRight;
+	int m_BorderBottom;
+
 	virtual void DumpData(char* Filename){};
 	virtual CBImage* TakeScreenshot();
 	virtual HRESULT SetViewport(int left, int top, int right, int bottom);

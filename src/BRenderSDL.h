@@ -74,11 +74,6 @@ private:
 	SDL_Window* m_Win;
 	AnsiString m_Name;
 
-	int m_BorderLeft;
-	int m_BorderTop;
-	int m_BorderRight;
-	int m_BorderBottom;
-
 	float m_RatioX;
 	float m_RatioY;
 
