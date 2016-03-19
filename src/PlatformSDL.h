@@ -63,6 +63,12 @@ public:
 #ifdef ADD_CRASH_REPORT
 	// debugging
 	static LONG HandleCrashReport(CBGame* Game, EXCEPTION_POINTERS* pExPtrs);
+	
+	static void SignalHandler(int currSignal);
+
+	static void GetExceptionPointers(
+					DWORD dwExceptionCode,
+					EXCEPTION_POINTERS* pExceptionPointers);
 #endif
 #endif
 

@@ -31,6 +31,7 @@ THE SOFTWARE.
 #ifdef __WIN32__
 #	include <dbghelp.h>
 #	include <direct.h>
+#   include <signal.h>
 #else
 #	include <unistd.h>
 #	include <dirent.h>
@@ -46,6 +47,18 @@ THE SOFTWARE.
 #endif
 #if defined(__IPHONEOS__)
 #   include <locale.h>
+#endif
+
+#if defined(__WIN32__) && !defined(__MINGW32__)
+#ifdef ADD_CRASH_REPORT
+
+static void(__cdecl *m_prevSigABRT)(int); // Previous SIGABRT handler.  
+static void(__cdecl *m_prevSigILL)(int);  // Previous SIGILL handler.
+static void(__cdecl *m_prevSigSEGV)(int); // Previous SIGSEGV handler.
+static void(__cdecl *m_prevSigFPE)(int);  // Previous SIGFPE handler.
+static void(__cdecl *m_prevSigTERM)(int); // Previous SIGTERM handler.
+
+#endif
 #endif
 
 CBGame* CBPlatform::Game = NULL;
@@ -200,6 +213,12 @@ int CBPlatform::Run(CBGame* inGame, int argc, char* argv[])
 
 #if defined(__WIN32__) && !defined(__MINGW32__)
 #ifdef ADD_CRASH_REPORT
+	m_prevSigABRT = signal(SIGABRT, SignalHandler);
+	m_prevSigILL = signal(SIGILL, SignalHandler);
+	m_prevSigSEGV = signal(SIGSEGV, SignalHandler);
+	m_prevSigFPE = signal(SIGFPE, SignalHandler);
+	m_prevSigTERM = signal(SIGTERM, SignalHandler);
+
 	__try
 #endif
 #endif
@@ -216,6 +235,12 @@ int CBPlatform::Run(CBGame* inGame, int argc, char* argv[])
 	{
 		ret = 1;
 	}
+
+	signal(SIGABRT, m_prevSigABRT);
+	signal(SIGILL, m_prevSigILL);
+	signal(SIGSEGV, m_prevSigSEGV);
+	signal(SIGFPE, m_prevSigFPE);
+	signal(SIGTERM, m_prevSigTERM);
 #endif
 #endif
 
@@ -237,17 +262,88 @@ LONG CBPlatform::HandleCrashReport(CBGame* Game, EXCEPTION_POINTERS* pExPtrs)
 		DllCreateReport CreateReport = (DllCreateReport)GetProcAddress(hMod, "CreateReport");
 		if(CreateReport)
 		{
-			if(Game && Game->m_Renderer && Game->m_Renderer->m_Window)
+			if (Game && Game->m_Renderer && Game->m_Renderer->m_Window)
 			{
 				ShowWindow(Game->m_Renderer->m_Window, SW_HIDE);
 			}
 			CreateReport("wme", DCGF_VER_MAJOR, DCGF_VER_MINOR, DCGF_VER_BUILD, pExPtrs, true);
 			Ret = EXCEPTION_EXECUTE_HANDLER;
-		}		
+		}
 		FreeLibrary(hMod);
 	}
+
 	return Ret;
 }
+
+void CBPlatform::SignalHandler(int currSignal)
+{
+	EXCEPTION_RECORD ExceptionRecord;
+	CONTEXT ContextRecord;
+	EXCEPTION_POINTERS ptr;
+
+	ptr.ExceptionRecord = &ExceptionRecord;
+	ptr.ContextRecord = &ContextRecord;
+
+	CBPlatform::GetExceptionPointers(currSignal, &ptr);
+
+	CBPlatform::HandleCrashReport(Game, &ptr);
+}
+
+// The following code gets exception pointers using a workaround found in CRT code.
+void CBPlatform::GetExceptionPointers(DWORD dwExceptionCode,
+	EXCEPTION_POINTERS* pExceptionPointers)
+{
+	// The following code was taken from VC++ 8.0 CRT (invarg.c: line 104)
+
+	CONTEXT ContextRecord;
+	memset(&ContextRecord, 0, sizeof(CONTEXT));
+
+#ifdef _X86_
+
+	__asm {
+		mov dword ptr[ContextRecord.Eax], eax
+			mov dword ptr[ContextRecord.Ecx], ecx
+			mov dword ptr[ContextRecord.Edx], edx
+			mov dword ptr[ContextRecord.Ebx], ebx
+			mov dword ptr[ContextRecord.Esi], esi
+			mov dword ptr[ContextRecord.Edi], edi
+			mov word ptr[ContextRecord.SegSs], ss
+			mov word ptr[ContextRecord.SegCs], cs
+			mov word ptr[ContextRecord.SegDs], ds
+			mov word ptr[ContextRecord.SegEs], es
+			mov word ptr[ContextRecord.SegFs], fs
+			mov word ptr[ContextRecord.SegGs], gs
+			pushfd
+			pop[ContextRecord.EFlags]
+	}
+
+	ContextRecord.ContextFlags = CONTEXT_CONTROL;
+#pragma warning(push)
+#pragma warning(disable:4311)
+	ContextRecord.Eip = (ULONG)_ReturnAddress();
+	ContextRecord.Esp = (ULONG)_AddressOfReturnAddress();
+#pragma warning(pop)
+	ContextRecord.Ebp = *((ULONG *)_AddressOfReturnAddress() - 1);
+
+#elif defined (_IA64_) || defined (_AMD64_)
+
+	/* Need to fill up the Context in IA64 and AMD64. */
+	RtlCaptureContext(&ContextRecord);
+
+#else  /* defined (_IA64_) || defined (_AMD64_) */
+
+	ZeroMemory(&ContextRecord, sizeof(ContextRecord));
+
+#endif  /* defined (_IA64_) || defined (_AMD64_) */
+
+	memcpy(pExceptionPointers->ContextRecord, &ContextRecord, sizeof(CONTEXT));
+
+	ZeroMemory(pExceptionPointers->ExceptionRecord, sizeof(EXCEPTION_RECORD));
+
+	pExceptionPointers->ExceptionRecord->ExceptionCode = dwExceptionCode;
+	pExceptionPointers->ExceptionRecord->ExceptionAddress = _ReturnAddress();
+}
+
 #endif
 #endif
 
