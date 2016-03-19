@@ -26,6 +26,7 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "AdObject.h"
 
+#define WORKAROUND_INVALID_ANIM_REFERENCE
 
 IMPLEMENT_PERSISTENT(CAdObject, false);
 
@@ -124,6 +125,14 @@ CAdObject::~CAdObject()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdObject::PlayAnim(char *Filename)
 {
+#ifdef WORKAROUND_INVALID_ANIM_REFERENCE
+	bool updateReference = false;
+	if (m_CurrentSprite == m_AnimSprite)
+	{
+		updateReference = true;
+	}
+#endif
+
 	SAFE_DELETE(m_AnimSprite);
 	m_AnimSprite = new CBSprite(Game, this);
 	if(!m_AnimSprite)
@@ -139,6 +148,13 @@ HRESULT CAdObject::PlayAnim(char *Filename)
 		return res;
 	}
 	m_State = STATE_PLAYING_ANIM;
+
+#ifdef WORKAROUND_INVALID_ANIM_REFERENCE
+	if (updateReference == true)
+	{
+		m_CurrentSprite = m_AnimSprite;
+	}
+#endif
 
 	return S_OK;
 }
