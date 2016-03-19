@@ -238,7 +238,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 	Uint32 flags = SDL_WINDOW_SHOWN;
 #ifdef __IPHONEOS__
-	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS | SLD_WINDOW_ALLOW_HIGHDPI;
+	flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALLOW_HIGHDPI;
 #else
 #ifdef __ANDROID__
 	// just do the same IOS does
