@@ -98,16 +98,20 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	m_RealHeight = 320;
 
 	int numModes = SDL_GetNumDisplayModes(deviceNumber);
-	for (int i = 0; i < numModes; i++)
+
+    Game->LOG(0, "iOS / Android report %d modes.", numModes);
+    
+    for (int i = 0; i < numModes; i++)
 	{
 		SDL_GetDisplayMode(deviceNumber, i, &bestResolution);
 
-		if (bestResolution.w > bestResolution.h)
+        Game->LOG(0, "iOS / Android mode %d x=%d y=%d.", i, bestResolution.w, bestResolution.h);
+        
+		if ((bestResolution.w > bestResolution.h) && ((bestResolution.w > m_RealWidth) || (bestResolution.h > m_RealHeight)))
 		{
 			m_RealWidth = bestResolution.w;
 			m_RealHeight = bestResolution.h;
 			current = &bestResolution;
-			break;
 		}
 	}	
 #else
@@ -318,35 +322,26 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 #ifdef __IPHONEOS__
 	// if a high DPI window was created, we need to update the pixel sizes after the renderer has been created
-	int rendererX;
-	int rendererY;
 
-	if (SDL_GetRendererOutputSize(m_Renderer, &rendererX, &rendererY) == 0)
-	{
-		if ((rendererX != m_RealWidth) || (rendererY != m_RealHeight))
-		{
-			// density values change as per reported scale
-			m_RealDensityX *= fDensityDiag;
-			m_RealDensityY *= fDensityDiag;
+    Game->LOG(0, "Updating densities by scale factor: %.2f.", fDensityDiag);
+    
+    // density values change as per reported scale
+    m_RealDensityX *= fDensityDiag;
+    m_RealDensityY *= fDensityDiag;
 
-			WindowResized(rendererX, rendererY);
+    // values should be overwritten by renderer values
+    WindowResized(m_RealWidth, m_RealHeight);
 
-			m_RealWidth  = m_NewRealWidth;
-			m_RealHeight = m_NewRealHeight;
+    m_RealWidth  = m_NewRealWidth;
+    m_RealHeight = m_NewRealHeight;
 
-			m_BorderLeft   = m_NewBorderLeft;
-			m_BorderTop    = m_NewBorderTop;
-			m_BorderRight  = m_NewBorderRight;
-			m_BorderBottom = m_NewBorderBottom;
+    m_BorderLeft   = m_NewBorderLeft;
+    m_BorderTop    = m_NewBorderTop;
+    m_BorderRight  = m_NewBorderRight;
+    m_BorderBottom = m_NewBorderBottom;
 
-			m_RatioX = m_NewRatioX;
-			m_RatioY = m_NewRatioY;
-		}
-	}
-	else
-	{
-		Game->LOG(0, "Query renderer for real display size failed!");
-	}
+    m_RatioX = m_NewRatioX;
+    m_RatioY = m_NewRatioY;
 
 #endif
 
@@ -407,10 +402,32 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 /////////////////////////////////////////////////////
 void CBRenderSDL::WindowResized(int x, int y)
 {
-	m_NewRealWidth  = x;
+#ifdef __IPHONEOS__
+    // if a high DPI window was created, we need to update the pixel sizes after the renderer has been created
+    int rendererX;
+    int rendererY;
+    
+    if (SDL_GetRendererOutputSize(m_Renderer, &rendererX, &rendererY) == 0)
+    {
+        m_NewRealWidth  = rendererX;
+        m_NewRealHeight = rendererY;
+        
+        Game->LOG(0, "Query renderer: x=%d y=%d.", rendererX, rendererY);
+    }
+    else
+    {
+        m_NewRealWidth  = x;
+        m_NewRealHeight = y;
+    }
+    
+#else
+    
+    m_NewRealWidth  = x;
 	m_NewRealHeight = y;
 
-	float origAspect = (float) m_Width        / (float) m_Height;
+#endif
+
+    float origAspect = (float) m_Width        / (float) m_Height;
 	float realAspect = (float) m_NewRealWidth / (float) m_NewRealHeight;
 
 	float ratio;
