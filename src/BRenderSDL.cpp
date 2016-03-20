@@ -320,6 +320,10 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	SDL_GetRendererInfo(m_Renderer, &info);
 	Game->LOG(0, "Renderer max texture sizes: x=%d y=%d.\n", info.max_texture_width, info.max_texture_height);
 
+	// initialize variables to avoid surprizes
+	m_NewRealWidth  = m_RealWidth;
+	m_NewRealHeight = m_RealHeight;
+
 #ifdef __IPHONEOS__
 	// if a high DPI window was created, we need to update the pixel sizes after the renderer has been created
 
