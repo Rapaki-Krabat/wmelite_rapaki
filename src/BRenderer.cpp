@@ -267,6 +267,10 @@ HRESULT CBRenderer::InitRenderer(int width, int height, bool windowed, float upS
 	return E_FAIL;
 }
 
+/////////////////////////////////////////////////////
+void CBRenderer::WindowResized(int x, int y)
+{
+}
 
 //////////////////////////////////////////////////////////////////////
 void CBRenderer::OnWindowChange()
