@@ -232,6 +232,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	else
 #endif
 	{
+		fDensityDiag = 1;
 		m_RealDensityX = 0;
 		m_RealDensityY = 0;
 	}
@@ -315,6 +316,40 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	SDL_GetRendererInfo(m_Renderer, &info);
 	Game->LOG(0, "Renderer max texture sizes: x=%d y=%d.\n", info.max_texture_width, info.max_texture_height);
 
+#ifdef __IPHONEOS__
+	// if a high DPI window was created, we need to update the pixel sizes after the renderer has been created
+	int rendererX;
+	int rendererY;
+
+	if (SDL_GetRendererOutputSize(m_Renderer, &rendererX, &rendererY) == 0)
+	{
+		if ((rendererX != m_RealWidth) || (rendererY != m_RealHeight))
+		{
+			// density values change as per reported scale
+			m_RealDensityX *= fDensityDiag;
+			m_RealDensityY *= fDensityDiag;
+
+			WindowResized(rendererX, rendererY);
+
+			m_RealWidth  = m_NewRealWidth;
+			m_RealHeight = m_NewRealHeight;
+
+			m_BorderLeft   = m_NewBorderLeft;
+			m_BorderTop    = m_NewBorderTop;
+			m_BorderRight  = m_NewBorderRight;
+			m_BorderBottom = m_NewBorderBottom;
+
+			m_RatioX = m_NewRatioX;
+			m_RatioY = m_NewRatioY;
+		}
+	}
+	else
+	{
+		Game->LOG(0, "Query renderer for real display size failed!");
+	}
+
+#endif
+
 	// erase window content immediately (hopefully gets rid of artifacts upon game start)
 	Fill(0, 0, 0, NULL);
 	SDL_RenderPresent(m_Renderer);
@@ -367,6 +402,43 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	
 
 	return S_OK;
+}
+
+/////////////////////////////////////////////////////
+void CBRenderSDL::WindowResized(int x, int y)
+{
+	m_NewRealWidth  = x;
+	m_NewRealHeight = y;
+
+	float origAspect = (float) m_Width        / (float) m_Height;
+	float realAspect = (float) m_NewRealWidth / (float) m_NewRealHeight;
+
+	float ratio;
+	if (origAspect < realAspect)
+	{
+		// normal to wide
+		ratio = (float) m_NewRealHeight / (float) m_Height;
+	}
+	else
+	{
+		// wide to normal
+		ratio = (float) m_NewRealWidth / (float) m_Width;
+	}
+
+	m_NewBorderLeft  = (m_NewRealWidth - (m_Width * ratio)) / 2;
+	m_NewBorderRight =  m_NewRealWidth - (m_Width * ratio) - m_NewBorderLeft;
+
+	m_NewBorderTop    = (m_NewRealHeight - (m_Height * ratio)) / 2;
+	m_NewBorderBottom =  m_NewRealHeight - (m_Height * ratio) - m_NewBorderTop;
+
+	m_NewRatioX = (float)(m_NewRealWidth  - m_NewBorderLeft - m_NewBorderRight)  / (float) m_Width;
+	m_NewRatioY = (float)(m_NewRealHeight - m_NewBorderTop  - m_NewBorderBottom) / (float) m_Height;
+
+	Game->LOG(0, "Update screen: Orig w=%d h=%d Transformed w=%d h=%d ratiox=%.02f ratioy=%.02f",
+			m_Width, m_Height, m_NewRealWidth, m_NewRealHeight,
+			m_NewRatioX, m_NewRatioY);
+	Game->LOG(0, "Update screen: BorderLeft=%d BorderRight=%d BorderTop=%d BorderBottom=%d",
+			m_NewBorderLeft, m_NewBorderRight, m_NewBorderTop, m_NewBorderBottom);
 }
 
 /////////////////////////////////////////////////////
@@ -511,6 +583,21 @@ HRESULT CBRenderSDL::Flip()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CBRenderSDL::EraseBackground()
 {
+	// update values from window update event here to be consistent
+	if ((m_NewRealWidth != m_RealWidth) || (m_NewRealHeight != m_RealHeight))
+	{
+		m_RealWidth  = m_NewRealWidth;
+		m_RealHeight = m_NewRealHeight;
+
+		m_BorderLeft   = m_NewBorderLeft;
+		m_BorderTop    = m_NewBorderTop;
+		m_BorderRight  = m_NewBorderRight;
+		m_BorderBottom = m_NewBorderBottom;
+
+		m_RatioX = m_NewRatioX;
+		m_RatioY = m_NewRatioY;
+	}
+
 	Fill(0, 0, 0, NULL);
 
 	// in case of pixelperfect rendering, both on- and offscreen

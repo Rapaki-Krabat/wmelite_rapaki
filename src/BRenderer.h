@@ -82,6 +82,8 @@ public:
 	virtual float GetScaleRatioX() const { return 1.0f; }
 	virtual float GetScaleRatioY() const { return 1.0f; }
 
+	virtual void WindowResized(int x, int y);
+
 	HRESULT ClipCursor();
 	HRESULT UnclipCursor();
 

@@ -419,6 +419,7 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			break;
 		case SDL_WINDOWEVENT_RESIZED:
 			Game->LOG(0, "Window resize event received: x=%d y=%d.", event->window.data1, event->window.data2);
+			Game->m_Renderer->WindowResized(event->window.data1, event->window.data2);
 			break;
 		}
 		break;

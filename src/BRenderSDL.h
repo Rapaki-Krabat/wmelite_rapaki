@@ -68,6 +68,8 @@ public:
 	float GetScaleRatioX() const { return m_RatioX; }
 	float GetScaleRatioY() const { return m_RatioY; }
 
+	void WindowResized(int x, int y);
+
 private:
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Texture;
@@ -76,6 +78,18 @@ private:
 
 	float m_RatioX;
 	float m_RatioY;
+
+	// store data from window update events
+	int m_NewRealWidth;
+	int m_NewRealHeight;
+
+	int m_NewBorderLeft;
+	int m_NewBorderTop;
+	int m_NewBorderRight;
+	int m_NewBorderBottom;
+
+	float m_NewRatioX;
+	float m_NewRatioY;
 
 	// whether pixelperfect is active at all
 	bool m_PixelPerfect;
