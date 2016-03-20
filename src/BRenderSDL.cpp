@@ -332,6 +332,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
     // values should be overwritten by renderer values
     WindowResized(m_RealWidth, m_RealHeight);
 
+    // apply values immediately
     m_RealWidth  = m_NewRealWidth;
     m_RealHeight = m_NewRealHeight;
 
@@ -403,7 +404,8 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 void CBRenderSDL::WindowResized(int x, int y)
 {
 #ifdef __IPHONEOS__
-    // if a high DPI window was created, we need to update the pixel sizes after the renderer has been created
+    // if a high DPI window was created, we need to query sites in pixels from the current renderer
+	// make sure that this function is not called when the renderer is set for offscreen rendering
     int rendererX;
     int rendererY;
     
@@ -418,6 +420,8 @@ void CBRenderSDL::WindowResized(int x, int y)
     {
         m_NewRealWidth  = x;
         m_NewRealHeight = y;
+
+        Game->LOG(0, "Renderer query failed, using x=%d y=%d.", x, y);
     }
     
 #else
@@ -426,6 +430,8 @@ void CBRenderSDL::WindowResized(int x, int y)
 	m_NewRealHeight = y;
 
 #endif
+
+	// compute new values, but apply only later when erasing screen to avoid inconsistencies
 
     float origAspect = (float) m_Width        / (float) m_Height;
 	float realAspect = (float) m_NewRealWidth / (float) m_NewRealHeight;
