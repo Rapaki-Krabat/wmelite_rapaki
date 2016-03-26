@@ -142,7 +142,7 @@ HRESULT CAdResponseBox::CreateButtons()
 				btn->m_FontPress = btn->m_FontHover;
 				btn->m_Align = m_Align;
 
-				if (Game->m_TouchInterface)
+				if ((Game->m_TouchInterface) && (Game->m_DisableTouchDialogFontHover))
 					btn->m_FontHover = btn->m_Font;
 
 
@@ -156,7 +156,7 @@ HRESULT CAdResponseBox::CreateButtons()
 
 			// make the responses touchable
 			if (Game->m_TouchInterface)
-				btn->m_Height = max(btn->m_Height, 50);
+				btn->m_Height = max(btn->m_Height, Game->m_MinDialogResponseDistance);
 
 			//btn->SetListener(this, btn, m_Responses[i]->m_ID);
 			btn->SetListener(this, btn, i);

@@ -210,6 +210,10 @@ public:
 	int m_DoubleClickMaxXDiff;
 	int m_DoubleClickMaxYDiff;
 
+	bool m_DisableTouchDialogFontHover;
+	int  m_MinDialogResponseDistance;
+	bool m_UseNonTouchSubtitlesWidthComputation;
+
 	// compatibility bits
 	bool m_CompatKillMethodThreads;
 	

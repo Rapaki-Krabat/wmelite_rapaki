@@ -245,6 +245,11 @@ CBGame::CBGame():CBObject(this)
 	m_AutoSaveSlot = 999;
 	m_CursorHidden = false;
 
+	// defaults
+	m_DisableTouchDialogFontHover          = true;
+	m_MinDialogResponseDistance            = 50;
+	m_UseNonTouchSubtitlesWidthComputation = false;
+
 #ifdef __IPHONEOS__
 	m_TouchInterface = true;
 	m_ConstrainedMemory = true; // TODO differentiate old and new iOS devices
@@ -2799,6 +2804,33 @@ CScValue* CBGame::ScGetProperty(char *Name)
 		return m_ScValue;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// DisableTouchDialogFontHover
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DisableTouchDialogFontHover")==0)
+	{
+		m_ScValue->SetBool(m_DisableTouchDialogFontHover);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// MinDialogResponseDistance
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "MinDialogResponseDistance")==0)
+	{
+		m_ScValue->SetInt(m_MinDialogResponseDistance);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// m_UseNonTouchSubtitlesWidthComputation
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "m_UseNonTouchSubtitlesWidthComputation")==0)
+	{
+		m_ScValue->SetBool(m_UseNonTouchSubtitlesWidthComputation);
+		return m_ScValue;
+	}
+
 
 	else return CBObject::ScGetProperty(Name);
 }
@@ -3062,6 +3094,34 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 		m_Renderer->m_MaxObjectDistanceY = Value->GetInt();
 		return S_OK;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// DisableTouchDialogFontHover
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DisableTouchDialogFontHover")==0)
+	{
+		m_DisableTouchDialogFontHover = Value->GetBool();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// MinDialogResponseDistance
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "MinDialogResponseDistance")==0)
+	{
+		m_MinDialogResponseDistance = Value->GetInt();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// m_UseNonTouchSubtitlesWidthComputation
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "m_UseNonTouchSubtitlesWidthComputation")==0)
+	{
+		m_UseNonTouchSubtitlesWidthComputation = Value->GetBool();
+		return S_OK;
+	}
+
 
 	else return CBObject::ScSetProperty(Name, Value);
 }
