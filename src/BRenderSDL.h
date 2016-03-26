@@ -65,8 +65,8 @@ public:
 
 	void DumpData(char* Filename);
 
-	float GetScaleRatioX() const { return m_RatioX; }
-	float GetScaleRatioY() const { return m_RatioY; }
+	float GetScaleRatioX() const { return m_PhysicalRatioX; }
+	float GetScaleRatioY() const { return m_PhysicalRatioY; }
 
 	void WindowResized(int x, int y);
 
@@ -76,20 +76,28 @@ private:
 	SDL_Window* m_Win;
 	AnsiString m_Name;
 
-	float m_RatioX;
-	float m_RatioY;
+	// "logical" window properties
+	// this is how the system represents the window to the application
+	// touch coordiantes are reported using these properties
+	float m_LogicalRatioX;
+	float m_LogicalRatioY;
+
+	int m_LogicalWidth;
+	int m_LogicalHeight;
+
+	int m_LogicalBorderLeft;
+	int m_LogicalBorderTop;
+	int m_LogicalBorderRight;
+	int m_LogicalBorderBottom;
+
+	// "physical" window properties
+	// this corresponds to what the renderer size really is
+	float m_PhysicalRatioX;
+	float m_PhysicalRatioY;
 
 	// store data from window update events
-	int m_NewRealWidth;
-	int m_NewRealHeight;
-
-	int m_NewBorderLeft;
-	int m_NewBorderTop;
-	int m_NewBorderRight;
-	int m_NewBorderBottom;
-
-	float m_NewRatioX;
-	float m_NewRatioY;
+	int m_NewLogicalWidth;
+	int m_NewLogicalHeight;
 
 	// whether pixelperfect is active at all
 	bool m_PixelPerfect;
@@ -104,6 +112,11 @@ private:
 	DWORD m_SecondTickTime;
 	DWORD m_FrameCounter;
 	DWORD m_AccumulatedSleepTime;
+
+	float m_upScalingRatioStepping;
+	float m_downScalingRatioStepping;
+
+	void UpdateWindowScaling();
 
 	float GetAlignedUpscalingRatio(float ratio, float stepping);
 	float GetAlignedDownscalingRatio(float ratio, float stepping);

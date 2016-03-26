@@ -42,8 +42,10 @@ CBRenderSDL::CBRenderSDL(CBGame* inGame) : CBRenderer(inGame)
 	m_Renderer = NULL;
 	m_Win = NULL;
 
-	m_BorderLeft = m_BorderRight = m_BorderTop = m_BorderBottom = 0;
-	m_RatioX = m_RatioY = 1.0f;
+	m_PhysicalBorderLeft = m_PhysicalBorderRight = m_PhysicalBorderTop = m_PhysicalBorderBottom = 0;
+	m_LogicalRatioX = m_LogicalRatioY = 1.0f;
+	m_PhysicalRatioX = m_PhysicalRatioY = 1.0f;
+	m_PhysicalWidth = m_PhysicalHeight = m_LogicalWidth = m_LogicalHeight = 0;
 	m_PixelPerfect = false;
 }
 
@@ -62,6 +64,9 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) return E_FAIL;
 	
+	m_upScalingRatioStepping   = upScalingRatioStepping;
+	m_downScalingRatioStepping = downScalingRatioStepping;
+
 	const SDL_DisplayMode* current = NULL;
 
 	// for searching matching resolution, always remember "best" pick
@@ -85,8 +90,11 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	m_Width = width;
 	m_Height = height;
 
-	m_RealWidth = width;
-	m_RealHeight = height;
+	m_LogicalWidth  = 0;
+	m_LogicalHeight = 0;
+
+	m_NewLogicalWidth = width;
+	m_NewLogicalHeight = height;
 
 	m_PixelPerfect = pixelPerfectRendering;
 
@@ -94,8 +102,8 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 #if defined(__IPHONEOS__) || defined(__ANDROID__)
 	// mobile devices: search all resolutions until one is found where width > height
 
-	m_RealWidth = 480;
-	m_RealHeight = 320;
+	m_NewLogicalWidth = 480;
+	m_NewLogicalHeight = 320;
 
 	int numModes = SDL_GetNumDisplayModes(deviceNumber);
 
@@ -107,10 +115,10 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
         Game->LOG(0, "iOS / Android mode %d x=%d y=%d.", i, bestResolution.w, bestResolution.h);
         
-		if ((bestResolution.w > bestResolution.h) && ((bestResolution.w > m_RealWidth) || (bestResolution.h > m_RealHeight)))
+		if ((bestResolution.w > bestResolution.h) && ((bestResolution.w > m_NewLogicalWidth) || (bestResolution.h > m_NewLogicalHeight)))
 		{
-			m_RealWidth = bestResolution.w;
-			m_RealHeight = bestResolution.h;
+			m_NewLogicalWidth     = bestResolution.w;
+			m_NewLogicalHeight    = bestResolution.h;
 			current = &bestResolution;
 		}
 	}	
@@ -170,76 +178,45 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	// this is our resulting mode
 	current = &bestResolution;
 
-	m_RealWidth = current->w;
-	m_RealHeight = current->h;
+	m_NewLogicalWidth = current->w;
+	m_NewLogicalHeight = current->h;
 
 #endif
 
 	// last chance to override resolution settings with registry
 	if ((Game->m_Registry->ReadInt("Debug", "ForceResWidth", 0) != 0) && (Game->m_Registry->ReadInt("Debug", "ForceResHeight", 0) != 0)) {
-		m_RealWidth = Game->m_Registry->ReadInt("Debug", "ForceResWidth", m_Width);
-		m_RealHeight = Game->m_Registry->ReadInt("Debug", "ForceResHeight", m_Height);
+		m_NewLogicalWidth  = Game->m_Registry->ReadInt("Debug", "ForceResWidth", m_Width);
+		m_NewLogicalHeight = Game->m_Registry->ReadInt("Debug", "ForceResHeight", m_Height);
 	}
 
-	float origAspect = (float)m_Width / (float)m_Height;
-	float realAspect = (float)m_RealWidth / (float)m_RealHeight;
-
-	float ratio;
-	if (origAspect < realAspect)
-	{
-		// normal to wide
-		ratio = (float)m_RealHeight / (float)m_Height;
-	}
-	else
-	{
-		// wide to normal
-		ratio = (float)m_RealWidth / (float)m_Width;
-	}
-
-	Game->LOG(0, "Ratio before stepping application: %.02f", ratio);
-
-	if (ratio > 1.0) {
-		ratio = GetAlignedUpscalingRatio(ratio, upScalingRatioStepping);
-	}
-	if (ratio < 1.0) {
-		ratio = GetAlignedDownscalingRatio(ratio, downScalingRatioStepping);
-	}
-
-	Game->LOG(0, "Ratio after stepping application: %.02f", ratio);
-
-	m_BorderLeft = (m_RealWidth - (m_Width * ratio)) / 2;
-	m_BorderRight = m_RealWidth - (m_Width * ratio) - m_BorderLeft;
-
-	m_BorderTop = (m_RealHeight - (m_Height * ratio)) / 2;
-	m_BorderBottom = m_RealHeight - (m_Height * ratio) - m_BorderTop;
-
-	m_RatioX = (float)(m_RealWidth - m_BorderLeft - m_BorderRight) / (float)m_Width;
-	m_RatioY = (float)(m_RealHeight - m_BorderTop - m_BorderBottom) / (float)m_Height;
-
-// #ifdef __ANDROID__
-	Game->LOG(0, "Orig w=%d h=%d Transformed w=%d h=%d ratiox=%.02f ratioy=%.02f",
-			m_Width, m_Height, m_RealWidth, m_RealHeight,
-			m_RatioX, m_RatioY);
-	Game->LOG(0, "BorderLeft=%d BorderRight=%d BorderTop=%d BorderBottom=%d",
-			m_BorderLeft, m_BorderRight, m_BorderTop, m_BorderBottom);
-// #endif
-
+	// density is in "points", and "diag" is the scale factor logical/physical (iOS)
 	float fDensityDiag;
 	float fDensityX;
 	float fDensityY;
 #if !defined(__WIN32__) || defined(__MINGW32__)
 	if (SDL_GetDisplayDPI(deviceNumber, &fDensityDiag, &fDensityX, &fDensityY) == 0)
 	{
-		m_RealDensityX = (int) fDensityX;
-		m_RealDensityY = (int) fDensityY;
+		m_PhysicalDensityX = (int) fDensityX;
+		m_PhysicalDensityY = (int) fDensityY;
 	}
 	else
 #endif
 	{
 		fDensityDiag = 1;
-		m_RealDensityX = 0;
-		m_RealDensityY = 0;
+		m_PhysicalDensityX = 0;
+		m_PhysicalDensityY = 0;
 	}
+
+#ifdef __IPHONEOS__
+	// if a scale factor is reported (iOS Retina displays), update the densities appropriately
+
+    Game->LOG(0, "Updating densities by scale factor: %.2f.", fDensityDiag);
+
+    // density values change as per reported scale
+    m_PhysicalDensityX *= fDensityDiag;
+    m_PhysicalDensityY *= fDensityDiag;
+
+#endif
 
 	Uint32 flags = SDL_WINDOW_SHOWN;
 #ifdef __IPHONEOS__
@@ -261,7 +238,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	m_Win = SDL_CreateWindow("WME Lite",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		m_RealWidth, m_RealHeight,
+		m_NewLogicalWidth, m_NewLogicalHeight,
 		flags);
 	
 	if (!m_Win) return E_FAIL;
@@ -320,39 +297,8 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	SDL_GetRendererInfo(m_Renderer, &info);
 	Game->LOG(0, "Renderer max texture sizes: x=%d y=%d.\n", info.max_texture_width, info.max_texture_height);
 
-	// initialize variables to avoid surprizes
-	m_NewRealWidth  = m_RealWidth;
-	m_NewRealHeight = m_RealHeight;
-
-#ifdef __IPHONEOS__
-	// if a high DPI window was created, we need to update the pixel sizes after the renderer has been created
-
-    Game->LOG(0, "Updating densities by scale factor: %.2f.", fDensityDiag);
-    
-    // density values change as per reported scale
-    m_RealDensityX *= fDensityDiag;
-    m_RealDensityY *= fDensityDiag;
-
-    // values should be overwritten by renderer values
-    WindowResized(m_RealWidth, m_RealHeight);
-
-    // apply values immediately
-    m_RealWidth  = m_NewRealWidth;
-    m_RealHeight = m_NewRealHeight;
-
-    m_BorderLeft   = m_NewBorderLeft;
-    m_BorderTop    = m_NewBorderTop;
-    m_BorderRight  = m_NewBorderRight;
-    m_BorderBottom = m_NewBorderBottom;
-
-    m_RatioX = m_NewRatioX;
-    m_RatioY = m_NewRatioY;
-
-#endif
-
-	// erase window content immediately (hopefully gets rid of artifacts upon game start)
-	Fill(0, 0, 0, NULL);
-	SDL_RenderPresent(m_Renderer);
+	// we have a renderer, now we can compute all the scaling values
+	UpdateWindowScaling();
 
 	if (m_PixelPerfect) {
 		// try to make texture scaling look as nice as possible
@@ -362,11 +308,6 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 		SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderTarget(m_Renderer, m_Texture);
 		SDL_RenderSetViewport(m_Renderer, NULL);
-
-		m_PixelPerfectTargetRect.x = m_BorderLeft;
-		m_PixelPerfectTargetRect.y = m_BorderTop;
-		m_PixelPerfectTargetRect.w = m_RealWidth;
-		m_PixelPerfectTargetRect.h = m_RealHeight;
 
 		Game->AddMem(m_Width * m_Height * 4);
 
@@ -395,11 +336,9 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	if (m_FrameRateLimit > 0)
 	{
 		m_FrameSleepTime = MathUtil::Round(1000.0f / ((float) m_FrameRateLimit));
-		
 	}
 
 	m_Active = true;
-	
 
 	return S_OK;
 }
@@ -407,65 +346,115 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 /////////////////////////////////////////////////////
 void CBRenderSDL::WindowResized(int x, int y)
 {
+	// re-computation will be done next time the window is erased
+	m_NewLogicalWidth  = x;
+	m_NewLogicalHeight = y;
+}
+
+/////////////////////////////////////////////////////
+void CBRenderSDL::UpdateWindowScaling()
+{
 #ifdef __IPHONEOS__
     // if a high DPI window was created, we need to query sites in pixels from the current renderer
 	// make sure that this function is not called when the renderer is set for offscreen rendering
     int rendererX;
     int rendererY;
-    
+
     if (SDL_GetRendererOutputSize(m_Renderer, &rendererX, &rendererY) == 0)
     {
-        m_NewRealWidth  = rendererX;
-        m_NewRealHeight = rendererY;
-        
+    	m_PhysicalWidth  = rendererX;
+    	m_PhysicalHeight = rendererY;
+
         Game->LOG(0, "Query renderer: x=%d y=%d.", rendererX, rendererY);
     }
     else
     {
-        m_NewRealWidth  = x;
-        m_NewRealHeight = y;
+    	m_PhysicalWidth  = m_NewLogicalWidth;
+    	m_PhysicalHeight = m_NewLogicalHeight;
 
-        Game->LOG(0, "Renderer query failed, using x=%d y=%d.", x, y);
+        Game->LOG(0, "Renderer query failed, using logical sizes x=%d y=%d.", m_NewLogicalWidth, m_NewLogicalHeight);
     }
-    
 #else
-    
-    m_NewRealWidth  = x;
-	m_NewRealHeight = y;
-
+	m_PhysicalWidth  = m_NewLogicalWidth;
+	m_PhysicalHeight = m_NewLogicalHeight;
 #endif
 
-	// compute new values, but apply only later when erasing screen to avoid inconsistencies
+	m_LogicalWidth  = m_NewLogicalWidth;
+	m_LogicalHeight = m_NewLogicalHeight;
 
-    float origAspect = (float) m_Width        / (float) m_Height;
-	float realAspect = (float) m_NewRealWidth / (float) m_NewRealHeight;
+    float origAspect         = (float) m_Width         / (float) m_Height;
+	float realLogicalAspect  = (float) m_LogicalWidth  / (float) m_LogicalHeight;
+	float realPhysicalAspect = (float) m_PhysicalWidth / (float) m_PhysicalHeight;
 
-	float ratio;
-	if (origAspect < realAspect)
+	float logicalRatio;
+	float physicalRatio;
+	if (origAspect < realLogicalAspect)
 	{
 		// normal to wide
-		ratio = (float) m_NewRealHeight / (float) m_Height;
+		logicalRatio  = (float) m_LogicalHeight  / (float) m_Height;
+		physicalRatio = (float) m_PhysicalHeight / (float) m_Height;
 	}
 	else
 	{
 		// wide to normal
-		ratio = (float) m_NewRealWidth / (float) m_Width;
+		logicalRatio  = (float) m_LogicalWidth  / (float) m_Width;
+		physicalRatio = (float) m_PhysicalWidth / (float) m_Width;
 	}
 
-	m_NewBorderLeft  = (m_NewRealWidth - (m_Width * ratio)) / 2;
-	m_NewBorderRight =  m_NewRealWidth - (m_Width * ratio) - m_NewBorderLeft;
+	Game->LOG(0, "Ratios before stepping application: %.02f %.02f", logicalRatio, physicalRatio);
 
-	m_NewBorderTop    = (m_NewRealHeight - (m_Height * ratio)) / 2;
-	m_NewBorderBottom =  m_NewRealHeight - (m_Height * ratio) - m_NewBorderTop;
+	if (logicalRatio > 1.0) {
+		logicalRatio = GetAlignedUpscalingRatio(logicalRatio, m_upScalingRatioStepping);
+	}
+	if (logicalRatio < 1.0) {
+		logicalRatio = GetAlignedDownscalingRatio(logicalRatio, m_downScalingRatioStepping);
+	}
+	if (physicalRatio > 1.0) {
+		physicalRatio = GetAlignedUpscalingRatio(physicalRatio, m_upScalingRatioStepping);
+	}
+	if (physicalRatio < 1.0) {
+		physicalRatio = GetAlignedDownscalingRatio(physicalRatio, m_downScalingRatioStepping);
+	}
 
-	m_NewRatioX = (float)(m_NewRealWidth  - m_NewBorderLeft - m_NewBorderRight)  / (float) m_Width;
-	m_NewRatioY = (float)(m_NewRealHeight - m_NewBorderTop  - m_NewBorderBottom) / (float) m_Height;
+	Game->LOG(0, "Ratios after stepping application: %.02f %.02f", logicalRatio, physicalRatio);
 
-	Game->LOG(0, "Update screen: Orig w=%d h=%d Transformed w=%d h=%d ratiox=%.02f ratioy=%.02f",
-			m_Width, m_Height, m_NewRealWidth, m_NewRealHeight,
-			m_NewRatioX, m_NewRatioY);
-	Game->LOG(0, "Update screen: BorderLeft=%d BorderRight=%d BorderTop=%d BorderBottom=%d",
-			m_NewBorderLeft, m_NewBorderRight, m_NewBorderTop, m_NewBorderBottom);
+	// logical coordinates update
+	m_LogicalBorderLeft  = (m_LogicalWidth - (m_Width * logicalRatio)) / 2;
+	m_LogicalBorderRight =  m_LogicalWidth - (m_Width * logicalRatio) - m_LogicalBorderLeft;
+
+	m_LogicalBorderTop    = (m_LogicalHeight - (m_Height * logicalRatio)) / 2;
+	m_LogicalBorderBottom =  m_LogicalHeight - (m_Height * logicalRatio) - m_LogicalBorderTop;
+
+	m_LogicalRatioX = (float)(m_LogicalWidth  - m_LogicalBorderLeft - m_LogicalBorderRight)  / (float) m_Width;
+	m_LogicalRatioY = (float)(m_LogicalHeight - m_LogicalBorderTop  - m_LogicalBorderBottom) / (float) m_Height;
+
+	Game->LOG(0, "Update screen: Orig w=%d h=%d Logical w=%d h=%d ratiox=%.02f ratioy=%.02f",
+			m_Width, m_Height, m_LogicalWidth, m_LogicalHeight,
+			m_LogicalRatioX, m_LogicalRatioY);
+	Game->LOG(0, "Update screen: Logical BorderLeft=%d BorderRight=%d BorderTop=%d BorderBottom=%d",
+			m_LogicalBorderLeft, m_LogicalBorderRight, m_LogicalBorderTop, m_LogicalBorderBottom);
+
+	// physical coordinates update
+	m_PhysicalBorderLeft  = (m_PhysicalWidth - (m_Width * physicalRatio)) / 2;
+	m_PhysicalBorderRight =  m_PhysicalWidth - (m_Width * physicalRatio) - m_PhysicalBorderLeft;
+
+	m_PhysicalBorderTop    = (m_PhysicalHeight - (m_Height * physicalRatio)) / 2;
+	m_PhysicalBorderBottom =  m_PhysicalHeight - (m_Height * physicalRatio) - m_PhysicalBorderTop;
+
+	m_PhysicalRatioX = (float)(m_PhysicalWidth  - m_PhysicalBorderLeft - m_PhysicalBorderRight)  / (float) m_Width;
+	m_PhysicalRatioY = (float)(m_PhysicalHeight - m_PhysicalBorderTop  - m_PhysicalBorderBottom) / (float) m_Height;
+
+	Game->LOG(0, "Update screen: Orig w=%d h=%d Physical w=%d h=%d ratiox=%.02f ratioy=%.02f",
+			m_Width, m_Height, m_PhysicalWidth, m_PhysicalHeight,
+			m_PhysicalRatioX, m_PhysicalRatioY);
+	Game->LOG(0, "Update screen: Physical BorderLeft=%d BorderRight=%d BorderTop=%d BorderBottom=%d",
+			m_PhysicalBorderLeft, m_PhysicalBorderRight, m_PhysicalBorderTop, m_PhysicalBorderBottom);
+
+	// in case of pixelperfect rendering, the viewport coords need to be updated
+	m_PixelPerfectTargetRect.x = m_PhysicalBorderLeft;
+	m_PixelPerfectTargetRect.y = m_PhysicalBorderTop;
+	m_PixelPerfectTargetRect.w = m_PhysicalWidth;
+	m_PixelPerfectTargetRect.h = m_PhysicalHeight;
 }
 
 /////////////////////////////////////////////////////
@@ -611,18 +600,9 @@ HRESULT CBRenderSDL::Flip()
 HRESULT CBRenderSDL::EraseBackground()
 {
 	// update values from window update event here to be consistent
-	if ((m_NewRealWidth != m_RealWidth) || (m_NewRealHeight != m_RealHeight))
+	if ((m_NewLogicalWidth != m_LogicalWidth) || (m_NewLogicalHeight != m_LogicalHeight))
 	{
-		m_RealWidth  = m_NewRealWidth;
-		m_RealHeight = m_NewRealHeight;
-
-		m_BorderLeft   = m_NewBorderLeft;
-		m_BorderTop    = m_NewBorderTop;
-		m_BorderRight  = m_NewBorderRight;
-		m_BorderBottom = m_NewBorderBottom;
-
-		m_RatioX = m_NewRatioX;
-		m_RatioY = m_NewRatioY;
+		UpdateWindowScaling();
 	}
 
 	Fill(0, 0, 0, NULL);
@@ -718,11 +698,11 @@ HRESULT CBRenderSDL::DrawLine(int X1, int Y1, int X2, int Y2, DWORD Color)
 #else
 	// setviewport() is respected, so only scale the coordinates
 	POINT point1, point2;
-	point1.x = X1 * m_RatioX;
-	point1.y = Y1 * m_RatioY;
+	point1.x = X1 * m_PhysicalRatioX;
+	point1.y = Y1 * m_PhysicalRatioY;
 
-	point2.x = X2 * m_RatioX;
-	point2.y = Y2 * m_RatioY;
+	point2.x = X2 * m_PhysicalRatioX;
+	point2.y = Y2 * m_PhysicalRatioY;
 #endif
 
 	SDL_RenderDrawLine(m_Renderer, point1.x, point1.y, point2.x, point2.y);
@@ -792,10 +772,10 @@ HRESULT CBRenderSDL::SetViewport(int left, int top, int right, int bottom)
 	if (m_RenderOffscreen == false)
 	{
 		// original behaviour --> modify viewport rect
-		rect.x = left + m_BorderLeft;
-		rect.y = top + m_BorderTop;
-		rect.w = (right - left) * m_RatioX;
-		rect.h = (bottom - top) * m_RatioY;
+		rect.x = left + m_PhysicalBorderLeft;
+		rect.y = top + m_PhysicalBorderTop;
+		rect.w = (right - left) * m_PhysicalRatioX;
+		rect.h = (bottom - top) * m_PhysicalRatioY;
 
 		// TODO fix this once viewports work correctly in SDL/landscape
 #ifndef EMULATE_VIEWPORT_SETTING
@@ -805,10 +785,10 @@ HRESULT CBRenderSDL::SetViewport(int left, int top, int right, int bottom)
 	else
 	{
 		// pixelperfect behaviour --> remember viewport for final onscreen drawing only
-		m_PixelPerfectTargetRect.x = left + m_BorderLeft;
-		m_PixelPerfectTargetRect.y = top + m_BorderTop;
-		m_PixelPerfectTargetRect.w = (right - left) * m_RatioX;
-		m_PixelPerfectTargetRect.h = (bottom - top) * m_RatioY;
+		m_PixelPerfectTargetRect.x = left + m_PhysicalBorderLeft;
+		m_PixelPerfectTargetRect.y = top + m_PhysicalBorderTop;
+		m_PixelPerfectTargetRect.w = (right - left) * m_PhysicalRatioX;
+		m_PixelPerfectTargetRect.h = (bottom - top) * m_PhysicalRatioY;
 	}
 
 	return S_OK;
@@ -824,10 +804,10 @@ void CBRenderSDL::ModTargetRect(SDL_Rect* rect)
 		// only apply offsets/scaling if pixelperfect rendering is off
 		SDL_RenderGetViewport(GetSdlRenderer(), &viewportRect);
 
-		rect->x = MathUtil::Round(rect->x * m_RatioX + m_BorderLeft - viewportRect.x);
-		rect->y = MathUtil::Round(rect->y * m_RatioY + m_BorderTop - viewportRect.y);
-		rect->w = MathUtil::RoundUp(rect->w * m_RatioX);
-		rect->h = MathUtil::RoundUp(rect->h * m_RatioY);
+		rect->x = MathUtil::Round(rect->x * m_PhysicalRatioX + m_PhysicalBorderLeft - viewportRect.x);
+		rect->y = MathUtil::Round(rect->y * m_PhysicalRatioY + m_PhysicalBorderTop - viewportRect.y);
+		rect->w = MathUtil::RoundUp(rect->w * m_PhysicalRatioX);
+		rect->h = MathUtil::RoundUp(rect->h * m_PhysicalRatioY);
 	}
 }
 
@@ -838,24 +818,24 @@ void CBRenderSDL::ModOrigin(SDL_Point* origin)
 	if (m_RenderOffscreen == false)
 	{
 		// only apply scaling if no pixelperfect rendering is requested
-		origin->x *= m_RatioX;
-		origin->y *= m_RatioY;
+		origin->x *= m_PhysicalRatioX;
+		origin->y *= m_PhysicalRatioY;
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 void CBRenderSDL::PointFromScreen(POINT* point)
 {
-	point->x = (point->x  - m_BorderLeft) / m_RatioX;
-	point->y = (point->y  - m_BorderTop) / m_RatioY;
+	point->x = (point->x  - m_LogicalBorderLeft) / m_LogicalRatioX;
+	point->y = (point->y  - m_LogicalBorderTop) / m_LogicalRatioY;
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 void CBRenderSDL::PointToScreen(POINT* point)
 {
-	point->x = MathUtil::Round((point->x * m_RatioX) + m_BorderLeft);
-	point->y = MathUtil::Round((point->y * m_RatioY) + m_BorderTop);
+	point->x = MathUtil::Round((point->x * m_LogicalRatioX) + m_LogicalBorderLeft);
+	point->y = MathUtil::Round((point->y * m_LogicalRatioY) + m_LogicalBorderTop);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -2377,7 +2377,7 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "RealScreenWidth")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_RealWidth);
+		m_ScValue->SetInt(m_Renderer->m_PhysicalWidth);
 		return m_ScValue;
 	}
 
@@ -2386,7 +2386,7 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "RealScreenHeight")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_RealHeight);
+		m_ScValue->SetInt(m_Renderer->m_PhysicalHeight);
 		return m_ScValue;
 	}
 
@@ -2395,7 +2395,7 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "RealDensityX")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_RealDensityX);
+		m_ScValue->SetInt(m_Renderer->m_PhysicalDensityX);
 		return m_ScValue;
 	}
 
@@ -2404,7 +2404,7 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "RealDensityY")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_RealDensityY);
+		m_ScValue->SetInt(m_Renderer->m_PhysicalDensityY);
 		return m_ScValue;
 	}
 
@@ -2413,7 +2413,7 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenBorderLeft")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_BorderLeft);
+		m_ScValue->SetInt(m_Renderer->m_PhysicalBorderLeft);
 		return m_ScValue;
 	}
 
@@ -2422,7 +2422,7 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenBorderTop")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_BorderTop);
+		m_ScValue->SetInt(m_Renderer->m_PhysicalBorderTop);
 		return m_ScValue;
 	}
 
@@ -2431,7 +2431,7 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenBorderRight")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_BorderRight);
+		m_ScValue->SetInt(m_Renderer->m_PhysicalBorderRight);
 		return m_ScValue;
 	}
 
@@ -2440,7 +2440,7 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenBorderBottom")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_BorderBottom);
+		m_ScValue->SetInt(m_Renderer->m_PhysicalBorderBottom);
 		return m_ScValue;
 	}
 

@@ -45,9 +45,9 @@ CBRenderer::CBRenderer(CBGame* inGame):CBBase(inGame)
 	m_Width = m_Height = m_BPP = 0;
 	CBPlatform::SetRectEmpty(&m_MonitorRect);
 
-	m_RealWidth = m_RealHeight = 0;
+	m_PhysicalWidth = m_PhysicalHeight = 0;
 	m_DrawOffsetX = m_DrawOffsetY = 0;
-	m_RealDensityX = m_RealDensityY = 0;
+	m_PhysicalDensityX = m_PhysicalDensityY = 0;
 
 	m_MaxObjectDistanceX = m_MaxObjectDistanceY = 0;
 }
