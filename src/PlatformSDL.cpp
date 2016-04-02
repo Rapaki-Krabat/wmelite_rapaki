@@ -349,6 +349,7 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			}
 		}
 #endif
+		Game->m_LastActiveObject = Game->m_ActiveObject;
 		switch (event->button.button)
 		{
 		case SDL_BUTTON_LEFT:
