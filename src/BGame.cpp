@@ -96,6 +96,7 @@ CBGame::CBGame():CBObject(this)
 
 	m_MainObject = NULL;
 	m_ActiveObject = NULL;
+	m_LastActiveObject = NULL;
 
 	m_Fader = NULL;
 
@@ -249,6 +250,8 @@ CBGame::CBGame():CBObject(this)
 	m_DisableTouchDialogFontHover          = true;
 	m_MinDialogResponseDistance            = 50;
 	m_UseNonTouchSubtitlesWidthComputation = false;
+
+	m_DeactivateObjectOnRelease = false;
 
 #ifdef __IPHONEOS__
 	m_TouchInterface = true;
@@ -2355,6 +2358,15 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	// LastActiveObject (RO)
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "LastActiveObject")==0)
+	{
+		m_ScValue->SetNative(m_LastActiveObject, true);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	// ScreenWidth (RO)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenWidth")==0)
@@ -2823,13 +2835,23 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// m_UseNonTouchSubtitlesWidthComputation
+	// UseNonTouchSubtitlesWidthComputation
 	//////////////////////////////////////////////////////////////////////////
-	else if(strcmp(Name, "m_UseNonTouchSubtitlesWidthComputation")==0)
+	else if(strcmp(Name, "UseNonTouchSubtitlesWidthComputation")==0)
 	{
 		m_ScValue->SetBool(m_UseNonTouchSubtitlesWidthComputation);
 		return m_ScValue;
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// DeactivateObjectOnRelease
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DeactivateObjectOnRelease")==0)
+	{
+		m_ScValue->SetBool(m_DeactivateObjectOnRelease);
+		return m_ScValue;
+	}
+
 
 
 	else return CBObject::ScGetProperty(Name);
@@ -3114,11 +3136,20 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// m_UseNonTouchSubtitlesWidthComputation
+	// UseNonTouchSubtitlesWidthComputation
 	//////////////////////////////////////////////////////////////////////////
-	else if(strcmp(Name, "m_UseNonTouchSubtitlesWidthComputation")==0)
+	else if(strcmp(Name, "UseNonTouchSubtitlesWidthComputation")==0)
 	{
 		m_UseNonTouchSubtitlesWidthComputation = Value->GetBool();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// DeactivateObjectOnRelease
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DeactivateObjectOnRelease")==0)
+	{
+		m_DeactivateObjectOnRelease = Value->GetBool();
 		return S_OK;
 	}
 
@@ -3224,6 +3255,7 @@ HRESULT CBGame::UnregisterObject(CBObject *Object)
 
 	// is it active object?
 	if(m_ActiveObject==Object) m_ActiveObject = NULL;
+	if(m_LastActiveObject==Object) m_LastActiveObject = NULL;
 
 	// is it main object?
 	if(m_MainObject==Object) m_MainObject = NULL;
@@ -4102,6 +4134,7 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 	CBObject::Persist(PersistMgr);
 
 	PersistMgr->Transfer(TMEMBER(m_ActiveObject));
+	PersistMgr->Transfer(TMEMBER(m_LastActiveObject));
 	PersistMgr->Transfer(TMEMBER(m_CapturedObject));
 	PersistMgr->Transfer(TMEMBER(m_CursorNoninteractive));
 	PersistMgr->Transfer(TMEMBER(m_DoNotExpandStrings));
@@ -4519,6 +4552,8 @@ HRESULT CBGame::SetActiveObject(CBObject *Obj)
 	{
 		m_ActiveObject->ApplyEvent("MouseEntry");
 	}
+
+	m_LastActiveObject = m_ActiveObject;
 
 	return S_OK;
 }

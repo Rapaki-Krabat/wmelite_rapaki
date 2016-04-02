@@ -214,6 +214,8 @@ public:
 	int  m_MinDialogResponseDistance;
 	bool m_UseNonTouchSubtitlesWidthComputation;
 
+	bool m_DeactivateObjectOnRelease;
+
 	// compatibility bits
 	bool m_CompatKillMethodThreads;
 	
@@ -282,6 +284,7 @@ public:
 	virtual HRESULT ShowCursor();
 	CBSprite* m_CursorNoninteractive;
 	CBObject* m_ActiveObject;
+	CBObject* m_LastActiveObject;
 	CBKeyboardState* m_KeyboardState;
 	bool m_Interactive;
 	TGameState m_State;

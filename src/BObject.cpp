@@ -98,7 +98,11 @@ CBObject::~CBObject()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CBObject::Cleanup()
 {
-	if(Game && Game->m_ActiveObject==this) Game->m_ActiveObject = NULL;
+	if(Game && Game->m_ActiveObject==this)
+	{
+		Game->m_ActiveObject = NULL;
+		Game->m_LastActiveObject = NULL;
+	}
 
 	CBScriptHolder::Cleanup();
 	SAFE_DELETE_ARRAY(m_SoundEvent);

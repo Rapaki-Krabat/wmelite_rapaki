@@ -165,6 +165,7 @@ HRESULT CAdGame::InitLoop()
 		SAFE_DELETE_ARRAY(m_ScheduledScene);
 
 		Game->m_ActiveObject = NULL;
+		Game->m_LastActiveObject = NULL;
 	}
 
 	

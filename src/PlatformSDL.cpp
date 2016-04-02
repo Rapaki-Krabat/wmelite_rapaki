@@ -384,6 +384,13 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			if (Game) Game->OnMouseMiddleUp();
 			break;
 		}
+		Game->m_LastActiveObject = Game->m_ActiveObject;
+#if defined(__IPHONEOS__) || defined(__ANDROID__)
+		if (Game->m_DeactivateObjectOnRelease == true)
+		{
+			Game->m_ActiveObject = NULL;
+		}
+#endif
 		break;
 
 	case SDL_FINGERMOTION:
