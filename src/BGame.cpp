@@ -2353,7 +2353,14 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ActiveObject")==0)
 	{
-		m_ScValue->SetNative(m_ActiveObject, true);
+		if (Game->m_DeactivateObjectOnRelease == true)
+		{
+			m_ScValue->SetNative(m_LastActiveObject, true);
+		}
+		else
+		{
+			m_ScValue->SetNative(m_ActiveObject, true);
+		}
 		return m_ScValue;
 	}
 
@@ -2362,7 +2369,14 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "LastActiveObject")==0)
 	{
-		m_ScValue->SetNative(m_LastActiveObject, true);
+		if (Game->m_DeactivateObjectOnRelease == true)
+		{
+			m_ScValue->SetNative(m_ActiveObject, true);
+		}
+		else
+		{
+			m_ScValue->SetNative(m_LastActiveObject, true);
+		}
 		return m_ScValue;
 	}
 
