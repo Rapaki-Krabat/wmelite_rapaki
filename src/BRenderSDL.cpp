@@ -306,8 +306,8 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 		m_Texture = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, m_Width, m_Height);
 		if (!m_Texture) return E_FAIL;
 		SDL_SetTextureBlendMode(m_Texture, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderTarget(m_Renderer, m_Texture);
-		SDL_RenderSetViewport(m_Renderer, NULL);
+		// SDL_SetRenderTarget(m_Renderer, m_Texture);
+		// SDL_RenderSetViewport(m_Renderer, NULL);
 
 		Game->AddMem(m_Width * m_Height * 4);
 
