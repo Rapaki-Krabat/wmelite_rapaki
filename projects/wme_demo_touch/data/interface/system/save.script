@@ -36,7 +36,8 @@ on "save"
 {
   if(SelectedSlot >= 0)
   {
-    var WinName = Game.LoadWindow("interface\system\savename.window");
+    // var WinName = Game.LoadWindow("interface\system\savename.window");
+    var SaveGameName;
     /*
     if(Game.IsSaveSlotUsed(SelectedSlot))
     {
@@ -47,20 +48,20 @@ on "save"
 		 var Minutes = Time.GetMinutes();
 		 if(Minutes < 10) Minutes = "0" + Minutes;
 		 
-		 WinName.xDescription = Scene.Name + ", " + Time.GetDate() + "." + Time.GetMonth() + "." + Time.GetYear() + ", " + Time.GetHours() + ":" + Minutes;
+		 SaveGameName = Scene.Name + ", " + Time.GetDate() + "." + Time.GetMonth() + "." + Time.GetYear() + ", " + Time.GetHours() + ":" + Minutes;
     
 
-    WinName.Center();
-    WinName.GoSystemExclusive();
-    if(WinName.xResult==true)
-    {
+    //WinName.Center();
+    //WinName.GoSystemExclusive();
+    //if(WinName.xResult==true)
+    //{
       this.xResult = true;
-      Game.SaveGame(SelectedSlot, WinName.xDescription);
-    }
-    else
-      this.xResult = false;
+      Game.SaveGame(SelectedSlot, SaveGameName);
+    //}
+    //else
+    //  this.xResult = false;
 
-    Game.UnloadObject(WinName);
+    //Game.UnloadObject(WinName);
 
     if(this.xResult) this.Close();
   }

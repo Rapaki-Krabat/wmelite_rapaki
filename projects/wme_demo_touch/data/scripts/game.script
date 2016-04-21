@@ -149,37 +149,60 @@ method DeleteItem(item)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-on "Keypress"
-{
+//on "Keypress"
+//{
   // on Esc or F1 key
-  if(Keyboard.KeyCode==VK_ESCAPE || Keyboard.KeyCode==VK_F1)
-  {
+//  if(Keyboard.KeyCode==VK_ESCAPE || Keyboard.KeyCode==VK_F1)
+//  {
     // load and display the main menu window
-    WinCaption.Visible = false;
-    var WinMainMenu = Game.LoadWindow("interface\system\mainmenu.window");
-    WinMainMenu.Center();
-    WinMainMenu.GoSystemExclusive();
-    Game.UnloadObject(WinMainMenu);
-  }
+//    WinCaption.Visible = false;
+//    var WinMainMenu = Game.LoadWindow("interface\system\mainmenu.window");
+//    WinMainMenu.Center();
+//    WinMainMenu.GoSystemExclusive();
+//    Game.UnloadObject(WinMainMenu);
+//  }
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-on "QuitGame"
-{
+//on "QuitGame"
+//{
   // on Alt+F4 (window close)
   // load and display the quit confirmation window
-  WinCaption.Visible = false;
-  var WinQuit = Game.LoadWindow("interface\system\quit.window");
-  WinQuit.Center();
-  WinQuit.GoSystemExclusive();
+//  WinCaption.Visible = false;
+//  var WinQuit = Game.LoadWindow("interface\system\quit.window");
+//  WinQuit.Center();
+//  WinQuit.GoSystemExclusive();
 
   // and if the user selected Yes
-  if(WinQuit.xResult)
-  {
+//  if(WinQuit.xResult)
+//  {
     // quit the game
-    Game.QuitGame();
-  }
+//    Game.QuitGame();
+//  }
   // otherwise just unload the quit window from memory
-  else Game.UnloadObject(WinQuit);
+//  else Game.UnloadObject(WinQuit);
+//}
+
+////////////////////////////////////////////////////////////////////////////////
+on "Keypress"
+{
+  // on Android the back key generates an escape key event
+  // iOS cannot generate it, but according to guidelines it should not exit anyway
+  if(Keyboard.KeyCode==VK_ESCAPE)
+  {
+    WinCaption.Visible = false;
+    var WinQuit = Game.LoadWindow("interface\system\quit.window");
+    WinQuit.Center();
+    WinQuit.GoSystemExclusive();
+
+    // and if the user selected Yes
+    if(WinQuit.xResult)
+    {
+      // quit the game
+      Game.QuitGame();
+    }
+    // otherwise just unload the quit window from memory
+    else Game.UnloadObject(WinQuit);
+  }
 }
