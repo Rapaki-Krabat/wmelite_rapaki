@@ -161,7 +161,7 @@ method DeleteItem(item)
 //    WinMainMenu.GoSystemExclusive();
 //    Game.UnloadObject(WinMainMenu);
 //  }
-}
+// }
 
 
 ////////////////////////////////////////////////////////////////////////////////
