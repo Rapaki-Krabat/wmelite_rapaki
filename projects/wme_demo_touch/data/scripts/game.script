@@ -2,7 +2,7 @@
 #include "scripts\keys.inc"
 
 
-if (Game.Platform == "iPhone OS") Game.CursorHidden = true;
+if ((Game.Platform == "Android") || (Game.Platform == "iOS")) Game.CursorHidden = true;
 
 // store some of the game's attributes in global variables for convenience
 Keyboard = Game.Keyboard;
