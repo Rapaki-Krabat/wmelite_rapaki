@@ -20,7 +20,7 @@ on "quit"
   {
     Game.QuitGame();
   }
-  else Game.UnloadObject(WinQuit);
+  else Game.DeleteWindow(WinQuit);
 }
 
 
@@ -42,7 +42,7 @@ on "load"
   var WinLoad = Game.LoadWindow("interface\system\load.window");
   WinLoad.Center();
   WinLoad.GoSystemExclusive();
-  Game.UnloadObject(WinLoad);
+  Game.DeleteWindow(WinLoad);
 }
 
 
@@ -55,9 +55,9 @@ on "save"
   if(WinSave.xResult==true)
   {
     this.Close();
-    Game.UnloadObject(WinSave);
+    Game.DeleteWindow(WinSave);
   }
   else
-    Game.UnloadObject(WinSave);
+    Game.DeleteWindow(WinSave);
 
 }

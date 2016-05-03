@@ -25,7 +25,7 @@ on "menu"
   var WinMainMenu = Game.LoadWindow("interface\system\mainmenu.window");
   WinMainMenu.Center();
   WinMainMenu.GoSystemExclusive();
-  Game.UnloadObject(WinMainMenu);
+  Game.DeleteWindow(WinMainMenu);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

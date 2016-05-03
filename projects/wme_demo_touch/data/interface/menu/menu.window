@@ -85,6 +85,7 @@ WINDOW
     PRESSED=FALSE
     PIXEL_PERFECT=FALSE
     
+    SCRIPT="interface\menu\talk_button.script"
     
     EDITOR_PROPERTY
     {
@@ -114,6 +115,7 @@ WINDOW
     PRESSED=FALSE
     PIXEL_PERFECT=FALSE
     
+    SCRIPT="interface\menu\take_button.script"
     
     EDITOR_PROPERTY
     {

@@ -29,8 +29,9 @@ global MenuObject = null;
 actor = Game.LoadActor("actors\molly\molly.actor");
 Game.MainObject = actor;
 
-// run the "game loop" script
-Game.AttachScript("scripts\game_loop.script");
+// run endless loop scripts
+Game.AttachScript("scripts\game_loop_overlay.script");
+Game.AttachScript("scripts\game_loop_caption.script");
 
 // initial items
 Game.TakeItem("money");
@@ -40,35 +41,40 @@ Game.TakeItem("money");
 Game.ChangeScene(Game.StartupScene);
 
 
-global g_IsDragging = false;
-global g_DragObject = null;
-global g_DragStart = 0;
+global g_CurrSelectedObject          = null;
+global g_CurrSelectedObjectStartTime = 0;
 
-global g_LeftClickStart = 0;
+global g_IsLeftClick    = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 on "LeftClick"
 {
-	g_IsDragging = true;
-	g_DragObject = Game.ActiveObject;
-	g_DragStart = Game.CurrentTime;
+	g_IsLeftClick = true;
 	
-	// remember click time for short/long click distinguishment
-	g_LeftClickStart = Game.CurrentTime;
+	g_CurrSelectedObject          = Game.ActiveObject;
+	g_CurrSelectedObjectStartTime = Game.CurrentTime;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 on "LeftRelease"
 {
-	if (!g_IsDragging) return;
+	var ActObj = Game.ActiveObject;
+
+	// send "release" event to button (even if long click active)
+	if (ActObj.Type == "button")
+	{
+		if (ActObj.CanHandleEvent("ButtonRelease"))
+		{
+			ActObj.ApplyEvent("ButtonRelease");
+		}
+	}
+
+	// all other stuff not relevant on long click
+	if (!g_IsLeftClick) return;
 	
-	g_IsDragging = false;
-	
-	// how long was the click? (in ms)
-	var leftClickTime = Game.CurrentTime - g_LeftClickStart;
+	g_IsLeftClick = false;
 	
 	// what did we click?
-	var ActObj = Game.ActiveObject;
 	if(ActObj!=null)
 	{
 		// clicking an inventory item
@@ -79,7 +85,7 @@ on "LeftRelease"
 		// using an inventory item on another object
 		else if(Game.SelectedItem != null && Game.SelectedItem != ActObj)
 		{
-			if (ActObj.Type != "button" && ActObj.Type != "window")
+			if ((ActObj.Type != "button") && (ActObj.Type != "window"))
 			{
 				var Item = Game.SelectedItem;
 				if(ActObj.CanHandleEvent(Item.Name)) ActObj.ApplyEvent(Item.Name);
@@ -88,27 +94,16 @@ on "LeftRelease"
 				else actor.Talk("I can't use these things together.");
 			}
 		}
-		// display menu if the object supports verbs or just apply click
+		// simply apply left click
 		else
 		{
-			if (leftClickTime < 500)
+			if (ActObj.CanHandleEvent("LookAt"))
 			{
-				if (ActObj.CanHandleEvent("LookAt"))
-				{
-					ActObj.ApplyEvent("LookAt");
-				} 
-				else if (ActObj.CanHandleEvent("LeftClick"))
-				{
-					ActObj.ApplyEvent("LeftClick");
-				}
-				else
-				{
-					DisplayVerbMenu(ActObj);
-				}
-			}
-			else
+				ActObj.ApplyEvent("LookAt");
+			} 
+			else if (ActObj.CanHandleEvent("LeftClick"))
 			{
-				if (!DisplayVerbMenu(ActObj)) ActObj.ApplyEvent("LeftClick");
+				ActObj.ApplyEvent("LeftClick");
 			}
 		}
 	}
@@ -177,42 +172,6 @@ method DeleteItem(item)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//on "Keypress"
-//{
-// on Esc or F1 key
-//  if(Keyboard.KeyCode==VK_ESCAPE || Keyboard.KeyCode==VK_F1)
-//  {
-// load and display the main menu window
-//    WinCaption.Visible = false;
-//    var WinMainMenu = Game.LoadWindow("interface\system\mainmenu.window");
-//    WinMainMenu.Center();
-//    WinMainMenu.GoSystemExclusive();
-//    Game.UnloadObject(WinMainMenu);
-//  }
-// }
-
-
-////////////////////////////////////////////////////////////////////////////////
-//on "QuitGame"
-//{
-// on Alt+F4 (window close)
-// load and display the quit confirmation window
-//  WinCaption.Visible = false;
-//  var WinQuit = Game.LoadWindow("interface\system\quit.window");
-//  WinQuit.Center();
-//  WinQuit.GoSystemExclusive();
-
-// and if the user selected Yes
-//  if(WinQuit.xResult)
-//  {
-// quit the game
-//    Game.QuitGame();
-//  }
-// otherwise just unload the quit window from memory
-//  else Game.UnloadObject(WinQuit);
-//}
-
-////////////////////////////////////////////////////////////////////////////////
 on "Keypress"
 {
 	// on Android the back key generates an escape key event
@@ -231,6 +190,6 @@ on "Keypress"
 			Game.QuitGame();
 		}
 		// otherwise just unload the quit window from memory
-		else Game.UnloadObject(WinQuit);
+		else Game.DeleteWindow(WinQuit);
 	}
 }
