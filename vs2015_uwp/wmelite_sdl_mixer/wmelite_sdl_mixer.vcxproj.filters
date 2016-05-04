@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>274a1576-1235-48cf-a01b-e31115cf86ef</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>99141770-ea91-4609-b81f-11ad295f578f</UniqueIdentifier>
+      <Extensions>bmp;fbx;gif;jpg;jpeg;tga;tiff;tif;png</Extensions>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>d0a8673a-9723-4ab2-8623-800b8e99964d</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="Common\DirectXHelper.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\StepTimer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\DeviceResources.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClCompile Include="Common\DeviceResources.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClInclude Include="Content\Sample3DSceneRenderer.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\SampleFpsTextRenderer.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ShaderStructures.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClCompile Include="Content\Sample3DSceneRenderer.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\SampleFpsTextRenderer.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <FxCompile Include="Content\SamplePixelShader.hlsl">
+      <Filter>Content</Filter>
+    </FxCompile>
+    <FxCompile Include="Content\SampleVertexShader.hlsl">
+      <Filter>Content</Filter>
+    </FxCompile>
+    <Image Include="Assets\LockScreenLogo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\SplashScreen.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square150x150Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\Wide310x150Logo.scale-200.png">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\StoreLogo.png">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wmelite_sdl_mixer_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\AdActor.cpp" />
+    <ClCompile Include="..\..\src\AdActorDir.cpp" />
+    <ClCompile Include="..\..\src\AdEntity.cpp" />
+    <ClCompile Include="..\..\src\AdGame.cpp" />
+    <ClCompile Include="..\..\src\AdInventory.cpp" />
+    <ClCompile Include="..\..\src\AdInventoryBox.cpp" />
+    <ClCompile Include="..\..\src\AdItem.cpp" />
+    <ClCompile Include="..\..\src\AdLayer.cpp" />
+    <ClCompile Include="..\..\src\AdNodeState.cpp" />
+    <ClCompile Include="..\..\src\AdObject.cpp" />
+    <ClCompile Include="..\..\src\AdPath.cpp" />
+    <ClCompile Include="..\..\src\AdPathPoint.cpp" />
+    <ClCompile Include="..\..\src\AdRegion.cpp" />
+    <ClCompile Include="..\..\src\AdResponse.cpp" />
+    <ClCompile Include="..\..\src\AdResponseBox.cpp" />
+    <ClCompile Include="..\..\src\AdResponseContext.cpp" />
+    <ClCompile Include="..\..\src\AdRotLevel.cpp" />
+    <ClCompile Include="..\..\src\AdScaleLevel.cpp" />
+    <ClCompile Include="..\..\src\AdScene.cpp" />
+    <ClCompile Include="..\..\src\AdSceneNode.cpp" />
+    <ClCompile Include="..\..\src\AdSceneState.cpp" />
+    <ClCompile Include="..\..\src\AdSentence.cpp" />
+    <ClCompile Include="..\..\src\AdSpriteSet.cpp" />
+    <ClCompile Include="..\..\src\AdTalkDef.cpp" />
+    <ClCompile Include="..\..\src\AdTalkHolder.cpp" />
+    <ClCompile Include="..\..\src\AdTalkNode.cpp" />
+    <ClCompile Include="..\..\src\AdWaypointGroup.cpp" />
+    <ClCompile Include="..\..\src\BActiveRect.cpp" />
+    <ClCompile Include="..\..\src\BBase.cpp" />
+    <ClCompile Include="..\..\src\BDebugger.cpp" />
+    <ClCompile Include="..\..\src\BDiskFile.cpp" />
+    <ClCompile Include="..\..\src\BDynBuffer.cpp" />
+    <ClCompile Include="..\..\src\BEvent.cpp" />
+    <ClCompile Include="..\..\src\BFader.cpp" />
+    <ClCompile Include="..\..\src\BFile.cpp" />
+    <ClCompile Include="..\..\src\BFileEntry.cpp" />
+    <ClCompile Include="..\..\src\BFileManager.cpp" />
+    <ClCompile Include="..\..\src\BFont.cpp" />
+    <ClCompile Include="..\..\src\BFontBitmap.cpp" />
+    <ClCompile Include="..\..\src\BFontStorage.cpp" />
+    <ClCompile Include="..\..\src\BFontTT.cpp" />
+    <ClCompile Include="..\..\src\BFrame.cpp" />
+    <ClCompile Include="..\..\src\BGame.cpp" />
+    <ClCompile Include="..\..\src\BImage.cpp" />
+    <ClCompile Include="..\..\src\BKeyboardState.cpp" />
+    <ClCompile Include="..\..\src\BNamedObject.cpp" />
+    <ClCompile Include="..\..\src\BObject.cpp" />
+    <ClCompile Include="..\..\src\BPackage.cpp" />
+    <ClCompile Include="..\..\src\BParser.cpp" />
+    <ClCompile Include="..\..\src\BPersistMgr.cpp" />
+    <ClCompile Include="..\..\src\BPkgFile.cpp" />
+    <ClCompile Include="..\..\src\BPoint.cpp" />
+    <ClCompile Include="..\..\src\BQuickMsg.cpp" />
+    <ClCompile Include="..\..\src\BRegion.cpp" />
+    <ClCompile Include="..\..\src\BRegistry.cpp" />
+    <ClCompile Include="..\..\src\BRenderer.cpp" />
+    <ClCompile Include="..\..\src\BRenderSDL.cpp" />
+    <ClCompile Include="..\..\src\BResourceFile.cpp" />
+    <ClCompile Include="..\..\src\BResources.cpp" />
+    <ClCompile Include="..\..\src\BSaveThumbFile.cpp" />
+    <ClCompile Include="..\..\src\BSaveThumbHelper.cpp" />
+    <ClCompile Include="..\..\src\BScriptable.cpp" />
+    <ClCompile Include="..\..\src\BScriptHolder.cpp" />
+    <ClCompile Include="..\..\src\BSound.cpp" />
+    <ClCompile Include="..\..\src\BSprite.cpp" />
+    <ClCompile Include="..\..\src\BStringTable.cpp" />
+    <ClCompile Include="..\..\src\BSubFrame.cpp" />
+    <ClCompile Include="..\..\src\BSurface.cpp" />
+    <ClCompile Include="..\..\src\BSurfaceSDL.cpp" />
+    <ClCompile Include="..\..\src\BSurfaceStorage.cpp" />
+    <ClCompile Include="..\..\src\BTransitionMgr.cpp" />
+    <ClCompile Include="..\..\src\BViewport.cpp" />
+    <ClCompile Include="..\..\src\ConvertUTF.c" />
+    <ClCompile Include="..\..\src\crc.cpp" />
+    <ClCompile Include="..\..\src\DirectoryOperations.c" />
+    <ClCompile Include="..\..\src\FileOperations.c" />
+    <ClCompile Include="..\..\src\FontGlyphCache.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\MathUtil.cpp" />
+    <ClCompile Include="..\..\src\Matrix4.cpp" />
+    <ClCompile Include="..\..\src\PartEmitter.cpp" />
+    <ClCompile Include="..\..\src\PartForce.cpp" />
+    <ClCompile Include="..\..\src\PartParticle.cpp" />
+    <ClCompile Include="..\..\src\PathUtil.cpp" />
+    <ClCompile Include="..\..\src\PlatformSDL.cpp" />
+    <ClCompile Include="..\..\src\ScEngine.cpp" />
+    <ClCompile Include="..\..\src\ScScript.cpp" />
+    <ClCompile Include="..\..\src\ScStack.cpp" />
+    <ClCompile Include="..\..\src\ScValue.cpp" />
+    <ClCompile Include="..\..\src\SdlUtil.cpp" />
+    <ClCompile Include="..\..\src\StringUtil.cpp" />
+    <ClCompile Include="..\..\src\SXArray.cpp" />
+    <ClCompile Include="..\..\src\SXDate.cpp" />
+    <ClCompile Include="..\..\src\SXFile.cpp" />
+    <ClCompile Include="..\..\src\SXMath.cpp" />
+    <ClCompile Include="..\..\src\SXMemBuffer.cpp" />
+    <ClCompile Include="..\..\src\SxObject.cpp" />
+    <ClCompile Include="..\..\src\SXStore.cpp" />
+    <ClCompile Include="..\..\src\SXString.cpp" />
+    <ClCompile Include="..\..\src\SysClass.cpp" />
+    <ClCompile Include="..\..\src\SysClassRegistry.cpp" />
+    <ClCompile Include="..\..\src\SysInstance.cpp" />
+    <ClCompile Include="..\..\src\tinyxml.cpp" />
+    <ClCompile Include="..\..\src\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\src\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\src\UIButton.cpp" />
+    <ClCompile Include="..\..\src\UIEdit.cpp" />
+    <ClCompile Include="..\..\src\UIEntity.cpp" />
+    <ClCompile Include="..\..\src\UIObject.cpp" />
+    <ClCompile Include="..\..\src\UIText.cpp" />
+    <ClCompile Include="..\..\src\UITiledImage.cpp" />
+    <ClCompile Include="..\..\src\UIWindow.cpp" />
+    <ClCompile Include="..\..\src\utils.cpp" />
+    <ClCompile Include="..\..\src\Vector2.cpp" />
+    <ClCompile Include="..\..\src\VidDataSource.cpp" />
+    <ClCompile Include="..\..\src\VidManager.cpp" />
+    <ClCompile Include="..\..\src\VidTheoraPlayer.cpp" />
+    <ClCompile Include="..\..\src\snd_SDL_mixer\BSoundBuffer.cpp" />
+    <ClCompile Include="..\..\src\snd_SDL_mixer\BSoundMgr.cpp" />
+  </ItemGroup>
+</Project>
