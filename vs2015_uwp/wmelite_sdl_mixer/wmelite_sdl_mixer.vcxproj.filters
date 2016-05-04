@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\src\Vector2.cpp" />
     <ClCompile Include="..\..\src\snd_SDL_mixer\BSoundBuffer.cpp" />
     <ClCompile Include="..\..\src\snd_SDL_mixer\BSoundMgr.cpp" />
+    <ClCompile Include="..\..\..\SDL\src\main\winrt\SDL_winrt_main_NonXAML.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\FileOperations.h" />
