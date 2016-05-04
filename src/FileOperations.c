@@ -11,7 +11,7 @@
 
 #include "SDL.h"
 
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
 #	include <direct.h>
 #	include <io.h>
 #else
@@ -170,7 +170,7 @@ generic_file_ops *get_file_operations(file_access_variant access_variant)
 
 static int        file_exists_plain(const char *name)
 {
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
 	return _access(name, 0);
 #else
 	return access(name, R_OK);
@@ -210,7 +210,7 @@ static int        file_putc_plain(int character, FILEHANDLE handle)
 
 static int        file_seek_plain(FILEHANDLE handle, off_t offset, int whence)
 {
-#if defined(__MINGW32__) || defined(WIN32)
+#if defined(__MINGW32__) || defined(WIN32) || defined(__WINRT__)
 	return fseek((FILE*) handle, offset, whence);
 #else
 	return fseeko((FILE*) handle, offset, whence);

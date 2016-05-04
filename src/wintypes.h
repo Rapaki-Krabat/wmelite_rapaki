@@ -26,7 +26,7 @@ THE SOFTWARE.
 #ifndef __WmeWintypes_H__
 #define __WmeWintypes_H__
 
-#ifndef __WIN32__
+#if !defined(__WIN32__)
 
 #define WINAPI
 #define CALLBACK
@@ -42,7 +42,6 @@ THE SOFTWARE.
 
 
 #define CONST const
-
 
 #define MAX_PATH 512
 

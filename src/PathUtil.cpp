@@ -31,9 +31,12 @@ THE SOFTWARE.
 #include "DirectoryOperations.h"
 
 
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
 #	include <shlobj.h>
 #	include <io.h>
+// #ifdef __WINRT__
+// #include <fileapi.h>
+// #endif
 #else
 #   include <dirent.h>
 #endif
@@ -154,17 +157,21 @@ AnsiString PathUtil::GetSafeLogFileName()
 
 	AnsiString logFileName = GetUserDirectory();
 
-#ifdef __WIN32__
+#if defined(__WIN32__)
 	char moduleName[MAX_PATH];
 	::GetModuleFileName(NULL, moduleName, MAX_PATH);
 	
 	AnsiString fileName = GetFileNameWithoutExtension(moduleName) + GetTimeStamp() + ".log";
 	fileName = Combine("/Wintermute Engine/Logs/", fileName);
 	logFileName = Combine(logFileName, fileName);
-	
+#else
+#if defined(__WINRT__)
+	// TODO ???
+	logFileName = Combine(logFileName, "/Wintermute Engine/wme.log");
 #else
 	// !PORTME	
 	logFileName = Combine(logFileName, "/Wintermute Engine/wme.log");
+#endif
 #endif
 
 #else
@@ -210,8 +217,30 @@ bool PathUtil::DirectoryExists(const char* path)
 {
 	bool ret = false;
 #ifdef _WIN32
+#ifdef __WINRT__
+	if (_access(path, 0) == 0) {
+
+		struct stat status;
+		stat(path, &status);
+
+		return (status.st_mode & S_IFDIR) != 0;
+	}
+	return false;
+
+//	WIN32_FILE_ATTRIBUTE_DATA info;
+//	DWORD    fileAttributes;
+//	BOOL retStatus = GetFileAttributesEx(path, GetFileExInfoStandard, &info);
+//	if (retStatus == false)
+//	{
+//		return false;
+//	}
+//	fileAttributes = info.dwFileAttributes;
+//	ret = (fileAttributes != INVALID_FILE_ATTRIBUTES && (fileAttributes & FILE_ATTRIBUTE_DIRECTORY));
+
+#else
 	DWORD attr = GetFileAttributes(path);
 	ret = (attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY));
+#endif
 #else
 	DIRHANDLE dir;
 	generic_directory_ops *ops = GetDirectoryAccessMethod(path);
@@ -230,7 +259,7 @@ AnsiString PathUtil::GetUserDirectory()
 {
 	AnsiString userDir = "./";
 
-#ifdef __WIN32__
+#if defined(__WIN32__)
 	char buffer[MAX_PATH];
 	buffer[0] = '\0';
 	LPITEMIDLIST pidl = NULL;

@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libfreeimage", "..\..\..\wm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsdl_mixer", "..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\vs2015_uwp\libsdl_mixer\libsdl_mixer.vcxproj", "{770A54E9-1167-4543-9EE5-111327FAA62D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8\vs2015_uwp\zlib\zlib.vcxproj", "{672B60E7-DFAA-4B98-BE28-B2CB815423D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -117,6 +119,18 @@ Global
 		{770A54E9-1167-4543-9EE5-111327FAA62D}.Release|x64.Build.0 = Release|x64
 		{770A54E9-1167-4543-9EE5-111327FAA62D}.Release|x86.ActiveCfg = Release|Win32
 		{770A54E9-1167-4543-9EE5-111327FAA62D}.Release|x86.Build.0 = Release|Win32
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Debug|ARM.ActiveCfg = Debug|ARM
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Debug|ARM.Build.0 = Debug|ARM
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Debug|x64.ActiveCfg = Debug|x64
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Debug|x64.Build.0 = Debug|x64
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Debug|x86.ActiveCfg = Debug|Win32
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Debug|x86.Build.0 = Debug|Win32
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Release|ARM.ActiveCfg = Release|ARM
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Release|ARM.Build.0 = Release|ARM
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Release|x64.ActiveCfg = Release|x64
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Release|x64.Build.0 = Release|x64
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Release|x86.ActiveCfg = Release|Win32
+		{672B60E7-DFAA-4B98-BE28-B2CB815423D8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

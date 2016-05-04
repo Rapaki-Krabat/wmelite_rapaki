@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "StringUtil.h"
 #include "PathUtil.h"
 
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
 #	include <direct.h>
 #else
 #	include <unistd.h>
@@ -785,7 +785,11 @@ HRESULT CBFileManager::RestoreCurrentDir()
 	if(!m_BasePath) return S_OK;
 	else
 	{
+#ifdef __WINRT__
+		if(!_chdir(m_BasePath)) return S_OK;
+#else
 		if(!chdir(m_BasePath)) return S_OK;
+#endif
 		else return E_FAIL;
 	}
 }

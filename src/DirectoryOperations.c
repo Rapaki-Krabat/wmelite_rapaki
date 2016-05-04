@@ -7,7 +7,7 @@
 
 #include "SDL.h"
 
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
 #	include <shlobj.h>
 #	include <io.h>
 #else

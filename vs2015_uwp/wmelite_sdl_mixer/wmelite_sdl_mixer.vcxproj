@@ -111,11 +111,12 @@
     <ClCompile>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -126,11 +127,12 @@
     <ClCompile>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -141,11 +143,12 @@
     <ClCompile>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,11 +159,12 @@
     <ClCompile>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -171,11 +175,12 @@
     <ClCompile>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -186,11 +191,12 @@
     <ClCompile>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -201,14 +207,6 @@
     <Image Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Image Include="Assets\StoreLogo.png" />
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Common\DeviceResources.h" />
-    <ClInclude Include="Common\DirectXHelper.h" />
-    <ClInclude Include="Common\StepTimer.h" />
-    <ClInclude Include="Content\Sample3DSceneRenderer.h" />
-    <ClInclude Include="Content\SampleFpsTextRenderer.h" />
-    <ClInclude Include="Content\ShaderStructures.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\AdActor.cpp" />
@@ -327,26 +325,12 @@
     <ClCompile Include="..\..\src\UIWindow.cpp" />
     <ClCompile Include="..\..\src\utils.cpp" />
     <ClCompile Include="..\..\src\Vector2.cpp" />
-    <ClCompile Include="..\..\src\VidDataSource.cpp" />
-    <ClCompile Include="..\..\src\VidManager.cpp" />
-    <ClCompile Include="..\..\src\VidTheoraPlayer.cpp" />
-    <ClCompile Include="Common\DeviceResources.cpp" />
-    <ClCompile Include="Content\SampleFpsTextRenderer.cpp" />
-    <ClCompile Include="Content\Sample3DSceneRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="wmelite_sdl_mixer_TemporaryKey.pfx" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Content\SamplePixelShader.hlsl">
-      <ShaderType>Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="Content\SampleVertexShader.hlsl">
-      <ShaderType>Vertex</ShaderType>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\SDL\VisualC-WinRT\UWP_VS2015\SDL-UWP.vcxproj">
@@ -367,6 +351,13 @@
     <ProjectReference Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\vs2015_uwp\libsdl_mixer\libsdl_mixer.vcxproj">
       <Project>{770a54e9-1167-4543-9ee5-111327faa62d}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8\vs2015_uwp\zlib\zlib.vcxproj">
+      <Project>{672b60e7-dfaa-4b98-be28-b2cb815423d8}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\FileOperations.h" />
+    <ClInclude Include="..\..\src\wintypes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

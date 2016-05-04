@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "BRenderSDL.h"
 #include "PathUtil.h"
 
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
 #ifndef __MINGW32__
 #	include <dbghelp.h>
 #endif
@@ -86,7 +86,11 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 				char* IniName = CBUtils::GetFilename(param);
 
 				// switch to ini's dir
+#ifdef __WINRT__
+				_chdir(IniDir);
+#else
 				chdir(IniDir);
+#endif
 
 				// set ini name
 				sprintf(param, "./%s", IniName);
@@ -770,7 +774,7 @@ AnsiString CBPlatform::GetPlatformName()
 //////////////////////////////////////////////////////////////////////////
 int CBPlatform::stricmp(const char* str1, const char* str2)
 {
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
 	return ::stricmp(str1, str2);
 #else
 	return ::strcasecmp(str1, str2);
@@ -780,7 +784,7 @@ int CBPlatform::stricmp(const char* str1, const char* str2)
 //////////////////////////////////////////////////////////////////////////
 int CBPlatform::strnicmp(const char* str1, const char* str2, size_t maxCount)
 {
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
 	return ::strnicmp(str1, str2, maxCount);
 #else
 	return ::strncasecmp(str1, str2, maxCount);
