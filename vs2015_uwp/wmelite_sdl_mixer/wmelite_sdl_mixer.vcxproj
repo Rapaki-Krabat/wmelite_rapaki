@@ -364,6 +364,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\dcgf.h" />
     <ClInclude Include="..\..\src\FileOperations.h" />
     <ClInclude Include="..\..\src\wintypes.h" />
   </ItemGroup>

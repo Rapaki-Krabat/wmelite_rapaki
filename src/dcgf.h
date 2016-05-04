@@ -252,12 +252,16 @@ typedef void (*SYS_INSTANCE_CALLBACK)(void* Instance, void* Data);
 #define MIN(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+#ifdef __WINRT__
+
 #ifndef max
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
 
 #ifndef min
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
+
 #endif
 
 #define D3DCOLGetB(rgb)	 ((BYTE)(rgb))

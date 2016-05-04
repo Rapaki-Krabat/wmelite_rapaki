@@ -157,5 +157,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\FileOperations.h" />
     <ClInclude Include="..\..\src\wintypes.h" />
+    <ClInclude Include="..\..\src\dcgf.h" />
   </ItemGroup>
 </Project>
