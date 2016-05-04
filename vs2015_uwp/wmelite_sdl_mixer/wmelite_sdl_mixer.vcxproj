@@ -114,7 +114,7 @@
       <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;FREEIMAGE_DISABLE_CALLING_CONVENTION;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
@@ -130,7 +130,7 @@
       <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;FREEIMAGE_DISABLE_CALLING_CONVENTION;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
@@ -146,7 +146,7 @@
       <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;FREEIMAGE_DISABLE_CALLING_CONVENTION;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
@@ -162,7 +162,7 @@
       <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;FREEIMAGE_DISABLE_CALLING_CONVENTION;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
@@ -178,7 +178,7 @@
       <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;FREEIMAGE_DISABLE_CALLING_CONVENTION;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
@@ -194,7 +194,7 @@
       <AdditionalIncludeDirectories>..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\FreeImage3154\jni\Source;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\freetype-2.6\include;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libecho\jni;..\..\src;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Common\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\Reverb\lib;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\libeffects-android\jni\;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\jni;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8;..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL\jni\include;$(ProjectDir);$(IntermediateOutputPath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
-      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_SDL_MIXER;FREEIMAGE_USE_STD_DATATYPE_DEFINES;FREEIMAGE_DISABLE_CALLING_CONVENTION;_CRT_SECURE_NO_WARNINGS;__EXCLUDE_LIBTHEORA_PLAYER__;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
     </ClCompile>
