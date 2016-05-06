@@ -1,0 +1,220 @@
+# Configuration for iPhone OS, making static libs
+# this will generate both iPhone (arm) and iPhoneSimulator (i686) libs
+
+TARGET = wmelite
+INCLUDE=-Ixcode/dep/libfreeimage/include/ -Ixcode/dep/libfreetype/include \
+-Ixcode/dep/libSDL2/include -Ixcode/dep/libSDL2_mixer/include \
+-Ixcode/dep/libecho/include -Ixcode/dep/libreverb/include \
+-Ixcode/dep/libreverb/include/Reverb/lib \
+-Ixcode/dep/libreverb/include/Common/lib -Isrc -I.
+SRCS=\
+src/ConvertUTF.c \
+src/DirectoryOperations.c \
+src/FileOperations.c \
+src/AdActor.cpp \
+src/AdActorDir.cpp \
+src/AdEntity.cpp \
+src/AdGame.cpp \
+src/AdInventoryBox.cpp \
+src/AdInventory.cpp \
+src/AdItem.cpp \
+src/AdLayer.cpp \
+src/AdNodeState.cpp \
+src/AdObject.cpp \
+src/AdPath.cpp \
+src/AdPathPoint.cpp \
+src/AdRegion.cpp \
+src/AdResponseBox.cpp \
+src/AdResponseContext.cpp \
+src/AdResponse.cpp \
+src/AdRotLevel.cpp \
+src/AdScaleLevel.cpp \
+src/AdScene.cpp \
+src/AdSceneNode.cpp \
+src/AdSceneState.cpp \
+src/AdSentence.cpp \
+src/AdSpriteSet.cpp \
+src/AdTalkDef.cpp \
+src/AdTalkHolder.cpp \
+src/AdTalkNode.cpp \
+src/AdWaypointGroup.cpp \
+src/BActiveRect.cpp \
+src/BBase.cpp \
+src/BDebugger.cpp \
+src/BDiskFile.cpp \
+src/BDynBuffer.cpp \
+src/BEvent.cpp \
+src/BFader.cpp \
+src/BFile.cpp \
+src/BFileEntry.cpp \
+src/BFileManager.cpp \
+src/BFontBitmap.cpp \
+src/BFont.cpp \
+src/BFontStorage.cpp \
+src/BFontTT.cpp \
+src/BFrame.cpp \
+src/BGame.cpp \
+src/BImage.cpp \
+src/BKeyboardState.cpp \
+src/BNamedObject.cpp \
+src/BObject.cpp \
+src/BPackage.cpp \
+src/BParser.cpp \
+src/BPersistMgr.cpp \
+src/BPkgFile.cpp \
+src/BPoint.cpp \
+src/BQuickMsg.cpp \
+src/BRegion.cpp \
+src/BRegistry.cpp \
+src/BRenderer.cpp \
+src/BRenderSDL.cpp \
+src/BResourceFile.cpp \
+src/BResources.cpp \
+src/BSaveThumbFile.cpp \
+src/BSaveThumbHelper.cpp \
+src/BScriptable.cpp \
+src/BScriptHolder.cpp \
+src/snd_SDL_mixer/BSoundBuffer.cpp \
+src/BSound.cpp \
+src/snd_SDL_mixer/BSoundMgr.cpp \
+src/BSprite.cpp \
+src/BStringTable.cpp \
+src/BSubFrame.cpp \
+src/BSurface.cpp \
+src/BSurfaceSDL.cpp \
+src/BSurfaceStorage.cpp \
+src/BTransitionMgr.cpp \
+src/BViewport.cpp \
+src/crc.cpp \
+src/FontGlyphCache.cpp \
+src/main.cpp \
+src/MathUtil.cpp \
+src/Matrix4.cpp \
+src/PartEmitter.cpp \
+src/PartForce.cpp \
+src/PartParticle.cpp \
+src/PathUtil.cpp \
+src/PlatformSDL.cpp \
+src/ScEngine.cpp \
+src/ScScript.cpp \
+src/ScStack.cpp \
+src/ScValue.cpp \
+src/SdlUtil.cpp \
+src/StringUtil.cpp \
+src/SXArray.cpp \
+src/SXDate.cpp \
+src/SXFile.cpp \
+src/SXMath.cpp \
+src/SXMemBuffer.cpp \
+src/SxObject.cpp \
+src/SXStore.cpp \
+src/SXString.cpp \
+src/SysClass.cpp \
+src/SysClassRegistry.cpp \
+src/SysInstance.cpp \
+src/tinyxml.cpp \
+src/tinyxmlerror.cpp \
+src/tinyxmlparser.cpp \
+src/UIButton.cpp \
+src/UIEdit.cpp \
+src/UIEntity.cpp \
+src/UIObject.cpp \
+src/UIText.cpp \
+src/UITiledImage.cpp \
+src/UIWindow.cpp \
+src/utils.cpp \
+src/Vector2.cpp
+
+ifeq ($(CUSTOM_PLATFORM_CONFIG),)
+PLATFORM_CONFIG=./macos_platform_config.sh
+else
+PLATFORM_CONFIG=$(CUSTOM_PLATFORM_CONFIG)
+endif
+
+DEPS_INSTALLDIR=`$(PLATFORM_CONFIG) --installdir`
+
+STD_CFLAGS = `$(PLATFORM_CONFIG) --cflags` -DUSE_SDL_MIXER -D__EXCLUDE_LIBTHEORA_PLAYER__
+STD_CXXFLAGS = `$(PLATFORM_CONFIG) --cxxflags` -DUSE_SDL_MIXER -D__EXCLUDE_LIBTHEORA_PLAYER__
+
+MACOS_DEPLOYMENT_TARGET = `$(PLATFORM_CONFIG) --minversion`
+
+ARCH_I386 = i386
+ARCH_X86_64 = x86_64
+
+SDKROOT = `$(PLATFORM_CONFIG) --sysroot`
+
+EXTRA_CFLAGS   += $(INCLUDE)
+SRCS_TO_COMPILE=$(SRCS)
+
+EXTRA_CFLAGS += -isysroot $(SDKROOT)
+EXTRA_CFLAGS += -mmacosx-version-min=$(MACOS_DEPLOYMENT_TARGET)
+
+AR = `$(PLATFORM_CONFIG) --ar`
+
+CC = `$(PLATFORM_CONFIG) --cc`
+CXX = `$(PLATFORM_CONFIG) --cxx`
+LIBTOOL = `$(PLATFORM_CONFIG) --libtool`
+LIPO = `$(PLATFORM_CONFIG) --lipo`
+
+CFLAGS = $(STD_CFLAGS) $(EXTRA_CFLAGS)
+CXXFLAGS += $(STD_CXXFLAGS) $(EXTRA_CFLAGS)
+
+LDFLAGS = xcode/dep/libfreeimage/lib/libfreeimage.a \
+xcode/dep/libSDL2/libcombined/libSDL2.a \
+xcode/dep/libfreetype/lib/libfreetype.a \
+xcode/dep/libreverb/libcombined/libreverb.a \
+xcode/dep/libSDL2_mixer/libcombined/libSDL2_mixer.a \
+xcode/dep/libecho/libcombined/libecho.a \
+-framework CoreVideo -framework AudioToolbox -framework AudioUnit \
+-framework Cocoa -framework CoreAudio -framework IOKit \
+-framework CoreFoundation -framework Carbon -framework ForceFeedback \
+-lz -lbz2 -lc++ -fobjc-link-runtime
+
+.SUFFIXES: .o-i386 .o-x86_64 .m
+MODULES_i386 = $(SRCS_TO_COMPILE:.c=.o-i386) $(MSRCS_TO_COMPILE:.m=.o-i386)
+MODULES_i386 := $(MODULES_i386:.cpp=.o-i386)
+MODULES_x86_64 = $(SRCS_TO_COMPILE:.c=.o-x86_64) $(MSRCS_TO_COMPILE:.m=.o-x86_64)
+MODULES_x86_64 := $(MODULES_x86_64:.cpp=.o-x86_64)
+
+default: all
+
+copydeps:
+	cp -r $(DEPS_INSTALLDIR)/* xcode/dep/
+
+all: $(TARGET)-app
+
+$(TARGET)-app: $(TARGET)-app-i386 $(TARGET)-app-x86_64
+
+$(TARGET)-app-i386: $(MODULES_i386)
+	$(CXX) -arch i386 -isysroot $(SDKROOT) -mmacosx-version-min=$(MACOS_DEPLOYMENT_TARGET) -o $(TARGET)-i386.app $(MODULES_i386) $(LDFLAGS)
+
+$(TARGET)-app-x86_64: $(MODULES_x86_64)
+	$(CXX) -arch x86_64 -isysroot $(SDKROOT) -mmacosx-version-min=$(MACOS_DEPLOYMENT_TARGET) -o $(TARGET)-x86_64.app $(MODULES_x86_64) $(LDFLAGS)
+
+.c.o-i386:
+	@echo " (CC-i386) $<"
+	@$(CC) -arch $(ARCH_I386) $(CFLAGS) -c $< -o $@
+
+.cpp.o-i386:
+	@echo " (C++-i386) $<"
+	@$(CXX) -arch $(ARCH_I386) $(CXXFLAGS) -c $< -o $@
+
+.m.o-i386:
+	@echo " (COBJ-i386) $<"
+	@$(COBJ) -arch $(ARCH_I386) $(COBJFLAGS) -c $< -o $@
+
+.c.o-x86_64:
+	@echo " (CC-x86_64) $<"
+	@$(CC) -arch $(ARCH_X86_64) $(CFLAGS) -c $< -o $@
+
+.cpp.o-x86_64:
+	@echo " (C++-x86_64) $<"
+	@$(CXX) -arch $(ARCH_X86_64) $(CXXFLAGS) -c $< -o $@
+
+.m.o-x86_64:
+	@echo " (COBJ-x86_64) $<"
+	@$(COBJ) -arch $(ARCH_X86_64) $(COBJFLAGS) -c $< -o $@
+
+clean:
+	rm -f core Dist/*.* u2dtmp* $(MODULES_i386) $(MODULES_x86_64)
+
