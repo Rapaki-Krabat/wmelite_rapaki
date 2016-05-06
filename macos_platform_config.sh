@@ -58,7 +58,7 @@ VAR_FLAGS_MACOS_LIPO='
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '
 
 VAR_FLAGS_MACOS_DEPLOYMENT_TARGET='
-10.5'
+10.7'
 
 VAR_FLAGS_MACOS_INSTALL_DIR='
 /Users/Shared/Jenkins/MacOS/'
