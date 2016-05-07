@@ -558,7 +558,7 @@ void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 	vsprintf(buff, fmt, va);
 	va_end(va);
 
-#ifdef __IPHONEOS__
+#if defined(__IPHONEOS__) || defined(__MACOSX__)
 	printf("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
 	fflush(stdout);
 #else

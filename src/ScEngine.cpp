@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include <algorithm>
 #include <vector>
 
-#if defined(__LINUX__) || defined(__ANDROID__)
+#if defined(__LINUX__) || defined(__ANDROID__) || defined(__MACOSX__)
 #include <dlfcn.h>
 #endif
 
@@ -40,6 +40,10 @@ IMPLEMENT_PERSISTENT(CScEngine, true);
 #else
 #if defined(__LINUX__) || defined(__ANDROID__)
 #define COMPILER_DLL "libdcscomp.so"
+#else
+#if defined(__MACOSX__)
+#define COMPILER_DLL "libdcscomp.dylib"
+#endif
 #endif
 #endif
 
@@ -98,7 +102,7 @@ CScEngine::CScEngine(CBGame* inGame):CBBase(inGame)
 	}
 	else m_CompilerAvailable = false;
 #else
-#if defined(__LINUX__) || defined(__ANDROID__)
+#if defined(__LINUX__) || defined(__ANDROID__) || defined(__MACOSX__)
 	char CompilerPath[MAX_PATH];
 	strcpy(CompilerPath, COMPILER_DLL);
 	const char *errorStr;
