@@ -157,12 +157,14 @@
     <ClCompile Include="..\..\src\snd_SDL_mixer\BSoundBuffer.cpp" />
     <ClCompile Include="..\..\src\snd_SDL_mixer\BSoundMgr.cpp" />
     <ClCompile Include="..\..\..\SDL\src\main\winrt\SDL_winrt_main_NonXAML.cpp" />
+    <ClCompile Include="..\..\src\WinRTDetectPointers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\FileOperations.h" />
     <ClInclude Include="..\..\src\wintypes.h" />
     <ClInclude Include="..\..\src\dcgf.h" />
     <ClInclude Include="..\..\src\PlatformSDL.h" />
+    <ClInclude Include="..\..\src\WinRTDetectPointers.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Assets\settings.xml">

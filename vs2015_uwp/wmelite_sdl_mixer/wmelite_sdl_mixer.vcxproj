@@ -333,6 +333,14 @@
     <ClCompile Include="..\..\src\UIWindow.cpp" />
     <ClCompile Include="..\..\src\utils.cpp" />
     <ClCompile Include="..\..\src\Vector2.cpp" />
+    <ClCompile Include="..\..\src\WinRTDetectPointers.cpp">
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</CompileAsWinRT>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -369,6 +377,7 @@
     <ClInclude Include="..\..\src\dcgf.h" />
     <ClInclude Include="..\..\src\FileOperations.h" />
     <ClInclude Include="..\..\src\PlatformSDL.h" />
+    <ClInclude Include="..\..\src\WinRTDetectPointers.h" />
     <ClInclude Include="..\..\src\wintypes.h" />
   </ItemGroup>
   <ItemGroup>

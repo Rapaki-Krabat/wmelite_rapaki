@@ -53,6 +53,10 @@ THE SOFTWARE.
 #   include <locale.h>
 #endif
 
+#ifdef __WINRT__
+#   include "WinRTDetectPointers.h"
+#endif
+
 CBGame* CBPlatform::Game = NULL;
 
 
@@ -216,6 +220,10 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 		Game->LoadGame(SaveGame);
 		delete [] SaveGame;
 	}
+
+#ifdef __WINRT__
+	LogPointerDevices();
+#endif
 
 	// all set, ready to go
 	return 0;
