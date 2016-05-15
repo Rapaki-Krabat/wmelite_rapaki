@@ -354,7 +354,10 @@ HRESULT CBFileManager::InitPaths()
 	android_getGameFilePath(androidPath, 1024);
 	AddPath(PATH_SINGLE, androidPath);
 #endif
-	
+
+#ifdef __WINRT__
+	AddPath(PATH_PACKAGE, "./Assets");
+#endif
 
 	pathList = Game->m_Registry->ReadString("Resource", "PackagePaths", "");
 	numPaths = CBUtils::StrNumEntries(pathList.c_str(), ';');

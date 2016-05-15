@@ -338,6 +338,8 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="..\..\..\SDL\src\main\winrt\SDL2-WinRTResource_BlankCursor.cur" />
+    <None Include="Assets\data.dcp" />
     <None Include="wmelite_sdl_mixer_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -366,7 +368,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\dcgf.h" />
     <ClInclude Include="..\..\src\FileOperations.h" />
+    <ClInclude Include="..\..\src\PlatformSDL.h" />
     <ClInclude Include="..\..\src\wintypes.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Assets\settings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\SDL\src\main\winrt\SDL2-WinRTResources.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

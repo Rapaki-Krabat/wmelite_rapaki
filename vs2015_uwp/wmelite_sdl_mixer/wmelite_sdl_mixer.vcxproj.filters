@@ -34,6 +34,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="wmelite_sdl_mixer_TemporaryKey.pfx" />
+    <None Include="Assets\data.dcp">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="..\..\..\SDL\src\main\winrt\SDL2-WinRTResource_BlankCursor.cur" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\AdActor.cpp" />
@@ -158,5 +162,14 @@
     <ClInclude Include="..\..\src\FileOperations.h" />
     <ClInclude Include="..\..\src\wintypes.h" />
     <ClInclude Include="..\..\src\dcgf.h" />
+    <ClInclude Include="..\..\src\PlatformSDL.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Assets\settings.xml">
+      <Filter>Assets</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\SDL\src\main\winrt\SDL2-WinRTResources.rc" />
   </ItemGroup>
 </Project>

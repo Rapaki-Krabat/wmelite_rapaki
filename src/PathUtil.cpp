@@ -167,7 +167,7 @@ AnsiString PathUtil::GetSafeLogFileName()
 #else
 #if defined(__WINRT__)
 	// TODO ???
-	logFileName = Combine(logFileName, "/Wintermute Engine/wme.log");
+	logFileName = Combine(logFileName, "/wme.log");
 #else
 	// !PORTME	
 	logFileName = Combine(logFileName, "/Wintermute Engine/wme.log");

@@ -339,7 +339,7 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 
 	case SDL_MOUSEBUTTONDOWN:
 
-#if defined(__IPHONEOS__) || defined(__ANDROID__)
+#if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
 		{
 			CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
 			POINT p;

@@ -258,7 +258,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	AnsiString defaultRenderingHint = "opengles2";
 #else
 
-#ifdef __WIN32__
+#if defined(__WIN32__) || defined(__WINRT__)
     // directx for Windows
 	AnsiString defaultRenderingHint = "direct3d";
 
