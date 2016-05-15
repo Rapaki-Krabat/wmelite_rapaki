@@ -30,3 +30,29 @@ extern "C" void LogPointerDevices()
 	SDL_Log("Touch present: %d.\n", tCaps->TouchPresent);
 
 }
+
+extern "C" int DetectMousePresence()
+{
+	using namespace Windows::Devices::Input;
+
+	int mousePresent;
+
+	MouseCapabilities ^ mCaps = ref new MouseCapabilities();
+
+	mousePresent = mCaps->MousePresent;
+
+	return mousePresent;
+}
+
+extern "C" int DetectTouchPresence()
+{
+	using namespace Windows::Devices::Input;
+
+	int touchPresent;
+
+	TouchCapabilities ^ tCaps = ref new TouchCapabilities();
+
+	touchPresent = tCaps->TouchPresent;
+
+	return touchPresent;
+}

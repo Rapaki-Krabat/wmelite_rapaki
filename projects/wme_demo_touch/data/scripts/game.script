@@ -4,6 +4,13 @@
 
 if ((Game.Platform == "Android") || (Game.Platform == "iOS")) Game.CursorHidden = true;
 
+// dynamic test for touch input
+var dynamicInputDetection = Game.DetectSupportedInputMethods();
+if ((dynamicInputDetection == 2) || (dynamicInputDetection == 3))
+{
+	Game.CursorHidden = true;
+}
+
 // store some of the game's attributes in global variables for convenience
 Keyboard = Game.Keyboard;
 Scene = Game.Scene;

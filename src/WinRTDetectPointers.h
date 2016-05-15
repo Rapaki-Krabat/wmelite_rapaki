@@ -5,4 +5,8 @@
 
 extern "C" void LogPointerDevices();
 
+extern "C" int DetectMousePresence();
+
+extern "C" int DetectTouchPresence();
+
 #endif // WINRT_DETECT_POINTERS_H

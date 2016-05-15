@@ -47,6 +47,10 @@ THE SOFTWARE.
 #	include "android/android.h"
 #endif
 
+#ifdef __WINRT__
+#   include "WinRTDetectPointers.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -2259,6 +2263,33 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 
     return S_OK;
   }
+
+	//////////////////////////////////////////////////////////////////////////
+	// DetectSupportedInputMethods
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "DetectSupportedInputMethods")==0)
+	{
+		int supportedInputMask = 0;
+
+	    Stack->CorrectParams(0);
+
+#if defined(__ANDROID__) || defined(__IPHONEOS__)
+	    // for the moment, those will be touch-only
+	    supportedInputMask = 0x02;
+#else
+#if defined(__WINRT__)
+	    supportedInputMask |= (DetectMousePresence() != 0) ? 1 : 0;
+	    supportedInputMask |= (DetectTouchPresence() != 0) ? 2 : 0;
+#else
+	    // all standard PC platforms have mouse input only
+	    supportedInputMask = 0x01;
+#endif
+#endif
+
+	    Stack->PushInt(supportedInputMask);
+
+	    return S_OK;
+	}
 
 	else return CBObject::ScCallMethod(Script, Stack, ThisStack, Name);
 }
