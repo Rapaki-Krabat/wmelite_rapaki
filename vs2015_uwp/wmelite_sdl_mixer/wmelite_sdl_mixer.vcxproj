@@ -101,7 +101,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <PackageCertificateKeyFile>wmelite_sdl_mixer_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>wmelite_sdl_mixer_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>B819894210E647885E1767E73273520FB60207FA</PackageCertificateThumbprint>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Link>
@@ -347,7 +351,15 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL2-WinRTResource_BlankCursor.cur" />
-    <None Include="Assets\data.dcp" />
+    <None Include="Assets\data.dcp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
+    <None Include="wmelite_sdl_mixer_StoreKey.pfx" />
     <None Include="wmelite_sdl_mixer_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +394,7 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Assets\settings.xml" />
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL2-WinRTResources.rc" />
