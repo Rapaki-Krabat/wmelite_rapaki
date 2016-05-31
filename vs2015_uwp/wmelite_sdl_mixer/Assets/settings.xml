@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+  <Debug>
+    <DebugMode>0</DebugMode>
+  </Debug>
+  <Font>
+    <FontAlphaHack>1</FontAlphaHack>
+  </Font>
+  <Scaling>
+    <UpScalingStepping>0</UpScalingStepping>
+    <DownScalingStepping>0</DownScalingStepping>
+  </Scaling>
+  <Rendering>
+    <PixelPerfect>1</PixelPerfect>
+  </Rendering>
+  <Video>
+    <DesktopResolution>1</DesktopResolution>
+    <Windowed>0</Windowed>
+  </Video>
+</Settings>
+
