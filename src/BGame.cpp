@@ -439,6 +439,10 @@ HRESULT CBGame::Initialize1()
 	if(m_Store==NULL) goto init_fail;
 	RegisterObject(m_Store);
 
+#ifdef __WINRT__
+	SDL_SetHint(SDL_HINT_WINRT_HANDLE_BACK_BUTTON, "1");
+#endif
+
 	return S_OK;
 
 init_fail:
@@ -570,6 +574,10 @@ void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 #ifdef __ANDROID__
 	// that one should not have performance impact
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
+#endif
+
+#ifdef __WINRT__
+	SDL_Log("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
 #endif
 
 	if (m_DEBUG_LogFile == NULL) return;
@@ -4342,7 +4350,7 @@ HRESULT CBGame::Unfreeze()
 //////////////////////////////////////////////////////////////////////////
 bool CBGame::HandleKeypress(SDL_Event* event)
 {
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(__WINRT__)
 	// hard-code transformation of the "back" key to the escape key on Android
 	// TODO don't know whether OnWindowClose() is the better choice...
 	if (event->type == SDL_KEYDOWN)

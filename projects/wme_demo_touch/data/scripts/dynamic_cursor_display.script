@@ -1,0 +1,48 @@
+#include "scripts\base.inc"
+
+global g_LastMouseCursorShowTime;
+global g_LastMouseCursorShowTimeDelay;
+
+var lastMouseX = -10000;
+var lastMouseY = -10000;
+
+var cursorIsHidden = true;
+
+// infinite loop
+while(true)
+{
+	if ((Game.CurrentTime - g_LastMouseCursorShowTime) > CURSOR_DISPLAY_TIME_MS)
+	{
+		if (cursorIsHidden == false)
+		{
+			Game.CursorHidden = true;
+		
+			// lastMouseX = Game.MouseX;
+			// lastMouseY = Game.MouseY;
+			
+			cursorIsHidden = true;
+			
+			// Game.Msg("Cursor hidden " + lastMouseX + " " + lastMouseY);
+		}
+	}
+	else
+	{
+		if (cursorIsHidden == true)
+		{
+			//if (((Math.Abs(Game.MouseX - lastMouseX) < 40) && ((Math.Abs(Game.MouseY - lastMouseY) < 40))) 
+			//	|| ((g_LastMouseCursorShowTime - g_LastMouseCursorShowTimeDelayed) < CURSOR_DISPLAY_MOVE_EVENT_TIME))
+			if ((g_LastMouseCursorShowTime - g_LastMouseCursorShowTimeDelay) < CURSOR_DISPLAY_MOVE_EVENT_TIME)
+			{
+				Game.CursorHidden = false;
+			
+				cursorIsHidden = false;
+			
+				// Game.Msg("Cursor shown " + Game.MouseX + " " + Game.MouseY);
+				// Game.Msg("Cursor shown last=" + g_LastMouseCursorShowTime + ",delayed=" + g_LastMouseCursorShowTimeDelay);
+			}
+		}
+	}
+	// go to sleep for 20 miliseconds to allow the engine to perform other tasks
+	// it is important for the "endless" scripts to call the Sleep command, otherwise the game will get stuck
+	Sleep(20);
+}

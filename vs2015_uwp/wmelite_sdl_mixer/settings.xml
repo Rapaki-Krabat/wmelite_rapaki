@@ -2,6 +2,7 @@
 <Settings>
   <Debug>
     <DebugMode>0</DebugMode>
+    <ShowFPS>0</ShowFPS>
   </Debug>
   <Font>
     <FontAlphaHack>1</FontAlphaHack>
@@ -12,6 +13,10 @@
   </Scaling>
   <Rendering>
     <PixelPerfect>1</PixelPerfect>
+    <!-- <RenderingHint>opengles2</RenderingHint> -->
+    <VSync>1</VSync>
+    <DoubleBuffering>0</DoubleBuffering>
+    <FrameRateLimit>60</FrameRateLimit>
   </Rendering>
   <Video>
     <DesktopResolution>1</DesktopResolution>

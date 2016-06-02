@@ -22,6 +22,7 @@ global VAL_TOP=0;
 global VAL_CENTER=1;
 global VAL_BOTTOM=2;
 
-global LONG_CLICK_TIME_MS          = 700;
-global MIN_CAPTION_DISPLAY_TIME_MS = 400;
-
+global LONG_CLICK_TIME_MS             = 700;
+global MIN_CAPTION_DISPLAY_TIME_MS    = 400;
+global CURSOR_DISPLAY_TIME_MS         = 5000;
+global CURSOR_DISPLAY_MOVE_EVENT_TIME = 100;

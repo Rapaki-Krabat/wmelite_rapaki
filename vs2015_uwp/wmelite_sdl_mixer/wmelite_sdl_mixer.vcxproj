@@ -393,11 +393,15 @@
     <ClInclude Include="..\..\src\wintypes.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Assets\settings.xml" />
     <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL2-WinRTResources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="settings.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,10 +6,16 @@ if ((Game.Platform == "Android") || (Game.Platform == "iOS")) Game.CursorHidden 
 
 // dynamic test for touch input
 var dynamicInputDetection = Game.DetectSupportedInputMethods();
+
+Game.LOG("Check for supported input methods: " + dynamicInputDetection);
+
 if ((dynamicInputDetection == 2) || (dynamicInputDetection == 3))
 {
 	Game.CursorHidden = true;
 }
+
+// override detection for testing
+// dynamicInputDetection = 3;
 
 // store some of the game's attributes in global variables for convenience
 Keyboard = Game.Keyboard;
@@ -52,6 +58,14 @@ global g_CurrSelectedObject          = null;
 global g_CurrSelectedObjectStartTime = 0;
 
 global g_IsLeftClick    = false;
+
+global g_LastMouseCursorShowTime      = 0;
+global g_LastMouseCursorShowTimeDelay = -100000;
+
+if (dynamicInputDetection == 3)
+{
+	Game.AttachScript("scripts\dynamic_cursor_display.script");
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 on "LeftClick"
@@ -119,6 +133,19 @@ on "LeftRelease"
 	{
 		Scene.ApplyEvent("LeftClick");
 	}	
+}
+
+////////////////////////////////////////////////////////////////////////////////
+on "MouseDrag"
+{
+	if (dynamicInputDetection == 3)
+	{
+		g_LastMouseCursorShowTimeDelay = g_LastMouseCursorShowTime;
+		g_LastMouseCursorShowTime      = Game.CurrentTime;
+		
+		// Game.Msg("MouseDrag x=" + Game.MouseX + ",y=" + Game.MouseY);
+		// Game.Msg("MouseDrag last=" + g_LastMouseCursorShowTime + ",delayed=" + g_LastMouseCursorShowTimeDelay);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

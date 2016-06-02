@@ -169,11 +169,9 @@
     <ClInclude Include="..\..\src\WinRTDetectPointers.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="Assets\settings.xml">
-      <Filter>Assets</Filter>
-    </Xml>
+    <ResourceCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL2-WinRTResources.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL2-WinRTResources.rc" />
+    <Xml Include="settings.xml" />
   </ItemGroup>
 </Project>

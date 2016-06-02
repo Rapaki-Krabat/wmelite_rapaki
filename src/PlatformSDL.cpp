@@ -406,7 +406,11 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 #endif
 		break;
 
+#ifdef __WINRT__
+	case SDL_MOUSEMOTION:
+#else
 	case SDL_FINGERMOTION:
+#endif
 		if (Game) Game->OnMouseDrag();
 		break;
 	
