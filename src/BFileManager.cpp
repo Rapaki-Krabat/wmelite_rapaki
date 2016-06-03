@@ -357,6 +357,7 @@ HRESULT CBFileManager::InitPaths()
 
 #ifdef __WINRT__
 	AddPath(PATH_PACKAGE, "./Assets");
+	AddPath(PATH_SINGLE, "./Assets");
 #endif
 
 	pathList = Game->m_Registry->ReadString("Resource", "PackagePaths", "");
