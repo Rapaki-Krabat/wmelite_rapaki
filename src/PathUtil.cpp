@@ -306,6 +306,18 @@ AnsiString PathUtil::GetUserDirectory()
 			userDir = AnsiString(pw->pw_dir);
 		}
 	}
+
+#elif __WINRT__
+
+	char path[MAX_PATH];
+	char *tmp = SDL_GetPrefPath("Rapaki", "KaPSK");
+	if (tmp != NULL)
+	{
+		strncpy_s(path, tmp, MAX_PATH);
+		SDL_free(tmp);
+		userDir = AnsiString(path);
+	}
+
 #endif
 	
 	return userDir;
