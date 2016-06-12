@@ -72,6 +72,7 @@ public:
 	virtual HRESULT InitRenderer(int width, int height, bool windowed, float upScalingRatioStepping, float downScalingRatioStepping, bool pixelPerfectRendering, const AnsiString& renderingHint, bool vsync);
 	virtual HRESULT Flip();
 	virtual void InitLoop();
+	virtual HRESULT ReassureFullscreen();
 	virtual HRESULT SwitchFullscreen();
 	virtual HRESULT Setup2D(bool Force=false);
 	virtual HRESULT SetupLines();

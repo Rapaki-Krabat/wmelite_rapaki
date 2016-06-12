@@ -737,6 +737,15 @@ CBImage* CBRenderSDL::TakeScreenshot()
 }
 
 //////////////////////////////////////////////////////////////////////////
+HRESULT CBRenderSDL::ReassureFullscreen()
+{
+	if (m_Windowed) SDL_SetWindowFullscreen(m_Win, SDL_FALSE);
+	else SDL_SetWindowFullscreen(m_Win, SDL_TRUE);
+
+	return S_OK;
+}
+
+//////////////////////////////////////////////////////////////////////////
 HRESULT CBRenderSDL::SwitchFullscreen()
 {
 	if (m_Windowed) SDL_SetWindowFullscreen(m_Win, SDL_TRUE);

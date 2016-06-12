@@ -167,6 +167,8 @@
     <ClInclude Include="..\..\src\dcgf.h" />
     <ClInclude Include="..\..\src\PlatformSDL.h" />
     <ClInclude Include="..\..\src\WinRTDetectPointers.h" />
+    <ClInclude Include="..\..\src\BRenderer.h" />
+    <ClInclude Include="..\..\src\BRenderSDL.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL2-WinRTResources.rc" />

@@ -439,6 +439,18 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 // #endif
 			break;
 
+		case SDL_WINDOWEVENT_SHOWN:
+
+#ifdef __WINRT__
+			// on WinRT the fullscreen switch may fail, rertying once the window is
+			// shown might yield better results
+			Game->m_Renderer->ReassureFullscreen();
+			// SDL_Log("Window show event!!!");
+
+#endif
+
+			break;
+
 		case SDL_WINDOWEVENT_CLOSE:
 			break;
 		case SDL_WINDOWEVENT_RESIZED:

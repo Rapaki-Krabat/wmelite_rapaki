@@ -45,6 +45,7 @@ public:
 	HRESULT Fade(WORD Alpha);
 	HRESULT FadeToColor(DWORD Color, RECT* rect = NULL);
 
+	HRESULT ReassureFullscreen();
 	HRESULT SwitchFullscreen();
 
 	HRESULT DrawLine(int X1, int Y1, int X2, int Y2, DWORD Color);
