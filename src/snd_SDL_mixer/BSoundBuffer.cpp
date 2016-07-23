@@ -193,7 +193,7 @@ HRESULT CBSoundBuffer::LoadFromFile(const char* Filename, bool ForceReload)
 		m_chunk = Mix_LoadWAV_RW(m_rwops, 0);
 		if (!m_chunk)
 		{
-			Game->LOG(0, "SDL_mixer non-streamed error: %d while loading '%s'", Mix_GetError(), Filename);
+			Game->LOG(0, "SDL_mixer non-streamed error: '%s' while loading '%s'", Mix_GetError(), Filename);
 			return E_FAIL;
 		}
 
@@ -768,7 +768,8 @@ size_t CBSoundBuffer::FileReadImpl(SDL_RWops *ops, void *buffer, size_t size, si
 	CBFile* file = static_cast<CBFile*>(ops->hidden.unknown.data1);
 	DWORD oldPos = file->GetPos();
 	file->Read(buffer, ((DWORD) (nmemb * size)));
-	return file->GetPos() - oldPos;
+	// SDL_Log("Reading from file. Request %d elements of size %d and read %d bytes.\n", nmemb, size, actRead);
+	return (file->GetPos() - oldPos) / size;
 }
 
 //////////////////////////////////////////////////////////////////////////
