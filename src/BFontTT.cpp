@@ -713,6 +713,8 @@ HRESULT CBFontTT::InitFont()
 		// the requested font file is not in wme file space; try loading a system font
 #ifdef __IPHONEOS__
         AnsiString fontFileName = "DejaVuSans.ttf"; // on iOS use a fallback font we copy to app bundle
+#elif __WINRT__
+		AnsiString fontFileName = "fonts/DejaVuSans.ttf"; // 
 #else
         // search for a liberation font in the system font path
 		AnsiString fontFileName = PathUtil::Combine(CBPlatform::GetSystemFontPath(), "LiberationSans-Regular.ttf");

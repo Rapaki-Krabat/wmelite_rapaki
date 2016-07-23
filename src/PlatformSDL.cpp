@@ -783,6 +783,8 @@ AnsiString CBPlatform::GetSystemFontPath()
 	char androidPath[1024];
 	android_getFontPath(androidPath, 1024);
 	return AnsiString(androidPath);
+#elif __WINRT__
+	return "fonts/";
 #else
 	// !PORTME
 	return "/Library/Fonts/";
