@@ -2300,6 +2300,31 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 	    return S_OK;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// StartTextInput
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "StartTextInput")==0)
+	{
+		Stack->CorrectParams(1);
+		int yCoord = Stack->Pop()->GetInt();
+		m_Renderer->EnableKeyboard(yCoord);
+		Stack->PushNULL();
+
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// StopTextInput
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "StopTextInput")==0)
+	{
+		Stack->CorrectParams(0);
+		m_Renderer->DisableKeyboard();
+		Stack->PushNULL();
+
+		return S_OK;
+	}
+
 	else return CBObject::ScCallMethod(Script, Stack, ThisStack, Name);
 }
 

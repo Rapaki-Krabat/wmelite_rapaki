@@ -88,6 +88,9 @@ public:
 
 	virtual void WindowResized(int x, int y);
 
+	virtual void EnableKeyboard(int yCoord) { return; };
+	virtual void DisableKeyboard() { return; };
+
 	HRESULT ClipCursor();
 	HRESULT UnclipCursor();
 

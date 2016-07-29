@@ -71,6 +71,10 @@ public:
 
 	void WindowResized(int x, int y);
 
+	void EnableKeyboard(int yCoord);
+	void DisableKeyboard();
+
+
 private:
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Texture;

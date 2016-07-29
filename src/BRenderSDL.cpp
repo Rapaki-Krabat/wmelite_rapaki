@@ -922,3 +922,16 @@ float CBRenderSDL::GetAlignedDownscalingRatio(float ratio, float stepping)
 	return newRatio;
 }
 
+//////////////////////////////////////////////////////////////////////////
+void CBRenderSDL::EnableKeyboard(int yCoord)
+{
+	SDL_StartTextInput();
+	Game->LOG(0, "Starting text input!");
+}
+
+//////////////////////////////////////////////////////////////////////////
+void CBRenderSDL::DisableKeyboard()
+{
+	SDL_StopTextInput();
+	Game->LOG(0, "Stopping text input!");
+}
