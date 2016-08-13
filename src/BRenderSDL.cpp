@@ -47,6 +47,8 @@ CBRenderSDL::CBRenderSDL(CBGame* inGame) : CBRenderer(inGame)
 	m_PhysicalRatioX = m_PhysicalRatioY = 1.0f;
 	m_PhysicalWidth = m_PhysicalHeight = m_LogicalWidth = m_LogicalHeight = 0;
 	m_PixelPerfect = false;
+
+	m_ProgressIndicator = -1;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -86,6 +88,9 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	int deviceNumber = Game->m_Registry->ReadInt("Video", "DeviceNumber", 0);
 
 	Game->LOG(0, "Current video device no=%d, max=%d (- 1).", deviceNumber, SDL_GetNumVideoDisplays());
+
+	m_ProgressIndicator = Game->m_Registry->ReadInt("Video", "ProgressIndicatorFrames", -1);
+	m_MaxProgressIndicator = m_ProgressIndicator;
 
 	m_Width = width;
 	m_Height = height;
@@ -589,6 +594,36 @@ HRESULT CBRenderSDL::Flip()
 			m_FrameCounter = 0;
 			m_SecondTickTime = m_LastRenderTime;
 		}
+	}
+
+
+	if (m_ProgressIndicator >= 0)
+	{
+		// mid-screen
+//			int x1 = 0;
+//			int y1 = (m_Height / 2) - 5;
+//			int x2 = m_Width * (((float) m_ProgressIndicator) / ((float) m_MaxProgressIndicator));
+//			int y2 = (m_Height / 2) + 5;
+
+		int x1 = 0;
+		int y1 = m_PhysicalHeight - m_PhysicalBorderTop - m_PhysicalBorderBottom - 3;
+		int x2 = (m_PhysicalWidth - m_PhysicalBorderLeft - m_PhysicalBorderRight) * (((float) (m_MaxProgressIndicator - m_ProgressIndicator)) / ((float) m_MaxProgressIndicator));
+		int y2 = m_PhysicalHeight - m_PhysicalBorderTop - m_PhysicalBorderBottom - 1;
+
+		// Game->LOG(0, "?Drawing from %d,%d to %d,%d", x1, y1, x2, y2);
+
+		Uint8 alpha = 0xFF * (((float) (m_ProgressIndicator + m_MaxProgressIndicator)) / ((float) (m_MaxProgressIndicator * 2)));
+
+		SDL_SetRenderDrawBlendMode(m_Renderer, SDL_BLENDMODE_BLEND);
+
+		for (int u = y1; u <= y2; u++)
+		{
+			SDL_SetRenderDrawColor(m_Renderer, 0x00, 0x80, 0x00, alpha);
+
+			SDL_RenderDrawLine(m_Renderer, x1, u, x2, u);
+		}
+
+		m_ProgressIndicator--;
 	}
 
 	SDL_RenderPresent(m_Renderer);

@@ -121,6 +121,9 @@ private:
 	float m_upScalingRatioStepping;
 	float m_downScalingRatioStepping;
 
+	int m_ProgressIndicator;
+	int m_MaxProgressIndicator;
+
 	void UpdateWindowScaling();
 
 	float GetAlignedUpscalingRatio(float ratio, float stepping);
