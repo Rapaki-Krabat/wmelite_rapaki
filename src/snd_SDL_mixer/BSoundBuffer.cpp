@@ -460,18 +460,18 @@ DWORD CBSoundBuffer::GetPosition()
 
 	if ((m_chunk) && (m_currChannel >= 0))
 	{
+		// < 0 means getting current position
 		curr_position_ms = Mix_SetPlayPosition(m_currChannel, -1);
 	}
 	if ((m_music) && (m_currChannel >= 0))
 	{
-		// TODO
+		// depends on SDL_mixer support to actually work
 		double position_s;
-		Game->LOG(0, "FIXME: Get position for music not yet implemented.");
 		position_s = Mix_GetMusicPositionCh(m_currChannel);
 		curr_position_ms = (DWORD) (position_s * 1000.0f);
 	}
 
-	Game->LOG(0, "File %s current position %d ms.", m_Filename, curr_position_ms);
+	Game->LOG(0, "File %s get_current_position = %d ms.", m_Filename, curr_position_ms);
 
 	return curr_position_ms;
 }
