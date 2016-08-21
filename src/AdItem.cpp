@@ -34,6 +34,7 @@ CAdItem::CAdItem(CBGame* inGame):CAdTalkHolder(inGame)
 {
 	m_SpriteHover = NULL;
 	m_CursorNormal = m_CursorHover = NULL;
+	m_SpriteSelected = NULL;
 
 	m_CursorCombined = true;
 	m_InInventory = false;
@@ -57,6 +58,7 @@ CAdItem::~CAdItem()
 	SAFE_DELETE(m_SpriteHover);
 	SAFE_DELETE(m_CursorNormal);
 	SAFE_DELETE(m_CursorHover);
+	SAFE_DELETE(m_SpriteSelected);
 
 	SAFE_DELETE_ARRAY(m_AmountString);
 }
@@ -104,6 +106,7 @@ TOKEN_DEF_START
 	TOKEN_DEF (ALPHA)
 	TOKEN_DEF (TALK_SPECIAL)
 	TOKEN_DEF (TALK)
+	TOKEN_DEF (SPRITE_SELECTED)
 	TOKEN_DEF (SPRITE_HOVER)
 	TOKEN_DEF (SPRITE)
 	TOKEN_DEF (DISPLAY_AMOUNT)
@@ -135,6 +138,7 @@ HRESULT CAdItem::LoadBuffer(BYTE* Buffer, bool Complete)
 		TOKEN_TABLE (ALPHA)
 		TOKEN_TABLE (TALK_SPECIAL)
 		TOKEN_TABLE (TALK)
+		TOKEN_TABLE (SPRITE_SELECTED)
 		TOKEN_TABLE (SPRITE_HOVER)
 		TOKEN_TABLE (SPRITE)
 		TOKEN_TABLE (DISPLAY_AMOUNT)
@@ -192,11 +196,20 @@ HRESULT CAdItem::LoadBuffer(BYTE* Buffer, bool Complete)
 			case TOKEN_SPRITE_HOVER:
 				SAFE_DELETE(m_SpriteHover);
 				m_SpriteHover = new CBSprite(Game, this);
-				if(!m_SpriteHover || FAILED(m_SpriteHover->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))){
+				if (!m_SpriteHover || FAILED(m_SpriteHover->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))) {
 					SAFE_DELETE(m_SpriteHover);
 					cmd = PARSERR_GENERIC;
 				}
-			break;
+				break;
+
+			case TOKEN_SPRITE_SELECTED:
+				SAFE_DELETE(m_SpriteSelected);
+				m_SpriteSelected = new CBSprite(Game, this);
+				if (!m_SpriteSelected || FAILED(m_SpriteSelected->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))) {
+					SAFE_DELETE(m_SpriteSelected);
+					cmd = PARSERR_GENERIC;
+				}
+				break;
 
 			case TOKEN_AMOUNT:
 				parser.ScanStr((char*)params, "%d", &m_Amount);
@@ -331,6 +344,7 @@ HRESULT CAdItem::Update()
 		case STATE_READY:
 			if(!m_AnimSprite){
 				if(Game->m_ActiveObject==this && m_SpriteHover)	m_CurrentSprite = m_SpriteHover;
+				else if ((((CAdGame*)Game)->m_SelectedItem == this) && m_SpriteSelected) m_CurrentSprite = m_SpriteSelected;
 				else m_CurrentSprite = m_Sprite;
 			}
 		break;
@@ -725,6 +739,7 @@ HRESULT CAdItem::Persist(CBPersistMgr* PersistMgr){
 	PersistMgr->Transfer(TMEMBER(m_CursorHover));
 	PersistMgr->Transfer(TMEMBER(m_CursorNormal));
 	PersistMgr->Transfer(TMEMBER(m_SpriteHover));
+	PersistMgr->Transfer(TMEMBER(m_SpriteSelected));
 	PersistMgr->Transfer(TMEMBER(m_InInventory));
 	PersistMgr->Transfer(TMEMBER(m_DisplayAmount));
 	PersistMgr->Transfer(TMEMBER(m_Amount));

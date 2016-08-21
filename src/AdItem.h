@@ -47,6 +47,7 @@ public:
 	bool m_InInventory;
 	bool m_CursorCombined;
 	CBSprite* m_SpriteHover;
+	CBSprite* m_SpriteSelected;
 	CBSprite* m_CursorNormal;
 	CBSprite* m_CursorHover;
 	CAdItem(CBGame* inGame);
