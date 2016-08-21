@@ -743,6 +743,22 @@ HRESULT CAdGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	// SetInventoryBoxHideSelected
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "SetInventoryBoxHideSelected") == 0) {
+		Stack->CorrectParams(1);
+		bool hideSelected = Stack->Pop()->GetBool(false);
+
+		if (m_InventoryBox != NULL)
+		{
+			m_InventoryBox->m_HideSelected = hideSelected;
+		}
+
+		Stack->PushNULL();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	// LoadItems
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "LoadItems")==0){
