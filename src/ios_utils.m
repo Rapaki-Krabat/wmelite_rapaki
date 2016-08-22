@@ -24,6 +24,7 @@ THE SOFTWARE.
 */
 
 #include "ios_utils.h"
+#include "DisplayConfig.h"
 #include <string.h>
 #import <Foundation/NSPathUtilities.h>
 #import <UIKit/UIApplication.h>
@@ -78,3 +79,16 @@ void IOS_GetPlatformIdentifierString(char *buffer)
 	const char* utf8path2 = [ver UTF8String];
 	strcat(buffer, utf8path2);
 }
+
+void SetKeepDisplayOn(int keepOn)
+{
+    if (keepOn != 0)
+    {
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+    }
+    else
+    {
+        [UIApplication sharedApplication].idleTimerDisabled = NO;
+    }
+}
+
