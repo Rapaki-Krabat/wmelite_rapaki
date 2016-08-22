@@ -2325,6 +2325,21 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 		return S_OK;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// KeepDisplayOn
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "KeepDisplayOn")==0)
+	{
+		Stack->CorrectParams(1);
+		int keepOn = Stack->Pop()->GetInt();
+#if defined(__ANDROID__) || defined(__IPHONEOS__) || defined(__WINRT__)
+		SetKeepDisplayOn(keepOn);
+#endif
+		Stack->PushNULL();
+
+		return S_OK;
+	}
+
 	else return CBObject::ScCallMethod(Script, Stack, ThisStack, Name);
 }
 
