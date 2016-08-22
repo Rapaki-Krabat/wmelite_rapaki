@@ -3,6 +3,8 @@
 
 #include "SDL_android.h"
 
+#include "DisplayConfig.h"
+
 #include <android/log.h>
 #include <android/asset_manager_jni.h>
 
@@ -386,4 +388,15 @@ void android_getPlatformIdentifierString(char *buffer, int length)
 	(*env)->ReleaseStringUTFChars(env, str, tmp);
 	(*env)->DeleteLocalRef(env, cls);
 	(*env)->DeleteLocalRef(env, str);
+}
+
+void SetKeepDisplayOn(int keepOn)
+{
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "setKeepDisplayOn", "(I)V");
+
+	(*env)->CallVoidMethod(env, callbackObject, callbackID, (jint) keepOn);
+
+	(*env)->DeleteLocalRef(env, cls);
 }
