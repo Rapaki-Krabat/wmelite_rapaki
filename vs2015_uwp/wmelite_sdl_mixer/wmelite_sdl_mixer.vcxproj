@@ -345,6 +345,14 @@
       <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</CompileAsWinRT>
       <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</CompileAsWinRT>
     </ClCompile>
+    <ClCompile Include="..\..\src\WinRTDisplayConfig.cpp">
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</CompileAsWinRT>
+      <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</CompileAsWinRT>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -389,6 +397,7 @@
     <ClInclude Include="..\..\src\BRenderer.h" />
     <ClInclude Include="..\..\src\BRenderSDL.h" />
     <ClInclude Include="..\..\src\dcgf.h" />
+    <ClInclude Include="..\..\src\DisplayConfig.h" />
     <ClInclude Include="..\..\src\FileOperations.h" />
     <ClInclude Include="..\..\src\PlatformSDL.h" />
     <ClInclude Include="..\..\src\WinRTDetectPointers.h" />
