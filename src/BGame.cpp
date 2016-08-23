@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include <time.h>
 #include "crc.h"
 #include "StringUtil.h"
+#include "DisplayConfig.h"
 
 #ifdef __IPHONEOS__
 #	include "ios_utils.h"
