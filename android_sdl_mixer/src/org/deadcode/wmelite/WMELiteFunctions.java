@@ -139,8 +139,4 @@ public class WMELiteFunctions {
 	    String platformIdentifier = Build.MANUFACTURER + ":" + Build.PRODUCT + ":" + Build.MODEL + ":" + Build.VERSION.SDK_INT;
 		return platformIdentifier.replaceAll("\\s","_");
 	}
-	
-	public void setKeepDisplayOn(int keepOn)
-	{
-	}
 }

@@ -390,13 +390,8 @@ void android_getPlatformIdentifierString(char *buffer, int length)
 	(*env)->DeleteLocalRef(env, str);
 }
 
+// already supported by SDL itself
 void SetKeepDisplayOn(int keepOn)
 {
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "setKeepDisplayOn", "(I)V");
-
-	(*env)->CallVoidMethod(env, callbackObject, callbackID, (jint) keepOn);
-
-	(*env)->DeleteLocalRef(env, cls);
+  Android_JNI_SuspendScreenSaver((keepOn == 0) ? SDL_FALSE : SDL_TRUE);
 }
