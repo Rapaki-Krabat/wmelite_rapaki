@@ -251,6 +251,8 @@ CBGame::CBGame():CBObject(this)
 	m_AutoSaveSlot = 999;
 	m_CursorHidden = false;
 
+	m_ForceScreenOnState = false; // upon startup no such flag set
+
 	// defaults
 	m_DisableTouchDialogFontHover          = true;
 	m_MinDialogResponseDistance            = 50;
@@ -2340,6 +2342,7 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 		int keepOn = Stack->Pop()->GetInt();
 #if defined(__ANDROID__) || defined(__IPHONEOS__) || defined(__WINRT__)
 		SetKeepDisplayOn(keepOn);
+		m_ForceScreenOnState = (keepOn != 0) ? true : false;
 #endif
 		Stack->PushNULL();
 
@@ -4330,6 +4333,7 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_AutoSaveOnExit));
 	PersistMgr->Transfer(TMEMBER(m_AutoSaveSlot));
 	PersistMgr->Transfer(TMEMBER(m_CursorHidden));
+	PersistMgr->Transfer(TMEMBER(m_ForceScreenOnState));
 
 	if (PersistMgr->CheckVersion(1, 0, 1))
 		PersistMgr->Transfer(TMEMBER(m_Store));
@@ -4337,6 +4341,14 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 		m_Store = NULL;
 
 	if (!PersistMgr->m_Saving) m_Quitting = false;
+
+#if defined(__ANDROID__) || defined(__IPHONEOS__) || defined(__WINRT__)
+	if (!PersistMgr->m_Saving)
+	{
+		// make sure screensaver config is updated after load
+		SetKeepDisplayOn((m_ForceScreenOnState == true) ? 1 : 0);
+	}
+#endif
 
 	return S_OK;
 }

@@ -378,6 +378,8 @@ protected:
 	int m_AutoSaveSlot;
 	bool m_CursorHidden;
 
+	bool m_ForceScreenOnState;
+
 public:
 	void AutoSaveOnExit();
 
