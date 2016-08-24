@@ -588,9 +588,12 @@ HRESULT CUIButton::Display(int OffsetX, int OffsetY)
 	}
 	else if(m_Hover)
 	{
-		if(m_BackHover) back = m_BackHover;
-		if(m_ImageHover) image = m_ImageHover;
-		if(m_Text && m_FontHover) font = m_FontHover;
+		if (Game->m_ButtonHoverOnTouchOnly == false)
+		{
+			if(m_BackHover) back = m_BackHover;
+			if(m_ImageHover) image = m_ImageHover;
+			if(m_Text && m_FontHover) font = m_FontHover;
+		}
 	}
 	else if(m_CanFocus && IsFocused())
 	{

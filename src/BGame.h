@@ -216,6 +216,8 @@ public:
 
 	bool m_DeactivateObjectOnRelease;
 
+	bool m_ButtonHoverOnTouchOnly;
+
 	// compatibility bits
 	bool m_CompatKillMethodThreads;
 	

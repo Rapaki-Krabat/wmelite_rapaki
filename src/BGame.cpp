@@ -258,10 +258,15 @@ CBGame::CBGame():CBObject(this)
 
 	m_DeactivateObjectOnRelease = false;
 
+	m_ButtonHoverOnTouchOnly = false;
+
 #ifdef __IPHONEOS__
 	m_TouchInterface = true;
 	m_ConstrainedMemory = true; // TODO differentiate old and new iOS devices
 #elif __ANDROID__
+	m_TouchInterface = true;
+	m_ConstrainedMemory = false;
+#elif __WINRT__
 	m_TouchInterface = true;
 	m_ConstrainedMemory = false;
 #else
@@ -2947,6 +2952,15 @@ CScValue* CBGame::ScGetProperty(char *Name)
 		return m_ScValue;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// ButtonHoverOnTouchOnly
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "ButtonHoverOnTouchOnly")==0)
+	{
+		m_ScValue->SetBool(m_ButtonHoverOnTouchOnly);
+		return m_ScValue;
+	}
+
 
 
 	else return CBObject::ScGetProperty(Name);
@@ -3248,6 +3262,14 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 		return S_OK;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// ButtonHoverOnTouchOnly
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "ButtonHoverOnTouchOnly")==0)
+	{
+		m_ButtonHoverOnTouchOnly = Value->GetBool();
+		return S_OK;
+	}
 
 	else return CBObject::ScSetProperty(Name, Value);
 }
