@@ -4335,6 +4335,19 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_CursorHidden));
 	PersistMgr->Transfer(TMEMBER(m_ForceScreenOnState));
 
+	// as those should be static and platform dependent, persistance should not be necessary
+	// PersistMgr->Transfer(TMEMBER(m_DoubleClickMaxTime));
+	// PersistMgr->Transfer(TMEMBER(m_DoubleClickMaxXDiff));
+	// PersistMgr->Transfer(TMEMBER(m_DoubleClickMaxYDiff));
+
+	PersistMgr->Transfer(TMEMBER(m_DisableTouchDialogFontHover));
+	PersistMgr->Transfer(TMEMBER(m_MinDialogResponseDistance));
+	PersistMgr->Transfer(TMEMBER(m_UseNonTouchSubtitlesWidthComputation));
+
+	PersistMgr->Transfer(TMEMBER(m_DeactivateObjectOnRelease));
+
+	PersistMgr->Transfer(TMEMBER(m_ButtonHoverOnTouchOnly));
+
 	if (PersistMgr->CheckVersion(1, 0, 1))
 		PersistMgr->Transfer(TMEMBER(m_Store));
 	else
