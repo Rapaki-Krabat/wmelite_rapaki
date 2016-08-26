@@ -51,6 +51,8 @@ CUIButton::CUIButton(CBGame* inGame):CUIObject(inGame)
 	m_CenterImage = false;
 
 	m_PixelPerfect = false;
+
+	m_ReactsToHoverOnTouch = false;
 }
 
 
@@ -569,6 +571,10 @@ HRESULT CUIButton::Display(int OffsetX, int OffsetY)
 	//CBPlatform::SetRect(&rect, OffsetX + m_PosX, OffsetY + m_PosY, OffsetX+m_PosX+m_Width, OffsetY+m_PosY+m_Height);
 	//m_Hover = (!m_Disable && CBPlatform::PtInRect(&rect, Game->m_MousePos)!=FALSE);
 	m_Hover = (!m_Disable && Game->m_ActiveObject==this && (Game->m_Interactive || Game->m_State == GAME_SEMI_FROZEN));
+	if ((m_ReactsToHoverOnTouch) && (Game->m_ButtonHoverOnTouchOnly == true))
+	{
+		m_Hover = m_Hover && Game->m_MouseLeftDown;
+	}
 
 	if((m_Press && m_Hover && !Game->m_MouseLeftDown) ||
 		(m_OneTimePress && CBPlatform::GetTime() - m_OneTimePressTime >= 100)) Press();
@@ -588,12 +594,9 @@ HRESULT CUIButton::Display(int OffsetX, int OffsetY)
 	}
 	else if(m_Hover)
 	{
-		if (Game->m_ButtonHoverOnTouchOnly == false)
-		{
-			if(m_BackHover) back = m_BackHover;
-			if(m_ImageHover) image = m_ImageHover;
-			if(m_Text && m_FontHover) font = m_FontHover;
-		}
+		if(m_BackHover) back = m_BackHover;
+		if(m_ImageHover) image = m_ImageHover;
+		if(m_Text && m_FontHover) font = m_FontHover;
 	}
 	else if(m_CanFocus && IsFocused())
 	{
@@ -1045,6 +1048,7 @@ HRESULT CUIButton::Persist(CBPersistMgr* PersistMgr){
 	PersistMgr->Transfer(TMEMBER(m_PixelPerfect));
 	PersistMgr->Transfer(TMEMBER(m_Press));
 	PersistMgr->Transfer(TMEMBER(m_StayPressed));
+	PersistMgr->Transfer(TMEMBER(m_ReactsToHoverOnTouch));
 
 	if(!PersistMgr->m_Saving){
 		m_OneTimePress = false;
