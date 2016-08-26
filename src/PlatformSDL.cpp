@@ -114,6 +114,8 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 
 	Game->m_DEBUG_ShowFPS = Game->m_Registry->ReadBool("Debug", "ShowFPS");
 
+	Game->m_DebugAlwaysShowPlatformCursor = Game->m_Registry->ReadBool("Debug", "AlwaysShowPlatformCursor", false);
+
 	if(Game->m_Registry->ReadBool("Debug", "DisableSmartCache"))
 	{
 		Game->LOG(0, "Smart cache is DISABLED");
@@ -157,7 +159,7 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 	bool vsync = Game->m_Registry->ReadBool("Rendering", "VSync");
 
 	// initialize the renderer
-	ret = Game->m_Renderer->InitRenderer(Game->m_SettingsResWidth, Game->m_SettingsResHeight, windowedMode, upScalingStepping, downScalingStepping, pixelPerfectRendering, renderingHint, vsync);
+	ret = Game->m_Renderer->InitRenderer(Game->m_SettingsResWidth, Game->m_SettingsResHeight, windowedMode, upScalingStepping, downScalingStepping, pixelPerfectRendering, renderingHint, vsync, Game->m_DebugAlwaysShowPlatformCursor);
 	if (FAILED(ret))
 	{
 		Game->LOG(ret, "Error initializing renderer. Exiting.");
@@ -429,7 +431,14 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		case SDL_WINDOWEVENT_FOCUS_GAINED:
 		case SDL_WINDOWEVENT_RESTORED:
 			if (Game) Game->OnActivate(true, true);
-			SDL_ShowCursor(SDL_DISABLE);
+			if (Game->m_DebugAlwaysShowPlatformCursor == true)
+			{
+				SDL_ShowCursor(SDL_ENABLE);
+			}
+			else
+			{
+				SDL_ShowCursor(SDL_DISABLE);
+			}
 			break;
 		case SDL_WINDOWEVENT_FOCUS_LOST:
 		case SDL_WINDOWEVENT_MINIMIZED:

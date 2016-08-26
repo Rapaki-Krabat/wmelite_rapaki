@@ -62,9 +62,12 @@ CBRenderSDL::~CBRenderSDL()
 }
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float upScalingRatioStepping, float downScalingRatioStepping, bool pixelPerfectRendering, const AnsiString& renderingHint, bool vsync)
+HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float upScalingRatioStepping, float downScalingRatioStepping, bool pixelPerfectRendering, const AnsiString& renderingHint, bool vsync, bool m_DebugAlwaysShowPlatformCursor)
 {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) return E_FAIL;
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		Game->LOG(0, "SDL init video failed???\n");
+		return E_FAIL;
+	}
 	
 	m_upScalingRatioStepping   = upScalingRatioStepping;
 	m_downScalingRatioStepping = downScalingRatioStepping;
@@ -246,11 +249,17 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 		m_NewLogicalWidth, m_NewLogicalHeight,
 		flags);
 	
-	if (!m_Win) return E_FAIL;
+	if (!m_Win) {
+		Game->LOG(0, "Fatal: Could not create SDL window???\n");
+		return E_FAIL;
+	}
 
 	SDL_SetWindowDisplayMode(m_Win, current);	
 
-	SDL_ShowCursor(SDL_DISABLE);
+	if (m_DebugAlwaysShowPlatformCursor == false)
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+	}
 
 #ifdef __IPHONEOS__
 	// SDL defaults to OGL ES2, which doesn't work on old devices

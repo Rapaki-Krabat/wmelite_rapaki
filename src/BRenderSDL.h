@@ -37,7 +37,7 @@ public:
 
 	const char* GetName();
 
-	HRESULT InitRenderer(int width, int height, bool windowed, float upScalingRatioStepping, float downScalingRatioStepping, bool pixelPerfectRendering, const AnsiString& renderingHint, bool vsync);
+	HRESULT InitRenderer(int width, int height, bool windowed, float upScalingRatioStepping, float downScalingRatioStepping, bool pixelPerfectRendering, const AnsiString& renderingHint, bool vsync, bool m_DebugAlwaysShowPlatformCursor);
 	HRESULT Flip();
 	HRESULT EraseBackground();
 	HRESULT Fill(BYTE r, BYTE g, BYTE b, RECT* rect);

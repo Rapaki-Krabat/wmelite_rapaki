@@ -150,6 +150,7 @@ public:
 	CBTransitionMgr* m_TransMgr;
 	CBDebugger* GetDebugMgr();
 	void LOG(HRESULT res, LPCSTR fmt, ...);
+
 	CBRenderer* m_Renderer;
 	CBSoundMgr* m_SoundMgr;
 #if !defined(__LINUX__) && !defined(__ANDROID__) && !defined(__EXCLUDE_LIBTHEORA_PLAYER__)
@@ -190,6 +191,7 @@ public:
 	bool m_SettingsRequireSound;
 	bool m_SettingsAllowDesktopRes;
 	int m_SettingsTLMode;
+
 	char* m_SettingsGameFile;
 	CBFader* m_Fader;
 	bool m_SuppressScriptErrors;
@@ -220,6 +222,8 @@ public:
 
 	// compatibility bits
 	bool m_CompatKillMethodThreads;
+
+	bool m_DebugAlwaysShowPlatformCursor;
 	
 private:	
 	// FPS stuff

@@ -267,7 +267,7 @@ HRESULT CBRenderer::Flip()
 
 
 //////////////////////////////////////////////////////////////////////
-HRESULT CBRenderer::InitRenderer(int width, int height, bool windowed, float upScalingRatioStepping, float downScalingRatioStepping, bool pixelPerfectRendering, const AnsiString& renderingHint, bool vsync)
+HRESULT CBRenderer::InitRenderer(int width, int height, bool windowed, float upScalingRatioStepping, float downScalingRatioStepping, bool pixelPerfectRendering, const AnsiString& renderingHint, bool vsync, bool m_DebugAlwaysShowPlatformCursor)
 {
 	return E_FAIL;
 }
