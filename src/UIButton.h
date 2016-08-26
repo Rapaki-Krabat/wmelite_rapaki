@@ -37,6 +37,7 @@ public:
 	bool m_StayPressed;
 	bool m_CenterImage;
 	bool m_OneTimePress;
+	bool m_ReactsToHoverOnTouch;
 	DWORD m_OneTimePressTime;
 	DECLARE_PERSISTENT(CUIButton, CUIObject);
 	void Press();

@@ -122,6 +122,7 @@ HRESULT CAdResponseBox::CreateButtons()
 			btn->m_Parent = m_Window;
 			btn->m_SharedFonts = btn->m_SharedImages = true;
 			btn->m_SharedCursors = true;
+			btn->m_ReactsToHoverOnTouch = true;
 			// iconic
 			if(m_Responses[i]->m_Icon)
 			{
