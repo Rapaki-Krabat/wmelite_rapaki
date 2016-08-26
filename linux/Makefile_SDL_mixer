@@ -12,7 +12,7 @@ SRCDIR=../src
 
 ODIR=obj_sdl_mixer
 
-LIBS=`sdl2-config --libs` `freetype-config --libs` -lfreeimage -L. -lSDL2_mixer -lSDL2 -leffects -lecho -ldl
+LIBS=`sdl2-config --libs` `freetype-config --libs` -lfreeimage -L. -lSDL2_mixer -lSDL2 -leffects -lecho -ldl -lz
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o
 OBJC = $(patsubst %,$(ODIR)/%,$(_OBJC))
