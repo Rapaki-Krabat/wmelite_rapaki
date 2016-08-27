@@ -3,6 +3,7 @@
 
 void SetKeepDisplayOn(int keepOn)
 {
+#if 0
 	using namespace Windows::System::Display;
 
 	DisplayRequest ^ request = ref new DisplayRequest();
@@ -15,4 +16,5 @@ void SetKeepDisplayOn(int keepOn)
 	{
 		request->RequestRelease();
 	}
+#endif
 }
