@@ -139,6 +139,7 @@ TOKEN_DEF_START
 	TOKEN_DEF (PARENT_NOTIFY)
 	TOKEN_DEF (PRESSED)
 	TOKEN_DEF (PIXEL_PERFECT)
+	TOKEN_DEF (REACTS_TO_HOVER_ON_TOUCH)
 	TOKEN_DEF (EDITOR_PROPERTY)
 TOKEN_DEF_END
 //////////////////////////////////////////////////////////////////////////
@@ -180,6 +181,7 @@ HRESULT CUIButton::LoadBuffer(BYTE* Buffer, bool Complete)
 		TOKEN_TABLE (PARENT_NOTIFY)
 		TOKEN_TABLE (PRESSED)
 		TOKEN_TABLE (PIXEL_PERFECT)
+		TOKEN_TABLE (REACTS_TO_HOVER_ON_TOUCH)
 		TOKEN_TABLE (EDITOR_PROPERTY)
 	TOKEN_TABLE_END
 	
@@ -398,6 +400,10 @@ HRESULT CUIButton::LoadBuffer(BYTE* Buffer, bool Complete)
 			case TOKEN_PIXEL_PERFECT:
 				parser.ScanStr((char*)params, "%b", &m_PixelPerfect);
 			break;
+
+			case TOKEN_REACTS_TO_HOVER_ON_TOUCH:
+				parser.ScanStr((char*)params, "%b", &m_ReactsToHoverOnTouch);
+				break;
 
 			case TOKEN_EDITOR_PROPERTY:
 				ParseEditorProperty(params, false);
