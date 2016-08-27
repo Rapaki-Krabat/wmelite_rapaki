@@ -975,11 +975,18 @@ CScValue* CUIButton::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// PixelPerfect
 	//////////////////////////////////////////////////////////////////////////
-	else if(strcmp(Name, "PixelPerfect")==0){
+	else if (strcmp(Name, "PixelPerfect") == 0) {
 		m_ScValue->SetBool(m_PixelPerfect);
 		return m_ScValue;
 	}
-	
+	//////////////////////////////////////////////////////////////////////////
+	// ReactsToHoverOnTouch
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "ReactsToHoverOnTouch") == 0) {
+		m_ScValue->SetBool(m_ReactsToHoverOnTouch);
+		return m_ScValue;
+	}
+
 	else return CUIObject::ScGetProperty(Name);
 }
 
