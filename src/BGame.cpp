@@ -5217,18 +5217,32 @@ HRESULT CBGame::OnMouseMiddleUp()
 }
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBGame::OnMouseDrag()
+HRESULT CBGame::OnMouseDrag(bool isTouch)
 {
 	if (IsVideoPlaying()) return S_OK;
 
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_DRAG, MOUSE_BUTTON_LEFT);
 
-	bool Handled = m_State==GAME_RUNNING && SUCCEEDED(ApplyEvent("MouseDrag"));
-	if(!Handled)
+	if (isTouch)
 	{
-		if(m_ActiveObject!=NULL)
+		bool Handled = m_State == GAME_RUNNING && SUCCEEDED(ApplyEvent("TouchDrag"));
+		if (!Handled)
 		{
-			m_ActiveObject->ApplyEvent("MouseDrag");
+			if (m_ActiveObject != NULL)
+			{
+				m_ActiveObject->ApplyEvent("TouchDrag");
+			}
+		}
+	}
+	else
+	{
+		bool Handled = m_State == GAME_RUNNING && SUCCEEDED(ApplyEvent("MouseDrag"));
+		if (!Handled)
+		{
+			if (m_ActiveObject != NULL)
+			{
+				m_ActiveObject->ApplyEvent("MouseDrag");
+			}
 		}
 	}
 	return S_OK;

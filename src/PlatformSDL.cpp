@@ -409,8 +409,11 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		break;
 
 	case SDL_MOUSEMOTION:
+		if (Game) Game->OnMouseDrag(false);
+		break;
+
 	case SDL_FINGERMOTION:
-		if (Game) Game->OnMouseDrag();
+		if (Game) Game->OnMouseDrag(true);
 		break;
 	
 	case SDL_MOUSEWHEEL:
