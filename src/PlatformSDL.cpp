@@ -115,6 +115,7 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 	Game->m_DEBUG_ShowFPS = Game->m_Registry->ReadBool("Debug", "ShowFPS");
 
 	Game->m_DebugAlwaysShowPlatformCursor = Game->m_Registry->ReadBool("Debug", "AlwaysShowPlatformCursor", false);
+	Game->m_DebugFakeFingerMotion = Game->m_Registry->ReadBool("Debug", "FakeFingerMotion", false);
 
 	if(Game->m_Registry->ReadBool("Debug", "DisableSmartCache"))
 	{
@@ -409,6 +410,10 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		break;
 
 	case SDL_MOUSEMOTION:
+		if (Game->m_DebugFakeFingerMotion == true)
+		{
+			if (Game) Game->OnMouseDrag(true);
+		}
 		if (Game) Game->OnMouseDrag(false);
 		break;
 

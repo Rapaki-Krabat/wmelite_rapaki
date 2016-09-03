@@ -224,6 +224,7 @@ public:
 	bool m_CompatKillMethodThreads;
 
 	bool m_DebugAlwaysShowPlatformCursor;
+	bool m_DebugFakeFingerMotion;
 	
 private:	
 	// FPS stuff
