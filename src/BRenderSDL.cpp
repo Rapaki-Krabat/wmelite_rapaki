@@ -92,8 +92,12 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 	Game->LOG(0, "Current video device no=%d, max=%d (- 1).", deviceNumber, SDL_GetNumVideoDisplays());
 
-	m_ProgressIndicator = Game->m_Registry->ReadInt("Video", "ProgressIndicatorFrames", -1);
-	m_MaxProgressIndicator = m_ProgressIndicator;
+	m_ProgressIndicator         = Game->m_Registry->ReadInt("Video", "ProgressIndicatorFrames", -1);
+	m_MaxProgressIndicator      = m_ProgressIndicator;
+	m_ProgressIndicatorRed      = (BYTE) Game->m_Registry->ReadInt("Video", "ProgressIndicatorRed", 0);
+	m_ProgressIndicatorGreen    = (BYTE) Game->m_Registry->ReadInt("Video", "ProgressIndicatorGreen", 0x80);
+	m_ProgressIndicatorBlue     = (BYTE) Game->m_Registry->ReadInt("Video", "ProgressIndicatorBlue", 0);
+	m_ProgressIndicatorNumLines = Game->m_Registry->ReadInt("Video", "ProgressIndicatorNumLines", 3);
 
 	m_Width = width;
 	m_Height = height;
@@ -615,7 +619,7 @@ HRESULT CBRenderSDL::Flip()
 //			int y2 = (m_Height / 2) + 5;
 
 		int x1 = 0;
-		int y1 = m_PhysicalHeight - m_PhysicalBorderTop - m_PhysicalBorderBottom - 3;
+		int y1 = m_PhysicalHeight - m_PhysicalBorderTop - m_PhysicalBorderBottom - m_ProgressIndicatorNumLines;
 		int x2 = (m_PhysicalWidth - m_PhysicalBorderLeft - m_PhysicalBorderRight) * (((float) (m_MaxProgressIndicator - m_ProgressIndicator)) / ((float) m_MaxProgressIndicator));
 		int y2 = m_PhysicalHeight - m_PhysicalBorderTop - m_PhysicalBorderBottom - 1;
 
@@ -627,7 +631,7 @@ HRESULT CBRenderSDL::Flip()
 
 		for (int u = y1; u <= y2; u++)
 		{
-			SDL_SetRenderDrawColor(m_Renderer, 0x00, 0x80, 0x00, alpha);
+			SDL_SetRenderDrawColor(m_Renderer, m_ProgressIndicatorRed, m_ProgressIndicatorGreen, m_ProgressIndicatorBlue, alpha);
 
 			SDL_RenderDrawLine(m_Renderer, x1, u, x2, u);
 		}

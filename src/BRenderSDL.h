@@ -123,6 +123,10 @@ private:
 
 	int m_ProgressIndicator;
 	int m_MaxProgressIndicator;
+	BYTE m_ProgressIndicatorRed;
+	BYTE m_ProgressIndicatorGreen;
+	BYTE m_ProgressIndicatorBlue;
+	int m_ProgressIndicatorNumLines;
 
 	void UpdateWindowScaling();
 
