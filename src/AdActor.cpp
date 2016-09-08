@@ -1101,9 +1101,9 @@ HRESULT CAdActor::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Thi
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// BlockInterruptible
+	// BlockScriptKillable
 	//////////////////////////////////////////////////////////////////////////
-	else if(strcmp(Name, "BlockInterruptible")==0)
+	else if (strcmp(Name, "BlockScriptKillable") == 0)
 	{
 		int blockTimeMs;
 		Stack->CorrectParams(1);
@@ -1111,6 +1111,18 @@ HRESULT CAdActor::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Thi
 		m_BlockInterruptibleTime = Game->m_Timer + blockTimeMs;
 		m_Ready = false;
 		Script->WaitForExclusive(this);
+		Stack->PushNULL();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// KillBlockedScripts
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "KillBlockedScripts") == 0)
+	{
+		Stack->CorrectParams(0);
+		m_BlockInterruptibleTime = 0;
+		Script->m_Engine->ResetObject(this);
 		Stack->PushNULL();
 		return S_OK;
 	}
