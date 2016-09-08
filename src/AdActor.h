@@ -95,6 +95,7 @@ private:
 	double m_PFX;
 	double m_PFY;
 	int m_PFCount;
+	DWORD m_BlockInterruptibleTime;
 };
 
 #endif // __WmeAdActor_H__

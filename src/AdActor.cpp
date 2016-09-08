@@ -52,6 +52,8 @@ CAdActor::CAdActor(CBGame* inGame):CAdTalkHolder(inGame)
 	m_StopOnBlocked = false;
 	m_ActorIsBlocked = false;
 
+	m_BlockInterruptibleTime = 0;
+
 	SetDefaultAnimNames();
 }
 
@@ -798,7 +800,10 @@ HRESULT CAdActor::Update()
 	//Game->QuickMessageForm("%s", m_CurrentSprite->m_Filename);
 
 	UpdateBlockRegion();
-	m_Ready = (m_State == STATE_READY);
+
+	// add feature to make the actor appear busy for some time so that scripts can wait for it
+	// in an interruptible way (another script calls WaitForExclusive() thus killing all other scripts)
+	m_Ready = (m_State == STATE_READY) && (Game->m_Timer > m_BlockInterruptibleTime);
 
 	UpdatePartEmitter();
 	UpdateSpriteAttachments();
@@ -1095,6 +1100,21 @@ HRESULT CAdActor::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Thi
 		return S_OK;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// BlockInterruptible
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "BlockInterruptible")==0)
+	{
+		int blockTimeMs;
+		Stack->CorrectParams(1);
+		blockTimeMs = Stack->Pop()->GetInt();
+		m_BlockInterruptibleTime = Game->m_Timer + blockTimeMs;
+		m_Ready = false;
+		Script->WaitForExclusive(this);
+		Stack->PushNULL();
+		return S_OK;
+	}
+
 	else return CAdTalkHolder::ScCallMethod(Script, Stack, ThisStack, Name);
 }
 
@@ -1388,6 +1408,7 @@ HRESULT CAdActor::Persist(CBPersistMgr *PersistMgr)
 
 	PersistMgr->Transfer(TMEMBER(m_StopOnBlocked));
 	PersistMgr->Transfer(TMEMBER(m_ActorIsBlocked));
+	PersistMgr->Transfer(TMEMBER(m_BlockInterruptibleTime));
 
 	m_Anims.Persist(PersistMgr);
 
