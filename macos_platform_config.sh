@@ -31,7 +31,7 @@ VAR_FLAGS_MACOS_LDFLAGS='
  '
 
 VAR_FLAGS_MACOS_PLATFORM_SDK_ROOT_DIR='
-/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/ '
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/ '
 
 VAR_FLAGS_MACOS_CC='
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang '
