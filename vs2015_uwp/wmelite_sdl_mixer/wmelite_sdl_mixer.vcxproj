@@ -213,7 +213,7 @@
     <Image Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL_winrt_main_NonXAML.cpp">
+    <ClCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_merged\src\main\winrt\SDL_winrt_main_NonXAML.cpp">
       <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</CompileAsWinRT>
       <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</CompileAsWinRT>
       <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</CompileAsWinRT>
@@ -358,7 +358,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL2-WinRTResource_BlankCursor.cur" />
+    <None Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_merged\src\main\winrt\SDL2-WinRTResource_BlankCursor.cur" />
     <None Include="Assets\data.dcp">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
@@ -386,7 +386,7 @@
     <ProjectReference Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_mixer\vs2015_uwp\libsdl_mixer\libsdl_mixer.vcxproj">
       <Project>{770a54e9-1167-4543-9ee5-111327faa62d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\VisualC-WinRT\UWP_VS2015\SDL-UWP.vcxproj">
+    <ProjectReference Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_merged\VisualC-WinRT\UWP_VS2015\SDL-UWP.vcxproj">
       <Project>{89e9b32e-a86a-47c3-a948-d2b1622925ce}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\zlib-1.2.8\vs2015_uwp\zlib\zlib.vcxproj">
@@ -407,7 +407,7 @@
     <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_WinRT\src\main\winrt\SDL2-WinRTResources.rc" />
+    <ResourceCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_merged\src\main\winrt\SDL2-WinRTResources.rc" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="settings.xml">
