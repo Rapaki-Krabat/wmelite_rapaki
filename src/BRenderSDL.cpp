@@ -303,7 +303,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 #ifdef __ANDROID__
 
-	SDL_SetHint(SDL_HINT_ANDROID_USE_UI_LOW_PROFILE, "1");
+	SDL_SetHint(SDL_HINT_ANDROID_HIDE_SYSTEM_BARS, "1");
 
 #endif
 
