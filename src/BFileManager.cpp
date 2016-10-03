@@ -202,6 +202,7 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, bool Compressed, BYTE* PrefixBuffer, DWORD PrefixSize)
 {
 	int tmpRes;
+	size_t tmpFwrite;
 
 	RestoreCurrentDir();
 
@@ -227,9 +228,13 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		return E_FAIL;
 	}
 
+	// track errors during fwrite
+	tmpRes = 0;
+
 	if(PrefixBuffer && PrefixSize)
 	{
-		fwrite(PrefixBuffer, PrefixSize, 1, f);
+		tmpFwrite = fwrite(PrefixBuffer, PrefixSize, 1, f);
+		if (tmpFwrite != 1) tmpRes = 1;
 	}
 
 	if(Compressed)
@@ -250,17 +255,25 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 			if (compStatus == Z_OK)
 			{
 				DWORD magic = DCGF_MAGIC;
-				fwrite(&magic, sizeof(DWORD), 1, f);
+				tmpFwrite = fwrite(&magic, sizeof(DWORD), 1, f);
+				if (tmpFwrite != 1) tmpRes = 1;
+
 				magic = COMPRESSED_FILE_MAGIC;
-				fwrite(&magic, sizeof(DWORD), 1, f);
+				tmpFwrite = fwrite(&magic, sizeof(DWORD), 1, f);
+				if (tmpFwrite != 1) tmpRes = 1;
 
 				DWORD DataOffset = 5*sizeof(DWORD);
-				fwrite(&DataOffset, sizeof(DWORD), 1, f);
+				tmpFwrite = fwrite(&DataOffset, sizeof(DWORD), 1, f);
+				if (tmpFwrite != 1) tmpRes = 1;
 
-				fwrite(&CompSize, sizeof(DWORD), 1, f);
-				fwrite(&BufferSize, sizeof(DWORD), 1, f);
+				tmpFwrite = fwrite(&CompSize, sizeof(DWORD), 1, f);
+				if (tmpFwrite != 1) tmpRes = 1;
 
-				fwrite(CompBuffer, CompSize, 1, f);
+				tmpFwrite = fwrite(&BufferSize, sizeof(DWORD), 1, f);
+				if (tmpFwrite != 1) tmpRes = 1;
+
+				tmpFwrite = fwrite(CompBuffer, CompSize, 1, f);
+				if (tmpFwrite != 1) tmpRes = 1;
 			}
 			else
 			{
@@ -272,11 +285,22 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		}
 	}
 	
-	if(!Compressed) fwrite(Buffer, BufferSize, 1, f);
+	if (!Compressed)
+	{
+		fwrite(Buffer, BufferSize, 1, f);
+		if (tmpFwrite != 1) tmpRes = 1;
+	}
 
 	fclose(f);
 
-	Game->LOG(0, "Save(2): Wrote file %s.\n", tmpFile);
+	Game->LOG(0, "Save(2): Wrote file %s status=%d.\n", tmpFile, tmpRes);
+	
+	// rather not use a file that had write errors...
+	if (tmpRes != 0)
+	{
+		Game->LOG(0, "Error writing file '%s'.", Filename);
+		return E_FAIL;
+	}
 
 	// delete an existing .old file from a previous save operation
 	tmpRes = remove(oldFile);
