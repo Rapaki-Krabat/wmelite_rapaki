@@ -287,7 +287,7 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	
 	if (!Compressed)
 	{
-		fwrite(Buffer, BufferSize, 1, f);
+		tmpFwrite = fwrite(Buffer, BufferSize, 1, f);
 		if (tmpFwrite != 1) tmpRes = 1;
 	}
 
