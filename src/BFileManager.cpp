@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #if defined(__WIN32__) || defined(__WINRT__)
 #	include <direct.h>
+#   include <io.h>
 #else
 #	include <unistd.h>
 #endif
@@ -125,11 +126,38 @@ HRESULT CBFileManager::Cleanup()
 
 #define MAX_FILE_SIZE 10000000
 //////////////////////////////////////////////////////////////////////
-BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustExist)
+BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustExist, bool testOldFile)
 {
+	int tmpRes;
 
 	BYTE* buffer=NULL;
 	
+	// restore an older file if the current one does not exist (unsuccessful save operation)
+	if (testOldFile == true)
+	{
+#if defined(__WINRT__) || defined(__WIN32__)
+		tmpRes = _access(Filename, 0);
+#else
+		tmpRes = access(Filename, F_OK);
+#endif
+
+		Game->LOG(0, "Load(1): Check file %s existance result=%d.\n", Filename, tmpRes);
+
+		// file does not exist, so try to restore a possible older version
+		if (tmpRes != 0)
+		{
+			char *oldFile = new char[strlen(Filename) + 5];
+			strcpy(oldFile, Filename);
+			strcat(oldFile, ".old");
+
+			// rename the possible old version to the current version
+			tmpRes = rename(oldFile, Filename);
+			Game->LOG(0, "Load(2): Rename old file %s to file %s result=%d.\n", oldFile, Filename, tmpRes);
+
+			delete[] oldFile;
+		}
+	}
+
 	CBFile* File = OpenFile(Filename);
 	if(!File)
 	{
@@ -173,13 +201,24 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 //////////////////////////////////////////////////////////////////////////
 HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, bool Compressed, BYTE* PrefixBuffer, DWORD PrefixSize)
 {
+	int tmpRes;
+
 	RestoreCurrentDir();
 
 	CBUtils::CreatePath(Filename, false);
 	
+	// create strings for new and old file
 	char *tmpFile = new char[strlen(Filename) + 5];
 	strcpy(tmpFile, Filename);
 	strcat(tmpFile, ".tmp");
+
+	char *oldFile = new char[strlen(Filename) + 5];
+	strcpy(oldFile, Filename);
+	strcat(oldFile, ".old");
+
+	// delete the old .tmp file
+	tmpRes = remove(tmpFile);
+	Game->LOG(0, "Save(1): Remove .tmp file %s result=%d.\n", tmpFile, tmpRes);
 
 	FILE* f = fopen(tmpFile, "wb");
 	if(!f)
@@ -237,9 +276,22 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 	fclose(f);
 
-	rename(tmpFile, Filename);
+	Game->LOG(0, "Save(2): Wrote file %s.\n", tmpFile);
 
-	delete [] tmpFile;
+	// delete an existing .old file from a previous save operation
+	tmpRes = remove(oldFile);
+	Game->LOG(0, "Save(3): Remove .old file %s result=%d.\n", oldFile, tmpRes);
+
+	// move existing file to .old file
+	tmpRes = rename(Filename, oldFile);
+	Game->LOG(0, "Save(4): Move file %s to .old file %s result=%d.\n", Filename, oldFile, tmpRes);
+
+	// move .tmp file to final file
+	tmpRes = rename(tmpFile, Filename);
+	Game->LOG(0, "Save(5): Move .tmp file %s to file %s result=%d.\n", tmpFile, Filename, tmpRes);
+
+	delete[] tmpFile;
+	delete[] oldFile;
 
 	return S_OK;
 }

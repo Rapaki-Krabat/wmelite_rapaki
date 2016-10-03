@@ -196,7 +196,7 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 
 	m_Saving = false;
 
-	m_Buffer = Game->m_FileManager->ReadWholeFile(Filename, &m_BufferSize);
+	m_Buffer = Game->m_FileManager->ReadWholeFile(Filename, &m_BufferSize, true, true);
 	if(m_Buffer)
 	{
 		DWORD Magic;
