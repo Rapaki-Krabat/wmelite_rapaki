@@ -78,6 +78,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 		ops->file_read((char *) (&magic1), sizeof(DWORD), m_File);
 		ops->file_read((char *) (&magic2), sizeof(DWORD), m_File);
 
+		Game->LOG(0, "Load zlib(1): magic1=0x%08X magic2=0x%08X.\n", magic1, magic2);
 
 		if(magic1==DCGF_MAGIC && magic2==COMPRESSED_FILE_MAGIC) m_Compressed = true;
 
@@ -87,6 +88,8 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			ops->file_read((char *) (&DataOffset), sizeof(DWORD), m_File);
 			ops->file_read((char *) (&CompSize), sizeof(DWORD), m_File);
 			ops->file_read((char *) (&UncompSize), sizeof(DWORD), m_File);
+
+			Game->LOG(0, "Load zlib(2): DataOffset=0x%08X CompSize=0x%08X UncompSize=0x%08X.\n", DataOffset, CompSize, UncompSize);
 
 			BYTE* CompBuffer = new BYTE[CompSize];
 			if(!CompBuffer)
@@ -108,9 +111,13 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			ops->file_seek(m_File, DataOffset + m_PrefixSize, SEEK_SET);
 			ops->file_read((char *) CompBuffer, CompSize, m_File);
 
-			if(uncompress(m_Data, (uLongf*)&UncompSize, CompBuffer, CompSize)!=Z_OK)
+			int uncompStatus;
+
+			uncompStatus = uncompress(m_Data, (uLongf*)&UncompSize, CompBuffer, CompSize);
+
+			if(uncompStatus != Z_OK)
 			{
-				Game->LOG(0, "Error uncompressing file '%s'", Filename);
+				Game->LOG(0, "Error uncompressing file '%s' status=%d", Filename, uncompStatus);
 				delete [] CompBuffer;
 				Close();
 				return E_FAIL;

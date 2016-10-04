@@ -255,20 +255,25 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 			if (compStatus == Z_OK)
 			{
 				DWORD magic = DCGF_MAGIC;
+				Game->LOG(0, "Save zlib(1): magic1=0x%08X.\n", magic);
 				tmpFwrite = fwrite(&magic, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
 				magic = COMPRESSED_FILE_MAGIC;
+				Game->LOG(0, "Save zlib(2): magic2=0x%08X.\n", magic);
 				tmpFwrite = fwrite(&magic, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
 				DWORD DataOffset = 5*sizeof(DWORD);
+				Game->LOG(0, "Save zlib(3): DataOffset=0x%08X.\n", DataOffset);
 				tmpFwrite = fwrite(&DataOffset, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
+				Game->LOG(0, "Save zlib(4): CompSize=0x%08X.\n", CompSize);
 				tmpFwrite = fwrite(&CompSize, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
+				Game->LOG(0, "Save zlib(5): BufferSize=0x%08X.\n", BufferSize);
 				tmpFwrite = fwrite(&BufferSize, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
