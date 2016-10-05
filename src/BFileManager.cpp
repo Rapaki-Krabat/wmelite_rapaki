@@ -250,7 +250,17 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		{
 			int compStatus;
 
-			compStatus = compress(CompBuffer, (uLongf*)&CompSize, Buffer, BufferSize);
+			// 64-bit safety
+			uLongf SafeCompSize;
+			uLongf SafeBufferSize;
+
+			SafeCompSize   = CompSize;
+			SafeBufferSize = BufferSize;
+
+			compStatus = compress(CompBuffer, &SafeCompSize, Buffer, SafeBufferSize);
+
+			CompSize   = (DWORD) SafeCompSize;
+			BufferSize = (DWORD) SafeBufferSize;
 
 			if (compStatus == Z_OK)
 			{

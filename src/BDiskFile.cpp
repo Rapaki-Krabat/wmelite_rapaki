@@ -113,7 +113,14 @@ HRESULT CBDiskFile::Open(const char* Filename)
 
 			int uncompStatus;
 
-			uncompStatus = uncompress(m_Data, (uLongf*)&UncompSize, CompBuffer, CompSize);
+			// 64-bit safety
+			uLongf SafeCompSize;
+			uLongf SafeUncompSize;
+
+			SafeCompSize   = CompSize;
+			SafeUncompSize = UncompSize;
+
+			uncompStatus = uncompress(m_Data, &SafeUncompSize, CompBuffer, SafeCompSize);
 
 			if(uncompStatus != Z_OK)
 			{
