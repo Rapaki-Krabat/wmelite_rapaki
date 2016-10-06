@@ -141,7 +141,7 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 		tmpRes = access(Filename, F_OK);
 #endif
 
-		Game->LOG(0, "Load(1): Check file %s existance result=%d.\n", Filename, tmpRes);
+		Game->LOG(0, "Load(1): Check file %s existance result=%d.", Filename, tmpRes);
 
 		// file does not exist, so try to restore a possible older version
 		if (tmpRes != 0)
@@ -152,7 +152,7 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 
 			// rename the possible old version to the current version
 			tmpRes = rename(oldFile, Filename);
-			Game->LOG(0, "Load(2): Rename old file %s to file %s result=%d.\n", oldFile, Filename, tmpRes);
+			Game->LOG(0, "Load(2): Rename old file %s to file %s result=%d.", oldFile, Filename, tmpRes);
 
 			delete[] oldFile;
 		}
@@ -219,7 +219,7 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 	// delete the old .tmp file
 	tmpRes = remove(tmpFile);
-	Game->LOG(0, "Save(1): Remove .tmp file %s result=%d.\n", tmpFile, tmpRes);
+	Game->LOG(0, "Save(1): Remove .tmp file %s result=%d.", tmpFile, tmpRes);
 
 	FILE* f = fopen(tmpFile, "wb");
 	if(!f)
@@ -265,25 +265,20 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 			if (compStatus == Z_OK)
 			{
 				DWORD magic = DCGF_MAGIC;
-				Game->LOG(0, "Save zlib(1): magic1=0x%08X.\n", magic);
 				tmpFwrite = fwrite(&magic, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
 				magic = COMPRESSED_FILE_MAGIC;
-				Game->LOG(0, "Save zlib(2): magic2=0x%08X.\n", magic);
 				tmpFwrite = fwrite(&magic, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
 				DWORD DataOffset = 5*sizeof(DWORD);
-				Game->LOG(0, "Save zlib(3): DataOffset=0x%08X.\n", DataOffset);
 				tmpFwrite = fwrite(&DataOffset, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
-				Game->LOG(0, "Save zlib(4): CompSize=0x%08X.\n", CompSize);
 				tmpFwrite = fwrite(&CompSize, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
-				Game->LOG(0, "Save zlib(5): BufferSize=0x%08X.\n", BufferSize);
 				tmpFwrite = fwrite(&BufferSize, sizeof(DWORD), 1, f);
 				if (tmpFwrite != 1) tmpRes = 1;
 
@@ -308,7 +303,7 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 	fclose(f);
 
-	Game->LOG(0, "Save(2): Wrote file %s status=%d.\n", tmpFile, tmpRes);
+	Game->LOG(0, "Save(2): Wrote file %s status=%d.", tmpFile, tmpRes);
 	
 	// rather not use a file that had write errors...
 	if (tmpRes != 0)
@@ -319,15 +314,15 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 	// delete an existing .old file from a previous save operation
 	tmpRes = remove(oldFile);
-	Game->LOG(0, "Save(3): Remove .old file %s result=%d.\n", oldFile, tmpRes);
+	Game->LOG(0, "Save(3): Remove .old file %s result=%d.", oldFile, tmpRes);
 
 	// move existing file to .old file
 	tmpRes = rename(Filename, oldFile);
-	Game->LOG(0, "Save(4): Move file %s to .old file %s result=%d.\n", Filename, oldFile, tmpRes);
+	Game->LOG(0, "Save(4): Move file %s to .old file %s result=%d.", Filename, oldFile, tmpRes);
 
 	// move .tmp file to final file
 	tmpRes = rename(tmpFile, Filename);
-	Game->LOG(0, "Save(5): Move .tmp file %s to file %s result=%d.\n", tmpFile, Filename, tmpRes);
+	Game->LOG(0, "Save(5): Move .tmp file %s to file %s result=%d.", tmpFile, Filename, tmpRes);
 
 	delete[] tmpFile;
 	delete[] oldFile;
