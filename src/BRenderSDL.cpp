@@ -64,6 +64,8 @@ CBRenderSDL::~CBRenderSDL()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float upScalingRatioStepping, float downScalingRatioStepping, bool pixelPerfectRendering, const AnsiString& renderingHint, bool vsync, bool m_DebugAlwaysShowPlatformCursor)
 {
+	bool desktopModeRequested;
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		Game->LOG(0, "SDL init video failed???\n");
 		return E_FAIL;
@@ -150,7 +152,14 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 	Game->LOG(0, "Starting best screen dimension=%dx%d, ratio=%.2f, ratio diff=%.2f.", bestResolution.w, bestResolution.h, bestRatio, bestRatioDiff);
 
-	if (Game->m_Registry->ReadBool("Video", "DesktopResolution", false) == false)
+	desktopModeRequested = Game->m_Registry->ReadBool("Video", "DesktopResolution", false);
+
+#if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
+	// always desire fullscreen at desktop resolution for mobile platforms
+	desktopModeRequested = true;
+#endif
+
+	if (desktopModeRequested == false)
 	{
 		// now iterate over all modes of this screen and pick the best one
 		for (int i = 0; i < SDL_GetNumDisplayModes(deviceNumber); i++)
@@ -246,6 +255,9 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	// as of Novmber 2012 using SDL_WINDOW_FULLSCREEN causes iOS glitch when returning back to the app (the image is shifted several pixels up)
 	// so better don't use it on iOS
 	if (!m_Windowed) flags |= SDL_WINDOW_FULLSCREEN;
+
+	// mobile platforms would want the native/desktop/onlyonesupported resolution
+	if (desktopModeRequested == true) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 	m_Win = SDL_CreateWindow("WME Lite",
 		SDL_WINDOWPOS_UNDEFINED,
