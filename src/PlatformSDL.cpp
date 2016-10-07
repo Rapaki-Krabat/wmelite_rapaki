@@ -468,7 +468,8 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		case SDL_WINDOWEVENT_CLOSE:
 			break;
 		case SDL_WINDOWEVENT_RESIZED:
-			Game->LOG(0, "Window resize event received: x=%d y=%d.", event->window.data1, event->window.data2);
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
+			Game->LOG(0, "Window resize/sizechange event received: x=%d y=%d.", event->window.data1, event->window.data2);
 			// exclude ios for the moment because of the difficulty to query the renderer's dimensions
 #if !defined(__IPHONEOS__)
             Game->m_Renderer->WindowResized(event->window.data1, event->window.data2);
