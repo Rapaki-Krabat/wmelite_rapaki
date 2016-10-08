@@ -170,7 +170,7 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 
 	Game->Initialize3();	
 	
-#if defined(__IPHONEOS__) || defined(__ANDROID__)
+#if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
 	SDL_AddEventWatch(CBPlatform::SDLEventWatcher, NULL);
 #endif
 	
