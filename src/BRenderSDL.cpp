@@ -112,6 +112,13 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 	m_PixelPerfect = pixelPerfectRendering;
 
+	desktopModeRequested = Game->m_Registry->ReadBool("Video", "DesktopResolution", false);
+
+#if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
+	// always desire fullscreen at desktop resolution for mobile platforms
+	desktopModeRequested = true;
+#endif
+
 	// find suitable resolution
 #if defined(__IPHONEOS__) || defined(__ANDROID__)
 	// mobile devices: search all resolutions until one is found where width > height
@@ -128,8 +135,9 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 		SDL_GetDisplayMode(deviceNumber, i, &bestResolution);
 
         Game->LOG(0, "iOS / Android mode %d x=%d y=%d.", i, bestResolution.w, bestResolution.h);
-        
-		if ((bestResolution.w > bestResolution.h) && ((bestResolution.w > m_NewLogicalWidth) || (bestResolution.h > m_NewLogicalHeight)))
+
+		// use new mode if it matches, but make sure that at least one mode is picked in the end
+		if (((bestResolution.w > bestResolution.h) && ((bestResolution.w > m_NewLogicalWidth) || (bestResolution.h > m_NewLogicalHeight))) || (current == NULL))
 		{
 			m_NewLogicalWidth     = bestResolution.w;
 			m_NewLogicalHeight    = bestResolution.h;
@@ -151,13 +159,6 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	Game->LOG(0, "Game dimension=%dx%d, ratio=%.2f.", width, height, gameRatio);
 
 	Game->LOG(0, "Starting best screen dimension=%dx%d, ratio=%.2f, ratio diff=%.2f.", bestResolution.w, bestResolution.h, bestRatio, bestRatioDiff);
-
-	desktopModeRequested = Game->m_Registry->ReadBool("Video", "DesktopResolution", false);
-
-#if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
-	// always desire fullscreen at desktop resolution for mobile platforms
-	desktopModeRequested = true;
-#endif
 
 	if (desktopModeRequested == false)
 	{
@@ -201,6 +202,15 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 
 	m_NewLogicalWidth = current->w;
 	m_NewLogicalHeight = current->h;
+
+#ifdef __WINRT__
+	// always assume ccords in landscape for WinRT
+	if (m_NewLogicalWidth < m_NewLogicalHeight)
+	{
+		m_NewLogicalWidth  = current->h;
+		m_NewLogicalHeight = current->w;
+	}
+#endif
 
 #endif
 
@@ -376,9 +386,41 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 /////////////////////////////////////////////////////
 void CBRenderSDL::WindowResized(int x, int y)
 {
+#ifdef __WINRT__
+	// work-around an SDL bug where the window size is sometimes reported in portrait and sometimes in landcape mode
+	if (m_LogicalWidth > m_LogicalHeight)
+	{
+		// our initial orientation was landscape
+		if (x > y)
+		{
+			m_NewLogicalWidth  = x;
+			m_NewLogicalHeight = y;
+		}
+		else
+		{
+			m_NewLogicalWidth  = y;
+			m_NewLogicalHeight = x;
+		}
+	}
+	else
+	{
+		// our initial orientation was portrait
+		if (x < y)
+		{
+			m_NewLogicalWidth  = x;
+			m_NewLogicalHeight = y;
+		}
+		else
+		{
+			m_NewLogicalWidth  = y;
+			m_NewLogicalHeight = x;
+		}
+	}
+#else
 	// re-computation will be done next time the window is erased
 	m_NewLogicalWidth  = x;
 	m_NewLogicalHeight = y;
+#endif
 }
 
 /////////////////////////////////////////////////////
