@@ -17,7 +17,6 @@ import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsoluteLayout;
 import android.widget.RelativeLayout;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -422,7 +421,7 @@ public class SDLActivity extends Activity {
                     // Note: On some devices setting view to GONE creates a flicker in landscape.
                     // Setting the View's sizes to 0 is similar to GONE but without the flicker.
                     // The sizes will be set to useful values when the keyboard is shown again.
-                    mTextEdit.setLayoutParams(new AbsoluteLayout.LayoutParams(0, 0, 0, 0));
+                    mTextEdit.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
 
                     InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mTextEdit.getWindowToken(), 0);
