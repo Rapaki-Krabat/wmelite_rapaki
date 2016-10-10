@@ -47,6 +47,8 @@ CBSoundBuffer::CBSoundBuffer(CBGame* inGame):CBBase(inGame)
 	m_PrivateVolume = 100;
 	m_cachedVolume = 100;
 	m_cachedPosition = 0;
+	m_cachedPanning = 0.0f;
+	m_currentPanning = 0.0f;
 
 	m_Looping = false;
 	m_LoopStart = 0;
@@ -156,9 +158,11 @@ HRESULT CBSoundBuffer::LoadFromFile(const char* Filename, bool ForceReload)
 
 	if (m_File) Game->m_FileManager->CloseFile(m_File);
 	
-	m_currChannel = -1;
-	m_cachedVolume = 100;
+	m_currChannel    = -1;
+	m_cachedVolume   = 100;
 	m_cachedPosition = 0;
+	m_cachedPanning  = 0.0f;
+	m_currentPanning = 0.0f;
 
 	m_File = Game->m_FileManager->OpenFile(Filename);
 	if (!m_File)
@@ -231,8 +235,8 @@ HRESULT CBSoundBuffer::Play(bool Looping, DWORD StartSample)
 	// set volume to the last cached one (volume could have been set before channel number was known)
 	SetVolume(m_cachedVolume);
 
-	// reset panning of channel to default
-	Mix_SetPanning(m_currChannel, 127, 127);
+	// reset panning of channel to last cached value
+	InternalSetPan(m_cachedPanning);
 
 	// register reverb if channel number was not known during reverb config
 	// TODO do not double-register!!!
@@ -519,26 +523,45 @@ HRESULT CBSoundBuffer::SetLoopStart(DWORD Pos)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CBSoundBuffer::SetPan(float Pan)
 {
-	// set pan (balance) attribute
+	// set pan (balance) attribute if a channel is already allocated
 	if (((m_chunk) || (m_music)) && (m_currChannel >= 0))
 	{
-		Uint8 left;
-		Uint8 right;
-		int result;
-
-		left  = (Uint8) (127 * (1.0 - Pan));
-		right = (Uint8) (127 * (1.0 + Pan));
-
-		result = Mix_SetPanning(m_currChannel, left, right);
-
-		// Game->LOG(0, "Setting pan on channel %d to left=%d right=%d, result=%d.", m_currChannel, left, right, result);
-
-		if (m_music)
+		// do not call if panning did not change
+		if (Pan != m_currentPanning)
 		{
-			// TODO need to debug whether panning setting works on a music channel
-			// Game->LOG(0, "Setting pan on music is experimental!");
+			m_currentPanning = Pan;
+			InternalSetPan(Pan);
 		}
 	}
+	else
+	{
+		// cache the setting only, to be applied upon Play()
+		m_cachedPanning = Pan;
+	}
+
+	return S_OK;
+}
+
+//////////////////////////////////////////////////////////////////////////
+HRESULT CBSoundBuffer::InternalSetPan(float Pan)
+{
+	Uint8 left;
+	Uint8 right;
+	int result;
+
+	left  = (Uint8) (127 * (1.0 - Pan));
+	right = (Uint8) (127 * (1.0 + Pan));
+
+	result = Mix_SetPanning(m_currChannel, left, right);
+
+	// Game->LOG(0, "Setting pan on channel %d to left=%d right=%d, result=%d.", m_currChannel, left, right, result);
+
+	if (m_music)
+	{
+		// TODO need to debug whether panning setting works on a music channel
+		// Game->LOG(0, "Setting pan on music is experimental!");
+	}
+
 	return S_OK;
 }
 

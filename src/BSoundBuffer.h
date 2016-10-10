@@ -121,6 +121,8 @@ public:
 	int m_currChannel;
 	int m_cachedVolume; // remember volume when channel number is not known yet
 	DWORD m_cachedPosition;
+	float m_cachedPanning; // remember panning setting as well, sometimes it is set before a channel is allocated
+	float m_currentPanning; // make sure to not call panning function if setting didn't change
 
 	void InvalidateChannelNumber(int finished_channel);
 
@@ -138,6 +140,9 @@ public:
 
 	static void EchoEffectFunction(int chan, void *stream, int len, void *udata);
 	static void EchoEffectDoneFunction(int chan, void *udata);
+
+private:
+	HRESULT InternalSetPan(float Pan);
 
 #endif
 
