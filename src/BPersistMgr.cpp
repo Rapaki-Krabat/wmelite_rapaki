@@ -129,7 +129,12 @@ HRESULT CBPersistMgr::InitSave(char* Desc, bool quickSave)
 			Game->m_CachedThumbnail = new CBSaveThumbHelper(Game);
 			if(FAILED(Game->m_CachedThumbnail->StoreThumbnail(true)))
 			{
+				Game->LOG(0, "Persistence manager save fetch thumbnail failed!");
 				SAFE_DELETE(Game->m_CachedThumbnail);
+			}
+			else
+			{
+				Game->LOG(0, "Persistence manager save fetch thumbnail success!");
 			}
 		}
 
@@ -155,10 +160,14 @@ HRESULT CBPersistMgr::InitSave(char* Desc, bool quickSave)
 		// do not save the thumbnail in quick save mode
 		if ((Game->m_CachedThumbnail) && (!quickSave))
 		{
+			Game->LOG(0, "Persistence manager save want to store thumbnail in savegame!");
+
 			if(Game->m_CachedThumbnail->m_Thumbnail)
 			{
 				DWORD Size = 0;
 				BYTE* Buffer = Game->m_CachedThumbnail->m_Thumbnail->CreateBMPBuffer(&Size);
+
+				Game->LOG(0, "Persistence manager save stored thumbnail in savegame, size=%d!", Size);
 
 				PutDWORD(Size);
 				if(Size>0) PutBytes(Buffer, Size);
@@ -216,6 +225,7 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 			if(Magic==SAVE_MAGIC_2)
 			{
 				m_SavedVerBuild = (BYTE)GetDWORD();
+
 				char* SavedName = GetString();
 				if(SavedName==NULL || CBPlatform::stricmp(SavedName, Game->m_Name)!=0)
 				{
@@ -225,6 +235,9 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 
 				// load thumbnail
 				m_ThumbnailDataSize = GetDWORD();
+
+				Game->LOG(0, "Persistence manager load thumbnail size=%d.", m_ThumbnailDataSize);
+
 				if(m_ThumbnailDataSize>0)
 				{
 					m_ThumbnailData = new BYTE[m_ThumbnailDataSize];
