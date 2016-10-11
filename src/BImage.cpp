@@ -76,16 +76,12 @@ BYTE* CBImage::CreateBMPBuffer(DWORD* BufferSize)
 {
 	if (!m_Bitmap) return NULL;
 
-	Game->LOG(0, "Create BMP buffer from image...");
-
 	FIMEMORY* fiMem = FreeImage_OpenMemory();
 	FreeImage_SaveToMemory(FIF_PNG, m_Bitmap, fiMem);
 	DWORD size;
 	BYTE* data;
 	FreeImage_AcquireMemory(fiMem, &data, &size);
 
-	Game->LOG(0, "Acquire BMP buffer from image size=%d", size);
-	
 	BYTE* Buffer = new BYTE[size];
 	memcpy(Buffer, data, size);
 

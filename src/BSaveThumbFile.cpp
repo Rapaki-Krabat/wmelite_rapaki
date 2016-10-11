@@ -68,15 +68,12 @@ HRESULT CBSaveThumbFile::Open(const char* Filename)
 	char SlotFilename[MAX_PATH+1];
 	Game->GetSaveSlotFilename(Slot, SlotFilename);
 
-	Game->LOG(0, "Trying to read thumbnail image from file %s.", SlotFilename);
-
 	CBPersistMgr* pm = new CBPersistMgr(Game);
 	if(!pm) return E_FAIL;
 
 	Game->m_DEBUG_AbsolutePathWarning = false;
 	if(FAILED(pm->InitLoad(SlotFilename)))
 	{
-		Game->LOG(0, "Reading thumbnail failed!");
 		Game->m_DEBUG_AbsolutePathWarning = true;
 		delete pm;
 		return E_FAIL;
@@ -86,14 +83,12 @@ HRESULT CBSaveThumbFile::Open(const char* Filename)
 	HRESULT res;
 
 	if(pm->m_ThumbnailDataSize!=0){
-		Game->LOG(0, "Thumbnail found!");
 		m_Data = new BYTE[pm->m_ThumbnailDataSize];
 		memcpy(m_Data, pm->m_ThumbnailData, pm->m_ThumbnailDataSize);
 		m_Size = pm->m_ThumbnailDataSize;
 		res = S_OK;
 	}
 	else {
-		Game->LOG(0, "Thumbnail NOT found!");
 		res = E_FAIL;
 	}
 	delete pm;	

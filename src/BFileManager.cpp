@@ -842,7 +842,6 @@ CBFile* CBFileManager::OpenFileRaw(const char *Filename)
 
 	if(CBPlatform::strnicmp(Filename, "savegame:", 9)==0)
 	{
-		Game->LOG(0, "Trying to open savegame %s", Filename);
 		CBSaveThumbFile* SaveThumbFile = new CBSaveThumbFile(Game);
 		if(SUCCEEDED(SaveThumbFile->Open(Filename))) return SaveThumbFile;
 		else
