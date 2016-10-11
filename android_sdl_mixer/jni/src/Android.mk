@@ -98,7 +98,7 @@ $(LOCAL_PATH)/../../../src/
 
 LOCAL_CFLAGS += -Wcast-align
 
-LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-write-strings -Wno-conversion-null -DUSE_SDL_MIXER -Wcast-align
+LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-write-strings -Wno-conversion-null -DUSE_SDL_MIXER -DFREEIMAGE_LITE_BUILD -DFREEIMAGE_NOT_SO_LITE_BUILD -Wcast-align
 
 # LOCAL_ARM_MODE := arm
 
