@@ -2145,7 +2145,7 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 		Stack->CorrectParams(0);
 		SAFE_DELETE(m_CachedThumbnail);
 		m_CachedThumbnail = new CBSaveThumbHelper(this);
-		if(FAILED(m_CachedThumbnail->StoreThumbnail()))
+		if(FAILED(m_CachedThumbnail->StoreThumbnail(true)))
 		{
 			SAFE_DELETE(m_CachedThumbnail);
 			Stack->PushBool(false);
