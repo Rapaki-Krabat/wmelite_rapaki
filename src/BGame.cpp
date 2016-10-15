@@ -50,6 +50,7 @@ THE SOFTWARE.
 
 #ifdef __WINRT__
 #   include "WinRTDetectPointers.h"
+#   include "WinRTVersionInfo.h"
 #endif
 
 //////////////////////////////////////////////////////////////////////
@@ -5472,6 +5473,10 @@ AnsiString CBGame::GetPlatformIdentifier() const
 #elif __ANDROID__
 	char id[1024];
 	android_getPlatformIdentifierString(id, 1024);
+	return AnsiString(id);
+#elif __WINRT__
+	char id[1024];
+	WinRTVersionInfo(id, 1024);
 	return AnsiString(id);
 #else
 	return "computer";
