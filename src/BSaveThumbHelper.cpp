@@ -50,9 +50,17 @@ HRESULT CBSaveThumbHelper::StoreThumbnail(bool DoFlip)
 		{
 			// when using opengl on windows it seems to be necessary to do this twice
 			// works normally for direct3d
+			// seems that we need to render as many times as graphics are buffered internally
+			// so that we will later read a proper screenshot
 			Game->DisplayContent(false);
 			Game->m_Renderer->Flip();
 			
+			Game->DisplayContent(false);
+			Game->m_Renderer->Flip();
+
+			Game->DisplayContent(false);
+			Game->m_Renderer->Flip();
+
 			Game->DisplayContent(false);
 			Game->m_Renderer->Flip();
 		}
