@@ -2878,9 +2878,18 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// DeviceType (RO)
 	//////////////////////////////////////////////////////////////////////////
-	else if(strcmp(Name, "PlatformIdentifier")==0)
+	else if (strcmp(Name, "PlatformIdentifier") == 0)
 	{
 		m_ScValue->SetString(GetPlatformIdentifier().c_str());
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// AppVersionString (RO)
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "AppVersionString") == 0)
+	{
+		m_ScValue->SetString(GetAppVersionString().c_str());
 		return m_ScValue;
 	}
 
@@ -5488,6 +5497,22 @@ AnsiString CBGame::GetPlatformIdentifier() const
 #elif __WINRT__
 	char id[1024];
 	WinRTVersionInfo(id, 1024);
+	return AnsiString(id);
+#else
+	return "computer";
+#endif
+}
+
+//////////////////////////////////////////////////////////////////////////
+AnsiString CBGame::GetAppVersionString() const
+{
+#ifdef __IPHONEOS__
+	return AnsiString("TBD");
+#elif __ANDROID__
+	return AnsiString("TBD");
+#elif __WINRT__
+	char id[1024];
+	WinRTAppInfo(id, 1024);
 	return AnsiString(id);
 #else
 	return "computer";

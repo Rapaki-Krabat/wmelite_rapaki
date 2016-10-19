@@ -351,6 +351,7 @@ public:
 	bool m_ConstrainedMemory;
 	AnsiString GetDeviceType() const;
 	AnsiString GetPlatformIdentifier() const;
+	AnsiString GetAppVersionString() const;
 
 
 private:	

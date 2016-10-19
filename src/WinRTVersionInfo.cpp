@@ -6,10 +6,10 @@
 
 #include <string.h>
 
-using namespace Windows::System::Profile;
-
 extern "C" void WinRTVersionInfo(char *info, int maxlen)
 {
+	using namespace Windows::System::Profile;
+
 	size_t currLen = 0;
 	stdext::cvt::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
 
@@ -50,4 +50,34 @@ extern "C" void WinRTVersionInfo(char *info, int maxlen)
 	}
 
 	//	SDL_Log("%s\n", info);
+}
+
+extern "C" void WinRTAppInfo(char *info, int maxlen)
+{
+	using namespace Windows::ApplicationModel;
+
+	size_t currLen = 0;
+	stdext::cvt::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
+
+	Package^ package = Windows::ApplicationModel::Package::Current;
+	PackageId^ packageId = package->Id;
+	PackageVersion version = packageId->Version;
+	
+	Platform::String^ output = version.Major.ToString() + "." 
+		+ version.Minor.ToString() + "." 
+		+ version.Build.ToString() + "." 
+		+ version.Revision.ToString();
+
+	std::string appInfoUtf8 = convert.to_bytes(output->Data());
+
+	const char* appInfoCString = appInfoUtf8.c_str();
+
+	info[0] = 0;
+
+	currLen = strlen(appInfoCString);
+
+	if (currLen < (maxlen - 1))
+	{
+		strcat(info, appInfoCString);
+	}
 }
