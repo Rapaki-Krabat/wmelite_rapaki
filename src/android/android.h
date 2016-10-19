@@ -36,6 +36,8 @@ int android_advertisementShow(char *key, int number);
 
 void android_getPlatformIdentifierString(char *buffer, int length);
 
+void android_getAppVersionString(char *buffer, int length);
+
 #ifdef __cplusplus
 }
 #endif

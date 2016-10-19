@@ -5511,7 +5511,9 @@ AnsiString CBGame::GetAppVersionString() const
 	IOS_GetAppVersionString(id);
 	return AnsiString(id);
 #elif __ANDROID__
-	return AnsiString("TBD");
+	char id[1024];
+	android_getAppVersionString(id, 1024);
+	return AnsiString(id);
 #elif __WINRT__
 	char id[1024];
 	WinRTAppInfo(id, 1024);

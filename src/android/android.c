@@ -390,6 +390,32 @@ void android_getPlatformIdentifierString(char *buffer, int length)
 	(*env)->DeleteLocalRef(env, str);
 }
 
+void android_getAppVersionString(char *buffer, int length)
+{
+	const char *tmp;
+
+	// get the proper jni env from SDL
+	// JNIEnv *env = Android_JNI_GetEnv();
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getAppVersionString", "()Ljava/lang/String;");
+	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
+
+	tmp = (*env)->GetStringUTFChars(env, str, NULL);
+
+	if (strnlen(tmp, length) < length) {
+		strncpy(buffer, tmp, length);
+	} else {
+		buffer[0] = 0;
+	}
+
+	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getAppVersionString() returns %s", buffer);
+
+	(*env)->ReleaseStringUTFChars(env, str, tmp);
+	(*env)->DeleteLocalRef(env, cls);
+	(*env)->DeleteLocalRef(env, str);
+}
+
 // already supported by SDL itself
 void SetKeepDisplayOn(int keepOn)
 {
