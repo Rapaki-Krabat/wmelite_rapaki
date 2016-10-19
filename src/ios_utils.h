@@ -35,6 +35,7 @@ extern "C" {
 	void IOS_ShowStatusLine(int show);
 	void IOS_GetDeviceType(char* buffer);
 	void IOS_GetPlatformIdentifierString(char *buffer);
+	void IOS_GetAppVersionString(char *buffer);
 
 #ifdef __cplusplus
 }

@@ -80,6 +80,20 @@ void IOS_GetPlatformIdentifierString(char *buffer)
 	strcat(buffer, utf8path2);
 }
 
+void IOS_GetAppVersionString(char *buffer)
+{
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *majorVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
+
+    const char* utf8major = [majorVersion UTF8String];
+    const char* utf8minor = [minorVersion UTF8String];
+    
+	strcpy(buffer, utf8major);
+	strcat(buffer, ":");
+	strcat(buffer, utf8minor);
+}
+
 void SetKeepDisplayOn(int keepOn)
 {
     if (keepOn != 0)

@@ -5507,7 +5507,9 @@ AnsiString CBGame::GetPlatformIdentifier() const
 AnsiString CBGame::GetAppVersionString() const
 {
 #ifdef __IPHONEOS__
-	return AnsiString("TBD");
+	char id[1024];
+	IOS_GetAppVersionString(id);
+	return AnsiString(id);
 #elif __ANDROID__
 	return AnsiString("TBD");
 #elif __WINRT__
