@@ -550,7 +550,7 @@ HRESULT CBFrame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 	//////////////////////////////////////////////////////////////////////////
 	// GetEvent
 	//////////////////////////////////////////////////////////////////////////
-	else if(strcmp(Name, "GetSubframe")==0)
+	else if(strcmp(Name, "GetEvent")==0)
 	{
 		Stack->CorrectParams(1);
 		int Index = Stack->Pop()->GetInt(-1);
