@@ -417,6 +417,11 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		if (Game) Game->OnMouseDrag(false);
 		break;
 
+#ifdef __WINRT__
+	// make sure all touch events are somehow forwarded, not just dragging
+	case SDL_FINGERDOWN:
+	case SDL_FINGERUP:
+#endif
 	case SDL_FINGERMOTION:
 		if (Game) Game->OnMouseDrag(true);
 		break;
