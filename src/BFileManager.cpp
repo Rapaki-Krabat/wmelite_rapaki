@@ -437,6 +437,12 @@ HRESULT CBFileManager::InitPaths()
 	char androidPath[1024];
 	android_getGamePackagePath(androidPath, 1024);
 	AddPath(PATH_PACKAGE, androidPath);
+	android_getGamePackagePatchPath(androidPath, 1024);
+	if (strnlen(androidPath, 1024) > 0)
+	{
+		// patch path might not exist
+		AddPath(PATH_PACKAGE, androidPath);
+	}
 	android_getGameFilePath(androidPath, 1024);
 	AddPath(PATH_SINGLE, androidPath);
 #endif

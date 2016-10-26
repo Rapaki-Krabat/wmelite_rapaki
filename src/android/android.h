@@ -18,6 +18,8 @@ void android_getDeviceTypeHint(char *buffer, int length);
 
 void android_getGamePackagePath(char *buffer, int length);
 
+void android_getGamePackagePatchPath(char *buffer, int length);
+
 void android_getGameFilePath(char *buffer, int length);
 
 void android_getFontPath(char *buffer, int length);

@@ -139,6 +139,40 @@ void android_getGamePackagePath(char *buffer, int length)
 	(*env)->DeleteLocalRef(env, str);
 }
 
+void android_getGamePackagePatchPath(char *buffer, int length)
+{
+	const char *tmp;
+
+	// get the proper jni env from SDL
+	// JNIEnv *env = Android_JNI_GetEnv();
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+
+	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() env=%s", (env == NULL) ? "NULL" : "OK");
+
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getGamePackagePatchPath", "()Ljava/lang/String;");
+
+	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() callbackid=%d", callbackID);
+
+	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
+
+	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() jstring=%s", (str == NULL) ? "NULL" : "OK");
+
+	tmp = (*env)->GetStringUTFChars(env, str, NULL);
+
+	if (strnlen(tmp, length) < length) {
+		strncpy(buffer, tmp, length);
+	} else {
+		buffer[0] = 0;
+	}
+
+	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePatchPath() returns %s", buffer);
+
+	(*env)->ReleaseStringUTFChars(env, str, tmp);
+	(*env)->DeleteLocalRef(env, cls);
+	(*env)->DeleteLocalRef(env, str);
+}
+
 void android_getGameFilePath(char *buffer, int length)
 {
 	const char *tmp;
