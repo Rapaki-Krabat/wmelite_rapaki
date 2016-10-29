@@ -5264,6 +5264,7 @@ HRESULT CBGame::OnMouseDrag(bool isTouch)
 
 	if (isTouch)
 	{
+		ApplyEvent("TouchDragDetect");
 		bool Handled = m_State == GAME_RUNNING && SUCCEEDED(ApplyEvent("TouchDrag"));
 		if (!Handled)
 		{
@@ -5275,6 +5276,7 @@ HRESULT CBGame::OnMouseDrag(bool isTouch)
 	}
 	else
 	{
+		ApplyEvent("MouseDragDetect");
 		bool Handled = m_State == GAME_RUNNING && SUCCEEDED(ApplyEvent("MouseDrag"));
 		if (!Handled)
 		{
