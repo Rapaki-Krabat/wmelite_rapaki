@@ -4548,6 +4548,9 @@ bool CBGame::HandleKeypress(SDL_Event* event)
 bool CBGame::HandleMouseWheel(int Delta)
 {
 	bool Handled = false;
+
+	if (m_State == GAME_RUNNING && !m_Interactive) return Handled;
+
 	if(m_FocusedWindow)
 	{
 		Handled = Game->m_FocusedWindow->HandleMouseWheel(Delta);
@@ -5101,6 +5104,8 @@ HRESULT CBGame::OnMouseLeftDown()
 		return S_OK;
 	}
 
+	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
+
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_CLICK, MOUSE_BUTTON_LEFT);
 
 	bool Handled = m_State==GAME_RUNNING && SUCCEEDED(ApplyEvent("LeftClick"));
@@ -5123,6 +5128,8 @@ HRESULT CBGame::OnMouseLeftDown()
 HRESULT CBGame::OnMouseLeftUp()
 {
 	if (IsVideoPlaying()) return S_OK;
+
+	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
 
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_RELEASE, MOUSE_BUTTON_LEFT);
 
@@ -5186,6 +5193,8 @@ HRESULT CBGame::OnMouseRightDown()
 {
 	if (IsVideoPlaying()) return S_OK;
 
+	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
+
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_CLICK, MOUSE_BUTTON_RIGHT);
 
 	bool Handled = m_State==GAME_RUNNING && SUCCEEDED(ApplyEvent("RightClick"));
@@ -5203,6 +5212,8 @@ HRESULT CBGame::OnMouseRightDown()
 HRESULT CBGame::OnMouseRightUp()
 {
 	if (IsVideoPlaying()) return S_OK;
+
+	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
 
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_RELEASE, MOUSE_BUTTON_RIGHT);
 
@@ -5242,6 +5253,8 @@ HRESULT CBGame::OnMouseMiddleUp()
 {
 	if (IsVideoPlaying()) return S_OK;
 
+	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
+
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_RELEASE, MOUSE_BUTTON_MIDDLE);
 
 	bool Handled = m_State==GAME_RUNNING && SUCCEEDED(ApplyEvent("MiddleRelease"));
@@ -5260,11 +5273,14 @@ HRESULT CBGame::OnMouseDrag(bool isTouch)
 {
 	if (IsVideoPlaying()) return S_OK;
 
-	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_DRAG, MOUSE_BUTTON_LEFT);
-
 	if (isTouch)
 	{
 		ApplyEvent("TouchDragDetect");
+
+		if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
+
+		if (m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_DRAG, MOUSE_BUTTON_LEFT);
+
 		bool Handled = m_State == GAME_RUNNING && SUCCEEDED(ApplyEvent("TouchDrag"));
 		if (!Handled)
 		{
@@ -5277,6 +5293,11 @@ HRESULT CBGame::OnMouseDrag(bool isTouch)
 	else
 	{
 		ApplyEvent("MouseDragDetect");
+
+		if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
+
+		if (m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_DRAG, MOUSE_BUTTON_LEFT);
+
 		bool Handled = m_State == GAME_RUNNING && SUCCEEDED(ApplyEvent("MouseDrag"));
 		if (!Handled)
 		{

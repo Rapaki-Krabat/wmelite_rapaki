@@ -2128,6 +2128,8 @@ HRESULT CAdGame::OnMouseLeftUp()
 {
 	if (IsVideoPlaying()) return S_OK;
 
+	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
+
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_RELEASE, MOUSE_BUTTON_LEFT);
 
 	CBPlatform::ReleaseCapture();
@@ -2217,6 +2219,8 @@ HRESULT CAdGame::OnMouseRightDown()
 HRESULT CAdGame::OnMouseRightUp()
 {
 	if (IsVideoPlaying()) return S_OK;
+
+	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
 
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_RELEASE, MOUSE_BUTTON_RIGHT);
 
