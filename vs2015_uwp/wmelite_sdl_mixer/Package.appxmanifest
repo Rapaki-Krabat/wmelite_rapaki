@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="16544Rapaki.WMEliteengine" Publisher="CN=46FBFAA4-0B6D-4CC0-BA72-6597F2B516B5" Version="1.1.6.0" />
+  <Identity Name="16544Rapaki.WMEliteengine" Publisher="CN=46FBFAA4-0B6D-4CC0-BA72-6597F2B516B5" Version="1.1.9.0" />
   <mp:PhoneIdentity PhoneProductId="3ec3f614-7d3f-4166-bb47-2fd2eec13df3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>WMElite engine</DisplayName>
