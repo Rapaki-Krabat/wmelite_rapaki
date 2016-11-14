@@ -59,6 +59,12 @@ public class WMELiteFunctions {
 		return "/mnt/sdcard/";
 		// return "/mnt/sdcard/demo/";
 	}
+	
+	// used to supply separate path to mounted OBB patch file if desired
+	public String getGamePackagePatchPath() {
+	    // change to fit your needs, maybe to point to the expansion files downloaded from Google play
+	    return "/mnt/sdcard/";
+	}
 
 	public String getGameFilePath() {
 		// change to fit your needs, maybe to point to the expansion files downloaded from Google play
