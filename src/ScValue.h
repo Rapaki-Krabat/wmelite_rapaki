@@ -29,7 +29,11 @@ THE SOFTWARE.
 
 #include "BBase.h"
 #include "dcscript.h"	// Added by ClassView
-#include <map>
+#ifdef __WINRT__
+	#include <unordered_map>
+#else
+	#include <map>
+#endif
 #include <string>
 #include "wme_debugger.h"
 
@@ -93,8 +97,13 @@ public:
 	CScValue(CBGame* inGame, double Val);
 	CScValue(CBGame* inGame, const char* Val);
 	virtual ~CScValue();
+#ifdef __WINRT__
+	unordered_map<string, CScValue*> m_ValObject;
+	unordered_map<string, CScValue*>::iterator m_ValIter;
+#else
 	map<string, CScValue*> m_ValObject;
 	map<string, CScValue*>::iterator m_ValIter;
+#endif
 
 	bool SetProperty(const char* PropName, int Value);
 	bool SetProperty(const char* PropName, const char* Value);

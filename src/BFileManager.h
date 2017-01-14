@@ -26,8 +26,11 @@ THE SOFTWARE.
 #ifndef __WmeBFileManager_H__
 #define __WmeBFileManager_H__
 
-
-#include <map>
+#ifdef __WINRT__
+	#include <unordered_map>
+#else
+	#include <map>
+#endif
 #include "coll_templ.h"
 #include "FileOperations.h"
 
@@ -63,10 +66,18 @@ public:
 	CBArray<CBPackage*, CBPackage*> m_Packages;
 	CBArray<CBFile*, CBFile*> m_OpenFiles;
 
+#ifdef __WINRT__
+	unordered_map<string, CBFileEntry*> m_Files;
+#else
 	map<string, CBFileEntry*> m_Files;
+#endif
 private:
 	HRESULT RegisterPackage(const AnsiString& path, const AnsiString& name, bool searchSignature = false);
+#ifdef __WINRT__
+	unordered_map<string, CBFileEntry*>::iterator m_FilesIter;
+#else
 	map<string, CBFileEntry*>::iterator m_FilesIter;
+#endif
 	bool IsValidPackage(const AnsiString& fileName) const;
 	
 };
