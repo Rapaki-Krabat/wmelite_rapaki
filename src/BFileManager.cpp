@@ -611,6 +611,11 @@ HRESULT CBFileManager::RegisterPackage(const AnsiString& path, const AnsiString&
 		DWORD NumFiles;
 		ops->file_read((char *) (&NumFiles), sizeof(DWORD), f);
 
+#ifdef __WINRT__
+		// might help to index files in the package faster
+		m_Files.reserve(m_Files.size() + NumFiles);
+#endif
+
 		for(int j=0; j<NumFiles; j++)
 		{
 			char* Name;
