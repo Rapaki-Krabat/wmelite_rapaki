@@ -263,6 +263,8 @@ CBGame::CBGame():CBObject(this)
 
 	m_ButtonHoverOnTouchOnly = false;
 
+	m_MouseEntryLeaveTouchQuirk = false;
+
 #ifdef __IPHONEOS__
 	m_TouchInterface = true;
 	m_ConstrainedMemory = true; // TODO differentiate old and new iOS devices
@@ -3003,7 +3005,14 @@ CScValue* CBGame::ScGetProperty(char *Name)
 		return m_ScValue;
 	}
 
-
+	//////////////////////////////////////////////////////////////////////////
+	// MouseEntryLeaveTouchQuirk
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "MouseEntryLeaveTouchQuirk") == 0)
+	{
+		m_ScValue->SetBool(m_MouseEntryLeaveTouchQuirk);
+		return m_ScValue;
+	}
 
 	else return CBObject::ScGetProperty(Name);
 }
@@ -3310,6 +3319,15 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 	else if(strcmp(Name, "ButtonHoverOnTouchOnly")==0)
 	{
 		m_ButtonHoverOnTouchOnly = Value->GetBool();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// MouseEntryLeaveTouchQuirk
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "MouseEntryLeaveTouchQuirk") == 0)
+	{
+		m_MouseEntryLeaveTouchQuirk = Value->GetBool();
 		return S_OK;
 	}
 
@@ -4392,6 +4410,17 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 	else
 		m_Store = NULL;
 
+	// version check for the "mouseentry/mouseleave" touch quirk
+	if (PersistMgr->CheckVersion(1, 2, 0))
+	{
+		PersistMgr->Transfer(TMEMBER(m_MouseEntryLeaveTouchQuirk));
+	}
+	else
+	{
+		m_MouseEntryLeaveTouchQuirk = false;
+	}
+
+
 	if (!PersistMgr->m_Saving) m_Quitting = false;
 
 #if defined(__ANDROID__) || defined(__IPHONEOS__) || defined(__WINRT__)
@@ -4729,12 +4758,12 @@ HRESULT CBGame::SetActiveObject(CBObject *Obj)
 
 	if(Obj==m_ActiveObject) return S_OK;
 
-	if(m_ActiveObject) m_ActiveObject->ApplyEvent("MouseLeave");
+	if (m_ActiveObject) m_ActiveObject->ApplyEvent("MouseLeave");
 	//if(ValidObject(m_ActiveObject)) m_ActiveObject->ApplyEvent("MouseLeave");
 	m_ActiveObject = Obj;
 	if(m_ActiveObject)
 	{
-		m_ActiveObject->ApplyEvent("MouseEntry");
+			m_ActiveObject->ApplyEvent("MouseEntry");
 	}
 
 	m_LastActiveObject = m_ActiveObject;

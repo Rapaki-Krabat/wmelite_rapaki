@@ -223,6 +223,8 @@ public:
 	// compatibility bits
 	bool m_CompatKillMethodThreads;
 
+	bool m_MouseEntryLeaveTouchQuirk;
+
 	bool m_DebugAlwaysShowPlatformCursor;
 	bool m_DebugFakeFingerMotion;
 	

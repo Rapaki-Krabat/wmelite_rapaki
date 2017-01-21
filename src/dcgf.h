@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 //////////////////////////////////////////////////////////////////////////
 #define DCGF_VER_MAJOR 1
-#define DCGF_VER_MINOR 1
+#define DCGF_VER_MINOR 2
 #define DCGF_VER_BUILD 0
 #define DCGF_VER_SUFFIX "rapaki"
 #define DCGF_VER_BETA true
