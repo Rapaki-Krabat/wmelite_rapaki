@@ -4748,7 +4748,7 @@ HRESULT CBGame::EmptySaveSlot(int Slot)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBGame::SetActiveObject(CBObject *Obj)
+HRESULT CBGame::SetActiveObject(CBObject *Obj, bool touchEntry, bool touchDrag, bool touchRelease)
 {
 	// not-active when game is frozen
 	if(Obj && !Game->m_Interactive && !Obj->m_NonIntMouseEvents)
@@ -4756,17 +4756,41 @@ HRESULT CBGame::SetActiveObject(CBObject *Obj)
 		Obj = NULL;
 	}
 
-	if(Obj==m_ActiveObject) return S_OK;
-
-	if (m_ActiveObject) m_ActiveObject->ApplyEvent("MouseLeave");
-	//if(ValidObject(m_ActiveObject)) m_ActiveObject->ApplyEvent("MouseLeave");
-	m_ActiveObject = Obj;
-	if(m_ActiveObject)
+	if (Obj != m_ActiveObject)
 	{
-			m_ActiveObject->ApplyEvent("MouseEntry");
-	}
+		// object changed, so handle entry/exit if allowed
 
-	m_LastActiveObject = m_ActiveObject;
+		if ((m_MouseEntryLeaveTouchQuirk == false) || (touchDrag == true) || (touchRelease == true))
+		{
+			// generate the leave event when not touch, or when dragging/fingerup in touch mode
+			if (m_ActiveObject) m_ActiveObject->ApplyEvent("MouseLeave");
+		}
+
+		m_ActiveObject = Obj;
+
+		if ((m_MouseEntryLeaveTouchQuirk == false) || (touchDrag == true) || (touchEntry == true))
+		{
+			// generate the enter event when not in touch, or when fingerdown/dragging in touch mode
+			if (m_ActiveObject) m_ActiveObject->ApplyEvent("MouseEntry");
+		}
+
+		m_LastActiveObject = m_ActiveObject;
+	}
+	else
+	{
+		// if the active object is still the same one, only handle touch/release
+		if (m_MouseEntryLeaveTouchQuirk == true)
+		{
+			if (touchRelease == true)
+			{
+				if (m_ActiveObject) m_ActiveObject->ApplyEvent("MouseLeave");
+			}
+			if (touchEntry == true)
+			{
+				if (m_ActiveObject) m_ActiveObject->ApplyEvent("MouseEntry");
+			}
+		}
+	}
 
 	return S_OK;
 }
@@ -5103,7 +5127,7 @@ HRESULT CBGame::OnActivate(bool Activate, bool RefreshMouse)
 	{
 		POINT p;
 		GetMousePos(&p);
-		SetActiveObject(m_Renderer->GetObjectAt(p.x, p.y));
+		SetActiveObject(m_Renderer->GetObjectAt(p.x, p.y), false, false, false);
 	}
 
 	if(Activate)

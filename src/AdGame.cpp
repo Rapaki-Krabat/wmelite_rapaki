@@ -1844,7 +1844,7 @@ HRESULT CAdGame::DisplayContent(bool Update, bool DisplayAll)
 			// display normal windows
 			DisplayWindows(false);
 		
-			SetActiveObject(Game->m_Renderer->GetObjectAt(p.x, p.y));
+			SetActiveObject(Game->m_Renderer->GetObjectAt(p.x, p.y), false, false, false);
 		
 			// textual info
 			DisplaySentences(m_State==GAME_FROZEN);

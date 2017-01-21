@@ -355,7 +355,7 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
 			POINT p;
 			GetCursorPos(&p);			
-			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y));
+			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), true, false, false);
 			
 			if (Game->m_ActiveObject != NULL && strcmp(Game->m_ActiveObject->GetClassName(), "CUIButton") == 0)
 			{
@@ -407,10 +407,29 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			Game->m_ActiveObject = NULL;
 		}
 #endif
+
+#if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
+		{
+			CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
+			POINT p;
+			GetCursorPos(&p);
+			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), false, false, true);
+		}
+#endif
 		break;
 
 	case SDL_MOUSEMOTION:
-		if (Game->m_DebugFakeFingerMotion == true)
+
+#if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
+	{
+		CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
+		POINT p;
+		GetCursorPos(&p);
+		Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), false, true, false);
+	}
+#endif
+
+	if (Game->m_DebugFakeFingerMotion == true)
 		{
 			if (Game) Game->OnMouseDrag(true);
 		}

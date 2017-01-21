@@ -336,7 +336,7 @@ public:
 	HRESULT GetCurrentViewportRect(RECT* Rect, bool* Custom=NULL);
 	HRESULT PopViewport();
 	HRESULT PushViewport(CBViewport* Viewport);
-	HRESULT SetActiveObject(CBObject* Obj);	
+	HRESULT SetActiveObject(CBObject* Obj, bool touchEntry, bool touchDrag, bool touchRelease);	
 
 	CBSprite* m_LastCursor;
 	HRESULT DrawCursor(CBSprite* Cursor);
