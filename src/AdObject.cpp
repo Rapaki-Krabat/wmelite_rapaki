@@ -26,7 +26,6 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "AdObject.h"
 
-
 IMPLEMENT_PERSISTENT(CAdObject, false);
 
 //////////////////////////////////////////////////////////////////////////
@@ -41,6 +40,7 @@ CAdObject::CAdObject(CBGame* inGame):CBObject(inGame)
 	m_CurrentSprite = NULL;
 	m_AnimSprite = NULL;
 	m_TempSprite2 = NULL;
+	m_DetectCorruptSprite = new CBSprite(Game, this);
 
 	m_Font = NULL;
 
@@ -85,6 +85,7 @@ CAdObject::~CAdObject()
 	SAFE_DELETE(m_AnimSprite);
 	SAFE_DELETE(m_Sentence);
 	SAFE_DELETE_ARRAY(m_ForcedTalkAnimName);
+	SAFE_DELETE(m_DetectCorruptSprite);
 
 	SAFE_DELETE(m_BlockRegion);
 	SAFE_DELETE(m_WptGroup);
@@ -124,6 +125,13 @@ CAdObject::~CAdObject()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdObject::PlayAnim(char *Filename)
 {
+	// the anim sprite will be deleted, but the current sprite ptr might still reference it
+	// try to detect that it is referenced (use after free)
+	if (m_CurrentSprite == m_AnimSprite)
+	{
+		m_CurrentSprite = m_DetectCorruptSprite;
+	}
+
 	SAFE_DELETE(m_AnimSprite);
 	m_AnimSprite = new CBSprite(Game, this);
 	if(!m_AnimSprite)
@@ -834,6 +842,13 @@ int CAdObject::GetHeight()
 {
 	if(!m_CurrentSprite) return 0;
 	else{
+
+		if (m_CurrentSprite == m_DetectCorruptSprite)
+		{
+			Game->QuickMessage("Trying to dereference a corrupted sprite reference!");
+			return 0;
+		}
+
 		CBFrame* frame = m_CurrentSprite->m_Frames[m_CurrentSprite->m_CurrentFrame];
 		int ret = 0;
 		for(int i=0; i<frame->m_Subframes.GetSize(); i++){

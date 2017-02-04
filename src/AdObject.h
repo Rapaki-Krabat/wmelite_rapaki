@@ -103,6 +103,7 @@ public:
 private:
 	HRESULT DisplaySpriteAttachment(CAdObject* Attachment);
 	CAdInventory* m_Inventory;
+	CBSprite* m_DetectCorruptSprite;
 
 protected:
 	HRESULT GetScale(float* ScaleX, float* ScaleY);
