@@ -2363,6 +2363,21 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 		return S_OK;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// ForceEngineCrash
+	//////////////////////////////////////////////////////////////////////////
+	else if(strcmp(Name, "ForceEngineCrash")==0)
+	{
+		Stack->CorrectParams(0);
+
+		int *crash = 0;
+		*crash = 5;
+		
+		Stack->PushNULL();
+
+		return S_OK;
+	}
+
 	else return CBObject::ScCallMethod(Script, Stack, ThisStack, Name);
 }
 
