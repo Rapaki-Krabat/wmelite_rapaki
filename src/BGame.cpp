@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "crc.h"
 #include "StringUtil.h"
 #include "DisplayConfig.h"
+#include "LicenseCheck.h"
 
 #ifdef __IPHONEOS__
 #	include "ios_utils.h"
@@ -2377,6 +2378,72 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 
 		return S_OK;
 	}
+
+#ifdef __WINRT__
+
+	//////////////////////////////////////////////////////////////////////////
+	// LicenseCheckStart
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "LicenseCheckStart") == 0)
+	{
+		Stack->CorrectParams(0);
+
+		LicenseCheckStartAsync();
+
+		Stack->PushNULL();
+
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// LicenseCheckPending
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "LicenseCheckPending") == 0)
+	{
+		int licStatus;
+		
+		Stack->CorrectParams(0);
+
+		licStatus = LicenseCheckPollStatus();
+
+		Stack->PushBool((licStatus == 0) ? false : true);
+
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// LicenseCheckResultSummary
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "LicenseCheckResultSummary") == 0)
+	{
+		int licStatus;
+
+		Stack->CorrectParams(0);
+
+		licStatus = LicenseCheckResultStatus();
+
+		Stack->PushBool((licStatus == 0) ? true : false);
+
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// LicenseCheckResultString
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "LicenseCheckResultString") == 0)
+	{
+		char resultString[1024];
+		
+		Stack->CorrectParams(0);
+
+		LicenseCheckResultDetail(resultString, 1024);
+
+		Stack->PushString(resultString);
+
+		return S_OK;
+	}
+
+#endif
 
 	else return CBObject::ScCallMethod(Script, Stack, ThisStack, Name);
 }
