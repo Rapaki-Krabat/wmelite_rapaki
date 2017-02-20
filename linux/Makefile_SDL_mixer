@@ -42,6 +42,11 @@ $(ODIR)/FileOperations.o: $(SRCDIR)/FileOperations.c
 	@echo " (CC) $<"
 	@$(CC) -c -o $@ $< $(CFLAGS)
 
+$(ODIR)/LicenseCheckDummy.o: $(SRCDIR)/LicenseCheckDummy.c
+	@mkdir -p $(ODIR)
+	@echo " (CC) $<"
+	@$(CC) -c -o $@ $< $(CFLAGS)
+
 $(ODIR)/BSoundBuffer.o: $(SRCDIR)/snd_SDL_mixer/BSoundBuffer.cpp
 	@mkdir -p $(ODIR)
 	@echo " (CC) $<"
