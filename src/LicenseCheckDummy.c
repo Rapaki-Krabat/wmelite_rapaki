@@ -3,15 +3,27 @@
 
 #include "LicenseCheck.h"
 
-void LicenseCheckStartAsync()
+static int lastLicenseCheckStartTime = 0;
+
+void LicenseCheckStartAsync(int startTime)
 {
-       
+	lastLicenseCheckStartTime = startTime;
+}
+
+int LicenseCheckStartTime()
+{
+	return lastLicenseCheckStartTime;
 }
 
 // 0 --> not pending, != 0 --> pending
 int LicenseCheckPollStatus()
 {
-    return 0;   
+	return 0;
+}
+
+void LicenseCheckAbort()
+{
+	lastLicenseCheckStartTime = 0;
 }
 
 // 0 --> check passed, != 0 --> check failed
@@ -22,6 +34,6 @@ int LicenseCheckResultStatus()
 
 void LicenseCheckResultDetail(char *str, int maxlen)
 {
-    strcpy(str, "dummy licnese check status");
+    strcpy(str, "dummy license check status");
 }
 

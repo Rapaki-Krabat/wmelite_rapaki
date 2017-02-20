@@ -2379,8 +2379,6 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 		return S_OK;
 	}
 
-#ifdef __WINRT__
-
 	//////////////////////////////////////////////////////////////////////////
 	// LicenseCheckStart
 	//////////////////////////////////////////////////////////////////////////
@@ -2388,9 +2386,25 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 	{
 		Stack->CorrectParams(0);
 
-		LicenseCheckStartAsync();
+		LicenseCheckStartAsync((int) m_Timer);
 
 		Stack->PushNULL();
+
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// LicenseCheckLastStart
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "LicenseCheckLastStart") == 0)
+	{
+		int lastStartTime;
+
+		Stack->CorrectParams(0);
+
+		lastStartTime = LicenseCheckStartTime();
+
+		Stack->PushInt(lastStartTime);
 
 		return S_OK;
 	}
@@ -2407,6 +2421,20 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 		licStatus = LicenseCheckPollStatus();
 
 		Stack->PushBool((licStatus == 0) ? false : true);
+
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// LicenseCheckAbort
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "LicenseCheckAbort") == 0)
+	{
+		Stack->CorrectParams(0);
+
+		LicenseCheckAbort();
+
+		Stack->PushNULL();
 
 		return S_OK;
 	}
@@ -2442,8 +2470,6 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 
 		return S_OK;
 	}
-
-#endif
 
 	else return CBObject::ScCallMethod(Script, Stack, ThisStack, Name);
 }

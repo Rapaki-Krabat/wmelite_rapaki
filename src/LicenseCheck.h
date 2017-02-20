@@ -5,10 +5,14 @@
 extern "C" {
 #endif
 
-	void LicenseCheckStartAsync();
+	void LicenseCheckStartAsync(int startTime);
+
+	int LicenseCheckStartTime();
 
 	// 0 --> not pending, != 0 --> pending
 	int LicenseCheckPollStatus();
+
+	void LicenseCheckAbort();
 
 	// 0 --> check passed, != 0 --> check failed
 	int LicenseCheckResultStatus();

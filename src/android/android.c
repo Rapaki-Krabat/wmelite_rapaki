@@ -4,6 +4,7 @@
 #include "SDL_android.h"
 
 #include "DisplayConfig.h"
+#include "LicenseCheck.h"
 
 #include <android/log.h>
 #include <android/asset_manager_jni.h>
@@ -455,3 +456,38 @@ void SetKeepDisplayOn(int keepOn)
 {
   Android_JNI_SuspendScreenSaver((keepOn == 0) ? SDL_FALSE : SDL_TRUE);
 }
+
+static int lastLicenseCheckStartTime = 0;
+
+void LicenseCheckStartAsync(int startTime)
+{
+	lastLicenseCheckStartTime = startTime;
+}
+
+int LicenseCheckStartTime()
+{
+	return lastLicenseCheckStartTime;
+}
+
+// 0 --> not pending, != 0 --> pending
+int LicenseCheckPollStatus()
+{
+	return 0;
+}
+
+void LicenseCheckAbort()
+{
+	lastLicenseCheckStartTime = 0;
+}
+
+// 0 --> check passed, != 0 --> check failed
+int LicenseCheckResultStatus()
+{
+    return 0;   
+}
+
+void LicenseCheckResultDetail(char *str, int maxlen)
+{
+    strcpy(str, "todo android license check status");
+}
+
