@@ -5,11 +5,34 @@
 
 #include "SDL_log.h"
 
+using namespace Platform;
+using namespace Windows::ApplicationModel::Store;
+
 static int lastLicenseCheckStartTime = 0;
+
+static int licenseCheckResult = 0;
+
+// license information
+// https://github.com/Microsoft/Windows-universal-samples/blob/win10-1507/Samples/Store/cpp/Scenario1_TrialMode.xaml.cpp
+
+// asynchronous operation
+// https://msdn.microsoft.com/de-de/library/hh750082.aspx?f=255&MSPPError=-2147217396#example-component
 
 void LicenseCheckStartAsync(int startTime)
 {
 	lastLicenseCheckStartTime = startTime;
+
+	licenseCheckResult = 0;
+
+	auto licenseInformation = CurrentApp::LicenseInformation;
+	if (licenseInformation->IsActive)
+	{
+		licenseCheckResult = 1;
+	}
+	else
+	{
+		licenseCheckResult = -1;
+	}
 }
 
 int LicenseCheckStartTime()
@@ -20,22 +43,34 @@ int LicenseCheckStartTime()
 // 0 --> not pending, != 0 --> pending
 int LicenseCheckPollStatus()
 {
-	return 0;
+	return (licenseCheckResult == 0) ? 1 : 0;
 }
 
 void LicenseCheckAbort()
 {
 	lastLicenseCheckStartTime = 0;
+	licenseCheckResult        = 0;
 }
 
 // 0 --> check passed, != 0 --> check failed
 int LicenseCheckResultStatus()
 {
-	return 0;
+	return licenseCheckResult;
 }
 
 void LicenseCheckResultDetail(char *str, int maxlen)
 {
-	strcpy(str, "winrt todo license check status");
+	if (licenseCheckResult == 0)
+	{
+		strcpy(str, "License not checked yet!");
+	}
+	else if (licenseCheckResult == 1)
+	{
+		strcpy(str, "Licensed.");
+	}
+	else
+	{
+		strcpy(str, "Unlicensed.");
+	}
 }
 
