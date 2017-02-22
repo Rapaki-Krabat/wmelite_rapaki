@@ -5,8 +5,11 @@
 
 #include "SDL_log.h"
 
+#include <ppltasks.h>
+
 using namespace Platform;
 using namespace Windows::ApplicationModel::Store;
+using namespace concurrency;
 
 static int lastLicenseCheckStartTime = 0;
 
@@ -15,8 +18,8 @@ static int licenseCheckResult = 0;
 // license information
 // https://github.com/Microsoft/Windows-universal-samples/blob/win10-1507/Samples/Store/cpp/Scenario1_TrialMode.xaml.cpp
 
-// asynchronous operation
-// https://msdn.microsoft.com/de-de/library/hh750082.aspx?f=255&MSPPError=-2147217396#example-component
+// async task
+// https://msdn.microsoft.com/de-de/library/hh750082.aspx
 
 void LicenseCheckStartAsync(int startTime)
 {
@@ -24,15 +27,18 @@ void LicenseCheckStartAsync(int startTime)
 
 	licenseCheckResult = 0;
 
-	auto licenseInformation = CurrentApp::LicenseInformation;
-	if (licenseInformation->IsActive)
+	create_async([]
 	{
-		licenseCheckResult = 1;
-	}
-	else
-	{
-		licenseCheckResult = -1;
-	}
+		auto licenseInformation = CurrentApp::LicenseInformation;
+		if (licenseInformation->IsActive)
+		{
+			licenseCheckResult = 1;
+		}
+		else
+		{
+			licenseCheckResult = -1;
+		}
+	});
 }
 
 int LicenseCheckStartTime()
