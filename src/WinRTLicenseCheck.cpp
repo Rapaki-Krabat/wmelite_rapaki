@@ -10,6 +10,7 @@
 using namespace Platform;
 using namespace Windows::ApplicationModel::Store;
 using namespace concurrency;
+using namespace Windows::Foundation;
 
 static int lastLicenseCheckStartTime = 0;
 
@@ -21,12 +22,21 @@ static int licenseCheckResult = 0;
 // async task
 // https://msdn.microsoft.com/de-de/library/hh750082.aspx
 
+// request receipt
+// https://msdn.microsoft.com/library/windows/apps/hh967811
+
+static IAsyncOperation<String^> ^ appReceipt;
+
 void LicenseCheckStartAsync(int startTime)
 {
 	lastLicenseCheckStartTime = startTime;
 
 	licenseCheckResult = 0;
 
+	appReceipt = CurrentApp::GetAppReceiptAsync();
+	appReceipt->Completed = ref new AsyncOperationCompletedHandler<String ^>(this, AppReceiptCompletionHandler);
+
+#if 0
 	create_async([]
 	{
 		auto licenseInformation = CurrentApp::LicenseInformation;
@@ -39,6 +49,12 @@ void LicenseCheckStartAsync(int startTime)
 			licenseCheckResult = -1;
 		}
 	});
+#endif
+}
+
+void AppReceiptCompletionHandler(IAsyncOperation<String^> ^ asyncOp, AsyncStatus asyncStatus)
+{
+
 }
 
 int LicenseCheckStartTime()
@@ -49,6 +65,7 @@ int LicenseCheckStartTime()
 // 0 --> not pending, != 0 --> pending
 int LicenseCheckPollStatus()
 {
+	if (appReceipt->Completed())
 	return (licenseCheckResult == 0) ? 1 : 0;
 }
 
@@ -58,7 +75,7 @@ void LicenseCheckAbort()
 	licenseCheckResult        = 0;
 }
 
-// 0 --> check passed, != 0 --> check failed
+// 0 --> check passed, > 0 --> check failed, < 0 --> inconclusive (not possible to check)
 int LicenseCheckResultStatus()
 {
 	return licenseCheckResult;

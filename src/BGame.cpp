@@ -2450,7 +2450,18 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 
 		licStatus = LicenseCheckResultStatus();
 
-		Stack->PushBool((licStatus == 0) ? true : false);
+		switch (licStatus)
+		{
+		case 0:
+			Stack->PushString("PASSED");
+			break;
+		case 1:
+			Stack->PushString("FAILED");
+			break;
+		default:
+			Stack->PushString("UNKNOWN");
+			break;
+		}
 
 		return S_OK;
 	}

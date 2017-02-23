@@ -14,7 +14,7 @@ extern "C" {
 
 	void LicenseCheckAbort();
 
-	// 0 --> check passed, != 0 --> check failed
+	// 0 --> check passed, > 0 --> check failed, < 0 --> inconclusive (not possible to check)
 	int LicenseCheckResultStatus();
 
 	void LicenseCheckResultDetail(char *str, int maxlen);
