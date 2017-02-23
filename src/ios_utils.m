@@ -107,6 +107,9 @@ void SetKeepDisplayOn(int keepOn)
     }
 }
 
+// validate receipt of purchase
+// https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
+
 static int lastLicenseCheckStartTime = 0;
 
 void LicenseCheckStartAsync(int startTime)
