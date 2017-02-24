@@ -25,7 +25,23 @@ static int licenseCheckResult = 0;
 // request receipt
 // https://msdn.microsoft.com/library/windows/apps/hh967811
 
-static IAsyncOperation<String^> ^ appReceipt;
+class WinRTLicCheck
+{
+public:
+	void WinRTLicCheckStartAsync();
+
+	void WinRTLicCheckCancel();
+
+	int WinRTLicCheckStatus();
+
+	// void WinRTLicCheckCompletionHandler(IAsyncOperation<String^> ^ asyncOp, AsyncStatus asyncStatus);
+
+private:
+	IAsyncOperation<String^> ^ appReceipt;
+
+};
+
+static WinRTLicCheck *instance = new WinRTLicCheck();
 
 void LicenseCheckStartAsync(int startTime)
 {
@@ -33,28 +49,7 @@ void LicenseCheckStartAsync(int startTime)
 
 	licenseCheckResult = 0;
 
-	appReceipt = CurrentApp::GetAppReceiptAsync();
-	appReceipt->Completed = ref new AsyncOperationCompletedHandler<String ^>(this, AppReceiptCompletionHandler);
-
-#if 0
-	create_async([]
-	{
-		auto licenseInformation = CurrentApp::LicenseInformation;
-		if (licenseInformation->IsActive)
-		{
-			licenseCheckResult = 1;
-		}
-		else
-		{
-			licenseCheckResult = -1;
-		}
-	});
-#endif
-}
-
-void AppReceiptCompletionHandler(IAsyncOperation<String^> ^ asyncOp, AsyncStatus asyncStatus)
-{
-
+	instance->WinRTLicCheckStartAsync();
 }
 
 int LicenseCheckStartTime()
@@ -65,12 +60,12 @@ int LicenseCheckStartTime()
 // 0 --> not pending, != 0 --> pending
 int LicenseCheckPollStatus()
 {
-	if (appReceipt->Completed())
-	return (licenseCheckResult == 0) ? 1 : 0;
+	return instance->WinRTLicCheckStatus();
 }
 
 void LicenseCheckAbort()
 {
+	instance->WinRTLicCheckCancel();
 	lastLicenseCheckStartTime = 0;
 	licenseCheckResult        = 0;
 }
@@ -97,3 +92,69 @@ void LicenseCheckResultDetail(char *str, int maxlen)
 	}
 }
 
+void WinRTLicCheck::WinRTLicCheckStartAsync()
+{
+	appReceipt = CurrentApp::GetAppReceiptAsync();
+	// appReceipt->Completed = ref new AsyncOperationCompletedHandler<String ^>(this, &WinRTLicCheck::WinRTLicCheckCompletionHandler);
+
+	create_task(appReceipt).then([this](String^ resultStr){
+		const wchar_t* wide_chars = resultStr->Data();
+		char chars[512];
+		wcstombs(chars, wide_chars, 512);
+
+		printf("%s\n", chars);
+
+		licenseCheckResult = 1;
+	}
+	);
+#if 0
+	create_async([]
+	{
+		auto licenseInformation = CurrentApp::LicenseInformation;
+		if (licenseInformation->IsActive)
+		{
+			licenseCheckResult = 1;
+		}
+		else
+		{
+			licenseCheckResult = -1;
+		}
+	});
+#endif
+}
+
+void WinRTLicCheck::WinRTLicCheckCancel()
+{
+	appReceipt->Cancel();
+}
+
+int WinRTLicCheck::WinRTLicCheckStatus()
+{
+	if (appReceipt->Status == AsyncStatus::Completed)
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
+/*
+void WinRTLicCheck::WinRTLicCheckCompletionHandler(IAsyncOperation<String^> ^ asyncOp, AsyncStatus asyncStatus)
+{
+	const wchar_t* wide_chars = asyncStatus.ToString()->Data();
+	char chars[512];
+	wcstombs(chars, wide_chars, 512);
+
+	printf("Result completion handler, status=%s\n", chars);
+
+	if (asyncStatus == AsyncStatus::Completed)
+	{
+		licenseCheckResult = 1;
+	}
+	else
+	{
+		licenseCheckResult = -1;
+	}
+}
+
+*/
