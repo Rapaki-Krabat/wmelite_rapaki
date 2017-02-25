@@ -461,7 +461,15 @@ static int lastLicenseCheckStartTime = 0;
 
 void LicenseCheckStartAsync(int startTime)
 {
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "licenseCheckStart", "()V");
+
+	(*env)->CallVoidMethod(env, callbackObject, callbackID);
+	
 	lastLicenseCheckStartTime = startTime;
+
+	(*env)->DeleteLocalRef(env, cls);
 }
 
 int LicenseCheckStartTime()
@@ -469,25 +477,68 @@ int LicenseCheckStartTime()
 	return lastLicenseCheckStartTime;
 }
 
-// 0 --> not pending, != 0 --> pending
 int LicenseCheckPollStatus()
 {
-	return 0;
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "licenseCheckPoll", "()I");
+	jint ret;
+	
+	ret = (*env)->CallIntMethod(env, callbackObject, callbackID);
+	
+	(*env)->DeleteLocalRef(env, cls);
+
+	return (int) ret;
 }
 
 void LicenseCheckAbort()
 {
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "licenseCheckAbort", "()V");
+
+	(*env)->CallVoidMethod(env, callbackObject, callbackID);
+	
 	lastLicenseCheckStartTime = 0;
+
+	(*env)->DeleteLocalRef(env, cls);
 }
 
-// 0 --> check passed, != 0 --> check failed
 int LicenseCheckResultStatus()
 {
-    return 0;   
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "licenseCheckResultStatus", "()I");
+	jint ret;
+	
+	ret = (*env)->CallIntMethod(env, callbackObject, callbackID);
+	
+	(*env)->DeleteLocalRef(env, cls);
+
+	return (int) ret;
 }
 
 void LicenseCheckResultDetail(char *str, int maxlen)
 {
-    strcpy(str, "todo android license check status");
+	const char *tmp;
+
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "licenseCheckResultDetail", "()Ljava/lang/String;");
+	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
+
+	tmp = (*env)->GetStringUTFChars(env, str, NULL);
+
+	if (strnlen(tmp, length) < maxlen) {
+		strncpy(buffer, tmp, maxlen);
+	} else {
+		buffer[0] = 0;
+	}
+
+	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "licenseCheckResultDetail() returns %s", buffer);
+
+	(*env)->ReleaseStringUTFChars(env, str, tmp);
+	(*env)->DeleteLocalRef(env, cls);
+	(*env)->DeleteLocalRef(env, str);
 }
 

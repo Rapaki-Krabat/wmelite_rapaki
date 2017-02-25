@@ -151,4 +151,30 @@ public class WMELiteFunctions {
 	{
 	    return "TBD";
 	}	
+
+	
+	public void licenseCheckStart()
+	{
+		
+	}
+	
+	public int licenseCheckPoll()
+	{
+		return 0;
+	}
+	
+	public void licenseCheckAbort()
+	{
+		
+	}
+	
+	public int licenseCheckResultStatus()
+	{
+		return 0;
+	}
+	
+	public String licenseCheckResultDetail()
+	{
+		return "android license checker dummy";
+	}
 }
