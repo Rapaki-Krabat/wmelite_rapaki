@@ -525,19 +525,19 @@ void LicenseCheckResultDetail(char *str, int maxlen)
 	JNIEnv *env = Android_JNI_GetEnv();
 	jclass cls = (*env)->GetObjectClass(env, callbackObject);
 	jmethodID callbackID = (*env)->GetMethodID(env, cls, "licenseCheckResultDetail", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
+	jstring retStr = (*env)->CallObjectMethod(env, callbackObject, callbackID);
 
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
+	tmp = (*env)->GetStringUTFChars(env, retStr, NULL);
 
-	if (strnlen(tmp, length) < maxlen) {
-		strncpy(buffer, tmp, maxlen);
+	if (strnlen(tmp, maxlen) < maxlen) {
+		strncpy(str, tmp, maxlen);
 	} else {
 		buffer[0] = 0;
 	}
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "licenseCheckResultDetail() returns %s", buffer);
 
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
+	(*env)->ReleaseStringUTFChars(env, retStr, tmp);
 	(*env)->DeleteLocalRef(env, cls);
 	(*env)->DeleteLocalRef(env, str);
 }
