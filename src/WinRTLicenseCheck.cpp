@@ -14,7 +14,7 @@ using namespace Windows::Foundation;
 
 static int lastLicenseCheckStartTime = 0;
 
-static int licenseCheckResult = 0;
+static int licenseCheckResult = -1;
 
 // license information
 // https://github.com/Microsoft/Windows-universal-samples/blob/win10-1507/Samples/Store/cpp/Scenario1_TrialMode.xaml.cpp
@@ -37,7 +37,7 @@ public:
 	// void WinRTLicCheckCompletionHandler(IAsyncOperation<String^> ^ asyncOp, AsyncStatus asyncStatus);
 
 private:
-	IAsyncOperation<String^> ^ appReceipt;
+	IAsyncOperation<String^> ^ appReceipt = nullptr;
 
 };
 
@@ -47,7 +47,7 @@ void LicenseCheckStartAsync(int startTime)
 {
 	lastLicenseCheckStartTime = startTime;
 
-	licenseCheckResult = 0;
+	licenseCheckResult = -1;
 
 	instance->WinRTLicCheckStartAsync();
 }
@@ -67,7 +67,7 @@ void LicenseCheckAbort()
 {
 	instance->WinRTLicCheckCancel();
 	lastLicenseCheckStartTime = 0;
-	licenseCheckResult        = 0;
+	licenseCheckResult        = -1;
 }
 
 // 0 --> check passed, > 0 --> check failed, < 0 --> inconclusive (not possible to check)
@@ -78,11 +78,11 @@ int LicenseCheckResultStatus()
 
 void LicenseCheckResultDetail(char *str, int maxlen)
 {
-	if (licenseCheckResult == 0)
+	if (licenseCheckResult == -1)
 	{
 		strcpy(str, "License not checked yet!");
 	}
-	else if (licenseCheckResult == 1)
+	else if (licenseCheckResult == 0)
 	{
 		strcpy(str, "Licensed.");
 	}
@@ -98,13 +98,15 @@ void WinRTLicCheck::WinRTLicCheckStartAsync()
 	// appReceipt->Completed = ref new AsyncOperationCompletedHandler<String ^>(this, &WinRTLicCheck::WinRTLicCheckCompletionHandler);
 
 	create_task(appReceipt).then([this](String^ resultStr){
+		const unsigned int resultLen = resultStr->Length();
 		const wchar_t* wide_chars = resultStr->Data();
-		char chars[512];
-		wcstombs(chars, wide_chars, 512);
+		char chars[4096];
+		memset(chars, 0, 4096);
+		wcstombs(chars, wide_chars, 4094);
 
-		printf("%s\n", chars);
+		SDL_Log("len=%d, val=%s\n", resultLen, chars);
 
-		licenseCheckResult = 1;
+		licenseCheckResult = 0;
 	}
 	);
 #if 0
@@ -125,14 +127,20 @@ void WinRTLicCheck::WinRTLicCheckStartAsync()
 
 void WinRTLicCheck::WinRTLicCheckCancel()
 {
-	appReceipt->Cancel();
+	if (appReceipt != nullptr)
+	{
+		appReceipt->Cancel();
+	}
 }
 
 int WinRTLicCheck::WinRTLicCheckStatus()
 {
-	if (appReceipt->Status == AsyncStatus::Completed)
+	if (appReceipt != nullptr)
 	{
-		return 0;
+		if (appReceipt->Status == AsyncStatus::Completed)
+		{
+			return 0;
+		}
 	}
 
 	return 1;
