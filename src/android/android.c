@@ -535,7 +535,7 @@ void LicenseCheckResultDetail(char *str, int maxlen)
 		str[0] = 0;
 	}
 
-	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "licenseCheckResultDetail() returns %s", buffer);
+	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "licenseCheckResultDetail() returns %s", str);
 
 	(*env)->ReleaseStringUTFChars(env, retStr, tmp);
 	(*env)->DeleteLocalRef(env, cls);
