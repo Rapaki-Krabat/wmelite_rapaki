@@ -126,8 +126,9 @@ src/utils.cpp \
 src/Vector2.cpp
 
 MSRCS=\
-src/IOS_StoreKit.m \
-src/ios_utils.m
+src/IOS_StoreKit.m     \
+src/ios_utils.m        \  
+src/ios_licensecheck.m
 
 ifeq ($(CUSTOM_PLATFORM_CONFIG),)
 PLATFORM_CONFIG=./ios_platform_config.sh
