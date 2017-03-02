@@ -320,7 +320,6 @@
     <ClCompile Include="..\..\src\SXMath.cpp" />
     <ClCompile Include="..\..\src\SXMemBuffer.cpp" />
     <ClCompile Include="..\..\src\SxObject.cpp" />
-    <ClCompile Include="..\..\src\SXStore.cpp" />
     <ClCompile Include="..\..\src\SXString.cpp" />
     <ClCompile Include="..\..\src\SysClass.cpp" />
     <ClCompile Include="..\..\src\SysClassRegistry.cpp" />
@@ -361,6 +360,7 @@
       <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</CompileAsWinRT>
       <CompileAsWinRT Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</CompileAsWinRT>
     </ClCompile>
+    <ClCompile Include="..\..\src\winrt\SXStore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

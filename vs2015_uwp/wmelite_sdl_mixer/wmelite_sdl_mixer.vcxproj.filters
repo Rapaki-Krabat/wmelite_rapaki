@@ -139,7 +139,6 @@
     <ClCompile Include="..\..\src\SXMath.cpp" />
     <ClCompile Include="..\..\src\SXMemBuffer.cpp" />
     <ClCompile Include="..\..\src\SxObject.cpp" />
-    <ClCompile Include="..\..\src\SXStore.cpp" />
     <ClCompile Include="..\..\src\SXString.cpp" />
     <ClCompile Include="..\..\src\SysClass.cpp" />
     <ClCompile Include="..\..\src\SysClassRegistry.cpp" />
@@ -162,6 +161,7 @@
     <ClCompile Include="..\..\..\wmelite-dependencies-for-linux-and-android\dependencies\SDL_merged\src\main\winrt\SDL_winrt_main_NonXAML.cpp" />
     <ClCompile Include="..\..\src\WinRTDisplayConfig.cpp" />
     <ClCompile Include="..\..\src\WinRTVersionInfo.cpp" />
+    <ClCompile Include="..\..\src\winrt\SXStore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\FileOperations.h" />
