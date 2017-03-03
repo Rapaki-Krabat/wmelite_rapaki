@@ -11,6 +11,7 @@ using namespace Platform;
 using namespace Windows::ApplicationModel::Store;
 using namespace concurrency;
 using namespace Windows::Foundation;
+using namespace Windows::Foundation::Collections;
 
 static int lastLicenseCheckStartTime = 0;
 
@@ -31,20 +32,63 @@ static int licenseCheckResult = -1;
 class WinRTInAppPurchase
 {
 public:
+	void WinRTInAppListItems(const char* prodIdList);
+
+
+
 	void WinRTLicCheckStartAsync();
 
 	void WinRTLicCheckCancel();
 
 	int WinRTLicCheckStatus();
 
-	// void WinRTLicCheckCompletionHandler(IAsyncOperation<String^> ^ asyncOp, AsyncStatus asyncStatus);
-
 private:
 	IAsyncOperation<String^> ^ appReceipt = nullptr;
 
+	IAsyncOperation<ListingInformation^> ^ listInfo = nullptr;
 };
 
 static WinRTInAppPurchase *instance = new WinRTInAppPurchase();
+
+void wrtiap_VerifyInAppProductsList(const char* prodIdList)
+{
+	instance->WinRTInAppListItems(prodIdList);
+}
+
+void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
+{
+	listInfo = CurrentApp::LoadListingInformationAsync();
+
+	create_task(listInfo).then([this](ListingInformation^ info) {
+		try
+		{
+
+			if (info->ProductListings->HasKey(""))
+			{
+				// valid products callback
+			}
+			else
+			{
+				// invalid products callback
+			}
+		}
+		catch (Platform::Exception^ exception)
+		{
+			Platform::String^ exString = exception->ToString;
+			const unsigned int resultLen = exString->Length();
+			const wchar_t* wide_chars = exString->Data();
+			char chars[4096];
+			memset(chars, 0, 4096);
+			wcstombs(chars, wide_chars, 4094);
+
+			SDL_Log("Error fetching store listing: %s.\n", chars);
+		}
+	}
+	);
+}
+
+
+
 
 void LicenseCheckStartAsync(int startTime)
 {
