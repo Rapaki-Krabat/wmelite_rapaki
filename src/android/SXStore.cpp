@@ -27,8 +27,9 @@ THE SOFTWARE.
 #include "SXStore.h"
 #include "StringUtil.h"
 
-#ifdef __IPHONEOS__
-#	include "IOS_StoreKit_interface.h"
+#ifdef __ANDROID__
+#	include "android.h"
+#	include "androidCallbacks.h"
 #endif
 
 
@@ -37,9 +38,7 @@ IMPLEMENT_PERSISTENT(CSXStore, false);
 //////////////////////////////////////////////////////////////////////////
 CSXStore::CSXStore(CBGame* inGame) : CBObject(inGame)
 {
-#ifdef __IPHONEOS__
-	StoreKit_SetExternalData((void*)this);
-#endif
+	androidiap_SetCallbackObject((void*)this);
 
 	m_EventsEnabled = false;
 	m_LastProductRequestOwner = NULL;
@@ -339,9 +338,7 @@ void CSXStore::AfterLoad()
 	{
 		SetEventsEnabled(NULL, true);
 	}
-#ifdef __IPHONEOS__
-	StoreKit_SetExternalData((void*)this);
-#endif
+	androidiap_SetCallbackObject((void*)this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -360,35 +357,26 @@ void CSXStore::SetEventsEnabled(CScScript* script, bool val)
 	if (val)
 	{
 		if (script) m_LastPurchaseOwner = script->m_Owner;
-#ifdef __IPHONEOS__
-		StoreKit_EnableEvents();
-#endif
+		androidiap_SetEventsEnabledDummy(true);
 	}
 	else
 	{
 		m_LastPurchaseOwner = NULL;
-#ifdef __IPHONEOS__
-		StoreKit_DisableEvents();
-#endif
+		androidiap_SetEventsEnabledDummy(false);
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 void CSXStore::ValidateProducts(const char* prodIdList)
 {
-#ifdef __IPHONEOS__
-	StoreKit_ValidateProducts(prodIdList);
-#endif
+	androidiap_VerifyInAppProductsList(prodIdList);
 }
 
 //////////////////////////////////////////////////////////////////////////
 bool CSXStore::IsAvailable()
 {
-#ifdef __IPHONEOS__
-	return StoreKit_IsStoreAvailable() > 0;
-#else
-	return false;
-#endif
+	// seems that on Android you cannot tell whether a user may not purchase anything
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -451,18 +439,17 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 {
 	if (!productId) return false;
 
-#ifdef __IPHONEOS__
 	for (int i = 0; i < m_ValidProducts.GetSize(); i++)
 	{
 		if (strcmp(productId, m_ValidProducts[i]->GetId()) == 0)
 		{
 			m_LastPurchaseOwner = script->m_Owner;
 
-			StoreKit_Purchase(productId);
+			androidiap_StartPurchase(productId);
 			return true;
 		}
 	}
-#endif
+
 	script->RuntimeError("Store.Purchase() - '%s' is not a valid product id", productId);
 	return false;
 }
@@ -471,12 +458,12 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 {
 	if (!transId) return false;
-#ifdef __IPHONEOS__
+
 	for (int i = 0; i < m_Transactions.GetSize(); i++)
 	{
 		if (strcmp(transId, m_Transactions[i]->GetId()) == 0)
 		{
-			if (StoreKit_FinishTransaction(transId) > 0)
+			if (androidiap_ConfirmPurchaseDummy(transId) > 0)
 			{
 				SAFE_DELETE(m_Transactions[i]);
 				m_Transactions.RemoveAt(i);
@@ -485,7 +472,7 @@ bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 			else return false;
 		}
 	}
-#endif
+
 	script->RuntimeError("Store.FinishTransaction() - '%s' is not a valid transaction id", transId);
 	return false;
 }
@@ -494,9 +481,7 @@ bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 void CSXStore::RestoreTransactions(CScScript* script)
 {
 	m_LastRestoreOwner = script->m_Owner;
-#ifdef __IPHONEOS__
-	StoreKit_RestoreTransactions();
-#endif
+	androidiap_RefreshPreviousPurchases();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -509,65 +494,59 @@ void CSXStore::OnRestoreFinished(bool error)
 	}
 }
 
-
-
-#ifdef __IPHONEOS__
-
 //////////////////////////////////////////////////////////////////////////
 // StoreKit callbacks (called from ObjC)
 //////////////////////////////////////////////////////////////////////////
-void StoreKit_AddValidProductCallback(const char* id, const char* name, const char* desc, const char* price, void* data)
+void android_AddValidProductCallback(const char* id, const char* name, const char* desc, const char* price, void* data)
 {
 	CSXStore* store = static_cast<CSXStore*>(data);
 	if (store) store->AddValidProduct(id, name, desc, price);
 }
 
 //////////////////////////////////////////////////////////////////////////
-void StoreKit_AddInvalidProductCallback(const char* id, void* data)
+void android_AddInvalidProductCallback(const char* id, void* data)
 {
 	CSXStore* store = static_cast<CSXStore*>(data);
 	if (store) store->AddInvalidProduct(id);
 }
 
 //////////////////////////////////////////////////////////////////////////
-void StoreKit_ReceiveProductsStartCallback(void* data)
+void android_ReceiveProductsStartCallback(void* data)
 {
 	CSXStore* store = static_cast<CSXStore*>(data);
 	if (store) store->ReceiveProductsStart();
 }
 
 //////////////////////////////////////////////////////////////////////////
-void StoreKit_ReceiveProductsEndCallback(void* data)
+void android_ReceiveProductsEndCallback(void* data)
 {
 	CSXStore* store = static_cast<CSXStore*>(data);
 	if (store) store->ReceiveProductsEnd();
 }
 
 //////////////////////////////////////////////////////////////////////////
-void StoreKit_AddTransactionCallback(const char* id, const char* productId, const char* state, void* data)
+void android_AddTransactionCallback(const char* id, const char* productId, const char* state, void* data)
 {
 	CSXStore* store = static_cast<CSXStore*>(data);
 	if (store) store->AddTransaction(id, productId, state);
 }
 
 //////////////////////////////////////////////////////////////////////////
-void StoreKit_ReceiveTransactionsStartCallback(void* data)
+void android_ReceiveTransactionsStartCallback(void* data)
 {
 	CSXStore* store = static_cast<CSXStore*>(data);
 	if (store) store->ReceiveTransactionsStart();
 }
 
 //////////////////////////////////////////////////////////////////////////
-void StoreKit_ReceiveTransactionsEndCallback(void* data)
+void android_ReceiveTransactionsEndCallback(void* data)
 {
 	CSXStore* store = static_cast<CSXStore*>(data);
 	if (store) store->ReceiveTransactionsEnd();
 }
 //////////////////////////////////////////////////////////////////////////
-void StoreKit_RestoreFinishedCallback(void* data, int error)
+void android_RestoreFinishedCallback(void* data, int error)
 {
 	CSXStore* store = static_cast<CSXStore*>(data);
 	if (store) store->OnRestoreFinished(error > 0);
 }
-
-#endif // __IPHONEOS__

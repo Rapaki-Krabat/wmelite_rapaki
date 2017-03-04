@@ -40,6 +40,18 @@ void android_getPlatformIdentifierString(char *buffer, int length);
 
 void android_getAppVersionString(char *buffer, int length);
 
+void androidiap_SetCallbackObject(void *obj);
+
+void androidiap_SetEventsEnabledDummy(bool enabled);
+
+void androidiap_VerifyInAppProductsList(const char* prodIdList);
+
+void androidiap_StartPurchase(const char* productId);
+
+int androidiap_ConfirmPurchaseDummy(const char* transId);
+
+void androidiap_RefreshPreviousPurchases();
+
 #ifdef __cplusplus
 }
 #endif

@@ -1,5 +1,6 @@
 
 #include "android.h"
+#include "androidCallbacks.h"
 
 #include "SDL_android.h"
 
@@ -542,3 +543,32 @@ void LicenseCheckResultDetail(char *str, int maxlen)
 	(*env)->DeleteLocalRef(env, str);
 }
 
+void androidiap_SetCallbackObject(void *obj)
+{
+
+}
+
+void androidiap_SetEventsEnabledDummy(bool enabled)
+{
+
+}
+
+void androidiap_VerifyInAppProductsList(const char* prodIdList)
+{
+
+}
+
+void androidiap_StartPurchase(const char* productId)
+{
+
+}
+
+int androidiap_ConfirmPurchaseDummy(const char* transId)
+{
+	return 1;
+}
+
+void androidiap_RefreshPreviousPurchases()
+{
+
+}
