@@ -357,12 +357,12 @@ void CSXStore::SetEventsEnabled(CScScript* script, bool val)
 	if (val)
 	{
 		if (script) m_LastPurchaseOwner = script->m_Owner;
-		androidiap_SetEventsEnabledDummy(true);
+		androidiap_SetEventsEnabledDummy(1);
 	}
 	else
 	{
 		m_LastPurchaseOwner = NULL;
-		androidiap_SetEventsEnabledDummy(false);
+		androidiap_SetEventsEnabledDummy(0);
 	}
 }
 

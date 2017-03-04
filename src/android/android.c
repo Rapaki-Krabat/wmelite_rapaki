@@ -16,7 +16,7 @@ static jobject callbackObject;
 
 AAssetManager *assetManager;
 
-void Java_org_deadcode_wmelite_WMELiteFunctions_nativeInit(JNIEnv* env, jobject o, jobject assetMgr)
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_nativeInit(JNIEnv* env, jobject o, jobject assetMgr)
 {
 
 	callbackObject = (*env)->NewGlobalRef(env, o);
@@ -364,6 +364,7 @@ void android_showURLInBrowser(char *URL)
   (*env)->CallVoidMethod(env, callbackObject, callbackID, urlString);
 
   (*env)->DeleteLocalRef(env, urlString);
+  (*env)->DeleteLocalRef(env, cls);
 }
 
 int android_advertisementPrepare(char *key, int number)
@@ -543,24 +544,44 @@ void LicenseCheckResultDetail(char *str, int maxlen)
 	(*env)->DeleteLocalRef(env, str);
 }
 
+static void *callbackObj;
+
 void androidiap_SetCallbackObject(void *obj)
 {
-
+	callbackObj = obj;
 }
 
-void androidiap_SetEventsEnabledDummy(bool enabled)
+void androidiap_SetEventsEnabledDummy(int enabled)
 {
 
 }
 
 void androidiap_VerifyInAppProductsList(const char* prodIdList)
 {
+  JNIEnv *env = Android_JNI_GetEnv();
+  jclass cls = (*env)->GetObjectClass(env, callbackObject);
+  jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapVerifyProductsList", "(Ljava/lang/String;)V");
 
+  jstring javaString = (*env)->NewStringUTF(env, prodIdList);
+
+  (*env)->CallVoidMethod(env, callbackObject, callbackID, javaString);
+
+  (*env)->DeleteLocalRef(env, javaString);
+  (*env)->DeleteLocalRef(env, cls);
 }
 
 void androidiap_StartPurchase(const char* productId)
 {
+  JNIEnv *env = Android_JNI_GetEnv();
+  jclass cls = (*env)->GetObjectClass(env, callbackObject);
+  jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapStartPurchase", "(Ljava/lang/String;)V");
 
+  jstring javaString = (*env)->NewStringUTF(env, productId);
+
+  (*env)->CallVoidMethod(env, callbackObject, callbackID, javaString);
+
+  (*env)->DeleteLocalRef(env, javaString);
+  (*env)->DeleteLocalRef(env, cls);
 }
 
 int androidiap_ConfirmPurchaseDummy(const char* transId)
@@ -569,6 +590,54 @@ int androidiap_ConfirmPurchaseDummy(const char* transId)
 }
 
 void androidiap_RefreshPreviousPurchases()
+{
+  JNIEnv *env = Android_JNI_GetEnv();
+  jclass cls = (*env)->GetObjectClass(env, callbackObject);
+  jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapRefreshPreviousPurchases", "()V");
+
+  (*env)->CallVoidMethod(env, callbackObject, callbackID);
+
+  lastLicenseCheckStartTime = 0;
+
+  (*env)->DeleteLocalRef(env, cls);
+}
+
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddValidProductCallback(JNIEnv* env, jobject o, jstring id, jstring name, jstring desc, jstring price)
+{
+
+}
+
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddInvalidProductCallback(JNIEnv* env, jobject o, jstring id)
+{
+
+}
+
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveProductsStartCallback(JNIEnv* env, jobject o)
+{
+
+}
+
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveProductsEndCallback(JNIEnv* env, jobject o)
+{
+
+}
+
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddTransactionCallback(JNIEnv* env, jobject o, jstring transId, jstring productId, jstring state)
+{
+
+}
+
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveTransactionsStartCallback(JNIEnv* env, jobject o)
+{
+
+}
+
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveTransactionsEndCallback(JNIEnv* env, jobject o)
+{
+
+}
+
+JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPRestoreFinishedCallback(JNIEnv* env, jobject o, jint error)
 {
 
 }
