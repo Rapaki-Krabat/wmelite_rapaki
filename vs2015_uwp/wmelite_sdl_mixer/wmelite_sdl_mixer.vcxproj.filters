@@ -162,6 +162,8 @@
     <ClCompile Include="..\..\src\WinRTDisplayConfig.cpp" />
     <ClCompile Include="..\..\src\WinRTVersionInfo.cpp" />
     <ClCompile Include="..\..\src\winrt\SXStore.cpp" />
+    <ClCompile Include="..\..\src\WinRTLicenseCheck.cpp" />
+    <ClCompile Include="..\..\src\winrt\WinRTInAppPurchase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\FileOperations.h" />
