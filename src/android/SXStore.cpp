@@ -407,7 +407,8 @@ void CSXStore::AddValidProduct(const char* id, const char* name, const char* des
 //////////////////////////////////////////////////////////////////////////
 void CSXStore::AddInvalidProduct(const char* id)
 {
-	m_InvalidProducts.push_back(id);
+	// make sure that a new AnsiString is constructed and our reference no longer necessary
+	m_InvalidProducts.push_back(AnsiString(id));
 }
 
 //////////////////////////////////////////////////////////////////////////
