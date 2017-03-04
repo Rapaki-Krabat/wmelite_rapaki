@@ -7,13 +7,13 @@ extern "C" {
 
 	void wrtiap_SetCallbackObject(void *obj);
 
-	void wrtiap_SetEventsEnabled(bool enabled);
+	void wrtiap_SetEventsEnabledDummy(bool enabled);
 
 	void wrtiap_VerifyInAppProductsList(const char* prodIdList);
 
 	void wrtiap_StartPurchase(const char* productId);
 
-	void wrtiap_ConfirmPurchaseDummy(const char* transId);
+	int wrtiap_ConfirmPurchaseDummy(const char* transId);
 
 	void wrtiap_RefreshPreviousPurchases();
 

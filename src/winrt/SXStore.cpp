@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #ifdef __WINRT__
 #	include "WinRTInAppPurchase.h"
+#	include "WinRTInAppCallbacks.h"
 #endif
 
 
@@ -37,7 +38,7 @@ IMPLEMENT_PERSISTENT(CSXStore, false);
 //////////////////////////////////////////////////////////////////////////
 CSXStore::CSXStore(CBGame* inGame) : CBObject(inGame)
 {
-	// StoreKit_SetExternalData((void*)this);
+	wrtiap_SetCallbackObject((void*)this);
 
 	m_EventsEnabled = false;
 	m_LastProductRequestOwner = NULL;
@@ -338,7 +339,7 @@ void CSXStore::AfterLoad()
 		SetEventsEnabled(NULL, true);
 	}
 
-	// StoreKit_SetExternalData((void*)this);
+	wrtiap_SetCallbackObject((void*)this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -358,19 +359,19 @@ void CSXStore::SetEventsEnabled(CScScript* script, bool val)
 	{
 		if (script) m_LastPurchaseOwner = script->m_Owner;
 
-		// StoreKit_EnableEvents();
+		wrtiap_SetEventsEnabledDummy(true);
 	}
 	else
 	{
 		m_LastPurchaseOwner = NULL;
-		// StoreKit_DisableEvents();
+		wrtiap_SetEventsEnabledDummy(false);
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 void CSXStore::ValidateProducts(const char* prodIdList)
 {
-	// StoreKit_ValidateProducts(prodIdList);
+	wrtiap_VerifyInAppProductsList(prodIdList);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -446,7 +447,7 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 		{
 			m_LastPurchaseOwner = script->m_Owner;
 
-			// StoreKit_Purchase(productId);
+			wrtiap_StartPurchase(productId);
 			return true;
 		}
 	}
@@ -464,8 +465,7 @@ bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 	{
 		if (strcmp(transId, m_Transactions[i]->GetId()) == 0)
 		{
-			// if (StoreKit_FinishTransaction(transId) > 0)
-			if (0)
+			if (wrtiap_ConfirmPurchaseDummy(transId) > 0)
 			{
 				SAFE_DELETE(m_Transactions[i]);
 				m_Transactions.RemoveAt(i);
@@ -483,7 +483,7 @@ bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 void CSXStore::RestoreTransactions(CScScript* script)
 {
 	m_LastRestoreOwner = script->m_Owner;
-	// StoreKit_RestoreTransactions();
+	wrtiap_RefreshPreviousPurchases();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -495,3 +495,62 @@ void CSXStore::OnRestoreFinished(bool error)
 		else m_LastRestoreOwner->ApplyEvent("TransactionsRestoreFinished");
 	}
 }
+
+#ifdef __WINRT__
+
+//////////////////////////////////////////////////////////////////////////
+void WinRTInAppPurchase_AddValidProductCallback(const char* id, const char* name, const char* desc, const char* price, void* data)
+{
+	CSXStore* store = static_cast<CSXStore*>(data);
+	if (store) store->AddValidProduct(id, name, desc, price);
+}
+
+//////////////////////////////////////////////////////////////////////////
+void WinRTInAppPurchase_AddInvalidProductCallback(const char* id, void* data)
+{
+	CSXStore* store = static_cast<CSXStore*>(data);
+	if (store) store->AddInvalidProduct(id);
+}
+
+//////////////////////////////////////////////////////////////////////////
+void WinRTInAppPurchase_ReceiveProductsStartCallback(void* data)
+{
+	CSXStore* store = static_cast<CSXStore*>(data);
+	if (store) store->ReceiveProductsStart();
+}
+
+//////////////////////////////////////////////////////////////////////////
+void WinRTInAppPurchase_ReceiveProductsEndCallback(void* data)
+{
+	CSXStore* store = static_cast<CSXStore*>(data);
+	if (store) store->ReceiveProductsEnd();
+}
+
+//////////////////////////////////////////////////////////////////////////
+void WinRTInAppPurchase_AddTransactionCallback(const char* id, const char* productId, const char* state, void* data)
+{
+	CSXStore* store = static_cast<CSXStore*>(data);
+	if (store) store->AddTransaction(id, productId, state);
+}
+
+//////////////////////////////////////////////////////////////////////////
+void WinRTInAppPurchase_ReceiveTransactionsStartCallback(void* data)
+{
+	CSXStore* store = static_cast<CSXStore*>(data);
+	if (store) store->ReceiveTransactionsStart();
+}
+
+//////////////////////////////////////////////////////////////////////////
+void WinRTInAppPurchase_ReceiveTransactionsEndCallback(void* data)
+{
+	CSXStore* store = static_cast<CSXStore*>(data);
+	if (store) store->ReceiveTransactionsEnd();
+}
+//////////////////////////////////////////////////////////////////////////
+void WinRTInAppPurchase_RestoreFinishedCallback(void* data, int error)
+{
+	CSXStore* store = static_cast<CSXStore*>(data);
+	if (store) store->OnRestoreFinished(error > 0);
+}
+
+#endif
