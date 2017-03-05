@@ -224,9 +224,15 @@ void WinRTInAppPurchase::WinRTInAppRestorePurchasedItems()
 
 	create_task(restoreListInfo).then([this](ListingInformation^ info) {
 
+		unsigned int productListSize;
+		
 		bool success = true;
 
 		WinRTInAppPurchase_ReceiveTransactionsStartCallback(callbackObj);
+
+		productListSize = info->ProductListings->Size;
+
+		SDL_Log("List of in app items size: %u\n", productListSize);
 
 		auto licenseInformation = CurrentApp::LicenseInformation;
 
