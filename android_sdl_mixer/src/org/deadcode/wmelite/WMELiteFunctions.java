@@ -177,4 +177,36 @@ public class WMELiteFunctions {
 	{
 		return "android license checker dummy";
 	}
+	
+	public void iapVerifyProductsList(String prodIdList)
+	{
+	
+	}
+	
+	public void iapStartPurchase(String productId)
+	{
+	
+	}
+	
+	public void iapRefreshPreviousPurchases()
+	{
+	
+	}
+	
+	public native void IAPAddValidProductCallback(String id, String name, String desc, String price);
+
+	public native void IAPAddInvalidProductCallback(String id);
+
+	public native void IAPReceiveProductsStartCallback();
+
+	public native void IAPReceiveProductsEndCallback();
+
+	public native void IAPAddTransactionCallback(String transId, String productId, String state);
+
+	public native void IAPReceiveTransactionsStartCallback();
+
+	public native void IAPReceiveTransactionsEndCallback();
+
+	public native void IAPRestoreFinishedCallback(int error);
+
 }
