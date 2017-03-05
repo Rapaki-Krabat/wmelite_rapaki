@@ -38,9 +38,13 @@ public:
 private:
 	IAsyncOperation<ListingInformation^> ^ listInfo = nullptr;
 
+	char prodIdListCopy[4096];
+
 	IAsyncOperation<ListingInformation^> ^ restoreListInfo = nullptr;
 
 	IAsyncOperation<PurchaseResults^>^ purchaseResult = nullptr;
+
+	String^ productIDCopy;
 };
 
 static WinRTInAppPurchase *instance = new WinRTInAppPurchase();
@@ -77,22 +81,25 @@ void wrtiap_RefreshPreviousPurchases()
 
 void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
 {
+	prodIdListCopy[4095] = 0;
+	strncpy(prodIdListCopy, prodIdList, 4095);
+	
 	listInfo = CurrentApp::LoadListingInformationAsync();
 
-	create_task(listInfo).then([this,prodIdList](ListingInformation^ info) {
+	create_task(listInfo).then([this](ListingInformation^ info) {
 		
 		WinRTInAppPurchase_ReceiveProductsStartCallback(callbackObj);
 
 		int start = 0;
 		int i = 0;
-		int end = strlen(prodIdList);
+		int end = (int) strlen(prodIdListCopy);
 		char onekey[4096];
 
-		SDL_Log("Product keys to search: %s.\n", prodIdList);
+		SDL_Log("Product keys to search: %s.\n", prodIdListCopy);
 
 		while (i < end)
 		{
-			while ((i < end) && (prodIdList[i] != ';'))
+			while ((i < end) && (prodIdListCopy[i] != ';'))
 			{
 				i++;
 			}
@@ -100,7 +107,7 @@ void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
 			memset(onekey, 0, 4096);
 			if (i > start)
 			{
-				memcpy(onekey, &prodIdList[start], (i - start));
+				memcpy(onekey, &prodIdListCopy[start], (i - start));
 
 				SDL_Log("One product key to search: %s.\n", onekey);
 
@@ -121,10 +128,15 @@ void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
 						WinRTInAppConvertRTString(item->Description, desc, 4096);
 						WinRTInAppConvertRTString(item->FormattedPrice, price, 4096);
 
+						SDL_Log("Valid product: id='%s' name='%s' description='%s' price='%s'\n",
+							onekey, name, desc, price);
+
 						WinRTInAppPurchase_AddValidProductCallback(onekey, name, desc, price, callbackObj);
 					}
 					else
 					{
+						SDL_Log("Invalid product: id='%s'\n", onekey);
+
 						WinRTInAppPurchase_AddInvalidProductCallback(onekey, callbackObj);
 					}
 				}
@@ -148,11 +160,11 @@ void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
 
 void WinRTInAppPurchase::WinRTInAppPurchaseItem(const char* productId)
 {
-	String^ rtId = WinRTInAppConvertCString(productId);
+	productIDCopy = WinRTInAppConvertCString(productId);
 
-	purchaseResult = CurrentApp::RequestProductPurchaseAsync(rtId);
+	purchaseResult = CurrentApp::RequestProductPurchaseAsync(productIDCopy);
 
-	create_task(purchaseResult).then([this,rtId](PurchaseResults^ res) {
+	create_task(purchaseResult).then([this](PurchaseResults^ res) {
 		
 		// do not call transaction_start() because only the purchased product will be added
 		// and the callback would erase the whole list of (restored) transactions
@@ -163,14 +175,14 @@ void WinRTInAppPurchase::WinRTInAppPurchaseItem(const char* productId)
 			char idCString[4096];
 			char transIDCString[4096];
 
-			WinRTInAppConvertRTString(rtId->ToString(), idCString, 4096);
+			WinRTInAppConvertRTString(productIDCopy->ToString(), idCString, 4096);
 
 			transIDCString[0] = 0;
 			strcat(transIDCString, "trID_");
 			strcat(transIDCString, idCString);
 
 			auto licenseInformation = CurrentApp::LicenseInformation;
-			if (licenseInformation->ProductLicenses->Lookup(rtId)->IsActive)
+			if (licenseInformation->ProductLicenses->Lookup(productIDCopy)->IsActive)
 			{
 				SDL_Log("Purchasing %s successful!\n", idCString);
 				
@@ -190,7 +202,7 @@ void WinRTInAppPurchase::WinRTInAppPurchaseItem(const char* productId)
 			char transIDCString[4096];
 
 			WinRTInAppConvertRTString(exception->ToString(), chars, 4096);
-			WinRTInAppConvertRTString(rtId->ToString(), idCString, 4096);
+			WinRTInAppConvertRTString(productIDCopy->ToString(), idCString, 4096);
 
 			transIDCString[0] = 0;
 			strcat(transIDCString, "trID_");
