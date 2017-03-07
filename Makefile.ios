@@ -289,7 +289,7 @@ $(TARGET)-app-x86_64:
 
 .m.o-armv7:
 	@echo " (COBJ-armv7) $<"
-	@$(COBJ_PHONE) -arch $(ARCH_PHONE_ARMV7) $(COBJFLAGS_PHONE) -c $< -o $@
+	$(COBJ_PHONE) -arch $(ARCH_PHONE_ARMV7) $(COBJFLAGS_PHONE) -c $< -o $@
 
 .cpp.o-armv7:
 	@echo " (C++-armv7) $<"
