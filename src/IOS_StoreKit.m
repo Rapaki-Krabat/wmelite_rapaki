@@ -25,7 +25,7 @@
 
 #import "IOS_StoreKit.h"
 
-#import "SDL_Log.h"
+// #import "SDL_Log.h"
 
 // #define STOREKIT_LOG SDL_Log
 // #define STOREKIT_LOG(...)
