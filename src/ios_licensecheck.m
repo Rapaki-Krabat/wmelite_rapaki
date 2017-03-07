@@ -31,6 +31,11 @@
 
 #include "LicenseCheck.h"
 
+
+#define LICENSECHECK_LOG_1(x) NSLog(@x)
+#define LICENSECHECK_LOG_2(x,y) NSLog(@x,y)
+#define LICENSECHECK_LOG_3(x,y,z) NSLog(@x,y,z)
+
 // validate receipt of purchase
 // https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
 
@@ -52,7 +57,7 @@ void LicenseCheckStartAsync(int startTime)
     NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
     if (!receipt)
     {
-        SDL_Log("Local receipt empty???\n");
+        LICENSECHECK_LOG_1("Local receipt empty???\n");
         licenseCheckInProgress    = 0;
     }
     else
@@ -67,7 +72,7 @@ void LicenseCheckStartAsync(int startTime)
         
         if (!requestData)
         {
-            SDL_Log("JSON request empty???\n");
+            LICENSECHECK_LOG_1("JSON request empty???\n");
             licenseCheckInProgress    = 0;
         }
         else
@@ -84,21 +89,21 @@ void LicenseCheckStartAsync(int startTime)
                 completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
                 {
                     if (connectionError) {
-                        SDL_Log("Connection error???\n");
+                        LICENSECHECK_LOG_1("Connection error???\n");
                         licenseCheckInProgress    = 0;
                     } else {
                         NSError *error;
                         NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
                         if (!jsonResponse)
                         {
-                            SDL_Log("JSON response empty???\n");
+                            LICENSECHECK_LOG_1("JSON response empty???\n");
                             licenseCheckInProgress    = 0;
                         }
                         else
                         {
                             for(NSString *key in [jsonResponse allKeys]) {
                                 // NSLog(@"%@",[jsonResponse objectForKey:key]);
-                                SDL_Log("%s : %s\n", [key UTF8String], [[jsonResponse objectForKey:key] UTF8String]);
+                                LICENSECHECK_LOG_3("%s : %s\n", [key UTF8String], [[jsonResponse objectForKey:key] UTF8String]);
                             }
                             
                             resultDetail = jsonResponse[@"status"];

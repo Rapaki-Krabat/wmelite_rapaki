@@ -25,6 +25,12 @@
 
 #import "IOS_StoreKit.h"
 
+#import "SDL_Log.h"
+
+// #define STOREKIT_LOG SDL_Log
+// #define STOREKIT_LOG(...)
+#define STOREKIT_LOG_1(x) NSLog(@x)
+#define STOREKIT_LOG_2(x,y) NSLog(@x,y)
 
 @implementation StoreKitMgr
 
@@ -136,12 +142,16 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
     NSArray* products = response.products;
 	for (SKProduct* product in products)
 	{
+        STOREKIT_LOG_2("Valid Product: %s\n", [product.productIdentifier UTF8String]);
+        
         StoreKit_AddValidProductCallback([product.productIdentifier UTF8String], [product.localizedTitle UTF8String], [product.localizedDescription UTF8String], [product.localizedPrice UTF8String], externalData);
     }
     
     NSArray* invalid = response.invalidProductIdentifiers;
 	for (NSString* invalidId in invalid)
 	{
+        STOREKIT_LOG_2("Invalid Product: %s\n", [invalidId UTF8String]);
+        
         StoreKit_AddInvalidProductCallback([invalidId UTF8String], externalData);
     }
     
@@ -173,6 +183,9 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
 	for (NSString* key in keys)
     {
         SKPaymentTransaction* transaction = [dictTransactions objectForKey:key];
+        
+        STOREKIT_LOG_2("Process transaction with key: %s\n", [key UTF8String]);
+        
         [self processTransaction:transaction];
     }
     
@@ -186,18 +199,42 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
     switch (transaction.transactionState)
     {
         case SKPaymentTransactionStatePurchased:
+            STOREKIT_LOG_1("Process transaction status purchased.\n");
+            
             state = @"purchased";
             break;
         
         case SKPaymentTransactionStateFailed:
             if (transaction.error.code == SKErrorPaymentCancelled)
+            {
+                STOREKIT_LOG_2("Process transaction status cancelled, error=%d.\n", (int) transaction.error.code);
+            
                 state = @"cancelled";
+            }
             else
+            {
+                STOREKIT_LOG_2("Process transaction status failed, error=%d.\n", (int) transaction.error.code);
+            
                 state = @"failed";
+            }
             break;
         
         case SKPaymentTransactionStateRestored:
+            STOREKIT_LOG_1("Process transaction status restored.\n");
+            
             state = @"restored";
+            break;
+            
+        case SKPaymentTransactionStateDeferred:
+            STOREKIT_LOG_1("Process transaction status deferred.\n");
+            
+            state = @"processing";
+            break;
+            
+        case SKPaymentTransactionStatePurchasing:
+            STOREKIT_LOG_1("Process transaction status purchasing.\n");
+            
+            state = @"processing";
             break;
     }
     
@@ -245,11 +282,17 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
     SKPaymentTransaction* trans = [dictTransactions objectForKey:strId];
     if (trans != nil)
     {
+        STOREKIT_LOG_2("Finishing transaction with id=%s.\n", transId);
+        
         [[SKPaymentQueue defaultQueue] finishTransaction: trans];
         [dictTransactions removeObjectForKey:strId];
         return YES;
     }
-    else return NO;
+    else
+    {
+        STOREKIT_LOG_2("Transaction with id=%s not found!\n", transId);
+        return NO;
+    }
 }
 
 @end
