@@ -170,9 +170,11 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
             case SKPaymentTransactionStatePurchased:
             case SKPaymentTransactionStateFailed:
             case SKPaymentTransactionStateRestored:
+                STOREKIT_LOG_2("Transaction ID recorded from update call: %s.\n", [transaction.transactionIdentifier UTF8String]);
                 [dictTransactions setObject:transaction forKey:transaction.transactionIdentifier];
                 break;
             default:
+                STOREKIT_LOG_2("Transaction ID NOT recorded from update call: %s.\n", [transaction.transactionIdentifier UTF8String]);
                 break;
         }
     }
