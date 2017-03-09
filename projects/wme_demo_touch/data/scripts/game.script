@@ -57,6 +57,11 @@ global inapp_disclaimer_shown = false;
 // Game.TakeItem("inappbook1");
 // Game.TakeItem("inappbook2");
 
+global inappPurchaseManager = new Object("scripts\inapp_purchase_manager.script");
+
+// try to restore purchased items whenever starting the app 
+inappPurchaseManager.restorePreviousPurchases();
+
 // which scene to load?
 Game.ChangeScene(Game.StartupScene);
 

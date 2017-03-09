@@ -3,6 +3,8 @@
 // scene state
 global StateStreet;
 
+global inappPurchaseManager;
+
 // default values
 if(StateStreet==null)
 {
@@ -20,3 +22,7 @@ if(!StateStreet.Visited)
 {
   StateStreet.Visited = true;
 }
+
+// (re-) validate in app purchase items when entering the scene
+inappPurchaseManager.validateInAppPurchases();
+

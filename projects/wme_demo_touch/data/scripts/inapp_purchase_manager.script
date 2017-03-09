@@ -1,0 +1,164 @@
+#include "scripts\base.inc"
+
+var Store = Game.Store;
+Store.EnableEvents();
+
+var restorePurchasesSuccessful = false;
+
+var lastPurchaseSuccessful = false;
+
+var validateSuccessful = false;
+
+var inappproductid1 = "org.deadcode.wmelite.inapp.redbook";
+var inappproductid2 = "org.deadcode.wmelite.inapp.bluebook";
+
+/////////////////////////////////////////////////////////////////////////
+method restorePreviousPurchases()
+{
+	restorePurchasesSuccessful = false;
+	Store.RestoreTransactions();	
+}
+
+/////////////////////////////////////////////////////////////////////////
+method validateInAppPurchases()
+{
+	validateSuccessful = false;
+	Store.ValidateProducts("org.deadcode.wmelite.inapp.redbook;org.deadcode.wmelite.inapp.bluebook");	
+}
+
+/////////////////////////////////////////////////////////////////////////
+method purchaseItem()
+{
+	var status;
+	
+	if (validateSuccessful == true)
+	{
+		// verify that the products are available for purchase
+		var inappproduct1valid = false;
+		var inappproduct2valid = false;
+		
+		for (var i = 0; i < Store.NumValidProducts; i = i + 1) 
+		{ 
+			var product = Store.GetValidProduct(i);
+			if (product.Id == inappproductid1)
+			{
+				inappproduct1valid = true;	
+			}
+			if (product.Id == inappproductid2)
+			{
+				inappproduct2valid = true;	
+			}
+		}
+		
+		if (Game.IsItemTaken("inappbook1") == false)
+		{
+			if (inappproduct1valid == true)
+			{
+				Store.Purchase(inappproductid1);
+				status = "Purchasing red book.";
+			}
+			else
+			{
+				status = "Red book not available for purchase.";	
+			}
+		}
+		else
+		{
+			if (Game.IsItemTaken("inappbook2") == false)
+			{
+				if (inappproduct2valid == true)
+				{
+					Store.Purchase(inappproductid2);
+					status = "Purchasing blue book.";
+				}
+				else
+				{
+					status = "Blue book not available for purchase.";	
+				}
+			}
+			else
+			{
+				status = "All items purchased, no more in app purchases possible.";
+			}
+		}
+	}
+	else
+	{
+		status = "Could not start the purchase process - are there issues connecting to the store?";	
+	}
+	
+	return status;
+}
+
+/////////////////////////////////////////////////////////////////////////
+method getLastPurchaseStatus()
+{
+	return lastPurchaseSuccessful;
+}
+
+/////////////////////////////////////////////////////////////////////////
+on "TransactionsRestoreFinished" 
+{ 
+	restorePurchasesSuccessful = true;
+} 
+ 
+/////////////////////////////////////////////////////////////////////////
+on "TransactionsRestoreFailed" 
+{ 
+	restorePurchasesSuccessful = false;
+}
+
+/////////////////////////////////////////////////////////////////////////
+on "TransactionsUpdated" 
+{
+	for (var i = 0; i < Store.NumTransactions; i = i + 1) 
+	{ 
+		var trans = Store.GetTransaction(i); 
+		
+		if (trans.State == "purchased" || trans.State == "restored") 
+		{
+			if (trans.State == "purchased") lastPurchaseSuccessful = true;
+
+			var productid = trans.ProductId;
+			
+			// purchase/restore the red book
+			if (productid == inappproductid1)
+			{
+				if (Game.IsItemTaken("inappbook1") == false)
+				{
+					Game.TakeItem("inappbook1");	
+				}
+			}
+			
+			// do not restore the blue book for test purposes (subsequent purchase should fail)
+			if (trans.State == "purchased") 
+			{
+				if (productid == inappproductid2)
+				{
+					if (Game.IsItemTaken("inappbook2") == false)
+					{
+						Game.TakeItem("inappbook2");	
+					}
+				}
+			}
+		} 
+		else if (trans.State == "failed") 
+		{ 
+			lastPurchaseSuccessful = false;
+		} 
+		else if (trans.State == "cancelled") 
+		{ 
+			lastPurchaseSuccessful = false;
+		} 
+		
+		// but in any case tell the App Store that you handled the transaction! 
+		Store.FinishTransaction(trans.Id); 
+	} 
+}
+
+/////////////////////////////////////////////////////////////////////////
+on "ProductsValidated" 
+{
+	validateSuccessful = true;
+} 
+
