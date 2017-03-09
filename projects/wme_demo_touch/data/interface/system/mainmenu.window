@@ -18,7 +18,7 @@ WINDOW
   X=0
   Y=0
   WIDTH=330
-  HEIGHT=210
+  HEIGHT=270
   DISABLED=FALSE
   VISIBLE=TRUE
   PARENT_NOTIFY=FALSE
@@ -149,41 +149,41 @@ WINDOW
     }
 
   }
-;  BUTTON
-;  {
-;    NAME="quit"
-;    CAPTION=""
+  BUTTON
+  {
+    NAME="licensing"
+    CAPTION=""
     
-;    BACK="ui_elements\but_normal.image"
-;    BACK_HOVER="ui_elements\but_hover.image"
-;    BACK_PRESS="ui_elements\but_pressed.image"
-;    BACK_DISABLE="ui_elements\but_disabled.image"
-;    BACK_FOCUS="ui_elements\but_focus.image"
-;    FONT="fonts\outline_white.font"
-;    FONT_DISABLE="fonts\outline_disabled.font"
+    BACK="ui_elements\but_normal.image"
+    BACK_HOVER="ui_elements\but_hover.image"
+    BACK_PRESS="ui_elements\but_pressed.image"
+    BACK_DISABLE="ui_elements\but_disabled.image"
+    BACK_FOCUS="ui_elements\but_focus.image"
+    FONT="fonts\outline_white.font"
+    FONT_DISABLE="fonts\outline_disabled.font"
     
-;    TEXT="Quit game"
-;    TEXT_ALIGN="center"
+    TEXT="Licensing info"
+    TEXT_ALIGN="center"
     
-;    X=10
-;    Y=200
-;    WIDTH=310
-;    HEIGHT=50
-;    DISABLED=FALSE
-;    VISIBLE=TRUE
-;    PARENT_NOTIFY=TRUE
-;    FOCUSABLE=FALSE
-;    CENTER_IMAGE=TRUE
-;    PRESSED=FALSE
-;    PIXEL_PERFECT=FALSE
+    X=10
+    Y=200
+    WIDTH=310
+    HEIGHT=50
+    DISABLED=FALSE
+    VISIBLE=TRUE
+    PARENT_NOTIFY=TRUE
+    FOCUSABLE=FALSE
+    CENTER_IMAGE=TRUE
+    PRESSED=FALSE
+    PIXEL_PERFECT=FALSE
     
     
-;    EDITOR_PROPERTY
-;    {
-;      NAME="Selected"
-;      VALUE="False"
-;    }
+    EDITOR_PROPERTY
+    {
+      NAME="Selected"
+      VALUE="False"
+    }
 
-;  }
+  }
 }
 

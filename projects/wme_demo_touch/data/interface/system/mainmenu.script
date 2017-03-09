@@ -61,3 +61,12 @@ on "save"
     Game.DeleteWindow(WinSave);
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
+on "licensing"
+{
+  var Licensing = Game.LoadWindow("interface\system\licensing.window");
+  Licensing.Center();
+  Licensing.GoSystemExclusive();
+  Game.DeleteWindow(Licensing);
+}

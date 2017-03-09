@@ -13,7 +13,7 @@ Priority=0
 
 [Settings]
 Preview=1
-Direct3D9=0
+Direct3D9=1
 
 [Debug]
 DebugMode=1
@@ -22,7 +22,7 @@ ShowFPS=1
 DebugConsole=1
 
 [Resource]
-CustomPaths=data;
+CustomPaths=data
 
 [Packager]
 OutputFolder=packages

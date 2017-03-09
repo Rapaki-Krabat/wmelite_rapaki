@@ -1,0 +1,17 @@
+#include "scripts\base.inc"
+#include "scripts\keys.inc"
+
+global num_license_checks;
+
+var license_summary = this.GetControl("license_summary"); 
+var license_details = this.GetControl("license_details"); 
+
+license_details.Text = "Last check at " + Game.LicenseCheckLastStart() + "ms. Total nr. checks: " + num_license_checks + ". Check pending: " + Game.LicenseCheckPending() + ". Details: " + Game.LicenseCheckResultString();
+license_summary.Text = Game.LicenseCheckResultSummary();
+
+////////////////////////////////////////////////////////////////////////////////
+on "close"
+{
+  this.Close();
+}
+

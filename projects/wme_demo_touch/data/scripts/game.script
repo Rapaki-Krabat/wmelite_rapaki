@@ -46,6 +46,8 @@ Game.MainObject = actor;
 Game.AttachScript("scripts\game_loop_overlay.script");
 Game.AttachScript("scripts\game_loop_caption.script");
 
+Game.AttachScript("scripts\license_check_loop.script");
+
 // initial items
 Game.TakeItem("money");
 
