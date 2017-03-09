@@ -26,3 +26,27 @@ ITEM
    AMOUNT_OFFSET_x = 5
    AMOUNT_OFFSET_Y = 47
 }
+
+ITEM
+{
+   CURSOR_COMBINED = TRUE
+   CAPTION = "In app red book"
+   NAME = "inappbook1"
+   SPRITE = "items\inappbook.sprite"
+   ;CURSOR = "items\book.bmp"
+   ;CURSOR_HOVER = "items\book_h.bmp"
+   SCRIPT = "items\inappbook.script"
+}
+
+ITEM
+{
+   CURSOR_COMBINED = TRUE
+   CAPTION = "In app blue book"
+   NAME = "inappbook2"
+   SPRITE = "items\inappbook2.sprite"
+   ;CURSOR = "items\book.bmp"
+   ;CURSOR_HOVER = "items\book_h.bmp"
+   SCRIPT = "items\inappbook2.script"
+}
+
+

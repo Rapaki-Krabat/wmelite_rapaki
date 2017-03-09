@@ -51,6 +51,11 @@ Game.AttachScript("scripts\license_check_loop.script");
 // initial items
 Game.TakeItem("money");
 
+global inapp_disclaimer_shown = false;
+
+// for testing, enable these items
+// Game.TakeItem("inappbook1");
+// Game.TakeItem("inappbook2");
 
 // which scene to load?
 Game.ChangeScene(Game.StartupScene);

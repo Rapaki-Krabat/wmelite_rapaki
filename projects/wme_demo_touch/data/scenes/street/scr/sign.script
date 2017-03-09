@@ -1,5 +1,6 @@
 #include "scripts\base.inc"
 
+global inapp_disclaimer_shown;
 
 ////////////////////////////////////////////////////////////////////////////////
 on "LightOn"
@@ -32,6 +33,28 @@ on "LookAt"
   actor.Talk("I seriously doubt that this will attract the masses...");
 }
 
+////////////////////////////////////////////////////////////////////////////////
+on "Take"
+{
+	actor.GoToObject(this);
+	
+	if (inapp_disclaimer_shown == false)
+	{
+		inapp_disclaimer_shown = true;
+
+		Game.Interactive = false;
+
+		actor.TurnTo(DI_DOWN);
+		
+		actor.Talk("Repeat this action to start an in app purchase.");
+		
+		actor.Talk("This is just to show the capabilities of the game engine.");
+		
+		actor.Talk("Do not execute this purchase unless you know what you are doing!");
+		
+		Game.Interactive = true;		
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 on "LeftClick"
