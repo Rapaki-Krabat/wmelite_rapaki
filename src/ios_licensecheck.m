@@ -36,6 +36,8 @@
 #define LICENSECHECK_LOG_2(x,y) NSLog(@x,y)
 #define LICENSECHECK_LOG_3(x,y,z) NSLog(@x,y,z)
 
+// #define USE_PRODUCTION_URL
+
 // validate receipt of purchase
 // https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
 
@@ -43,7 +45,7 @@ static int lastLicenseCheckStartTime = 0;
 static int licenseCheckInProgress    = 0;
 static int licenseCheckResult        = -1;
 
-NSString *resultDetail = NULL;
+NSNumber *resultDetail = NULL;
 
 void LicenseCheckStartAsync(int startTime)
 {
@@ -78,7 +80,11 @@ void LicenseCheckStartAsync(int startTime)
         else
         {
             // Create a POST request with the receipt data.
+#ifdef USE_PRODUCTION_URL
             NSURL *storeURL = [NSURL URLWithString:@"https://buy.itunes.apple.com/verifyReceipt"];
+#else
+            NSURL *storeURL = [NSURL URLWithString:@"https://sandbox.itunes.apple.com/verifyReceipt"];
+#endif
             NSMutableURLRequest *storeRequest = [NSMutableURLRequest requestWithURL:storeURL];
             [storeRequest setHTTPMethod:@"POST"];
             [storeRequest setHTTPBody:requestData];
@@ -101,13 +107,14 @@ void LicenseCheckStartAsync(int startTime)
                         }
                         else
                         {
-                            for(NSString *key in [jsonResponse allKeys]) {
-                                // NSLog(@"%@",[jsonResponse objectForKey:key]);
-                                LICENSECHECK_LOG_3("%s : %s\n", [key UTF8String], [[jsonResponse objectForKey:key] UTF8String]);
-                            }
+                            LICENSECHECK_LOG_1("Printing JSON response\n");
+
+                            NSString *jsonString = [[NSString alloc] initWithData:data
+                                                                         encoding:NSUTF8StringEncoding];
+                            NSLog(@"Response JSON=%@", jsonString);
                             
                             resultDetail = jsonResponse[@"status"];
-                            BOOL res = [resultDetail isEqualToString:@"0"];
+                            BOOL res = [resultDetail isEqualToNumber:@0];
                             
                             if (res)
                             {
