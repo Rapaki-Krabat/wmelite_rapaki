@@ -111,9 +111,15 @@ on "TransactionsRestoreFailed"
 /////////////////////////////////////////////////////////////////////////
 on "TransactionsUpdated" 
 {
-	for (var i = 0; i < Store.NumTransactions; i = i + 1) 
+	// a for loop won't work because the internal data structure is modified
+	// every time a transaction is finalized
+	
+	// for (var i = 0; i < Store.NumTransactions; i = i + 1) 
+	
+	while (Store.NumTransactions > 0)
 	{ 
-		var trans = Store.GetTransaction(i); 
+		// read the oldest transaction
+		var trans = Store.GetTransaction(0); 
 		
 		if (trans.State == "purchased" || trans.State == "restored") 
 		{
