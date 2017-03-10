@@ -10,7 +10,7 @@ SPRITE {
   FRAME {
     DELAY = 0
     KEYFRAME=FALSE
-    IMAGE = "items\inappbook2.bmp"
+    IMAGE = "items\inappbook2.png"
     EDITOR_SELECTED=TRUE
   }
 
