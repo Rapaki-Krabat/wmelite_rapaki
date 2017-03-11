@@ -153,9 +153,57 @@ void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
 			start = i;
 		}
 
+		// debug: print what we actually found
+
+#if 1
+
+		unsigned int productListSize;
+
+		productListSize = info->ProductListings->Size;
+
+		SDL_Log("List of in app items found size: %u\n", productListSize);
+
+		for (IIterator<IKeyValuePair<String^, ProductListing^>^>^ iter = info->ProductListings->First(); iter->HasCurrent; iter->MoveNext())
+		{
+			try
+			{
+
+				String^ id = iter->Current->Key;
+
+				char idCString[4096];
+
+				WinRTInAppConvertRTString(id, idCString, 4096);
+
+				SDL_Log("Item id=%s found.\n", idCString);
+			}
+			catch (Platform::Exception^ exception)
+			{
+				char chars[4096];
+				WinRTInAppConvertRTString(exception->ToString(), chars, 4096);
+
+				SDL_Log("Error iterating store listing: %s.\n", chars);
+			}
+		}
+
+#endif
+
 		WinRTInAppPurchase_ReceiveProductsEndCallback(callbackObj);
 	}
-	);
+	).then([this](task<void> t)
+	{
+		try {
+			t.get();
+			// .get() didn't throw, so we succeeded.
+		}
+		catch (Platform::Exception^ exception) {
+			// handle error
+			char exChars[4096];
+			WinRTInAppConvertRTString(exception->ToString(), exChars, 4096);
+
+			SDL_Log("Error thrown from task iterating store listing: %s.\n", exChars);
+		}
+
+	});
 }
 
 void WinRTInAppPurchase::WinRTInAppPurchaseItem(const char* productId)
@@ -215,7 +263,21 @@ void WinRTInAppPurchase::WinRTInAppPurchaseItem(const char* productId)
 
 		WinRTInAppPurchase_ReceiveTransactionsEndCallback(callbackObj);
 	}
-	);
+	).then([this](task<void> t)
+	{
+		try {
+			t.get();
+			// .get() didn't throw, so we succeeded.
+		}
+		catch (Platform::Exception^ exception) {
+			// handle error
+			char exChars[4096];
+			WinRTInAppConvertRTString(exception->ToString(), exChars, 4096);
+
+			SDL_Log("Error thrown from task purchasing an item: %s.\n", exChars);
+		}
+
+	});
 }
 
 void WinRTInAppPurchase::WinRTInAppRestorePurchasedItems()
@@ -282,7 +344,21 @@ void WinRTInAppPurchase::WinRTInAppRestorePurchasedItems()
 
 		WinRTInAppPurchase_RestoreFinishedCallback(callbackObj, (success == true) ? 0 : 1);
 	}
-	);
+	).then([this](task<void> t)
+	{
+		try {
+			t.get();
+			// .get() didn't throw, so we succeeded.
+		}
+		catch (Platform::Exception^ exception) {
+			// handle error
+			char exChars[4096];
+			WinRTInAppConvertRTString(exception->ToString(), exChars, 4096);
+
+			SDL_Log("Error thrown from task trying to restore purchased items: %s.\n", exChars);
+		}
+
+	});
 }
 
 void WinRTInAppPurchase::WinRTInAppConvertRTString(String^ winrtString, char* cString, int maxLen)
