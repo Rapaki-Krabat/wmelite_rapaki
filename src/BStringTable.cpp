@@ -215,7 +215,8 @@ HRESULT CBStringTable::LoadFile(char *Filename, bool ClearOld)
 			int RealLength = LineLength - (Pos+LineLength>=Size?0:1);
 
 			// if the current char is not \r then we have Unix encoding - advance by one again
-			if (Buffer[Pos+RealLength] != '\r') RealLength++;
+			// unless at the end of the file buffer
+			if ((Buffer[Pos+RealLength] != '\r') && (Pos+LineLength < Size)) RealLength++;
 
 			char* line = new char[RealLength+1];
 			strncpy(line, (char*)&Buffer[Pos], RealLength);
