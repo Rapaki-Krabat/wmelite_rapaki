@@ -209,29 +209,40 @@ HRESULT CBStringTable::LoadFile(char *Filename, bool ClearOld)
 		LineLength = 0;
 		while(Pos+LineLength < Size && Buffer[Pos+LineLength]!='\n' && Buffer[Pos+LineLength]!='\0') LineLength++;
 		
-		int RealLength = LineLength - (Pos+LineLength>=Size?0:1);
-		char* line = new char[RealLength+1];
-		strncpy(line, (char*)&Buffer[Pos], RealLength);
-		line[RealLength] = '\0';
-		char* value = strchr(line, '\t');
-		if(value==NULL) value = strchr(line, ' ');
-
-		if(line[0]!=';')
+		// skip empty lines (can happen with Unix text file encoding (no \r before \n)
+		if (LineLength > 0)
 		{
-			if(value!=NULL)
+			int RealLength = LineLength - (Pos+LineLength>=Size?0:1);
+
+			// if the current char is not \r then we have Unix encoding - advance by one again
+			if (Buffer[Pos+RealLength] != '\r') RealLength++;
+
+			char* line = new char[RealLength+1];
+			strncpy(line, (char*)&Buffer[Pos], RealLength);
+
+			line[RealLength] = '\0';
+
+			char* value = strchr(line, '\t');
+			if(value==NULL) value = strchr(line, ' ');
+
+			if(line[0]!=';')
 			{
-				value[0] = '\0';
-				value++;
-				for(int i=0; i<strlen(value); i++)
+				if(value!=NULL)
 				{
-					if(value[i]=='|') value[i] = '\n';
+					value[0] = '\0';
+					value++;
+					for(int i=0; i<strlen(value); i++)
+					{
+						if(value[i]=='|') value[i] = '\n';
+					}
+					AddString(line, value, ClearOld);
 				}
-				AddString(line, value, ClearOld);
+				else if(line[0]!='\0') AddString(line, "", ClearOld);
 			}
-			else if(line[0]!='\0') AddString(line, "", ClearOld);
+
+			delete [] line;
 		}
 
-		delete [] line;
 		Pos+=LineLength+1;
 	}
 
