@@ -82,13 +82,13 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := main
 
-SDL_PATH := ../../../dependencies/SDL/jni/
+SDL_PATH := ../../../dependencies/SDL_merged/
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include \
 $(LOCAL_PATH)/$(SDL_PATH)/src/core/android/ \
 $(LOCAL_PATH)/$(SDL_PATH)/src/ \
 $(LOCAL_PATH)/../../../dependencies/SDL_mixer/jni/ \
-$(LOCAL_PATH)/../../../dependencies/libfreetype-android/jni/include/ \
+$(LOCAL_PATH)/../../../dependencies/freetype-2.6/include/ \
 $(LOCAL_PATH)/../../../dependencies/FreeImage3154/jni/Source/ \
 $(LOCAL_PATH)/../../../dependencies/libeffects-android/jni/ \
 $(LOCAL_PATH)/../../../dependencies/libeffects-android/jni/Reverb/lib/ \
