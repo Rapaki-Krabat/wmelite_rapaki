@@ -163,7 +163,7 @@ void LicenseCheckResultDetail(char *str, int maxlen)
 {
     if (resultDetail != NULL)
     {
-        strncpy(str, [resultDetail UTF8String], maxlen - 1);
+        strncpy(str, [[resultDetail stringValue] UTF8String], maxlen - 1);
         str[maxlen - 1] = 0;
     }
     else
