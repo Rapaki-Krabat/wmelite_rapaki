@@ -1044,6 +1044,12 @@ HRESULT CAdObject::Persist(CBPersistMgr *PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_PartOffsetX));
 	PersistMgr->Transfer(TMEMBER(m_PartOffsetY));
 
+	// make sure this object reference is valid after load
+	if (!PersistMgr->m_Saving)
+	{
+		m_DetectCorruptSprite = new CBSprite(Game, this);
+	}
+
 	return S_OK;
 }
 
