@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include "StringUtil.h"
 
 #ifdef __IPHONEOS__
-#	include "IOS_StoreKit_interface.h"
+#	include "StoreKit_functions.h"
+#	include "StoreKit_callbacks.h"
 #endif
 
 

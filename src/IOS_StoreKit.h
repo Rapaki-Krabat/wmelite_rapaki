@@ -25,7 +25,8 @@
 
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
-#include "IOS_StoreKit_interface.h"
+#include "StoreKit_functions.h"
+#include "StoreKit_callbacks.h"
 
 
 @interface StoreKitMgr : NSObject<SKProductsRequestDelegate, SKPaymentTransactionObserver>
