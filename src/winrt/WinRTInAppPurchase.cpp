@@ -1,8 +1,8 @@
 
 #include <string.h>
 
-#include "WinRTInAppPurchase.h"
-#include "WinRTInAppCallbacks.h"
+#include "StoreKit_functions.h"
+#include "StoreKit_callbacks.h"
 
 #include "SDL_log.h"
 
@@ -49,34 +49,46 @@ private:
 
 static WinRTInAppPurchase *instance = new WinRTInAppPurchase();
 
-void wrtiap_SetCallbackObject(void *obj)
+void StoreKit_SetExternalData(void* data)
 {
-	callbackObj = obj;
+	callbackObj = data;
 }
 
-void wrtiap_SetEventsEnabledDummy(bool enabled)
+int StoreKit_IsStoreAvailable()
 {
-
+    // Windows Store is always available
+    return 1;
 }
 
-void wrtiap_VerifyInAppProductsList(const char* prodIdList)
+void StoreKit_EnableEvents()
 {
-	instance->WinRTInAppListItems(prodIdList);
+    // dummy
 }
 
-void wrtiap_StartPurchase(const char* productId)
+void StoreKit_DisableEvents()
 {
-	instance->WinRTInAppPurchaseItem(productId);
+    // dummy
 }
 
-int wrtiap_ConfirmPurchaseDummy(const char* transId)
+void StoreKit_ValidateProducts(const char* ids)
 {
-	return 1;
+	instance->WinRTInAppListItems(ids);
 }
 
-void wrtiap_RefreshPreviousPurchases()
+void StoreKit_Purchase(const char* prodId)
+{
+	instance->WinRTInAppPurchaseItem(prodId);
+}
+
+void StoreKit_RestoreTransactions()
 {
 	instance->WinRTInAppRestorePurchasedItems();
+}
+
+int StoreKit_FinishTransaction(const char* transId)
+{
+    // dummy
+	return 1;
 }
 
 void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
@@ -88,7 +100,7 @@ void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
 
 	create_task(listInfo).then([this](ListingInformation^ info) {
 		
-		WinRTInAppPurchase_ReceiveProductsStartCallback(callbackObj);
+		StoreKit_ReceiveProductsStartCallback(callbackObj);
 
 		int start = 0;
 		int i = 0;
@@ -131,13 +143,13 @@ void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
 						SDL_Log("Valid product: id='%s' name='%s' description='%s' price='%s'\n",
 							onekey, name, desc, price);
 
-						WinRTInAppPurchase_AddValidProductCallback(onekey, name, desc, price, callbackObj);
+						StoreKit_AddValidProductCallback(onekey, name, desc, price, callbackObj);
 					}
 					else
 					{
 						SDL_Log("Invalid product: id='%s'\n", onekey);
 
-						WinRTInAppPurchase_AddInvalidProductCallback(onekey, callbackObj);
+						StoreKit_AddInvalidProductCallback(onekey, callbackObj);
 					}
 				}
 				catch (Platform::Exception^ exception)
@@ -187,7 +199,7 @@ void WinRTInAppPurchase::WinRTInAppListItems(const char *prodIdList)
 
 #endif
 
-		WinRTInAppPurchase_ReceiveProductsEndCallback(callbackObj);
+		StoreKit_ReceiveProductsEndCallback(callbackObj);
 	}
 	).then([this](task<void> t)
 	{
@@ -234,13 +246,13 @@ void WinRTInAppPurchase::WinRTInAppPurchaseItem(const char* productId)
 			{
 				SDL_Log("Purchasing %s successful!\n", idCString);
 				
-				WinRTInAppPurchase_AddTransactionCallback(transIDCString, idCString, "purchased", callbackObj);
+				StoreKit_AddTransactionCallback(transIDCString, idCString, "purchased", callbackObj);
 			}
 			else
 			{
 				SDL_Log("Purchasing %s FAILED!\n", idCString);
 
-				WinRTInAppPurchase_AddTransactionCallback(transIDCString, idCString, "failed", callbackObj);
+				StoreKit_AddTransactionCallback(transIDCString, idCString, "failed", callbackObj);
 			}
 		}
 		catch (Platform::Exception^ exception)
@@ -258,10 +270,10 @@ void WinRTInAppPurchase::WinRTInAppPurchaseItem(const char* productId)
 
 			SDL_Log("Error purchasing item: %s.\n", chars);
 
-			WinRTInAppPurchase_AddTransactionCallback(transIDCString, idCString, "failed", callbackObj);
+			StoreKit_AddTransactionCallback(transIDCString, idCString, "failed", callbackObj);
 		}
 
-		WinRTInAppPurchase_ReceiveTransactionsEndCallback(callbackObj);
+		StoreKit_ReceiveTransactionsEndCallback(callbackObj);
 	}
 	).then([this](task<void> t)
 	{
@@ -290,7 +302,7 @@ void WinRTInAppPurchase::WinRTInAppRestorePurchasedItems()
 		
 		bool success = true;
 
-		WinRTInAppPurchase_ReceiveTransactionsStartCallback(callbackObj);
+		StoreKit_ReceiveTransactionsStartCallback(callbackObj);
 
 		productListSize = info->ProductListings->Size;
 
@@ -320,13 +332,13 @@ void WinRTInAppPurchase::WinRTInAppRestorePurchasedItems()
 				{
 					SDL_Log("Item id=%s was previously purchased.\n", idCString);
 
-					WinRTInAppPurchase_AddTransactionCallback(transIDCString, idCString, "restored", callbackObj);
+					StoreKit_AddTransactionCallback(transIDCString, idCString, "restored", callbackObj);
 				}
 				else
 				{
 					SDL_Log("Item id=%s was NOT previously purchased.\n", idCString);
 
-					WinRTInAppPurchase_AddTransactionCallback(transIDCString, idCString, "failed", callbackObj);
+					StoreKit_AddTransactionCallback(transIDCString, idCString, "failed", callbackObj);
 				}
 			}
 			catch (Platform::Exception^ exception)
@@ -340,9 +352,9 @@ void WinRTInAppPurchase::WinRTInAppRestorePurchasedItems()
 			}
 		}
 
-		WinRTInAppPurchase_ReceiveTransactionsEndCallback(callbackObj);
+		StoreKit_ReceiveTransactionsEndCallback(callbackObj);
 
-		WinRTInAppPurchase_RestoreFinishedCallback(callbackObj, (success == true) ? 0 : 1);
+		StoreKit_RestoreFinishedCallback(callbackObj, (success == true) ? 0 : 1);
 	}
 	).then([this](task<void> t)
 	{
