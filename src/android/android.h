@@ -40,18 +40,6 @@ void android_getPlatformIdentifierString(char *buffer, int length);
 
 void android_getAppVersionString(char *buffer, int length);
 
-void androidiap_SetCallbackObject(void *obj);
-
-void androidiap_SetEventsEnabledDummy(int enabled);
-
-void androidiap_VerifyInAppProductsList(const char* prodIdList);
-
-void androidiap_StartPurchase(const char* productId);
-
-int androidiap_ConfirmPurchaseDummy(const char* transId);
-
-void androidiap_RefreshPreviousPurchases();
-
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddValidProductCallback(JNIEnv* env, jobject o, jstring id, jstring name, jstring desc, jstring price);
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddInvalidProductCallback(JNIEnv* env, jobject o, jstring id);

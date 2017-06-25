@@ -1,6 +1,7 @@
 
 #include "android.h"
-#include "androidCallbacks.h"
+#include "StoreKit_functions.h"
+#include "StoreKit_callbacks.h"
 
 #include "SDL_android.h"
 
@@ -546,23 +547,34 @@ void LicenseCheckResultDetail(char *str, int maxlen)
 
 static void *callbackObj;
 
-void androidiap_SetCallbackObject(void *obj)
+void StoreKit_SetExternalData(void *data)
 {
-	callbackObj = obj;
+	callbackObj = data;
 }
 
-void androidiap_SetEventsEnabledDummy(int enabled)
+int StoreKit_IsStoreAvailable()
 {
-
+    // Google Play is always available
+    return 1;
 }
 
-void androidiap_VerifyInAppProductsList(const char* prodIdList)
+void StoreKit_EnableEvents()
+{
+    // dummy
+}
+
+void StoreKit_DisableEvents()
+{
+    // dummy
+}
+
+void StoreKit_ValidateProducts(const char* ids)
 {
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
   jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapVerifyProductsList", "(Ljava/lang/String;)V");
 
-  jstring javaString = (*env)->NewStringUTF(env, prodIdList);
+  jstring javaString = (*env)->NewStringUTF(env, ids);
 
   (*env)->CallVoidMethod(env, callbackObject, callbackID, javaString);
 
@@ -570,13 +582,13 @@ void androidiap_VerifyInAppProductsList(const char* prodIdList)
   (*env)->DeleteLocalRef(env, cls);
 }
 
-void androidiap_StartPurchase(const char* productId)
+void StoreKit_Purchase(const char* prodId)
 {
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
   jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapStartPurchase", "(Ljava/lang/String;)V");
 
-  jstring javaString = (*env)->NewStringUTF(env, productId);
+  jstring javaString = (*env)->NewStringUTF(env, prodId);
 
   (*env)->CallVoidMethod(env, callbackObject, callbackID, javaString);
 
@@ -584,12 +596,7 @@ void androidiap_StartPurchase(const char* productId)
   (*env)->DeleteLocalRef(env, cls);
 }
 
-int androidiap_ConfirmPurchaseDummy(const char* transId)
-{
-	return 1;
-}
-
-void androidiap_RefreshPreviousPurchases()
+void StoreKit_RestoreTransactions()
 {
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
@@ -600,6 +607,12 @@ void androidiap_RefreshPreviousPurchases()
   lastLicenseCheckStartTime = 0;
 
   (*env)->DeleteLocalRef(env, cls);
+}
+
+int StoreKit_FinishTransaction(const char* transId)
+{
+    // dummy
+	return 1;
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddValidProductCallback(JNIEnv* env, jobject o, jstring id, jstring name, jstring desc, jstring price)
@@ -644,7 +657,7 @@ JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddValidPro
 	(*env)->ReleaseStringUTFChars(env, price, tmp);
 
 
-	android_AddValidProductCallback(idCString, nameCString, descCString, priceCString, callbackObj);
+	StoreKit_AddValidProductCallback(idCString, nameCString, descCString, priceCString, callbackObj);
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddInvalidProductCallback(JNIEnv* env, jobject o, jstring id)
@@ -661,17 +674,17 @@ JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddInvalidP
 	}
 	(*env)->ReleaseStringUTFChars(env, id, tmp);
 
-	android_AddInvalidProductCallback(idCString, callbackObj);
+	StoreKit_AddInvalidProductCallback(idCString, callbackObj);
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveProductsStartCallback(JNIEnv* env, jobject o)
 {
-	android_ReceiveProductsStartCallback(callbackObj);
+	StoreKit_ReceiveProductsStartCallback(callbackObj);
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveProductsEndCallback(JNIEnv* env, jobject o)
 {
-	android_ReceiveProductsEndCallback(callbackObj);
+	StoreKit_ReceiveProductsEndCallback(callbackObj);
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddTransactionCallback(JNIEnv* env, jobject o, jstring transId, jstring productId, jstring state)
@@ -706,20 +719,20 @@ JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddTransact
 	}
 	(*env)->ReleaseStringUTFChars(env, state, tmp);
 
-	android_AddTransactionCallback(transIdCString, productIdCString, stateCString, callbackObj);
+	StoreKit_AddTransactionCallback(transIdCString, productIdCString, stateCString, callbackObj);
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveTransactionsStartCallback(JNIEnv* env, jobject o)
 {
-	android_ReceiveTransactionsStartCallback(callbackObj);
+	StoreKit_ReceiveTransactionsStartCallback(callbackObj);
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveTransactionsEndCallback(JNIEnv* env, jobject o)
 {
-	android_ReceiveTransactionsEndCallback(callbackObj);
+	StoreKit_ReceiveTransactionsEndCallback(callbackObj);
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPRestoreFinishedCallback(JNIEnv* env, jobject o, jint error)
 {
-	android_RestoreFinishedCallback(callbackObj, (int) error);
+	StoreKit_RestoreFinishedCallback(callbackObj, (int) error);
 }
