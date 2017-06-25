@@ -206,7 +206,7 @@ LOCAL_SRC_FILES := ../../../src/android/SDL_android_main.c \
 ../../../src/SXMath.cpp \
 ../../../src/SXMemBuffer.cpp \
 ../../../src/SxObject.cpp \
-../../../src/android/SXStore.cpp \
+../../../src/SXStore.cpp \
 ../../../src/SysClass.cpp \
 ../../../src/SysClassRegistry.cpp \
 ../../../src/SysInstance.cpp \

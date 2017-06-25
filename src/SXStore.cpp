@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "SXStore.h"
 #include "StringUtil.h"
 
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 #	include "StoreKit_functions.h"
 #	include "StoreKit_callbacks.h"
 #endif
@@ -38,7 +38,7 @@ IMPLEMENT_PERSISTENT(CSXStore, false);
 //////////////////////////////////////////////////////////////////////////
 CSXStore::CSXStore(CBGame* inGame) : CBObject(inGame)
 {
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 	StoreKit_SetExternalData((void*)this);
 #endif
 
@@ -340,7 +340,7 @@ void CSXStore::AfterLoad()
 	{
 		SetEventsEnabled(NULL, true);
 	}
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 	StoreKit_SetExternalData((void*)this);
 #endif
 }
@@ -361,14 +361,14 @@ void CSXStore::SetEventsEnabled(CScScript* script, bool val)
 	if (val)
 	{
 		if (script) m_LastPurchaseOwner = script->m_Owner;
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 		StoreKit_EnableEvents();
 #endif
 	}
 	else
 	{
 		m_LastPurchaseOwner = NULL;
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 		StoreKit_DisableEvents();
 #endif
 	}
@@ -377,7 +377,7 @@ void CSXStore::SetEventsEnabled(CScScript* script, bool val)
 //////////////////////////////////////////////////////////////////////////
 void CSXStore::ValidateProducts(const char* prodIdList)
 {
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 	StoreKit_ValidateProducts(prodIdList);
 #endif
 }
@@ -385,7 +385,7 @@ void CSXStore::ValidateProducts(const char* prodIdList)
 //////////////////////////////////////////////////////////////////////////
 bool CSXStore::IsAvailable()
 {
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 	return StoreKit_IsStoreAvailable() > 0;
 #else
 	return false;
@@ -420,7 +420,8 @@ void CSXStore::AddValidProduct(const char* id, const char* name, const char* des
 //////////////////////////////////////////////////////////////////////////
 void CSXStore::AddInvalidProduct(const char* id)
 {
-	m_InvalidProducts.push_back(id);
+	// make sure that a new AnsiString is constructed and our reference no longer necessary
+	m_InvalidProducts.push_back(AnsiString(id));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -452,7 +453,7 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 {
 	if (!productId) return false;
 
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 	for (int i = 0; i < m_ValidProducts.GetSize(); i++)
 	{
 		if (strcmp(productId, m_ValidProducts[i]->GetId()) == 0)
@@ -472,7 +473,7 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 {
 	if (!transId) return false;
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 	for (int i = 0; i < m_Transactions.GetSize(); i++)
 	{
 		if (strcmp(transId, m_Transactions[i]->GetId()) == 0)
@@ -495,7 +496,7 @@ bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 void CSXStore::RestoreTransactions(CScScript* script)
 {
 	m_LastRestoreOwner = script->m_Owner;
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 	StoreKit_RestoreTransactions();
 #endif
 }
@@ -512,7 +513,7 @@ void CSXStore::OnRestoreFinished(bool error)
 
 
 
-#if defined(__IPHONEOS__) || defined(__WINRT__)
+#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__)
 
 //////////////////////////////////////////////////////////////////////////
 // StoreKit callbacks (called from ObjC)
