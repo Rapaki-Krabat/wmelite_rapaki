@@ -12,6 +12,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef __WIN32__
+#    include <windows.h>
+#else
+#    include <pthread.h>
+#    include <time.h>
+#endif
+
 static void *callbackObj;
 
 static bool storeAvailable;
@@ -27,9 +34,19 @@ typedef struct
 	int  purchaseResult;
 } storeitem;
 
+static int validateDelayMs;
+static int restoreDelayMs;
+static int purchaseDelayMs;
+
+static bool restoreResult;
+
+static char purchaseIDCopy[4096];
+static char validateIDCopy[4096];
+
 static storeitem items[10];
 int maxItems;
 
+////////////////////////////////////////////////////////////////////////////////
 void StoreKit_SetExternalData(void* data)
 {
 	callbackObj = data;
@@ -37,6 +54,12 @@ void StoreKit_SetExternalData(void* data)
 	// initialize defaults
 	storeAvailable = false;
 	maxItems = 0;
+	
+	validateDelayMs = 2000;
+    restoreDelayMs  = 2000;
+    purchaseDelayMs = 4000;
+
+    restoreResult = true;
 
 	// load simualtor data from file
 	FILE* f = fopen("storesimulator.txt", "r");
@@ -65,6 +88,34 @@ void StoreKit_SetExternalData(void* data)
 						printf("Store is available!\n");
 						storeAvailable = true;
 					}
+				}
+				
+				// check if restore action shall fail
+				if (strncmp(line, "restore:", 8) == 0)
+				{
+					if (strncasecmp(line + 8, "false", 5) == 0)
+					{
+						printf("Restore action will fail!\n");
+						restoreResult = false;
+					}
+				}
+				
+				// parse validate delay
+				if (strncmp(line, "valp:", 5) == 0)
+				{
+				  validateDelayMs  = atoi(line + 5);
+				}
+
+				// parse restore delay
+				if (strncmp(line, "rest:", 5) == 0)
+				{
+				  restoreDelayMs  = atoi(line + 5);
+				}
+
+				// parse purchase delay
+				if (strncmp(line, "purc:", 5) == 0)
+				{
+				  purchaseDelayMs  = atoi(line + 5);
 				}
 
 				// check for items in the store
@@ -172,30 +223,44 @@ void StoreKit_SetExternalData(void* data)
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////////
 int StoreKit_IsStoreAvailable()
 {
 	return storeAvailable;
 }
 
+////////////////////////////////////////////////////////////////////////////////
 void StoreKit_EnableEvents()
 {
     // dummy
 }
 
+////////////////////////////////////////////////////////////////////////////////
 void StoreKit_DisableEvents()
 {
     // dummy
 }
 
-void StoreKit_ValidateProducts(const char* ids)
+////////////////////////////////////////////////////////////////////////////////
+#ifdef __WIN32__
+static DWORD WINAPI ValidateProductsThread(LPVOID arg)
+#else
+void* ValidateProductsThread(void *arg)
+#endif
 {
+    const char *ids = (const char *) arg;
+    
 	int start = 0;
 	int i = 0;
 	int end = (int) strlen(ids);
 	char onekey[4096];
 	int k;
 
-	// TODO model delay in a dedicated thread
+#ifdef __WIN32__
+    Sleep(validateDelayMs);
+#else
+    usleep(validateDelayMs * 1000);
+#endif
 
 	StoreKit_ReceiveProductsStartCallback(callbackObj);
 
@@ -250,15 +315,46 @@ void StoreKit_ValidateProducts(const char* ids)
 	}
 
 	StoreKit_ReceiveProductsEndCallback(callbackObj);
+    
+#ifdef __WIN32__
+    return 0;
+#else
+    return (void *) 0;
+#endif    
 }
 
-void StoreKit_Purchase(const char* prodId)
+////////////////////////////////////////////////////////////////////////////////
+void StoreKit_ValidateProducts(const char* ids)
 {
+    // must copy stack variable to local memory
+    strcpy(validateIDCopy, ids);
+    
+#ifdef __WIN32__
+    CreateThread(NULL, 0, ValidateProductsThread, (LPVOID) validateIDCopy, 0, NULL);
+#else
+    pthread_d threadId;
+    pthread_create(&threadId, NULL, ValidateProductsThread, (void *) validateIDCopy);
+#endif
+}
+
+////////////////////////////////////////////////////////////////////////////////
+#ifdef __WIN32__
+static DWORD WINAPI PurchaseProductsThread(LPVOID arg)
+#else
+void* PurchaseProductsThread(void *arg)
+#endif
+{
+    const char *prodId = (const char *) arg;
+
 	int k;
 	char transId[4096];
 	bool found = false;
-
-	// TODO model delay in a dedicated thread
+    
+#ifdef __WIN32__
+    Sleep(purchaseDelayMs);
+#else
+    usleep(purchaseDelayMs * 1000);
+#endif
 
 	for (k = 0; k < maxItems; k++)
 	{
@@ -270,7 +366,7 @@ void StoreKit_Purchase(const char* prodId)
                 found = true;
     
                 transId[0] = 0;
-                strcat(transId, "trID_");
+                strcat(transId, "purTrID_");
                 strcat(transId, items[k].id);
     
                 switch(items[k].purchaseResult)
@@ -297,50 +393,98 @@ void StoreKit_Purchase(const char* prodId)
 	if (found == false)
 	{
 		transId[0] = 0;
-		strcat(transId, "trID_");
+		strcat(transId, "purTrID_");
 		strcat(transId, prodId);
 
 		StoreKit_AddTransactionCallback(transId, prodId, "failed", callbackObj);
 	}
 
 	StoreKit_ReceiveTransactionsEndCallback(callbackObj);
+
+#ifdef __WIN32__
+    return 0;
+#else
+    return (void *) 0;
+#endif    
 }
 
-void StoreKit_RestoreTransactions()
+////////////////////////////////////////////////////////////////////////////////
+void StoreKit_Purchase(const char* prodId)
+{
+    // must copy stack variable to local memory
+    strcpy(purchaseIDCopy, prodId);
+    
+#ifdef __WIN32__
+    CreateThread(NULL, 0, PurchaseProductsThread, (LPVOID) purchaseIDCopy, 0, NULL);
+#else
+    pthread_d threadId;
+    pthread_create(&threadId, NULL, PurchaseProductsThread, (void *) purchaseIDCopy);
+#endif
+}
+
+////////////////////////////////////////////////////////////////////////////////
+#ifdef __WIN32__
+static DWORD WINAPI RestoreTransactionsThread(LPVOID arg)
+#else
+void* RestoreTransactionsThread(void *arg)
+#endif
 {
 	int k;
 	char transId[4096];
-	bool success = true;
 
-	// TODO model delay in a dedicated thread
-
-	// TODO model success/failure of restore action
+#ifdef __WIN32__
+    Sleep(restoreDelayMs);
+#else
+    usleep(restoreDelayMs * 1000);
+#endif
 
 	StoreKit_ReceiveTransactionsStartCallback(callbackObj);
 
-	for (k = 0; k < maxItems; k++)
+    if (restoreResult == true)	
 	{
-		transId[0] = 0;
-		strcat(transId, "trID_");
-		strcat(transId, items[k].id);
-
-		if (items[k].purchased == true)
-		{
-			StoreKit_AddTransactionCallback(transId, items[k].id, "restored", callbackObj);
-		}
-		else
-		{
-			StoreKit_AddTransactionCallback(transId, items[k].id, "failed", callbackObj);
-		}
-	}
+        for (k = 0; k < maxItems; k++)
+        {
+            transId[0] = 0;
+            strcat(transId, "trID_");
+            strcat(transId, items[k].id);
+    
+            if (items[k].purchased == true)
+            {
+                StoreKit_AddTransactionCallback(transId, items[k].id, "restored", callbackObj);
+            }
+            else
+            {
+                StoreKit_AddTransactionCallback(transId, items[k].id, "failed", callbackObj);
+            }
+        }
+    }
 
 	StoreKit_ReceiveTransactionsEndCallback(callbackObj);
 
-	StoreKit_RestoreFinishedCallback(callbackObj, (success == true) ? 0 : 1);
+	StoreKit_RestoreFinishedCallback(callbackObj, (restoreResult == true) ? 0 : 1);
+    
+#ifdef __WIN32__
+    return 0;
+#else
+    return (void *) 0;
+#endif    
 }
 
+////////////////////////////////////////////////////////////////////////////////
+void StoreKit_RestoreTransactions()
+{
+#ifdef __WIN32__
+    CreateThread(NULL, 0, RestoreTransactionsThread, (LPVOID) NULL, 0, NULL);
+#else
+    pthread_d threadId;
+    pthread_create(&threadId, NULL, RestoreTransactionsThread, (void *) NULL);
+#endif
+}
+
+////////////////////////////////////////////////////////////////////////////////
 int StoreKit_FinishTransaction(const char* transId)
 {
     // dummy
 	return 1;
 }
+
