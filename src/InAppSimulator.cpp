@@ -211,14 +211,18 @@ void StoreKit_ValidateProducts(const char* ids)
 		{
 			memcpy(onekey, &ids[start], (i - start));
 
-			printf("One product key to search: %s.\n", onekey);
+			// printf("One product key to search: %s.\n", onekey);
 
 			for (k = 0; k < maxItems; k++)
 			{
-				if (strncmp(onekey, items[k].id, strlen(items[k].id)) == 0)
-				{
-					break;
-				}
+			    // check length before checking content
+			    if (strlen(onekey) == strlen(items[k].id))
+			    {
+                    if (strncmp(onekey, items[k].id, strlen(items[k].id)) == 0)
+                    {
+                        break;
+                    }
+                }
 			}
 
 			if (k < maxItems)
@@ -258,28 +262,32 @@ void StoreKit_Purchase(const char* prodId)
 
 	for (k = 0; k < maxItems; k++)
 	{
-		if (strncmp(prodId, items[k].id, strlen(items[k].id)) == 0)
-		{
-			found = true;
-
-			transId[0] = 0;
-			strcat(transId, "trID_");
-			strcat(transId, items[k].id);
-
-			switch(items[k].purchaseResult)
-			{
-			case 0:
-				StoreKit_AddTransactionCallback(transId, items[k].id, "purchased", callbackObj);
-				break;
-			case 1:
-				StoreKit_AddTransactionCallback(transId, items[k].id, "cancelled", callbackObj);
-				break;
-			default:
-				StoreKit_AddTransactionCallback(transId, prodId, "failed", callbackObj);
-			}
-
-			break;
-		}
+        // check length before checking content
+        if (strlen(prodId) == strlen(items[k].id))
+        {
+            if (strncmp(prodId, items[k].id, strlen(items[k].id)) == 0)
+            {
+                found = true;
+    
+                transId[0] = 0;
+                strcat(transId, "trID_");
+                strcat(transId, items[k].id);
+    
+                switch(items[k].purchaseResult)
+                {
+                case 0:
+                    StoreKit_AddTransactionCallback(transId, items[k].id, "purchased", callbackObj);
+                    break;
+                case 1:
+                    StoreKit_AddTransactionCallback(transId, items[k].id, "cancelled", callbackObj);
+                    break;
+                default:
+                    StoreKit_AddTransactionCallback(transId, prodId, "failed", callbackObj);
+                }
+    
+                break;
+            }
+        }
 	}
 
 	// not found --> failed
