@@ -276,6 +276,9 @@ void StoreKit_Purchase(const char* prodId)
                 switch(items[k].purchaseResult)
                 {
                 case 0:
+                    // successful purchase --> change database so that re-purchase is not possible
+                    items[k].purchased = true;
+                    items[k].purchaseResult = 2;
                     StoreKit_AddTransactionCallback(transId, items[k].id, "purchased", callbackObj);
                     break;
                 case 1:
