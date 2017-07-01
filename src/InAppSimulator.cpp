@@ -24,6 +24,7 @@ typedef struct
 	char desc[500];
 	char price[50];
 	bool purchased;
+	int  purchaseResult;
 } storeitem;
 
 static storeitem items[10];
@@ -79,6 +80,7 @@ void StoreKit_SetExternalData(void* data)
 					memset(items[maxItems].price, 0, 200);
 					items[maxItems].valid = false;
 					items[maxItems].purchased = false;
+					items[maxItems].purchaseResult = 0;
 
 					// search id (terminated at ",")
 					start = strstr(line + 5, "id=");
@@ -140,11 +142,21 @@ void StoreKit_SetExternalData(void* data)
 								}
 							}
 
+							// search result (terminated at ",")
+							start = strstr(line + 5, "result=");
+							end = NULL;
+							if (start != NULL) end = strchr(start, 44);
 
+							if ((start != NULL) && (end != NULL))
+							{
+								memset(tmp, 0, 500);
+								strncpy(tmp, start + 7, (int) (end - start - 7));
+								items[maxItems].purchaseResult = atoi(tmp);
+							}
 						}
 					}
 
-					printf("Item found. Id='%s' Name='%s' Valid='%s' Description='%s' Price='%s' Purchased='%s'.\n", items[maxItems].id, items[maxItems].name, (items[maxItems].valid == true) ? "true" : "false", items[maxItems].desc, items[maxItems].price, (items[maxItems].purchased == true) ? "true" : "false");
+					printf("Item found. Id='%s' Name='%s' Valid='%s' Description='%s' Price='%s' Purchased='%s' Purchaseresult='%d'.\n", items[maxItems].id, items[maxItems].name, (items[maxItems].valid == true) ? "true" : "false", items[maxItems].desc, items[maxItems].price, (items[maxItems].purchased == true) ? "true" : "false", items[maxItems].purchaseResult);
 
 					// found an item, so increase number of items
 					maxItems++;
@@ -177,17 +189,135 @@ void StoreKit_DisableEvents()
 
 void StoreKit_ValidateProducts(const char* ids)
 {
+	int start = 0;
+	int i = 0;
+	int end = (int) strlen(ids);
+	char onekey[4096];
+	int k;
 
+	// TODO model delay in a dedicated thread
+
+	StoreKit_ReceiveProductsStartCallback(callbackObj);
+
+	while (i < end)
+	{
+		while ((i < end) && (ids[i] != ';'))
+		{
+			i++;
+		}
+
+		memset(onekey, 0, 4096);
+		if (i > start)
+		{
+			memcpy(onekey, &ids[start], (i - start));
+
+			printf("One product key to search: %s.\n", onekey);
+
+			for (k = 0; k < maxItems; k++)
+			{
+				if (strncmp(onekey, items[k].id, strlen(items[k].id)) == 0)
+				{
+					break;
+				}
+			}
+
+			if (k < maxItems)
+			{
+				// valid product
+				StoreKit_AddValidProductCallback(onekey, items[k].name, items[k].desc, items[k].price, callbackObj);
+			}
+			else
+			{
+				// invalid product
+				StoreKit_AddInvalidProductCallback(onekey, callbackObj);
+			}
+		}
+
+		i++;
+		start = i;
+	}
+
+	StoreKit_ReceiveProductsEndCallback(callbackObj);
 }
 
 void StoreKit_Purchase(const char* prodId)
 {
+	int k;
+	char transId[4096];
+	bool found = false;
 
+	// TODO model delay in a dedicated thread
+
+	for (k = 0; k < maxItems; k++)
+	{
+		if (strncmp(prodId, items[k].id, strlen(items[k].id)) == 0)
+		{
+			found = true;
+
+			transId[0] = 0;
+			strcat(transId, "trID_");
+			strcat(transId, items[k].id);
+
+			switch(items[k].purchaseResult)
+			{
+			case 0:
+				StoreKit_AddTransactionCallback(transId, items[k].id, "purchased", callbackObj);
+				break;
+			case 1:
+				StoreKit_AddTransactionCallback(transId, items[k].id, "cancelled", callbackObj);
+				break;
+			default:
+				StoreKit_AddTransactionCallback(transId, prodId, "failed", callbackObj);
+			}
+
+			break;
+		}
+	}
+
+	// not found --> failed
+	if (found == false)
+	{
+		transId[0] = 0;
+		strcat(transId, "trID_");
+		strcat(transId, prodId);
+
+		StoreKit_AddTransactionCallback(transId, prodId, "failed", callbackObj);
+	}
+
+	StoreKit_ReceiveTransactionsEndCallback(callbackObj);
 }
 
 void StoreKit_RestoreTransactions()
 {
+	int k;
+	char transId[4096];
+	bool success = true;
 
+	// TODO model delay in a dedicated thread
+
+	// TODO model success/failure of restore action
+
+	StoreKit_ReceiveTransactionsStartCallback(callbackObj);
+
+	for (k = 0; k < maxItems; k++)
+	{
+		transId[0] = 0;
+		strcat(transId, "trID_");
+		strcat(transId, items[k].id);
+
+		if (items[k].purchased == true)
+		{
+			StoreKit_AddTransactionCallback(transId, items[k].id, "restored", callbackObj);
+		}
+		else
+		{
+			StoreKit_AddTransactionCallback(transId, items[k].id, "failed", callbackObj);
+		}
+	}
+
+	StoreKit_ReceiveTransactionsEndCallback(callbackObj);
+
+	StoreKit_RestoreFinishedCallback(callbackObj, (success == true) ? 0 : 1);
 }
 
 int StoreKit_FinishTransaction(const char* transId)
