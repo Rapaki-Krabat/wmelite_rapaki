@@ -223,12 +223,20 @@ void StoreKit_ValidateProducts(const char* ids)
 
 			if (k < maxItems)
 			{
-				// valid product
-				StoreKit_AddValidProductCallback(onekey, items[k].name, items[k].desc, items[k].price, callbackObj);
+			    if (items[k].valid == true)
+			    {
+			        // valid product
+			        StoreKit_AddValidProductCallback(onekey, items[k].name, items[k].desc, items[k].price, callbackObj);
+			    }
+			    else
+			    {
+                    // existing invalid product
+                    StoreKit_AddInvalidProductCallback(onekey, callbackObj);
+			    }
 			}
 			else
 			{
-				// invalid product
+				// non-existing invalid product
 				StoreKit_AddInvalidProductCallback(onekey, callbackObj);
 			}
 		}
