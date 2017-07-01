@@ -39,6 +39,7 @@ static int restoreDelayMs;
 static int purchaseDelayMs;
 
 static bool restoreResult;
+static bool validateResult;
 
 static char purchaseIDCopy[4096];
 static char validateIDCopy[4096];
@@ -60,6 +61,7 @@ void StoreKit_SetExternalData(void* data)
     purchaseDelayMs = 4000;
 
     restoreResult = true;
+    validateResult = true;
 
 	// load simualtor data from file
 	FILE* f = fopen("storesimulator.txt", "r");
@@ -97,6 +99,16 @@ void StoreKit_SetExternalData(void* data)
 					{
 						printf("Restore action will fail!\n");
 						restoreResult = false;
+					}
+				}
+				
+				// check if validate action shall fail
+				if (strncmp(line, "validate:", 9) == 0)
+				{
+					if (strncasecmp(line + 9, "false", 5) == 0)
+					{
+						printf("Validate action will fail!\n");
+						validateResult = false;
 					}
 				}
 				
@@ -264,7 +276,8 @@ void* ValidateProductsThread(void *arg)
 
 	StoreKit_ReceiveProductsStartCallback(callbackObj);
 
-	while (i < end)
+	// do not issue any callbacks for products if the validation itself shall fail
+	while ((i < end) && (validateResult == true))
 	{
 		while ((i < end) && (ids[i] != ';'))
 		{
