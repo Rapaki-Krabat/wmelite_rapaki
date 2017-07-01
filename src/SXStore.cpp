@@ -27,20 +27,15 @@ THE SOFTWARE.
 #include "SXStore.h"
 #include "StringUtil.h"
 
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
-#	include "StoreKit_functions.h"
-#	include "StoreKit_callbacks.h"
-#endif
-
+#include "StoreKit_functions.h"
+#include "StoreKit_callbacks.h"
 
 IMPLEMENT_PERSISTENT(CSXStore, false);
 
 //////////////////////////////////////////////////////////////////////////
 CSXStore::CSXStore(CBGame* inGame) : CBObject(inGame)
 {
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
 	StoreKit_SetExternalData((void*)this);
-#endif
 
 	m_EventsEnabled = false;
 	m_LastProductRequestOwner = NULL;
@@ -340,9 +335,7 @@ void CSXStore::AfterLoad()
 	{
 		SetEventsEnabled(NULL, true);
 	}
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
 	StoreKit_SetExternalData((void*)this);
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -361,35 +354,26 @@ void CSXStore::SetEventsEnabled(CScScript* script, bool val)
 	if (val)
 	{
 		if (script) m_LastPurchaseOwner = script->m_Owner;
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
+
 		StoreKit_EnableEvents();
-#endif
 	}
 	else
 	{
 		m_LastPurchaseOwner = NULL;
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
 		StoreKit_DisableEvents();
-#endif
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
 void CSXStore::ValidateProducts(const char* prodIdList)
 {
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
 	StoreKit_ValidateProducts(prodIdList);
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
 bool CSXStore::IsAvailable()
 {
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
 	return StoreKit_IsStoreAvailable() > 0;
-#else
-	return false;
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -453,7 +437,6 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 {
 	if (!productId) return false;
 
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
 	for (int i = 0; i < m_ValidProducts.GetSize(); i++)
 	{
 		if (strcmp(productId, m_ValidProducts[i]->GetId()) == 0)
@@ -464,7 +447,7 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 			return true;
 		}
 	}
-#endif
+
 	script->RuntimeError("Store.Purchase() - '%s' is not a valid product id", productId);
 	return false;
 }
@@ -473,7 +456,7 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 {
 	if (!transId) return false;
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
+
 	for (int i = 0; i < m_Transactions.GetSize(); i++)
 	{
 		if (strcmp(transId, m_Transactions[i]->GetId()) == 0)
@@ -487,7 +470,7 @@ bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 			else return false;
 		}
 	}
-#endif
+
 	script->RuntimeError("Store.FinishTransaction() - '%s' is not a valid transaction id", transId);
 	return false;
 }
@@ -496,9 +479,8 @@ bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 void CSXStore::RestoreTransactions(CScScript* script)
 {
 	m_LastRestoreOwner = script->m_Owner;
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
+
 	StoreKit_RestoreTransactions();
-#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -510,10 +492,6 @@ void CSXStore::OnRestoreFinished(bool error)
 		else m_LastRestoreOwner->ApplyEvent("TransactionsRestoreFinished");
 	}
 }
-
-
-
-#if defined(__IPHONEOS__) || defined(__WINRT__) || defined(__ANDROID__) || defined(__LINUX__)
 
 //////////////////////////////////////////////////////////////////////////
 // StoreKit callbacks (called from ObjC)
@@ -572,4 +550,3 @@ void StoreKit_RestoreFinishedCallback(void* data, int error)
 	if (store) store->OnRestoreFinished(error > 0);
 }
 
-#endif // __IPHONEOS__
