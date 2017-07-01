@@ -16,7 +16,7 @@
 #    include <windows.h>
 #else
 #    include <pthread.h>
-#    include <time.h>
+#    include <unistd.h>
 #endif
 
 static void *callbackObj;
@@ -345,7 +345,7 @@ void StoreKit_ValidateProducts(const char* ids)
 #ifdef __WIN32__
     CreateThread(NULL, 0, ValidateProductsThread, (LPVOID) validateIDCopy, 0, NULL);
 #else
-    pthread_d threadId;
+    pthread_t threadId;
     pthread_create(&threadId, NULL, ValidateProductsThread, (void *) validateIDCopy);
 #endif
 }
@@ -430,7 +430,7 @@ void StoreKit_Purchase(const char* prodId)
 #ifdef __WIN32__
     CreateThread(NULL, 0, PurchaseProductsThread, (LPVOID) purchaseIDCopy, 0, NULL);
 #else
-    pthread_d threadId;
+    pthread_t threadId;
     pthread_create(&threadId, NULL, PurchaseProductsThread, (void *) purchaseIDCopy);
 #endif
 }
@@ -489,7 +489,7 @@ void StoreKit_RestoreTransactions()
 #ifdef __WIN32__
     CreateThread(NULL, 0, RestoreTransactionsThread, (LPVOID) NULL, 0, NULL);
 #else
-    pthread_d threadId;
+    pthread_t threadId;
     pthread_create(&threadId, NULL, RestoreTransactionsThread, (void *) NULL);
 #endif
 }

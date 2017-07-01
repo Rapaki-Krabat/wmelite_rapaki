@@ -10,7 +10,7 @@ SRCDIR=../src
 
 ODIR=obj_bass_fx_effects
 
-LIBS=`sdl2-config --libs` `freetype-config --libs` -L../prebuilt/linux/i386/ -L. -lbass -lfreeimage -lbass_fx -lSDL2 -leffects -ldl
+LIBS=`sdl2-config --libs` `freetype-config --libs` -L../prebuilt/linux/i386/ -L. -lbass -lfreeimage -lbass_fx -lSDL2 -leffects -ldl -lpthread
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o LicenseCheckDummy.o
 OBJC = $(patsubst %,$(ODIR)/%,$(_OBJC))
