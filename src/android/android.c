@@ -600,9 +600,10 @@ void StoreKit_RestoreTransactions()
 {
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
-  jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapRefreshPreviousPurchases", "()V");
+  jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapRefreshPreviousPurchases", "(Z)V");
+  jboolean restoreFlag = JNI_TRUE;
 
-  (*env)->CallVoidMethod(env, callbackObject, callbackID);
+  (*env)->CallVoidMethod(env, callbackObject, callbackID, restoreFlag);
 
   lastLicenseCheckStartTime = 0;
 

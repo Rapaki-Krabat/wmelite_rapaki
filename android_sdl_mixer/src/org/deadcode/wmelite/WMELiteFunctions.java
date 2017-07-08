@@ -188,7 +188,7 @@ public class WMELiteFunctions {
 	
 	}
 	
-	public void iapRefreshPreviousPurchases()
+	public void iapRefreshPreviousPurchases(boolean isRestore)
 	{
 	
 	}
