@@ -471,6 +471,14 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			break;
 		case SDL_WINDOWEVENT_FOCUS_LOST:
 		case SDL_WINDOWEVENT_MINIMIZED:
+
+			// the #ifdefs have been commented, this means that for autosave on exit the game might be
+			// already "deactivated"
+			// this is an issue when loading an autosaved game, because there is no automatic "activate"
+			// after load (yet)
+			// since the platforms might support losing focus w/o minimizing (multi-window), the better fix
+			// is to somehow "activate" the game after load, or to not save the "deactivated" state on autosave
+
 // #if !defined(__IPHONEOS__) && !defined(__ANDROID__)
 			if (Game) Game->OnActivate(false, false);
 			SDL_ShowCursor(SDL_ENABLE);
@@ -480,7 +488,7 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		case SDL_WINDOWEVENT_SHOWN:
 
 #ifdef __WINRT__
-			// on WinRT the fullscreen switch may fail, rertying once the window is
+			// on WinRT the fullscreen switch may fail, retrying once the window is
 			// shown might yield better results
 			Game->m_Renderer->ReassureFullscreen();
 			// SDL_Log("Window show event!!!");
