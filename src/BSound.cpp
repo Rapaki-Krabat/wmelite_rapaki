@@ -132,11 +132,11 @@ HRESULT CBSound::Stop()
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBSound::Pause(bool FreezePaused)
+HRESULT CBSound::Pause(/* bool FreezePaused */)
 {
 	if(m_Sound){
 		m_SoundPaused = true;
-		if(FreezePaused) m_Sound->m_FreezePaused = true;
+		// if(FreezePaused) m_Sound->m_FreezePaused = true;
 		return m_Sound->Pause();
 	}
 	else return E_FAIL;
@@ -163,7 +163,14 @@ HRESULT CBSound::Persist(CBPersistMgr *PersistMgr)
 		m_SoundPrivateVolume = m_Sound->m_PrivateVolume;
 		if(m_SoundPlaying) m_SoundPosition = m_Sound->GetPosition();
 		m_SoundLoopStart = m_Sound->m_LoopStart;
-		m_SoundFreezePaused = m_Sound->m_FreezePaused;
+
+		// do not save the current state of the soundFrozen variable.
+		// the value is more of a lifecycle state (app in foreground/has focus)
+		// than a game state, so loading a previously saved game should not
+		// have any music/sound in the frozen state
+
+		// m_SoundFreezePaused = m_Sound->m_FreezePaused;
+		m_SoundFreezePaused = false;
 	}
 
 	if(PersistMgr->m_Saving)

@@ -51,7 +51,13 @@ public:
 	DWORD m_SoundPosition;
 	DECLARE_PERSISTENT(CBSound, CBBase);
 	HRESULT Resume();
-	HRESULT Pause(bool FreezePaused = false);
+	
+	// the parameter has never been used, so remove it here
+	// the variable that would be set by this parameter is one that is not meant for persistance
+	// so avoid that it can be changed in a way that is related to engine logic (and not program/app lifecycle logic)
+
+	// HRESULT Pause(bool FreezePaused = false);
+	HRESULT Pause();
 	HRESULT Stop();
 	HRESULT Play(bool Looping=false);
 	DWORD GetLength();
