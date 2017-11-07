@@ -466,6 +466,8 @@ DWORD CBSoundBuffer::GetPosition()
 	{
 		// < 0 means getting current position
 		curr_position_ms = Mix_SetPlayPosition(m_currChannel, -1);
+
+		// Game->LOG(0, "Mix %s get_current_position = %d ms.", m_Filename, curr_position_ms);
 	}
 	if ((m_music) && (m_currChannel >= 0))
 	{
@@ -473,9 +475,10 @@ DWORD CBSoundBuffer::GetPosition()
 		double position_s;
 		position_s = Mix_GetMusicPositionCh(m_currChannel);
 		curr_position_ms = (DWORD) (position_s * 1000.0f);
+
+		// Game->LOG(0, "Music %s get_current_position = %d ms.", m_Filename, curr_position_ms);
 	}
 
-	Game->LOG(0, "File %s get_current_position = %d ms.", m_Filename, curr_position_ms);
 
 	return curr_position_ms;
 }
@@ -487,12 +490,15 @@ HRESULT CBSoundBuffer::SetPosition(DWORD Pos)
 	if ((m_chunk) && (m_currChannel >= 0))
 	{
 		Mix_SetPlayPosition(m_currChannel, Pos);
+
+		// Game->LOG(0, "Mix %s set_current_position = %d ms.", m_Filename, Pos);
 	}
 	if ((m_music) && (m_currChannel >= 0))
 	{
 		double position_s = ((double) Pos) / 1000.0f;
 		Mix_SetMusicPositionCh(position_s, m_currChannel);
-		Game->LOG(0, "Set music position is experimental!");
+
+		// Game->LOG(0, "Music %s set_current_position = %d ms.", m_Filename, Pos);
 	}
 
 	m_cachedPosition = Pos;
