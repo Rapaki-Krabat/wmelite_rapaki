@@ -542,7 +542,9 @@ void LicenseCheckResultDetail(char *str, int maxlen)
 
 	(*env)->ReleaseStringUTFChars(env, retStr, tmp);
 	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, retStr);
+	
+	// not a local reference (?)
+	// (*env)->DeleteLocalRef(env, retStr);
 }
 
 static void *callbackObj;
