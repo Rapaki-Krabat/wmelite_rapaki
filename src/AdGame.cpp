@@ -1274,6 +1274,7 @@ HRESULT CAdGame::LoadBuffer(BYTE * Buffer, bool Complete)
 						break;
 
 						case TOKEN_TALK_SKIP_BUTTON:
+							// FIXME release enums cannot be assigned via config file
 							if(CBPlatform::stricmp((char*)params2, "right")==0) m_TalkSkipButton = TALK_SKIP_RIGHT;
 							else if(CBPlatform::stricmp((char*)params2, "both")==0) m_TalkSkipButton = TALK_SKIP_BOTH;
 							else m_TalkSkipButton = TALK_SKIP_LEFT;
@@ -2128,7 +2129,15 @@ HRESULT CAdGame::OnMouseLeftUp()
 {
 	if (IsVideoPlaying()) return S_OK;
 
-	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
+	if (m_State == GAME_RUNNING && !m_Interactive)
+	{
+		// do the same as for the leftmousedown when talkskipbutton is set to left release
+		if (m_TalkSkipButton == TALK_SKIP_RELEASE_LEFT || m_TalkSkipButton == TALK_SKIP_RELEASE_BOTH)
+		{
+			FinishSentences();
+		}
+		return S_OK;
+	}
 
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_RELEASE, MOUSE_BUTTON_LEFT);
 
@@ -2220,7 +2229,15 @@ HRESULT CAdGame::OnMouseRightUp()
 {
 	if (IsVideoPlaying()) return S_OK;
 
-	if (m_State == GAME_RUNNING && !m_Interactive) return S_OK;
+	if (m_State == GAME_RUNNING && !m_Interactive)
+	{
+		// do the same as for the rightmousedown when talkskipbutton is set to right release
+		if (m_TalkSkipButton == TALK_SKIP_RELEASE_RIGHT || m_TalkSkipButton == TALK_SKIP_RELEASE_BOTH)
+		{
+			FinishSentences();
+		}
+		return S_OK;
+	}
 
 	if(m_ActiveObject) m_ActiveObject->HandleMouse(MOUSE_RELEASE, MOUSE_BUTTON_RIGHT);
 
