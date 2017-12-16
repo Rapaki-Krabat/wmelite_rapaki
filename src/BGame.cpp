@@ -268,7 +268,7 @@ CBGame::CBGame():CBObject(this)
 
 #ifdef __IPHONEOS__
 	m_TouchInterface = true;
-	m_ConstrainedMemory = true; // TODO differentiate old and new iOS devices
+	m_ConstrainedMemory = false; // do not differentiate old and new iOS devices anymore
 #elif __ANDROID__
 	m_TouchInterface = true;
 	m_ConstrainedMemory = false;
