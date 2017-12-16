@@ -100,6 +100,8 @@ void GlyphInfo::SetGlyphImage(size_t width, size_t height, size_t stride, BYTE* 
 	}
 
 	SDL_UnlockSurface(m_Image);
+
+	SDL_SetSurfaceBlendMode(m_Image, SDL_BLENDMODE_BLEND);
 }
 
 

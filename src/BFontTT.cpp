@@ -280,8 +280,6 @@ CBSurface* CBFontTT::RenderTextToTexture(const WideString& text, int width, TTex
 	}
 	SDL_Surface* surface = SDL_CreateRGBSurface(0, width, textHeight, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
 	
-	SDL_LockSurface(surface);
-
 	/* starting position for Y axis is taken as low as possible, assuming that no glyphs
 	 * render below "baseline + descender".
 	 *
@@ -370,6 +368,10 @@ CBSurface* CBFontTT::RenderTextToTexture(const WideString& text, int width, TTex
 
 		if (m_IsUnderline)
 		{
+			// need lock/unlock for access to pixels
+
+			SDL_LockSurface(surface);
+
 			for (int i = origPosX; i < origPosX + line->GetWidth(); i++)
 			{
 				Uint8* buf = (Uint8*)surface->pixels + (int)(m_UnderlinePos + m_Ascender) * surface->pitch;
@@ -377,10 +379,10 @@ CBSurface* CBFontTT::RenderTextToTexture(const WideString& text, int width, TTex
 	
 				buf32[i] = SDL_MapRGBA(surface->format, 255, 255, 255, 255);
 			}
+
+			SDL_UnlockSurface(surface);
 		}
 
-		SDL_UnlockSurface(surface);
-				
 		SAFE_DELETE(line);
 		posY += GetLineHeight();
 	}
@@ -403,7 +405,11 @@ CBSurface* CBFontTT::RenderTextToTexture(const WideString& text, int width, TTex
 //////////////////////////////////////////////////////////////////////////
 void CBFontTT::BlitSurface(SDL_Surface* src, SDL_Surface* target, SDL_Rect* targetRect)
 {
-	//SDL_BlitSurface(src, NULL, target, targetRect);
+#if 1
+	
+	SDL_BlitSurface(src, NULL, target, targetRect);
+
+#else
 
 	for (int y = 0; y < src->h; y++)
 	{
@@ -437,6 +443,8 @@ void CBFontTT::BlitSurface(SDL_Surface* src, SDL_Surface* target, SDL_Rect* targ
 			}
 		}
 	}
+
+#endif
 
 }
 
