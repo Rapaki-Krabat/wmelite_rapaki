@@ -56,22 +56,22 @@ void StoreKit_DisableEvents()
     [[StoreKitMgr sharedStoreKitMgr] disableEvents];    
 }
 
-void StoreKit_ValidateProducts(const char* ids)
+void StoreKit_ValidateProducts(const char* ids, TTextEncoding encoding)
 {
     [[StoreKitMgr sharedStoreKitMgr] validateProducts:ids];
 }
 
-void StoreKit_Purchase(const char* prodId)
+void StoreKit_Purchase(const char* prodId, TTextEncoding encoding)
 {
     [[StoreKitMgr sharedStoreKitMgr] purchase:prodId];
 }
 
-void StoreKit_RestoreTransactions()
+void StoreKit_RestoreTransactions(TTextEncoding encoding)
 {
     [[StoreKitMgr sharedStoreKitMgr]restoreTransactions];
 }
 
-int StoreKit_FinishTransaction(const char* transId)
+int StoreKit_FinishTransaction(const char* transId, TTextEncoding encoding)
 {
     if ([[StoreKitMgr sharedStoreKitMgr]finishTransaction:transId]) return 1;
     else return 0;
