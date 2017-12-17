@@ -565,7 +565,7 @@ void CBGame::DEBUG_DebugDisable()
 //////////////////////////////////////////////////////////////////////
 void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 {
-#if !defined(__IPHONEOS__) && !defined(__ANDROID__)
+#if !defined(__IPHONEOS__) && !defined(__ANDROID__) && !defined(__WINRT__)
 	if ((!m_DEBUG_DebugMode) && (!m_DEBUG_LogWriteMode)) return;
 #endif
 	time_t timeNow;
