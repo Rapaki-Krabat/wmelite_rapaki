@@ -4,6 +4,12 @@
 #include "StoreKit_functions.h"
 #include "StoreKit_callbacks.h"
 
+// definitions for stringutil declarations
+typedef unsigned char       BYTE; 
+typedef unsigned long       DWORD;
+
+#include "StringUtil.h"
+
 #include "SDL_log.h"
 
 #include <ppltasks.h>
@@ -35,6 +41,8 @@ public:
 
 	Platform::String^ WinRTInAppConvertCString(const char* cString);
 
+	void WinRTInAppUpdateEncoding(TTextEncoding newEncoding);
+
 private:
 	IAsyncOperation<ListingInformation^> ^ listInfo = nullptr;
 
@@ -45,6 +53,8 @@ private:
 	IAsyncOperation<PurchaseResults^>^ purchaseResult = nullptr;
 
 	String^ productIDCopy;
+
+	TTextEncoding currEncoding = TEXT_ANSI;
 };
 
 static WinRTInAppPurchase *instance = new WinRTInAppPurchase();
@@ -70,24 +80,29 @@ void StoreKit_DisableEvents()
     // dummy
 }
 
-void StoreKit_ValidateProducts(const char* ids)
+void StoreKit_ValidateProducts(const char* ids, TTextEncoding encoding)
 {
+	instance->WinRTInAppUpdateEncoding(encoding);
 	instance->WinRTInAppListItems(ids);
 }
 
-void StoreKit_Purchase(const char* prodId)
+void StoreKit_Purchase(const char* prodId, TTextEncoding encoding)
 {
+	instance->WinRTInAppUpdateEncoding(encoding);
 	instance->WinRTInAppPurchaseItem(prodId);
 }
 
-void StoreKit_RestoreTransactions()
+void StoreKit_RestoreTransactions(TTextEncoding encoding)
 {
+	instance->WinRTInAppUpdateEncoding(encoding);
 	instance->WinRTInAppRestorePurchasedItems();
 }
 
-int StoreKit_FinishTransaction(const char* transId)
+int StoreKit_FinishTransaction(const char* transId, TTextEncoding encoding)
 {
-    // dummy
+	instance->WinRTInAppUpdateEncoding(encoding);
+	
+	// dummy
 	return 1;
 }
 
@@ -378,15 +393,53 @@ void WinRTInAppPurchase::WinRTInAppConvertRTString(String^ winrtString, char* cS
 	const unsigned int resultLen = winrtString->Length();
 	const wchar_t* wide_chars = winrtString->Data();
 	memset(cString, 0, maxLen);
-	wcstombs(cString, wide_chars, (maxLen - 1));
+	if (currEncoding == TEXT_ANSI)
+	{
+		// convert to current locale and hope for the best
+		wcstombs(cString, wide_chars, (maxLen - 1));
+	}
+	else
+	{
+		// convert to UTF-8 with hopefully no loss
+		Utf8String tmpStr;
+		size_t tmpLength;
+		
+		tmpStr = StringUtil::WideToUtf8(wide_chars);
+		tmpLength = maxLen;
+		if (tmpStr.length() < maxLen)
+		{
+			tmpLength = tmpStr.length();
+		}
+
+		memcpy(cString, tmpStr.c_str(), tmpLength);
+	}
 }
 
 Platform::String^ WinRTInAppPurchase::WinRTInAppConvertCString(const char* cString)
 {
-	std::string s_str = std::string(cString);
-	std::wstring wid_str = std::wstring(s_str.begin(), s_str.end());
+	std::string s_str;
+	std::wstring wid_str;
+
+	s_str = std::string(cString);
+
+	if (currEncoding == TEXT_ANSI)
+	{
+		// simply transfer to wide string
+		wid_str = std::wstring(s_str.begin(), s_str.end());
+	}
+	else
+	{
+		// convert UTF-8 to wide string
+		wid_str = StringUtil::Utf8ToWide(s_str);
+	}
+
 	const wchar_t* w_char = wid_str.c_str();
 	Platform::String^ p_string = ref new Platform::String(w_char);
 
 	return p_string;
+}
+
+void WinRTInAppPurchase::WinRTInAppUpdateEncoding(TTextEncoding newEncoding)
+{
+	currEncoding = newEncoding;
 }

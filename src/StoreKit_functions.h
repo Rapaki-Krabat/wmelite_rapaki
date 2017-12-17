@@ -1,6 +1,7 @@
 #ifndef __StoreKit_functions_H__
 #define __StoreKit_functions_H__
 
+#include "dctypes.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -14,13 +15,13 @@ extern "C" {
     
     void StoreKit_DisableEvents();
     
-    void StoreKit_ValidateProducts(const char* ids);
+    void StoreKit_ValidateProducts(const char* ids, TTextEncoding encoding);
     
-    void StoreKit_Purchase(const char* prodId);
+    void StoreKit_Purchase(const char* prodId, TTextEncoding encoding);
     
-    void StoreKit_RestoreTransactions();
+    void StoreKit_RestoreTransactions(TTextEncoding encoding);
     
-    int StoreKit_FinishTransaction(const char* transId);
+    int StoreKit_FinishTransaction(const char* transId, TTextEncoding encoding);
     
 #ifdef __cplusplus
 }

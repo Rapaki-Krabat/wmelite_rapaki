@@ -367,7 +367,7 @@ void CSXStore::SetEventsEnabled(CScScript* script, bool val)
 //////////////////////////////////////////////////////////////////////////
 void CSXStore::ValidateProducts(const char* prodIdList)
 {
-	StoreKit_ValidateProducts(prodIdList);
+	StoreKit_ValidateProducts(prodIdList, Game->m_TextEncoding);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -443,7 +443,7 @@ bool CSXStore::Purchase(CScScript* script, const char* productId)
 		{
 			m_LastPurchaseOwner = script->m_Owner;
 
-			StoreKit_Purchase(productId);
+			StoreKit_Purchase(productId, Game->m_TextEncoding);
 			return true;
 		}
 	}
@@ -461,7 +461,7 @@ bool CSXStore::FinishTransaction(CScScript* script, const char* transId)
 	{
 		if (strcmp(transId, m_Transactions[i]->GetId()) == 0)
 		{
-			if (StoreKit_FinishTransaction(transId) > 0)
+			if (StoreKit_FinishTransaction(transId, Game->m_TextEncoding) > 0)
 			{
 				SAFE_DELETE(m_Transactions[i]);
 				m_Transactions.RemoveAt(i);
@@ -480,7 +480,7 @@ void CSXStore::RestoreTransactions(CScScript* script)
 {
 	m_LastRestoreOwner = script->m_Owner;
 
-	StoreKit_RestoreTransactions();
+	StoreKit_RestoreTransactions(Game->m_TextEncoding);
 }
 
 //////////////////////////////////////////////////////////////////////////
