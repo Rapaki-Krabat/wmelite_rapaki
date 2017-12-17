@@ -5,9 +5,6 @@
  *      Author: daniel
  */
 
-#include "StoreKit_functions.h"
-#include "StoreKit_callbacks.h"
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -18,6 +15,9 @@
 #    include <pthread.h>
 #    include <unistd.h>
 #endif
+
+#include "StoreKit_functions.h"
+#include "StoreKit_callbacks.h"
 
 static void *callbackObj;
 
