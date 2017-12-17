@@ -26,6 +26,8 @@ THE SOFTWARE.
 #ifndef DCTYPES_H
 #define DCTYPES_H
 
+#include "textencoding.h"
+
 #include <string>
 #include <list>
 #include <vector>
@@ -157,10 +159,6 @@ typedef enum {
 typedef enum {
 	CACHE_ALL, CACHE_HALF
 } TSpriteCacheType;
-
-typedef enum {
-	TEXT_ANSI=0, TEXT_UTF8=1, NUM_TEXT_ENCODINGS
-} TTextEncoding;
 
 typedef enum {
 	BLEND_UNKNOWN=-1, BLEND_NORMAL=0, BLEND_ADDITIVE=1, BLEND_SUBTRACTIVE=2, NUM_BLEND_MODES

@@ -1,7 +1,7 @@
 #ifndef __StoreKit_functions_H__
 #define __StoreKit_functions_H__
 
-#include "dctypes.h"
+#include "textencoding.h"
 
 #ifdef __cplusplus
 extern "C" {
