@@ -337,7 +337,7 @@ void* ValidateProductsThread(void *arg)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void StoreKit_ValidateProducts(const char* ids)
+void StoreKit_ValidateProducts(const char* ids, TTextEncoding encoding)
 {
     // must copy stack variable to local memory
     strcpy(validateIDCopy, ids);
@@ -422,7 +422,7 @@ void* PurchaseProductsThread(void *arg)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void StoreKit_Purchase(const char* prodId)
+void StoreKit_Purchase(const char* prodId, TTextEncoding encoding)
 {
     // must copy stack variable to local memory
     strcpy(purchaseIDCopy, prodId);
@@ -484,7 +484,7 @@ void* RestoreTransactionsThread(void *arg)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void StoreKit_RestoreTransactions()
+void StoreKit_RestoreTransactions(TTextEncoding encoding)
 {
 #ifdef __WIN32__
     CreateThread(NULL, 0, RestoreTransactionsThread, (LPVOID) NULL, 0, NULL);
@@ -495,7 +495,7 @@ void StoreKit_RestoreTransactions()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-int StoreKit_FinishTransaction(const char* transId)
+int StoreKit_FinishTransaction(const char* transId, TTextEncoding encoding)
 {
     // dummy
 	return 1;
