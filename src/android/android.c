@@ -570,7 +570,7 @@ void StoreKit_DisableEvents()
     // dummy
 }
 
-void StoreKit_ValidateProducts(const char* ids)
+void StoreKit_ValidateProducts(const char* ids, TTextEncoding encoding)
 {
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
@@ -584,7 +584,7 @@ void StoreKit_ValidateProducts(const char* ids)
   (*env)->DeleteLocalRef(env, cls);
 }
 
-void StoreKit_Purchase(const char* prodId)
+void StoreKit_Purchase(const char* prodId, TTextEncoding encoding)
 {
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
@@ -598,7 +598,7 @@ void StoreKit_Purchase(const char* prodId)
   (*env)->DeleteLocalRef(env, cls);
 }
 
-void StoreKit_RestoreTransactions()
+void StoreKit_RestoreTransactions(TTextEncoding encoding)
 {
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
@@ -612,7 +612,7 @@ void StoreKit_RestoreTransactions()
   (*env)->DeleteLocalRef(env, cls);
 }
 
-int StoreKit_FinishTransaction(const char* transId)
+int StoreKit_FinishTransaction(const char* transId, TTextEncoding encoding)
 {
     // dummy
 	return 1;
