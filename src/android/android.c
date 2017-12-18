@@ -602,7 +602,7 @@ static void createCString(JNIEnv *env, jstring jString, char* cString, int maxle
 	memcpy(cString, tmp, reallen);
 	
 	// unpin from memory
-	(*env)->ReleaseStringUTFChars(env, id, tmp);
+	(*env)->ReleaseStringUTFChars(env, jString, tmp);
 }
 
 void StoreKit_ValidateProducts(const char* ids, TTextEncoding encoding)
