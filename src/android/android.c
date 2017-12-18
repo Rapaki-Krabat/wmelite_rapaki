@@ -570,13 +570,50 @@ void StoreKit_DisableEvents()
     // dummy
 }
 
+static TTextEncoding currEncoding = TEXT_ANSI;
+
+static void updateTextEncoding(TTextEncoding newEncoding)
+{
+  currEncoding = newEncoding;
+}
+
+static jstring createJavaString(JNIEnv *env, const char* cString)
+{
+  // we do not care whether the string is ANSI or UTF-8
+  // this function will do "the right thing"
+  return (*env)->NewStringUTF(env, cString);
+}
+
+static void createCString(JNIEnv *env, jstring jString, char* cString, int maxlen)
+{
+  // make the array accessible from C
+  const char *tmp = (*env)->GetStringUTFChars(env, jString, NULL);
+	jsize currlen = (*env)->GetStringUTFLength(env, jString);
+
+	// compute max size of the string
+	int reallen = (currlen > (maxlen - 1)) ? (maxlen - 1) : currlen;
+  
+	// zero out C array
+	memset(cString, 0, maxlen);
+	
+	// FIXME in case of ANSI an encoding needs to be applied
+	
+	// copy string
+	memcpy(cString, tmp, reallen);
+	
+	// unpin from memory
+	(*env)->ReleaseStringUTFChars(env, id, tmp);
+}
+
 void StoreKit_ValidateProducts(const char* ids, TTextEncoding encoding)
 {
+  updateTextEncoding(encoding);
+  
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
   jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapVerifyProductsList", "(Ljava/lang/String;)V");
 
-  jstring javaString = (*env)->NewStringUTF(env, ids);
+  jstring javaString = createJavaString(env, ids);
 
   (*env)->CallVoidMethod(env, callbackObject, callbackID, javaString);
 
@@ -586,11 +623,13 @@ void StoreKit_ValidateProducts(const char* ids, TTextEncoding encoding)
 
 void StoreKit_Purchase(const char* prodId, TTextEncoding encoding)
 {
+  updateTextEncoding(encoding);
+  
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
   jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapStartPurchase", "(Ljava/lang/String;)V");
 
-  jstring javaString = (*env)->NewStringUTF(env, prodId);
+  jstring javaString = createJavaString(env, prodId);
 
   (*env)->CallVoidMethod(env, callbackObject, callbackID, javaString);
 
@@ -600,6 +639,8 @@ void StoreKit_Purchase(const char* prodId, TTextEncoding encoding)
 
 void StoreKit_RestoreTransactions(TTextEncoding encoding)
 {
+  updateTextEncoding(encoding);
+  
   JNIEnv *env = Android_JNI_GetEnv();
   jclass cls = (*env)->GetObjectClass(env, callbackObject);
   jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapRefreshPreviousPurchases", "(Z)V");
@@ -614,69 +655,33 @@ void StoreKit_RestoreTransactions(TTextEncoding encoding)
 
 int StoreKit_FinishTransaction(const char* transId, TTextEncoding encoding)
 {
-    // dummy
+  updateTextEncoding(encoding);
+  
+  // dummy
 	return 1;
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddValidProductCallback(JNIEnv* env, jobject o, jstring id, jstring name, jstring desc, jstring price)
 {
-	const char *tmp;
-
 	char idCString[4096];
 	char nameCString[4096];
 	char descCString[4096];
 	char priceCString[4096];
 
-	tmp = (*env)->GetStringUTFChars(env, id, NULL);
-	if (strnlen(tmp, 4096) < 4096) {
-		strncpy(idCString, tmp, 4096);
-	} else {
-		idCString[0] = 0;
-	}
-	(*env)->ReleaseStringUTFChars(env, id, tmp);
-
-	tmp = (*env)->GetStringUTFChars(env, name, NULL);
-	if (strnlen(tmp, 4096) < 4096) {
-		strncpy(nameCString, tmp, 4096);
-	} else {
-		nameCString[0] = 0;
-	}
-	(*env)->ReleaseStringUTFChars(env, name, tmp);
-
-	tmp = (*env)->GetStringUTFChars(env, desc, NULL);
-	if (strnlen(tmp, 4096) < 4096) {
-		strncpy(descCString, tmp, 4096);
-	} else {
-		descCString[0] = 0;
-	}
-	(*env)->ReleaseStringUTFChars(env, desc, tmp);
-
-	tmp = (*env)->GetStringUTFChars(env, price, NULL);
-	if (strnlen(tmp, 4096) < 4096) {
-		strncpy(priceCString, tmp, 4096);
-	} else {
-		priceCString[0] = 0;
-	}
-	(*env)->ReleaseStringUTFChars(env, price, tmp);
-
+	createCString(env, id, idCString, 4096);
+	createCString(env, name, nameCString, 4096);
+	createCString(env, desc, descCString, 4096);
+	createCString(env, price, priceCString, 4096);
 
 	StoreKit_AddValidProductCallback(idCString, nameCString, descCString, priceCString, callbackObj);
 }
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddInvalidProductCallback(JNIEnv* env, jobject o, jstring id)
 {
-	const char *tmp;
-
 	char idCString[4096];
-	tmp = (*env)->GetStringUTFChars(env, id, NULL);
 
-	if (strnlen(tmp, 4096) < 4096) {
-		strncpy(idCString, tmp, 4096);
-	} else {
-		idCString[0] = 0;
-	}
-	(*env)->ReleaseStringUTFChars(env, id, tmp);
-
+	createCString(env, id, idCString, 4096);
+	
 	StoreKit_AddInvalidProductCallback(idCString, callbackObj);
 }
 
@@ -692,35 +697,13 @@ JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPReceiveProd
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddTransactionCallback(JNIEnv* env, jobject o, jstring transId, jstring productId, jstring state)
 {
-	const char *tmp;
-
 	char transIdCString[4096];
 	char productIdCString[4096];
 	char stateCString[4096];
 
-	tmp = (*env)->GetStringUTFChars(env, transId, NULL);
-	if (strnlen(tmp, 4096) < 4096) {
-		strncpy(transIdCString, tmp, 4096);
-	} else {
-		transIdCString[0] = 0;
-	}
-	(*env)->ReleaseStringUTFChars(env, transId, tmp);
-
-	tmp = (*env)->GetStringUTFChars(env, productId, NULL);
-	if (strnlen(tmp, 4096) < 4096) {
-		strncpy(productIdCString, tmp, 4096);
-	} else {
-		productIdCString[0] = 0;
-	}
-	(*env)->ReleaseStringUTFChars(env, productId, tmp);
-
-	tmp = (*env)->GetStringUTFChars(env, state, NULL);
-	if (strnlen(tmp, 4096) < 4096) {
-		strncpy(stateCString, tmp, 4096);
-	} else {
-		stateCString[0] = 0;
-	}
-	(*env)->ReleaseStringUTFChars(env, state, tmp);
+	createCString(env, transId, transIdCString, 4096);
+	createCString(env, productId, productIdCString, 4096);
+	createCString(env, state,stateCString, 4096);
 
 	StoreKit_AddTransactionCallback(transIdCString, productIdCString, stateCString, callbackObj);
 }
