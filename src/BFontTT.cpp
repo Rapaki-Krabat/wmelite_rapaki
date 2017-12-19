@@ -318,7 +318,7 @@ CBSurface* CBFontTT::RenderTextToTexture(const WideString& text, int width, TTex
 			wchar_t ch = line->GetText()[i];
 
 			GlyphInfo* glyph = m_GlyphCache->GetGlyph(ch);
-			if (!glyph) continue;
+			if (!glyph) continue; // non-existent glyphs skipped, no side effects (they do not contribute to the maximum offset computation)
 
 			textOffset = max(textOffset, glyph->GetBearingY());
 
@@ -347,7 +347,7 @@ CBSurface* CBFontTT::RenderTextToTexture(const WideString& text, int width, TTex
 			wchar_t ch = line->GetText()[i];
 
 			GlyphInfo* glyph = m_GlyphCache->GetGlyph(ch);
-			if (!glyph) continue;
+			if (!glyph) continue; // non-existent glyphs skipped, no side effects (nothing drawn, no coords advanced)
 
 			float kerning = 0;
 			if (prevChar != L'\0') kerning = GetKerning(prevChar, ch);
@@ -875,20 +875,29 @@ int CBFontTT::WrapText(const WideString& text, int maxWidth, int maxHeight, Text
 		if (ch != L'\n')
 		{
 			GlyphInfo* glyphInfo = GetGlyphCache()->GetGlyph(ch);
-			if (!glyphInfo) continue;
-
-			float kerning = 0;
-			if (prevChar != L'\0') kerning = GetKerning(prevChar, ch);
-			prevChar = ch;
-
-			/* Small, but important difference! The computation of width must
-			 * match the one from the rendering EXACTLY, including precision
-			 * loss from casting. Otherwise, the bounds of the surface will
-			 * be exceeded.
-			 *
-			 */
-			charWidth = (((int) glyphInfo->GetAdvanceX()) + ((int) kerning));
-			// charWidth = (int)(glyphInfo->GetAdvanceX() + kerning);
+			
+			// if (!glyphInfo) continue;
+			//
+			// do not skip the rest of the code, because if we're at
+			// the last character of the text, 
+			// the line would not be added to the list!!!
+			// instead just pretend we have a charecter with 0 length
+			
+			if (glyphInfo)
+			{
+				float kerning = 0;
+				if (prevChar != L'\0') kerning = GetKerning(prevChar, ch);
+				prevChar = ch;
+	
+				/* Small, but important difference! The computation of width must
+				 * match the one from the rendering EXACTLY, including precision
+				 * loss from casting. Otherwise, the bounds of the surface will
+				 * be exceeded.
+				 *
+				 */
+				charWidth = (((int) glyphInfo->GetAdvanceX()) + ((int) kerning));
+				// charWidth = (int)(glyphInfo->GetAdvanceX() + kerning);
+			}
 		}
 
 		bool lineTooLong = maxWidth >= 0 && currWidth + charWidth > maxWidth;
