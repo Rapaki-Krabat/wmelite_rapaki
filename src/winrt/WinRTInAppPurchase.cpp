@@ -8,6 +8,8 @@
 typedef unsigned char       BYTE; 
 typedef unsigned long       DWORD;
 
+#include "dctypes.h"
+
 #include "StringUtil.h"
 
 #include "SDL_log.h"
