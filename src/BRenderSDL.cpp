@@ -478,6 +478,8 @@ void CBRenderSDL::UpdateWindowScaling()
 	m_LogicalWidth  = m_NewLogicalWidth;
 	m_LogicalHeight = m_NewLogicalHeight;
 
+    // compute aspect and borders first without considering safe area
+    
     float origAspect         = (float) m_Width         / (float) m_Height;
 	float realLogicalAspect  = (float) m_LogicalWidth  / (float) m_LogicalHeight;
 	// float realPhysicalAspect = (float) m_PhysicalWidth / (float) m_PhysicalHeight;
@@ -518,24 +520,32 @@ void CBRenderSDL::UpdateWindowScaling()
 	m_LogicalBorderLeft  = (m_LogicalWidth - (m_Width * logicalRatio)) / 2;
 	m_LogicalBorderRight =  m_LogicalWidth - (m_Width * logicalRatio) - m_LogicalBorderLeft;
     
-    /*
-    printf("Computed logical left border = %d and safe area offset = %d.\n", m_LogicalBorderLeft, m_LogicalBorderOffsetLeft);
-    printf("Computed logical right border = %d and safe area offset = %d.\n", m_LogicalBorderRight, m_LogicalBorderOffsetRight);
-    */
-    
-    if (m_LogicalBorderLeft < m_LogicalBorderOffsetLeft) m_LogicalBorderLeft = m_LogicalBorderOffsetLeft;
-    if (m_LogicalBorderRight < m_LogicalBorderOffsetRight) m_LogicalBorderRight = m_LogicalBorderOffsetRight;
+    // adjust if safe layout area borders are bigger
+    if (m_LogicalBorderOffsetLeft > m_LogicalBorderLeft)
+    {
+        Game->LOG(0, "Adjusting left border offset from %d to %d.\n", m_LogicalBorderLeft, m_LogicalBorderOffsetLeft);
+        m_LogicalBorderLeft = m_LogicalBorderOffsetLeft;
+    }
+    if (m_LogicalBorderOffsetRight > m_LogicalBorderRight)
+    {
+        Game->LOG(0, "Adjusting right border offset from %d to %d.\n", m_LogicalBorderRight, m_LogicalBorderOffsetRight);
+        m_LogicalBorderRight = m_LogicalBorderOffsetRight;
+    }
 
 	m_LogicalBorderTop    = (m_LogicalHeight - (m_Height * logicalRatio)) / 2;
 	m_LogicalBorderBottom =  m_LogicalHeight - (m_Height * logicalRatio) - m_LogicalBorderTop;
 
-    /*
-    printf("Computed logical top border = %d and safe area offset = %d.\n", m_LogicalBorderTop, m_LogicalBorderOffsetTop);
-    printf("Computed logical bottom border = %d and safe area offset = %d.\n", m_LogicalBorderBottom, m_LogicalBorderOffsetBottom);
-    */
-    
-    if (m_LogicalBorderTop < m_LogicalBorderOffsetTop) m_LogicalBorderTop = m_LogicalBorderOffsetTop;
-    if (m_LogicalBorderBottom < m_LogicalBorderOffsetBottom) m_LogicalBorderBottom = m_LogicalBorderOffsetBottom;
+    // adjust if safe layout area borders are bigger
+    if (m_LogicalBorderOffsetTop > m_LogicalBorderTop)
+    {
+        Game->LOG(0, "Adjusting top border offset from %d to %d.\n", m_LogicalBorderTop, m_LogicalBorderOffsetTop);
+        m_LogicalBorderTop = m_LogicalBorderOffsetTop;
+    }
+    if (m_LogicalBorderOffsetBottom > m_LogicalBorderBottom)
+    {
+        Game->LOG(0, "Adjusting bottom border offset from %d to %d.\n", m_LogicalBorderBottom, m_LogicalBorderOffsetBottom);
+        m_LogicalBorderBottom = m_LogicalBorderOffsetBottom;
+    }
 
 	m_LogicalRatioX = (float)(m_LogicalWidth  - m_LogicalBorderLeft - m_LogicalBorderRight)  / (float) m_Width;
 	m_LogicalRatioY = (float)(m_LogicalHeight - m_LogicalBorderTop  - m_LogicalBorderBottom) / (float) m_Height;
@@ -547,11 +557,30 @@ void CBRenderSDL::UpdateWindowScaling()
 			m_LogicalBorderLeft, m_LogicalBorderRight, m_LogicalBorderTop, m_LogicalBorderBottom);
 
 	// physical coordinates update
+#if 0
+    // this used to work when there were no "safe area" margins to respect
+    
 	m_PhysicalBorderLeft  = (m_PhysicalWidth - (m_Width * physicalRatio)) / 2;
 	m_PhysicalBorderRight =  m_PhysicalWidth - (m_Width * physicalRatio) - m_PhysicalBorderLeft;
 
 	m_PhysicalBorderTop    = (m_PhysicalHeight - (m_Height * physicalRatio)) / 2;
 	m_PhysicalBorderBottom =  m_PhysicalHeight - (m_Height * physicalRatio) - m_PhysicalBorderTop;
+#else
+    // compute physical borders from logical borders to honour a possible
+    // shrink due to safe layout area
+    
+	float logicalToPhysicalWidth = ((float) m_PhysicalWidth) / ((float) m_LogicalWidth);
+	float logicalToPhysicalHeight = ((float) m_PhysicalHeight) / ((float) m_LogicalHeight);
+
+	Game->LOG(0, "Logical to physical ratios: with=%.2f height=%.2f\n", logicalToPhysicalWidth, logicalToPhysicalHeight);
+
+	m_PhysicalBorderLeft  = (int) (((float) m_LogicalBorderLeft) * logicalToPhysicalWidth);
+	m_PhysicalBorderRight  = (int) (((float) m_LogicalBorderRight) * logicalToPhysicalWidth);
+
+	m_PhysicalBorderTop  = (int) (((float) m_LogicalBorderTop) * logicalToPhysicalHeight);
+	m_PhysicalBorderBottom  = (int) (((float) m_LogicalBorderBottom) * logicalToPhysicalHeight);
+
+#endif
 
 	m_PhysicalRatioX = (float)(m_PhysicalWidth  - m_PhysicalBorderLeft - m_PhysicalBorderRight)  / (float) m_Width;
 	m_PhysicalRatioY = (float)(m_PhysicalHeight - m_PhysicalBorderTop  - m_PhysicalBorderBottom) / (float) m_Height;
