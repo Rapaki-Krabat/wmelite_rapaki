@@ -92,11 +92,16 @@ private:
 	int m_LogicalWidth;
 	int m_LogicalHeight;
 
-	int m_LogicalBorderLeft;
-	int m_LogicalBorderTop;
-	int m_LogicalBorderRight;
-	int m_LogicalBorderBottom;
-
+    int m_LogicalBorderLeft;
+    int m_LogicalBorderTop;
+    int m_LogicalBorderRight;
+    int m_LogicalBorderBottom;
+    
+    int m_LogicalBorderOffsetLeft;
+    int m_LogicalBorderOffsetTop;
+    int m_LogicalBorderOffsetRight;
+    int m_LogicalBorderOffsetBottom;
+    
 	// "physical" window properties
 	// this corresponds to what the renderer size really is
 	float m_PhysicalRatioX;

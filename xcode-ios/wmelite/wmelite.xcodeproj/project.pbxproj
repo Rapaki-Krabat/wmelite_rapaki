@@ -980,9 +980,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				"CODE_SIGN_ENTITLEMENTS[sdk=*]" = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Daniel Sobe (2A6F7C65LU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Daniel Sobe (2A6F7C65LU)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = GEG75DQ787;
 				ENABLE_BITCODE = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1024,7 +1025,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.deadcode.wmelitedemo;
 				PRODUCT_NAME = wmelite;
-				PROVISIONING_PROFILE = "d414c63b-2800-42e3-9428-e7f08ccc6e2b";
+				PROVISIONING_PROFILE = "b98e0615-6c8e-4140-81b9-72562a823c30";
+				PROVISIONING_PROFILE_SPECIFIER = "WMELite development";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -1084,7 +1086,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.deadcode.wmelitedemo;
 				PRODUCT_NAME = wmelite;
-				PROVISIONING_PROFILE = "d414c63b-2800-42e3-9428-e7f08ccc6e2b";
+				PROVISIONING_PROFILE = "7d3825c0-5012-4f3b-a519-eb7db659c52e";
+				PROVISIONING_PROFILE_SPECIFIER = "WMElite demo";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -1097,8 +1100,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LIBRARY = "libc++";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Daniel Sobe (GEG75DQ787)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Daniel Sobe (2A6F7C65LU)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Daniel Sobe (2A6F7C65LU)";
 				ENABLE_BITCODE = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1107,8 +1110,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				PROVISIONING_PROFILE = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
+				PROVISIONING_PROFILE = "b98e0615-6c8e-4140-81b9-72562a823c30";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "b98e0615-6c8e-4140-81b9-72562a823c30";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1130,8 +1133,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
-				PROVISIONING_PROFILE = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "367481a8-7f4a-4e2f-8b34-5735f0c9f1d0";
+				PROVISIONING_PROFILE = "7d3825c0-5012-4f3b-a519-eb7db659c52e";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7d3825c0-5012-4f3b-a519-eb7db659c52e";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

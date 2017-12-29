@@ -26,6 +26,7 @@ THE SOFTWARE.
 #ifndef __WmeIosUtils_H__
 #define __WmeIosUtils_H__
 
+#include "SDL_syswm.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,6 +37,8 @@ extern "C" {
 	void IOS_GetDeviceType(char* buffer);
 	void IOS_GetPlatformIdentifierString(char *buffer);
 	void IOS_GetAppVersionString(char *buffer);
+    
+    void IOS_GetSafeLayoutLogicalOffsets(SDL_SysWMinfo *windowInfo, int width, int height, int *left, int *top, int *right, int *bottom);
 
 #ifdef __cplusplus
 }

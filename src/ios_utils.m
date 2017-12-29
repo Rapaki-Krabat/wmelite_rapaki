@@ -105,3 +105,34 @@ void SetKeepDisplayOn(int keepOn)
     }
 }
 
+void IOS_GetSafeLayoutLogicalOffsets(SDL_SysWMinfo *windowInfo, int width, int height, int *left, int *top, int *right, int *bottom)
+{
+    // pre-init with sane defaults
+    *left   = 0;
+    *top    = 0;
+    *right  = 0;
+    *bottom = 0;
+    
+    if (@available(iOS 11.0, *)) {
+        // get the window sizes
+        // better use what SDL already provides, just to make sure to use the same values
+        // windowInfo->info.uikit.window.screen.bounds;
+        
+        // query the current window for the safe area
+        UILayoutGuide* windowGuide = [windowInfo->info.uikit.window safeAreaLayoutGuide];
+        
+        /*
+        printf("window info x=%f y=%f w=%f h=%f\n",[windowGuide layoutFrame].origin.x, [windowGuide layoutFrame].origin.y, [windowGuide layoutFrame].size.width, [windowGuide layoutFrame].size.height);
+        printf("window size from SDL: w=%d h=%d\n", width, height);
+         */
+         
+        *left = (int) [windowGuide layoutFrame].origin.x;
+        *top = (int) [windowGuide layoutFrame].origin.y;
+        *right = width - ((int) [windowGuide layoutFrame].size.width) - *left;
+        *bottom = height - ((int) [windowGuide layoutFrame].size.height) - *top;
+    }
+
+    /*
+    printf("====> layout logical offsets x=%d y=%d r=%d b=%d <====\n", *left, *top, *right, *bottom);
+     */
+}

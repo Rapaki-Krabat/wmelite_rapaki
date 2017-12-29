@@ -30,6 +30,9 @@ THE SOFTWARE.
 #include "MathUtil.h"
 #include "StringUtil.h"
 #include <math.h>
+#include "SDL_syswm.h"
+
+#include "ios_utils.h"
 
 #ifdef __IPHONEOS__
 // #define EMULATE_VIEWPORT_SETTING
@@ -46,8 +49,7 @@ CBRenderSDL::CBRenderSDL(CBGame* inGame) : CBRenderer(inGame)
 	m_LogicalRatioX = m_LogicalRatioY = 1.0f;
 	m_PhysicalRatioX = m_PhysicalRatioY = 1.0f;
 	m_PhysicalWidth = m_PhysicalHeight = m_LogicalWidth = m_LogicalHeight = 0;
-	m_PhysicalWidth = m_PhysicalHeight = 0;
-	m_PhysicalDensityX = m_PhysicalDensityY = 0;
+    m_LogicalBorderOffsetLeft = m_LogicalBorderOffsetRight = m_LogicalBorderOffsetTop = m_LogicalBorderOffsetBottom = 0;
 	m_PixelPerfect = false;
 
 	m_ProgressIndicator = -1;
@@ -293,6 +295,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	// SDL defaults to OGL ES2, which doesn't work on old devices
     // 20151219: changed to opengles2, assume all active devices will work
 	AnsiString defaultRenderingHint = "opengles2";
+    
 #else
 
 #ifdef __ANDROID__
@@ -335,6 +338,25 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	m_Renderer = SDL_CreateRenderer(m_Win, -1, 0);
 	if (!m_Renderer) return E_FAIL;
 
+#ifdef __IPHONEOS__
+    
+    // with iphone x and ios 11 there is a bar rendered on top of all content
+    // to avoid important info to be hidden beneath, query the "safe layout" area
+    // and restrict rendering to this - rest will stay black
+    
+    SDL_SysWMinfo wmInfo;
+    
+    SDL_VERSION(&wmInfo.version); /* initialize info structure with SDL version info */
+    
+    if(SDL_GetWindowWMInfo(m_Win, &wmInfo)) { /* the call returns true on success */
+        // info.info.uikit.window;
+        // Game->LOG(0, "get wm info success!\n");
+        
+        IOS_GetSafeLayoutLogicalOffsets(&wmInfo, m_NewLogicalWidth, m_NewLogicalHeight, &m_LogicalBorderOffsetLeft, &m_LogicalBorderOffsetTop, &m_LogicalBorderOffsetRight, &m_LogicalBorderOffsetBottom);
+    }
+    
+#endif
+    
 	SDL_RendererInfo info;
 	SDL_GetRendererInfo(m_Renderer, &info);
 	Game->LOG(0, "Renderer max texture sizes: x=%d y=%d.\n", info.max_texture_width, info.max_texture_height);
@@ -458,7 +480,7 @@ void CBRenderSDL::UpdateWindowScaling()
 
     float origAspect         = (float) m_Width         / (float) m_Height;
 	float realLogicalAspect  = (float) m_LogicalWidth  / (float) m_LogicalHeight;
-	float realPhysicalAspect = (float) m_PhysicalWidth / (float) m_PhysicalHeight;
+	// float realPhysicalAspect = (float) m_PhysicalWidth / (float) m_PhysicalHeight;
 
 	float logicalRatio;
 	float physicalRatio;
@@ -495,9 +517,25 @@ void CBRenderSDL::UpdateWindowScaling()
 	// logical coordinates update
 	m_LogicalBorderLeft  = (m_LogicalWidth - (m_Width * logicalRatio)) / 2;
 	m_LogicalBorderRight =  m_LogicalWidth - (m_Width * logicalRatio) - m_LogicalBorderLeft;
+    
+    /*
+    printf("Computed logical left border = %d and safe area offset = %d.\n", m_LogicalBorderLeft, m_LogicalBorderOffsetLeft);
+    printf("Computed logical right border = %d and safe area offset = %d.\n", m_LogicalBorderRight, m_LogicalBorderOffsetRight);
+    */
+    
+    if (m_LogicalBorderLeft < m_LogicalBorderOffsetLeft) m_LogicalBorderLeft = m_LogicalBorderOffsetLeft;
+    if (m_LogicalBorderRight < m_LogicalBorderOffsetRight) m_LogicalBorderRight = m_LogicalBorderOffsetRight;
 
 	m_LogicalBorderTop    = (m_LogicalHeight - (m_Height * logicalRatio)) / 2;
 	m_LogicalBorderBottom =  m_LogicalHeight - (m_Height * logicalRatio) - m_LogicalBorderTop;
+
+    /*
+    printf("Computed logical top border = %d and safe area offset = %d.\n", m_LogicalBorderTop, m_LogicalBorderOffsetTop);
+    printf("Computed logical bottom border = %d and safe area offset = %d.\n", m_LogicalBorderBottom, m_LogicalBorderOffsetBottom);
+    */
+    
+    if (m_LogicalBorderTop < m_LogicalBorderOffsetTop) m_LogicalBorderTop = m_LogicalBorderOffsetTop;
+    if (m_LogicalBorderBottom < m_LogicalBorderOffsetBottom) m_LogicalBorderBottom = m_LogicalBorderOffsetBottom;
 
 	m_LogicalRatioX = (float)(m_LogicalWidth  - m_LogicalBorderLeft - m_LogicalBorderRight)  / (float) m_Width;
 	m_LogicalRatioY = (float)(m_LogicalHeight - m_LogicalBorderTop  - m_LogicalBorderBottom) / (float) m_Height;
