@@ -45,9 +45,7 @@ CBRenderer::CBRenderer(CBGame* inGame):CBBase(inGame)
 	m_Width = m_Height = m_BPP = 0;
 	CBPlatform::SetRectEmpty(&m_MonitorRect);
 
-	m_PhysicalWidth = m_PhysicalHeight = 0;
 	m_DrawOffsetX = m_DrawOffsetY = 0;
-	m_PhysicalDensityX = m_PhysicalDensityY = 0;
 
 	m_MaxObjectDistanceX = m_MaxObjectDistanceY = 0;
 }
@@ -426,18 +424,18 @@ bool CBRenderer::PointInViewport(POINT* P)
 //////////////////////////////////////////////////////////////////////////
 void CBRenderer::GetPhysicalScreenBorderDimensions(RECT *rect)
 {
-	rect->left   = m_PhysicalBorderLeft;
-	rect->top    = m_PhysicalBorderTop;
-	rect->right  = m_PhysicalBorderRight;
-	rect->bottom = m_PhysicalBorderBottom;
+	rect->left   = 0;
+	rect->top    = 0;
+	rect->right  = 0;
+	rect->bottom = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
 void CBRenderer::GetPhysicalScreenProperties(RECT *rect)
 {
 	// FIXME yes this is a misuse of the RECT STRUCT...
-	rect->left   = m_PhysicalWidth;
-	rect->top    = m_PhysicalHeight;
-	rect->right  = m_PhysicalDensityX;
-	rect->bottom = m_PhysicalDensityY;
+	rect->left   = 0;
+	rect->top    = 0;
+	rect->right  = 0;
+	rect->bottom = 0;
 }

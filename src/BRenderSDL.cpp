@@ -46,6 +46,8 @@ CBRenderSDL::CBRenderSDL(CBGame* inGame) : CBRenderer(inGame)
 	m_LogicalRatioX = m_LogicalRatioY = 1.0f;
 	m_PhysicalRatioX = m_PhysicalRatioY = 1.0f;
 	m_PhysicalWidth = m_PhysicalHeight = m_LogicalWidth = m_LogicalHeight = 0;
+	m_PhysicalWidth = m_PhysicalHeight = 0;
+	m_PhysicalDensityX = m_PhysicalDensityY = 0;
 	m_PixelPerfect = false;
 
 	m_ProgressIndicator = -1;
@@ -941,7 +943,6 @@ void CBRenderSDL::PointFromScreen(POINT* point)
 	point->y = (point->y  - m_LogicalBorderTop) / m_LogicalRatioY;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 void CBRenderSDL::PointToScreen(POINT* point)
 {
@@ -1036,4 +1037,23 @@ void CBRenderSDL::DisableKeyboard()
 {
 	SDL_StopTextInput();
 	Game->LOG(0, "Stopping text input!");
+}
+
+//////////////////////////////////////////////////////////////////////////
+void CBRenderSDL::GetPhysicalScreenBorderDimensions(RECT *rect)
+{
+	rect->left   = m_PhysicalBorderLeft;
+	rect->top    = m_PhysicalBorderTop;
+	rect->right  = m_PhysicalBorderRight;
+	rect->bottom = m_PhysicalBorderBottom;
+}
+
+//////////////////////////////////////////////////////////////////////////
+void CBRenderSDL::GetPhysicalScreenProperties(RECT *rect)
+{
+	// FIXME yes this is a misuse of the RECT STRUCT...
+	rect->left   = m_PhysicalWidth;
+	rect->top    = m_PhysicalHeight;
+	rect->right  = m_PhysicalDensityX;
+	rect->bottom = m_PhysicalDensityY;
 }

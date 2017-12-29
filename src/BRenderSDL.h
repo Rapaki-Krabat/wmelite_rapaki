@@ -74,6 +74,8 @@ public:
 	void EnableKeyboard(int yCoord);
 	void DisableKeyboard();
 
+	void GetPhysicalScreenBorderDimensions(RECT *rect);
+	void GetPhysicalScreenProperties(RECT *rect);
 
 private:
 	SDL_Renderer* m_Renderer;
@@ -133,6 +135,17 @@ private:
 	float GetAlignedUpscalingRatio(float ratio, float stepping);
 	float GetAlignedDownscalingRatio(float ratio, float stepping);
 
+	// these are physical (renderer) values
+	int m_PhysicalWidth;
+	int m_PhysicalHeight;
+	int m_PhysicalDensityX;
+	int m_PhysicalDensityY;
+
+	// these are the border offsets in render pixels
+	int m_PhysicalBorderLeft;
+	int m_PhysicalBorderTop;
+	int m_PhysicalBorderRight;
+	int m_PhysicalBorderBottom;
 };
 
 
