@@ -2625,7 +2625,10 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "RealScreenWidth")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_PhysicalWidth);
+		RECT r;
+		m_Renderer->GetPhysicalScreenProperties(&r);
+
+		m_ScValue->SetInt(r.left);
 		return m_ScValue;
 	}
 
@@ -2634,7 +2637,10 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "RealScreenHeight")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_PhysicalHeight);
+		RECT r;
+		m_Renderer->GetPhysicalScreenProperties(&r);
+
+		m_ScValue->SetInt(r.top);
 		return m_ScValue;
 	}
 
@@ -2643,7 +2649,10 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "RealDensityX")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_PhysicalDensityX);
+		RECT r;
+		m_Renderer->GetPhysicalScreenProperties(&r);
+
+		m_ScValue->SetInt(r.right);
 		return m_ScValue;
 	}
 
@@ -2652,7 +2661,10 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "RealDensityY")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_PhysicalDensityY);
+		RECT r;
+		m_Renderer->GetPhysicalScreenProperties(&r);
+
+		m_ScValue->SetInt(r.bottom);
 		return m_ScValue;
 	}
 
@@ -2661,7 +2673,10 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenBorderLeft")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_PhysicalBorderLeft);
+		RECT r;
+		m_Renderer->GetPhysicalScreenBorderDimensions(&r);
+
+		m_ScValue->SetInt(r.left);
 		return m_ScValue;
 	}
 
@@ -2670,7 +2685,10 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenBorderTop")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_PhysicalBorderTop);
+		RECT r;
+		m_Renderer->GetPhysicalScreenBorderDimensions(&r);
+
+		m_ScValue->SetInt(r.top);
 		return m_ScValue;
 	}
 
@@ -2679,7 +2697,10 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenBorderRight")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_PhysicalBorderRight);
+		RECT r;
+		m_Renderer->GetPhysicalScreenBorderDimensions(&r);
+
+		m_ScValue->SetInt(r.right);
 		return m_ScValue;
 	}
 
@@ -2688,7 +2709,10 @@ CScValue* CBGame::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "ScreenBorderBottom")==0)
 	{
-		m_ScValue->SetInt(m_Renderer->m_PhysicalBorderBottom);
+		RECT r;
+		m_Renderer->GetPhysicalScreenBorderDimensions(&r);
+
+		m_ScValue->SetInt(r.bottom);
 		return m_ScValue;
 	}
 

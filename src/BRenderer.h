@@ -34,23 +34,12 @@ class CBImage;
 class CBRenderer:public CBBase
 {
 public:
-	// these are physical (renderer) values
-	int m_PhysicalWidth;
-	int m_PhysicalHeight;
-	int m_PhysicalDensityX;
-	int m_PhysicalDensityY;
-
 	// these are in "game pixels"
 	int m_MaxObjectDistanceX;
 	int m_MaxObjectDistanceY;
 
 	int m_DrawOffsetX;
 	int m_DrawOffsetY;
-
-	int m_PhysicalBorderLeft;
-	int m_PhysicalBorderTop;
-	int m_PhysicalBorderRight;
-	int m_PhysicalBorderBottom;
 
 	virtual void DumpData(char* Filename){};
 	virtual CBImage* TakeScreenshot();
@@ -116,6 +105,23 @@ public:
 	int m_Width;
 
 	CBArray<CBActiveRect*, CBActiveRect*> m_RectList;
+
+	void GetPhysicalScreenBorderDimensions(RECT *rect);
+	void GetPhysicalScreenProperties(RECT *rect);
+
+private:
+
+	// these are physical (renderer) values
+	int m_PhysicalWidth;
+	int m_PhysicalHeight;
+	int m_PhysicalDensityX;
+	int m_PhysicalDensityY;
+
+	// these are the border offsets in render pixels
+	int m_PhysicalBorderLeft;
+	int m_PhysicalBorderTop;
+	int m_PhysicalBorderRight;
+	int m_PhysicalBorderBottom;
 };
 
 #endif
