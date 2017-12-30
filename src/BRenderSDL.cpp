@@ -30,12 +30,12 @@ THE SOFTWARE.
 #include "MathUtil.h"
 #include "StringUtil.h"
 #include <math.h>
-#include "SDL_syswm.h"
 
-#include "ios_utils.h"
 
 #ifdef __IPHONEOS__
-// #define EMULATE_VIEWPORT_SETTING
+	#include "SDL_syswm.h"
+	#include "ios_utils.h"
+	// #define EMULATE_VIEWPORT_SETTING
 #endif
 
 //////////////////////////////////////////////////////////////////////////
