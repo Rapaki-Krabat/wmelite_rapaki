@@ -86,6 +86,8 @@ CScScript::CScScript(CBGame* inGame, CScEngine* Engine):CBBase(inGame)
 	m_ParentScript = NULL;
 
 	m_TracingMode = false;
+
+	m_IgnoreFreeze = false;
 }
 
 
@@ -1277,6 +1279,8 @@ HRESULT CScScript::Persist(CBPersistMgr* PersistMgr){
 	PersistMgr->Transfer(TMEMBER(m_ParentScript));
 
 	if(!PersistMgr->m_Saving) m_TracingMode = false;
+
+	PersistMgr->Transfer(TMEMBER(m_IgnoreFreeze));
 
 	return S_OK;
 }

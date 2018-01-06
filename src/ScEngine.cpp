@@ -736,7 +736,20 @@ HRESULT CScEngine::PauseAll()
 {
 	for(int i=0; i<m_Scripts.GetSize(); i++)
 	{
-		if(m_Scripts[i]!=m_CurrentScript) m_Scripts[i]->Pause();
+		if (m_Scripts[i] != m_CurrentScript)
+		{
+			// skip scripts that declared not to be paused
+			if (m_Scripts[i]->m_IgnoreFreeze == false)
+			{
+				m_Scripts[i]->Pause();
+			}
+			else
+			{
+				// transition for sleeping scripts from game time to platform time --> make them runnable once
+				// otherwise the mismatch game time / platform time can have funny effects
+				m_Scripts[i]->Run();
+			}
+		}
 	}
 
 	return S_OK;
@@ -747,7 +760,19 @@ HRESULT CScEngine::PauseAll()
 HRESULT CScEngine::ResumeAll()
 {
 	for(int i=0; i<m_Scripts.GetSize(); i++)
-		m_Scripts[i]->Resume();
+	{
+		if (m_Scripts[i]->m_IgnoreFreeze == false)
+		{
+			// resume all paused scripts (default action)
+			m_Scripts[i]->Resume();
+		}
+		else
+		{
+			// transition for sleeping scripts from platform time to game time --> make them runnable once
+			// otherwise the mismatch game time / platform time can have funny effects
+			m_Scripts[i]->Run();
+		}
+	}
 
 	return S_OK;
 }
