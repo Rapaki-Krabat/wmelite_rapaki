@@ -512,10 +512,13 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		break;
 
 	case SDL_QUIT:
-#if defined(__IPHONEOS__) || defined(__ANDROID__)
+#if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
 		if (Game)
 		{
-			Game->AutoSaveOnExit();
+			// disable this instance of autosave, because it might race with the event watch
+			// and the event watch should in principle kick in earlier
+
+			// Game->AutoSaveOnExit();
 			Game->m_Quitting = true;
 		}
 #else
