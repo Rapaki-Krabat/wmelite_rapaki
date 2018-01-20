@@ -1214,7 +1214,10 @@ void CScScript::RuntimeError(LPCSTR fmt, ...)
 	Game->LOG(0, "  %s", buff);
 
 	if(!Game->m_SuppressScriptErrors)
+	{
 		Game->QuickMessage("Script runtime error. View log for details.");
+		Game->QuickMessage(buff);
+	}
 }
 
 
