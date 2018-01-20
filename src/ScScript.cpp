@@ -26,6 +26,10 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "ScScript.h"
 
+#ifdef __ANDROID__
+#	include <android/log.h>
+#	include "android/android.h"
+#endif
 
 
 IMPLEMENT_PERSISTENT(CScScript, false);
@@ -1213,10 +1217,16 @@ void CScScript::RuntimeError(LPCSTR fmt, ...)
 	Game->LOG(0, "Runtime error. Script '%s', line %d", m_Filename, m_CurrentLine);
 	Game->LOG(0, "  %s", buff);
 
+#ifdef __ANDROID__
+	// debug a special android error
+
+	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "Runtime error. Script '%s', line %d", m_Filename, m_CurrentLine);
+	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "  %s", buff);
+#endif
+
 	if(!Game->m_SuppressScriptErrors)
 	{
 		Game->QuickMessage("Script runtime error. View log for details.");
-		Game->QuickMessage(buff);
 	}
 }
 
