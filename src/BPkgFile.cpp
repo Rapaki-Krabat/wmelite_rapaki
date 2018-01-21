@@ -141,7 +141,11 @@ HRESULT CBPkgFile::Read(void *Buffer, DWORD Size)
 
 			int res = inflate(&m_Stream, Z_SYNC_FLUSH);
 			if(res!=Z_OK && res!=Z_STREAM_END){
-				Game->LOG(0, "zlib error: %d", res);
+				Game->LOG(0, "zlib inflate (read) error: %d", res);
+				if (m_Stream.msg != NULL)
+				{
+					Game->LOG(0, "zlib inflate (read) error message: %s", m_Stream.msg);
+				}
 				ret = E_FAIL;
 				break;
 			}
@@ -194,7 +198,16 @@ HRESULT CBPkgFile::SeekToPos(DWORD NewPos)
 		m_Stream.next_in = m_CompBuffer;
 		m_Stream.avail_out = MIN(STREAM_BUFFER_SIZE, NewPos);
 		m_Stream.next_out = StreamBuffer;
-		inflateInit(&m_Stream);
+		int initRes = inflateInit(&m_Stream);
+		if (initRes != Z_OK)
+		{
+			Game->LOG(0, "zlib inflate init error: %d", initRes);
+			if (m_Stream.msg != NULL)
+			{
+				Game->LOG(0, "zlib inflate init error message: %s", m_Stream.msg);
+			}
+		}
+
 		m_InflateInit = true;
 
 		while (m_Stream.total_out < NewPos && m_Stream.total_in < m_FileEntry->m_CompressedLength){
@@ -214,6 +227,11 @@ HRESULT CBPkgFile::SeekToPos(DWORD NewPos)
 			// stream on!
 			int res = inflate(&m_Stream, Z_SYNC_FLUSH);
 			if(res!=Z_OK && res!=Z_STREAM_END){
+				Game->LOG(0, "zlib inflate (seek) error: %d", res);
+				if (m_Stream.msg != NULL)
+				{
+					Game->LOG(0, "zlib inflate (seek) error message: %s", m_Stream.msg);
+				}
 				ret = E_FAIL;
 				break;
 			}
