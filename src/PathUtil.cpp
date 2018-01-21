@@ -73,7 +73,11 @@ AnsiString PathUtil::AppendSlashToPlainDir(const AnsiString& path)
 	if(!slashed) strcat(buffer, "\\");
 	//CBPlatform::strlwr(buffer);
 
-	return AnsiString(buffer);
+	AnsiString ret = AnsiString(buffer);
+
+	delete [] buffer;
+
+	return ret;
 }
 
 //////////////////////////////////////////////////////////////////////////
