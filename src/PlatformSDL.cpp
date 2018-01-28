@@ -468,7 +468,10 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			{
 				SDL_ShowCursor(SDL_DISABLE);
 			}
-			break;
+#ifdef __IPHONEOS__
+            SDL_IOSTryResumeAudio();
+#endif
+            break;
 		case SDL_WINDOWEVENT_FOCUS_LOST:
 		case SDL_WINDOWEVENT_MINIMIZED:
 
