@@ -120,8 +120,9 @@ HRESULT CBSoundMgr::Initialize()
 		return E_FAIL;
 	}
 
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) != 0) {
-		Game->LOG(0, "Can't initialize sound device");
+    // increase the buffer size from 1024 to avoid audio drops
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) != 0) {
+        Game->LOG(0, "Can't initialize sound device");
 		return E_FAIL;
 	}
 	Mix_ChannelFinished((void *) this, SDLMixer_channelDoneCallback);
