@@ -69,7 +69,6 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 	Game = inGame;
 	if(!Game) return 1;
 
-
 	bool windowedMode = false;
 
 	// parse command line
@@ -228,6 +227,11 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 	LogPointerDevices();
 #endif
 
+#ifdef __IPHONEOS__
+    // set iphone X home indicator to dimmed
+    SDL_SetHint(SDL_HINT_IOS_HIDE_HOME_INDICATOR, "2");
+#endif
+    
 	// all set, ready to go
 	return 0;
 }
