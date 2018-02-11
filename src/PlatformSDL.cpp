@@ -354,7 +354,10 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		{
 			CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
 			POINT p;
-			GetCursorPos(&p);			
+			p.x = event->button.x;
+			p.y = event->button.y;
+			TransformEventCoords(&p);
+			// GetCursorPos(&p);			
 			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), true, false, false);
 			
 			if (Game->m_ActiveObject != NULL && strcmp(Game->m_ActiveObject->GetClassName(), "CUIButton") == 0)
@@ -412,7 +415,10 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		{
 			CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
 			POINT p;
-			GetCursorPos(&p);
+			p.x = event->button.x;
+			p.y = event->button.y;
+			TransformEventCoords(&p);
+			// GetCursorPos(&p);
 			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), false, false, true);
 		}
 #endif
@@ -424,7 +430,10 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 	{
 		CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
 		POINT p;
-		GetCursorPos(&p);
+		p.x = event->motion.x;
+		p.y = event->motion.y;
+		TransformEventCoords(&p);
+		// GetCursorPos(&p);
 		Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), false, true, false);
 	}
 #endif
@@ -604,6 +613,16 @@ BOOL CBPlatform::SetCursorPos(int X, int Y)
 	renderer->PointToScreen(&p);
 
 	SDL_WarpMouseInWindow(renderer->GetSdlWindow(), p.x, p.y);
+	return TRUE;
+}
+
+//////////////////////////////////////////////////////////////////////////
+BOOL CBPlatform::TransformEventCoords(LPPOINT lpPoint)
+{
+	CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
+
+	renderer->PointFromScreen(lpPoint);
+
 	return TRUE;
 }
 

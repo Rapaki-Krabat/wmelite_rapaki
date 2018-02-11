@@ -77,6 +77,7 @@ public:
 	static void SleepMs(DWORD millis);
 	static BOOL GetCursorPos(LPPOINT lpPoint);
 	static BOOL SetCursorPos(int X, int Y);
+	static BOOL TransformEventCoords(LPPOINT lpPoint);
 	static BOOL ShowWindow(HWND hWnd, int nCmdShow);
 	static bool DeleteFile(const char* lpFileName);
 	static bool CopyFile(const char* from, const char* to, bool failIfExists);
