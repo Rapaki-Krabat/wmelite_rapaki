@@ -4909,7 +4909,11 @@ HRESULT CBGame::SetActiveObject(CBObject *Obj, bool touchEntry, bool touchDrag, 
 			if (m_ActiveObject) m_ActiveObject->ApplyEvent("MouseLeave");
 		}
 
-		m_ActiveObject = Obj;
+		if ((m_MouseEntryLeaveTouchQuirk == false) || (touchDrag == true) || (touchEntry == true) || (touchRelease == true))
+		{
+			// assign new object when not in touch, or at least one touch action set
+			m_ActiveObject = Obj;
+		}
 
 		if ((m_MouseEntryLeaveTouchQuirk == false) || (touchDrag == true) || (touchEntry == true))
 		{
