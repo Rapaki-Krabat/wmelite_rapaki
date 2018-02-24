@@ -173,8 +173,17 @@ HRESULT CBSound::Persist(CBPersistMgr *PersistMgr)
 		m_SoundFreezePaused = false;
 	}
 
+	// The sound effect settings are not saved. Maybe they're being restored by other means after load.
+	// But the values are thus undefined after load. Added the same code for loading to have them
+	// initialized.
 	if(PersistMgr->m_Saving)
 	{
+		m_SFXType = SFX_NONE;
+		m_SFXParam1 = m_SFXParam2 = m_SFXParam3 = m_SFXParam4 = 0;
+	}
+	else
+	{
+		// default init upon load.
 		m_SFXType = SFX_NONE;
 		m_SFXParam1 = m_SFXParam2 = m_SFXParam3 = m_SFXParam4 = 0;
 	}

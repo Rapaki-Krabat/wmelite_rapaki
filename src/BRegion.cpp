@@ -75,6 +75,7 @@ bool CBRegion::PointInRegion(int X, int Y)
 	POINT pt;
 	pt.x = X; pt.y = Y;
 
+	// FIXME this rect instance is never used.
 	RECT rect;
 	rect.left = X-1;
 	rect.right = X+2;
@@ -440,6 +441,15 @@ HRESULT CBRegion::Persist(CBPersistMgr* PersistMgr){
 	PersistMgr->Transfer(TMEMBER(m_LastMimicY));
 	m_Points.Persist(PersistMgr);
 	
+	// For some reason, this object is not saved.
+	// After restore, the values can be undefined (some platforms do not zero-out memory upon "new").
+	// To avoid referring undefined memory, but not otherwise breaking anything,
+	// init the object upon load.
+	if(!PersistMgr->m_Saving)
+	{
+		CBPlatform::SetRectEmpty(&m_Rect);
+	}
+
 	return S_OK;
 }
 
