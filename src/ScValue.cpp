@@ -787,6 +787,16 @@ HRESULT CScValue::Persist(CBPersistMgr* PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_ValRef));
 	PersistMgr->Transfer(TMEMBER(m_ValString));
 
+	// if the savegame contains a problematic instance, apply a workaround here
+	if (m_Type == VAL_VARIABLE_REF)
+	{
+		// a variable reference is NULLed if the pointer it contains could not be restored
+		if (m_ValRef == NULL)
+		{
+			m_Type = VAL_NULL;
+		}
+	}
+
 	/*
 	FILE* f = fopen("c:\\val.log", "a+");
 	switch(m_Type)
