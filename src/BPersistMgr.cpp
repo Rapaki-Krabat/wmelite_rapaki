@@ -518,6 +518,10 @@ HRESULT CBPersistMgr::Transfer(const char* Name, void* Val)
 			Game->LOG(0, "Warning: invalid instance '%s'", Name);
 		}
 
+		// if Val == NULL then both IDs are -1
+		// if the pointer is not registered, both IDs are -1
+		// if the pointer is registered, both values should be valid
+
 		PutDWORD(ClassID);
 		PutDWORD(InstanceID);
 	}
