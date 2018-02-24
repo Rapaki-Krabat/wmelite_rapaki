@@ -845,7 +845,7 @@ int CAdObject::GetHeight()
 
 		if (m_CurrentSprite == m_DetectCorruptSprite)
 		{
-			Game->QuickMessage("Trying to dereference a corrupted sprite reference!");
+			// Game->QuickMessage("Trying to dereference a corrupted sprite reference!");
 			return 0;
 		}
 
