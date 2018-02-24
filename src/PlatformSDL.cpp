@@ -578,6 +578,7 @@ void CBPlatform::OutputDebugString(LPCSTR lpOutputString)
 #ifdef __WIN32__
 	::OutputDebugString(lpOutputString);
 #endif
+	if (Game) Game->LOG(0, lpOutputString);
 }
 
 
