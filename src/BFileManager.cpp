@@ -307,7 +307,11 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	int fsync_status;
 	if (descr != -1)
 	{
+#if defined(__WIN32__) || defined(__WINRT__) || defined(__MINGW32__)
+		fsync_status = _commit(descr);
+#else
 		fsync_status = fsync(descr);
+#endif
 		if (fsync_status == 0)
 		{
 			Game->LOG(0, "Save(1,5): fsync file");

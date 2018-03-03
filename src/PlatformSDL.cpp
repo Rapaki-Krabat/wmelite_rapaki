@@ -36,6 +36,7 @@ THE SOFTWARE.
 #	include <dbghelp.h>
 #endif
 #	include <direct.h>
+#   include <io.h> 
 #else
 #	include <unistd.h>
 #	include <dirent.h>
@@ -713,7 +714,11 @@ bool CBPlatform::FlushDirectory(const char* path)
 
 		if (dirDesc != -1)
 		{
+#if defined(__WIN32__) || defined(__WINRT__) || defined(__MINGW32__)
+			flushStat = _commit(dirDesc);
+#else
 			flushStat = fsync(dirDesc);
+#endif
 
 			if (flushStat == 0)
 			{
