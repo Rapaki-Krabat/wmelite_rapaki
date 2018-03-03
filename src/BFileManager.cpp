@@ -302,17 +302,28 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		if (tmpFwrite != 1) tmpRes = 1;
 	}
 
+	// flush data (shouldn't hurt)
+	int flush_status;
+	flush_status = fflush(f);
+	if (flush_status != 0)
+	{
+		Game->LOG(0, "Save(1,25): flush file failed, errno=%d", errno);
+	}
+	else
+	{
+		Game->LOG(0, "Save(1,25): flush file");
+	}
+
 	// explicitly call fsync to make sure data makes it to disk
 	int descr = fileno(f);
-	int fsync_status;
 	if (descr != -1)
 	{
 #if defined(__WIN32__) || defined(__WINRT__) || defined(__MINGW32__)
-		fsync_status = _commit(descr);
+		flush_status = _commit(descr);
 #else
-		fsync_status = fsync(descr);
+		flush_status = fsync(descr);
 #endif
-		if (fsync_status == 0)
+		if (flush_status == 0)
 		{
 			Game->LOG(0, "Save(1,5): fsync file");
 		}
