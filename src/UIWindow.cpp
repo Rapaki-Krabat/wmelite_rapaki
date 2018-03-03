@@ -953,6 +953,7 @@ HRESULT CUIWindow::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Th
 				delete m_Widgets[i];
 				m_Widgets.RemoveAt(i);
 				if(val->GetType()==VAL_VARIABLE_REF) val->SetNULL();
+				i--;
 			}
 		}
 		Stack->PushNULL();
