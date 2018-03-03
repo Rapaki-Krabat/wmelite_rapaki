@@ -39,6 +39,8 @@ public:
 
 	static void CreatePath(const char* Path, bool PathOnly=false);
 
+	static bool FlushContainingDirectory(const char* Path);
+
 	static void DebugMessage(HWND hWnd, const char* Text);
 	static char* SetString(char** String, const char* Value);
 

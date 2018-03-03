@@ -33,6 +33,7 @@ THE SOFTWARE.
 #   include <io.h>
 #else
 #	include <unistd.h>
+#   include <errno.h>
 #endif
 
 #ifdef __APPLE__
@@ -301,6 +302,26 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		if (tmpFwrite != 1) tmpRes = 1;
 	}
 
+	// explicitly call fsync to make sure data makes it to disk
+	int descr = fileno(f);
+	int fsync_status;
+	if (descr != -1)
+	{
+		fsync_status = fsync(descr);
+		if (fsync_status == 0)
+		{
+			Game->LOG(0, "Save(1,5): fsync file");
+		}
+		else
+		{
+			Game->LOG(0, "Save(1,5): fsync file failed with %d", errno);
+		}
+	}
+	else
+	{
+		Game->LOG(0, "Save(1,5): fsync file not possible due to invalid descriptor!");
+	}
+
 	fclose(f);
 
 	Game->LOG(0, "Save(2): Wrote file %s status=%d.", tmpFile, tmpRes);
@@ -326,6 +347,16 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 	delete[] tmpFile;
 	delete[] oldFile;
+
+	// sync the underlying directory
+	if (!CBUtils::FlushContainingDirectory(Filename))
+	{
+		Game->LOG(0, "Save(6): Flush containing directory FAILED");
+	}
+	else
+	{
+		Game->LOG(0, "Save(6): Flush containing directory");
+	}
 
 	return S_OK;
 }

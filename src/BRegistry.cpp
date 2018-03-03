@@ -242,6 +242,7 @@ void CBRegistry::SaveXml(const AnsiString fileName, PathValueMap& values)
 	else
 	{
 		stream << printer.Str();
+		stream.flush();
 		stream.close();
 	}
 }

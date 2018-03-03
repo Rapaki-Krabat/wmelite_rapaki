@@ -82,6 +82,7 @@ public:
 	static bool DeleteFile(const char* lpFileName);
 	static bool CopyFile(const char* from, const char* to, bool failIfExists);
 	static bool CreateDirectory(const char* path);
+	static bool FlushDirectory(const char* path);
 	static HWND SetCapture(HWND hWnd);
 	static BOOL ReleaseCapture();
 	static BOOL SetForegroundWindow(HWND hWnd);

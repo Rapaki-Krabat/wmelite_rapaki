@@ -127,6 +127,36 @@ void CBUtils::CreatePath(const char* Path, bool PathOnly)
 }
 
 
+////////////////////////////////////////////////////////////////////////////////
+bool CBUtils::FlushContainingDirectory(const char* Path)
+{
+	AnsiString path;
+	int status;
+
+	status = -1;
+
+	path = PathUtil::GetDirectoryName(Path);
+
+	// do not sync if no dir is specified
+	if (path.length() > 0)
+	{
+		path = PathUtil::UnifySeparators(path);
+
+
+		char* fpath = new char[path.length() + 1];
+		strcpy(fpath, path.c_str());
+
+		if (CBPlatform::FlushDirectory(fpath))
+		{
+			status = 0;
+		}
+
+		delete [] fpath;
+	}
+
+	return (status == 0);
+}
+
 //////////////////////////////////////////////////////////////////////////
 void CBUtils::DebugMessage(HWND hWnd, const char* Text)
 {

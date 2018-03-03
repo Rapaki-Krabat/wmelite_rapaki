@@ -696,6 +696,36 @@ bool CBPlatform::CreateDirectory(const char* path)
 }
 
 //////////////////////////////////////////////////////////////////////////
+bool CBPlatform::FlushDirectory(const char* path)
+{
+	FILE *dirent;
+	int success;
+	int dirDesc;
+	int flushStat;
+
+	success = -1;
+
+	dirent = fopen(path, "r");
+
+	if (dirent != NULL)
+	{
+		dirDesc = fileno(dirent);
+
+		if (dirDesc != -1)
+		{
+			flushStat = fsync(dirDesc);
+
+			if (flushStat == 0)
+			{
+				success = 0;
+			}
+		}
+	}
+
+	return (success == 0);
+}
+
+//////////////////////////////////////////////////////////////////////////
 HWND CBPlatform::SetCapture(HWND hWnd)
 {
 #ifdef __WIN32__
