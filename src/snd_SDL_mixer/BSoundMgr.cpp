@@ -393,7 +393,7 @@ float CBSoundMgr::PosToPan(int X, int Y)
 /////////////////////////////////////////////////////////////////////////
 void CBSoundMgr::InvalidateChannels(int channel_number, bool streamed)
 {
-	// Game->LOG(0, "Invalidate %s channel with number %d.", (streamed) ? "streamed" : "non-streamed", channel_number);
+	// Game->LOG(0, "====> Invalidate %s channel with number %d.", (streamed) ? "MUSIC" : "MIXER", channel_number);
 	for (int i=0; i < m_Sounds.GetSize(); i++)
 	{
 		m_Sounds[i]->InvalidateChannelNumber(channel_number);

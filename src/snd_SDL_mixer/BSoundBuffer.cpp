@@ -218,13 +218,13 @@ HRESULT CBSoundBuffer::Play(bool Looping, DWORD StartSample)
 	if (m_chunk)
 	{
 		m_currChannel = Mix_PlayChannelTimed(-1, m_chunk, (Looping) ? -1 : 0, -1, StartSample);
-		// Game->LOG(0, "Started non-streaming play.");
+		// Game->LOG(0, "==> Started MIXER play of %s on channel %d.", m_Filename, m_currChannel);
 	}
 	if (m_music)
 	{
 		double position_s = ((double) StartSample) / 1000.0f;
 		m_currChannel = Mix_FadeInMusicPosCh(m_music, (Looping) ? -1 : 0, 0, -1, position_s);
-		// Game->LOG(0, "Started streaming play.");
+		// Game->LOG(0, "==> Started MUSIC play of %s on channel %d.", m_Filename, m_currChannel);
 	}
 
 	// Game->LOG(0, "Allocated channel for file %s = %d.", m_Filename, m_currChannel);
@@ -329,13 +329,13 @@ HRESULT CBSoundBuffer::Stop()
 
 	if ((m_chunk) && (m_currChannel >= 0))
 	{
-		// Game->LOG(0, "Non-buffered channel %d stopped!", m_currChannel);
+		// Game->LOG(0, "===> MIXER channel %d stopped!", m_currChannel);
 		Mix_HaltChannel(m_currChannel);
 		m_currChannel = -1; // channel number is invalid from now on
 	}
 	if ((m_music) && (m_currChannel >= 0))
 	{
-		// Game->LOG(0, "Buffered channel %d stopped!", m_currChannel);
+		// Game->LOG(0, "===> MUSIC channel %d stopped!", m_currChannel);
 		Mix_HaltMusicCh(m_music);
 		m_currChannel = -1; // channel number is invalid from now on
 	}
