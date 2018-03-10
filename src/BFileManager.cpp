@@ -148,14 +148,17 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 		if (tmpRes != 0)
 		{
 			char *oldFile = new char[strlen(Filename) + 5];
-			strcpy(oldFile, Filename);
-			strcat(oldFile, ".old");
+			if (oldFile != NULL)
+			{
+				strcpy(oldFile, Filename);
+				strcat(oldFile, ".old");
 
-			// rename the possible old version to the current version
-			tmpRes = rename(oldFile, Filename);
-			Game->LOG(0, "Load(2): Rename old file %s to file %s result=%d.", oldFile, Filename, tmpRes);
+				// rename the possible old version to the current version
+				tmpRes = rename(oldFile, Filename);
+				Game->LOG(0, "Load(2): Rename old file %s to file %s result=%d.", oldFile, Filename, tmpRes);
 
-			delete[] oldFile;
+				delete[] oldFile;
+			}
 		}
 	}
 
@@ -211,10 +214,19 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	
 	// create strings for new and old file
 	char *tmpFile = new char[strlen(Filename) + 5];
+	if (tmpFile == NULL)
+	{
+		return E_FAIL;
+	}
 	strcpy(tmpFile, Filename);
 	strcat(tmpFile, ".tmp");
 
 	char *oldFile = new char[strlen(Filename) + 5];
+	if (oldFile == NULL)
+	{
+		delete[] tmpFile;
+		return E_FAIL;
+	}
 	strcpy(oldFile, Filename);
 	strcat(oldFile, ".old");
 
@@ -226,6 +238,8 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	if(!f)
 	{
 		Game->LOG(0, "Error opening file '%s' for writing.", Filename);
+		delete[] tmpFile;
+		delete[] oldFile;
 		return E_FAIL;
 	}
 
@@ -238,10 +252,12 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		if (tmpFwrite != 1) tmpRes = 1;
 	}
 
+	BYTE* CompBuffer = NULL;
+
 	if(Compressed)
 	{
 		DWORD CompSize = BufferSize + (BufferSize / 100) + 12; // 1% extra space
-		BYTE* CompBuffer = new BYTE[CompSize];
+		CompBuffer = new BYTE[CompSize];
 		if(!CompBuffer)
 		{
 			Game->LOG(0, "Error allocating compression buffer while saving '%s'", Filename);
@@ -262,6 +278,8 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 			CompSize   = (DWORD) SafeCompSize;
 			BufferSize = (DWORD) SafeBufferSize;
+
+			// Game->LOG(0, "Compression result: status=%d Size %d compressed to %d", compStatus, BufferSize, CompSize);
 
 			if (compStatus == Z_OK)
 			{
@@ -292,7 +310,6 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 				Compressed = false;
 			}
 
-			delete [] CompBuffer;
 		}
 	}
 	
@@ -301,6 +318,8 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		tmpFwrite = fwrite(Buffer, BufferSize, 1, f);
 		if (tmpFwrite != 1) tmpRes = 1;
 	}
+
+	// Game->LOG(0, "Compressed=%s, file write status=%d", (Compressed) ? "TRUE" : "FALSE", tmpRes);
 
 	// flush data (shouldn't hurt)
 	int flush_status;
@@ -339,12 +358,17 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 	fclose(f);
 
+	// delete the buffer only after save & flush is done
+	if (CompBuffer != NULL) delete [] CompBuffer;
+
 	Game->LOG(0, "Save(2): Wrote file %s status=%d.", tmpFile, tmpRes);
 	
 	// rather not use a file that had write errors...
 	if (tmpRes != 0)
 	{
 		Game->LOG(0, "Error writing file '%s'.", Filename);
+		delete[] tmpFile;
+		delete[] oldFile;
 		return E_FAIL;
 	}
 
