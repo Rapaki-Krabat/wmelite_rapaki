@@ -87,6 +87,8 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			ops->file_read((char *) (&CompSize), sizeof(DWORD), m_File);
 			ops->file_read((char *) (&UncompSize), sizeof(DWORD), m_File);
 
+			// Game->LOG(0, "File %s is compressed, size=%d!", Filename, CompSize);
+
 			BYTE* CompBuffer = new BYTE[CompSize];
 			if(!CompBuffer)
 			{
@@ -131,9 +133,13 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			m_Pos = 0;
 			ops->file_close(m_File);
 			m_File = NULL;
+
+			// Game->LOG(0, "File uncompress ok, uncompressed size=%d", UncompSize);
 		}
 		else
 		{
+			// Game->LOG(0, "File %s is NOT compressed!", Filename);
+
 			m_Pos = 0;
 			ops->file_seek(m_File, 0, SEEK_END);
 			m_Size = ((DWORD) ops->file_tell(m_File)) - m_PrefixSize;
