@@ -318,9 +318,11 @@ HRESULT CBPersistMgr::PutBytes(BYTE *Buffer, DWORD Size)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CBPersistMgr::GetBytes(BYTE *Buffer, DWORD Size)
 {
+	// Game->LOG(0, "Requesting %u bytes from offset %u", Size, m_Offset);
+
 	if(m_Offset+Size>m_BufferSize)
 	{
-		Game->LOG(0, "Fatal: Save buffer underflow");
+		Game->LOG(0, "Fatal: Save buffer underflow. Offset=%u Size=%u Buffersize=%u", m_Offset, Size, m_BufferSize);
 		return E_FAIL;
 	}
 
@@ -364,6 +366,9 @@ char* CBPersistMgr::GetString()
 {
 	DWORD len = GetDWORD();
 	char* ret = (char*)(m_Buffer+m_Offset);
+
+	// Game->LOG(0, "Reading String %s at offset %u len=%u", ret, m_Offset, len);
+
 	m_Offset+=len;
 
 	if(!strcmp(ret, "(null)")) return NULL;
