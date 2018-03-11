@@ -319,7 +319,7 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 		if (tmpFwrite != 1) tmpRes = 1;
 	}
 
-	// Game->LOG(0, "Compressed=%s, file write status=%d", (Compressed) ? "TRUE" : "FALSE", tmpRes);
+	// Game->LOG(0, "Compressed=%s, file write status=%d resulting file size=%d", (Compressed) ? "TRUE" : "FALSE", tmpRes, ftell(f));
 
 	// flush data (shouldn't hurt)
 	int flush_status;
