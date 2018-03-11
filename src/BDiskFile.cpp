@@ -83,6 +83,9 @@ HRESULT CBDiskFile::Open(const char* Filename)
 		if(m_Compressed)
 		{
 			DWORD DataOffset, CompSize, UncompSize;
+			int status;
+			long readSize;
+
 			ops->file_read((char *) (&DataOffset), sizeof(DWORD), m_File);
 			ops->file_read((char *) (&CompSize), sizeof(DWORD), m_File);
 			ops->file_read((char *) (&UncompSize), sizeof(DWORD), m_File);
@@ -106,8 +109,16 @@ HRESULT CBDiskFile::Open(const char* Filename)
 				return E_FAIL;
 			}
 
-			ops->file_seek(m_File, DataOffset + m_PrefixSize, SEEK_SET);
-			ops->file_read((char *) CompBuffer, CompSize, m_File);
+			status = ops->file_seek(m_File, DataOffset + m_PrefixSize, SEEK_SET);
+			if (status != 0)
+			{
+				Game->LOG(0, "Seeking in file %s failed!", Filename);
+			}
+			readSize = ops->file_read((char *) CompBuffer, CompSize, m_File);
+			if (readSize != CompSize)
+			{
+				Game->LOG(0, "Reading file %s failed! Expected %d but read %d", Filename, CompSize, readSize);
+			}
 
 			int uncompStatus;
 
@@ -119,6 +130,8 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			SafeUncompSize = UncompSize;
 
 			uncompStatus = uncompress(m_Data, &SafeUncompSize, CompBuffer, SafeCompSize);
+
+			// Game->LOG(0, "Uncompressed size from zlib: %d", SafeUncompSize);
 
 			if(uncompStatus != Z_OK)
 			{
