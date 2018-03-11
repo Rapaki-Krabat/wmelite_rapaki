@@ -59,6 +59,7 @@ THE SOFTWARE.
 #endif
 
 CBGame* CBPlatform::Game = NULL;
+SDL_mutex *autoSaveOnExitMutex;
 
 
 #define CLASS_NAME "GF_FRAME"
@@ -298,11 +299,15 @@ LONG CBPlatform::HandleCrashReport(CBGame* Game, EXCEPTION_POINTERS* pExPtrs)
 //////////////////////////////////////////////////////////////////////////
 int CBPlatform::MessageLoop()
 {
+	SDL_Event event;
 	bool done = false;
+
+	autoSaveOnExitMutex = SDL_CreateMutex();
 
 	while (!done)
 	{
-		SDL_Event event;
+		SDL_LockMutex(autoSaveOnExitMutex);
+
 		while (SDL_PollEvent(&event))
 		{
 			HandleEvent(&event);
@@ -319,9 +324,14 @@ int CBPlatform::MessageLoop()
 			if(!Game->m_SuspendedRendering) Game->m_Renderer->Flip();
 			if(Game->m_Loading) Game->LoadGame(Game->m_ScheduledLoadSlot);
 		}
+
+		SDL_UnlockMutex(autoSaveOnExitMutex);
+
 		if(Game->m_Quitting) break;
 
 	}
+
+	SDL_DestroyMutex(autoSaveOnExitMutex);
 
 	if(Game)
 	{
@@ -552,9 +562,11 @@ int CBPlatform::SDLEventWatcher(void* userdata, SDL_Event* event)
 {
 	if (event->type == SDL_WINDOWEVENT && event->window.event == SDL_WINDOWEVENT_MINIMIZED)
 	{
+		SDL_LockMutex(autoSaveOnExitMutex);
 		if (Game) Game->AutoSaveOnExit();
 		if (Game) Game->OnActivate(false, false);
 		SDL_ShowCursor(SDL_ENABLE);
+		SDL_UnlockMutex(autoSaveOnExitMutex);
 	}
 	
 	return 1;
