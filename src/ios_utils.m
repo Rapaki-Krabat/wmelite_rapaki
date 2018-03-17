@@ -105,6 +105,20 @@ void SetKeepDisplayOn(int keepOn)
     }
 }
 
+// duplicate function in case we want to make decisions based on specific device
+NSString *machineNameIOSUtils()
+{
+    struct utsname systemInfo;
+    if (uname(&systemInfo) < 0) {
+        return nil;
+    } else {
+        return [NSString stringWithCString:systemInfo.machine
+                              encoding:NSUTF8StringEncoding];
+    }
+}
+
+// #define SAFE_LAYOUT_ONLY_FOR_IPHONE_X
+
 void IOS_GetSafeLayoutLogicalOffsets(SDL_SysWMinfo *windowInfo, int width, int height, int *left, int *top, int *right, int *bottom)
 {
     // pre-init with sane defaults
@@ -121,15 +135,31 @@ void IOS_GetSafeLayoutLogicalOffsets(SDL_SysWMinfo *windowInfo, int width, int h
         // query the current window for the safe area
         UILayoutGuide* windowGuide = [windowInfo->info.uikit.window safeAreaLayoutGuide];
         
-        /*
+        // hard-code to use the info only for iphone X for the moment
+        NSString *machName = machineNameIOSUtils();
+        
         printf("window info x=%f y=%f w=%f h=%f\n",[windowGuide layoutFrame].origin.x, [windowGuide layoutFrame].origin.y, [windowGuide layoutFrame].size.width, [windowGuide layoutFrame].size.height);
         printf("window size from SDL: w=%d h=%d\n", width, height);
-         */
-         
-        *left = (int) [windowGuide layoutFrame].origin.x;
-        *top = (int) [windowGuide layoutFrame].origin.y;
-        *right = width - ((int) [windowGuide layoutFrame].size.width) - *left;
-        *bottom = height - ((int) [windowGuide layoutFrame].size.height) - *top;
+        
+        
+#ifdef SAFE_LAYOUT_ONLY_FOR_IPHONE_X
+        if (machName != nil)
+        {
+        	if (   [machName isEqualToString:@"iPhone10,3"]    // iphone X
+         		|| [machName isEqualToString:@"iPhone10,6"])   // iphone X
+    		{
+#endif
+
+	        	*left = (int) [windowGuide layoutFrame].origin.x;
+    	    	*top = (int) [windowGuide layoutFrame].origin.y;
+        		*right = width - ((int) [windowGuide layoutFrame].size.width) - *left;
+        		*bottom = height - ((int) [windowGuide layoutFrame].size.height) - *top;
+
+#ifdef SAFE_LAYOUT_ONLY_FOR_IPHONE_X
+        	}
+        }
+#endif
+
     }
 
     /*
