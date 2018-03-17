@@ -3157,6 +3157,15 @@ CScValue* CBGame::ScGetProperty(char *Name)
 		return m_ScValue;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// WaitingForResponses
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "WaitingForResponses") == 0)
+	{
+		m_ScValue->SetBool(m_State == GAME_SEMI_FROZEN);
+		return m_ScValue;
+	}
+
 	else return CBObject::ScGetProperty(Name);
 }
 
