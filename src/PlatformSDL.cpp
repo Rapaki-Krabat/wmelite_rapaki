@@ -366,6 +366,24 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 	case SDL_MOUSEBUTTONDOWN:
 
 #if defined(__IPHONEOS__) || defined(__ANDROID__) || defined(__WINRT__)
+	{
+		CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
+		POINT p;
+		p.x = event->button.x;
+		p.y = event->button.y;
+		TransformEventCoords(&p);
+		// GetCursorPos(&p);			
+		Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), true, false, false);
+
+		if (Game->m_ActiveObject != NULL && strcmp(Game->m_ActiveObject->GetClassName(), "CUIButton") == 0)
+		{
+			CUIButton* btn = static_cast<CUIButton*> (Game->m_ActiveObject);
+			if (btn->m_Visible && !btn->m_Disable) btn->m_Press = true;
+		}
+	}
+#else
+#if defined(__LINUX__) || defined (__WIN32__) || defined(__MINGW32__)
+		if (Game->m_DebugFakeFingerMotion == true)
 		{
 			CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
 			POINT p;
@@ -374,13 +392,14 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			TransformEventCoords(&p);
 			// GetCursorPos(&p);			
 			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), true, false, false);
-			
+
 			if (Game->m_ActiveObject != NULL && strcmp(Game->m_ActiveObject->GetClassName(), "CUIButton") == 0)
 			{
 				CUIButton* btn = static_cast<CUIButton*> (Game->m_ActiveObject);
 				if (btn->m_Visible && !btn->m_Disable) btn->m_Press = true;
 			}
 		}
+#endif
 #endif
 		Game->m_LastActiveObject = Game->m_ActiveObject;
 		switch (event->button.button)
@@ -436,6 +455,19 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			// GetCursorPos(&p);
 			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), false, false, true);
 		}
+#else
+#if defined(__LINUX__) || defined (__WIN32__) || defined(__MINGW32__)
+		if (Game->m_DebugFakeFingerMotion == true)
+		{
+			CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
+			POINT p;
+			p.x = event->button.x;
+			p.y = event->button.y;
+			TransformEventCoords(&p);
+			// GetCursorPos(&p);
+			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), false, false, true);
+		}
+#endif
 #endif
 		break;
 
@@ -451,6 +483,19 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 		// GetCursorPos(&p);
 		Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), false, true, false);
 	}
+#else
+#if defined(__LINUX__) || defined (__WIN32__) || defined(__MINGW32__)
+		if (Game->m_DebugFakeFingerMotion == true)
+		{
+			CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
+			POINT p;
+			p.x = event->motion.x;
+			p.y = event->motion.y;
+			TransformEventCoords(&p);
+			// GetCursorPos(&p);
+			Game->SetActiveObject(renderer->GetObjectAt(p.x, p.y), false, true, false);
+		}
+#endif
 #endif
 
 	if (Game->m_DebugFakeFingerMotion == true)
