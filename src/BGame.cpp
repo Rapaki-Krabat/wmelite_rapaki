@@ -595,7 +595,7 @@ void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 #endif
 
 #if defined(__IPHONEOS__)
-    os_log_info(OS_LOG_DEFAULT, "%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
+    os_log_info(OS_LOG_DEFAULT, "%02{public}d:%02{public}d:%02{public}d: %{public}s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
 #endif
 
 	// this still assurres ios wont write anything to file
