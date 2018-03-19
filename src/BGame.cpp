@@ -42,6 +42,7 @@ THE SOFTWARE.
 
 #ifdef __IPHONEOS__
 #	include "ios_utils.h"
+#   include <os/log.h>
 #endif
 
 #ifdef __ANDROID__
@@ -579,7 +580,7 @@ void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 	vsprintf(buff, fmt, va);
 	va_end(va);
 
-#if defined(__IPHONEOS__) || defined(__MACOSX__)
+#if defined(__MACOSX__)
 	printf("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
 	fflush(stdout);
 #else
@@ -589,10 +590,15 @@ void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
 #endif
 
-#ifdef __WINRT__
+#if defined(__WINRT__)
 	SDL_Log("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
 #endif
 
+#if defined(__IPHONEOS__)
+    os_log_info(OS_LOG_DEFAULT, "%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
+#endif
+
+	// this still assurres ios wont write anything to file
 	if (m_DEBUG_LogFile == NULL) return;
 
 	// redirect to an engine's own callback
