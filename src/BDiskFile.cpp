@@ -27,6 +27,10 @@ THE SOFTWARE.
 #include "BDiskFile.h"
 #include "PathUtil.h"
 
+#include "SDL_stdinc.h"
+
+#define WIN_UTF8ToString(S) (wchar_t *)SDL_iconv_string("UTF-16LE", "UTF-8", (char *)(S), SDL_strlen(S)+1)
+
 //////////////////////////////////////////////////////////////////////////
 CBDiskFile::CBDiskFile(CBGame* inGame):CBFile(inGame)
 {
@@ -59,7 +63,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 		// re-check the access method for every path
 		ops = PathUtil::GetFileAccessMethod(FullPath);
 
-		m_File = ops->file_open(FullPath, "rb");
+		m_File = _wfopen(WIN_UTF8ToString(FullPath), L"rb");
 		if(m_File!=NULL) break;
 	}
 
@@ -69,7 +73,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 		strcpy(FullPath, Filename);
 		CorrectSlashes(FullPath);
 		ops = PathUtil::GetFileAccessMethod(FullPath);
-		m_File = ops->file_open(FullPath, "rb");
+		m_File = _wfopen(WIN_UTF8ToString(FullPath), L"rb");
 	}
 
 	if(m_File)

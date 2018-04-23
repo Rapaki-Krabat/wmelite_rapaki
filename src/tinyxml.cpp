@@ -33,15 +33,20 @@ distribution.
 #include "dcgf.h"
 #include "PathUtil.h"
 
+#include "SDL_stdinc.h"
+
 bool TiXmlBase::condenseWhiteSpace = true;
 
 static generic_file_ops* ops;
+
+#define WIN_UTF8ToString(S) (wchar_t *)SDL_iconv_string("UTF-16LE", "UTF-8", (char *)(S), SDL_strlen(S)+1)
 
 // Microsoft compiler security
 FILEHANDLE TiXmlFOpen( const char* filename, const char* mode )
 {
 	ops = PathUtil::GetFileAccessMethod(AnsiString(filename));
-	return ops->file_open(filename, mode);
+	// return ops->file_open(filename, mode);
+	return _wfopen(WIN_UTF8ToString(filename), WIN_UTF8ToString(mode));
 }
 
 void TiXmlBase::EncodeString( const TIXML_STRING& str, TIXML_STRING* outString )

@@ -53,6 +53,10 @@ THE SOFTWARE.
 #endif
 #endif
 
+#include "SDL_stdinc.h"
+
+#define WIN_UTF8ToString(S) (wchar_t *)SDL_iconv_string("UTF-16LE", "UTF-8", (char *)(S), SDL_strlen(S)+1)
+
 extern "C"
 {
 	#include "zlib.h"
@@ -137,7 +141,7 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 	if (testOldFile == true)
 	{
 #if defined(__WINRT__) || defined(__WIN32__)
-		tmpRes = _access(Filename, 0);
+		tmpRes = _waccess(WIN_UTF8ToString(Filename), 0);
 #else
 		tmpRes = access(Filename, F_OK);
 #endif
@@ -154,7 +158,7 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 				strcat(oldFile, ".old");
 
 				// rename the possible old version to the current version
-				tmpRes = rename(oldFile, Filename);
+				tmpRes = _wrename(WIN_UTF8ToString(oldFile), WIN_UTF8ToString(Filename));
 				Game->LOG(0, "Load(2): Rename old file %s to file %s result=%d.", oldFile, Filename, tmpRes);
 
 				delete[] oldFile;
@@ -231,10 +235,10 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	strcat(oldFile, ".old");
 
 	// delete the old .tmp file
-	tmpRes = remove(tmpFile);
+	tmpRes = _wremove(WIN_UTF8ToString(tmpFile));
 	Game->LOG(0, "Save(1): Remove .tmp file %s result=%d.", tmpFile, tmpRes);
 
-	FILE* f = fopen(tmpFile, "wb");
+	FILE* f = _wfopen(WIN_UTF8ToString(tmpFile), L"wb");
 	if(!f)
 	{
 		Game->LOG(0, "Error opening file '%s' for writing.", Filename);
@@ -373,15 +377,15 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	}
 
 	// delete an existing .old file from a previous save operation
-	tmpRes = remove(oldFile);
+	tmpRes = _wremove(WIN_UTF8ToString(oldFile));
 	Game->LOG(0, "Save(3): Remove .old file %s result=%d.", oldFile, tmpRes);
 
 	// move existing file to .old file
-	tmpRes = rename(Filename, oldFile);
+	tmpRes = _wrename(WIN_UTF8ToString(Filename), WIN_UTF8ToString(oldFile));
 	Game->LOG(0, "Save(4): Move file %s to .old file %s result=%d.", Filename, oldFile, tmpRes);
 
 	// move .tmp file to final file
-	tmpRes = rename(tmpFile, Filename);
+	tmpRes = _wrename(WIN_UTF8ToString(tmpFile), WIN_UTF8ToString(Filename));
 	Game->LOG(0, "Save(5): Move .tmp file %s to file %s result=%d.", tmpFile, Filename, tmpRes);
 
 	delete[] tmpFile;

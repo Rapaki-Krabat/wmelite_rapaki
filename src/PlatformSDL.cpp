@@ -58,6 +58,10 @@ THE SOFTWARE.
 #   include "WinRTDetectPointers.h"
 #endif
 
+#include "SDL_stdinc.h"
+
+#define WIN_UTF8ToString(S) (wchar_t *)SDL_iconv_string("UTF-16LE", "UTF-8", (char *)(S), SDL_strlen(S)+1)
+
 CBGame* CBPlatform::Game = NULL;
 SDL_mutex *autoSaveOnExitMutex;
 
@@ -705,7 +709,7 @@ BOOL CBPlatform::ShowWindow(HWND hWnd, int nCmdShow)
 //////////////////////////////////////////////////////////////////////////
 bool CBPlatform::DeleteFile(const char* lpFileName)
 {
-	return remove(lpFileName) ? true : false;
+	return _wremove(WIN_UTF8ToString(lpFileName)) ? true : false;
 }
 
 //////////////////////////////////////////////////////////////////////////
