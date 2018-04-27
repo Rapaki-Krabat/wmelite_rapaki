@@ -753,7 +753,15 @@ bool CBPlatform::CreateDirectory(const char* path)
 {
 #ifdef _WIN32
 	int ret = _wmkdir(WIN_UTF8ToString(path));
-	if (ret != 0) SDL_Log("Create (sub)dir '%s' errno=%d.\n", path, errno);
+
+	if (ret != 0)
+	{
+		// only print out unexpected errors to console
+		if (errno != EEXIST)
+		{
+			SDL_Log("Create (sub)dir '%s' errno=%d.\n", path, errno);
+		}
+	}
 #else
 	int ret = mkdir(path, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IXOTH);
 #endif

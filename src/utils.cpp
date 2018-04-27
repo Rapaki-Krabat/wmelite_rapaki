@@ -119,7 +119,6 @@ void CBUtils::CreatePath(const char* Path, bool PathOnly)
 			if (*chPtr == 0) atEnd = true;
 
 			*chPtr = 0;
-			SDL_Log("Creating (sub)path '%s'.\n", fpath);
 			CBPlatform::CreateDirectory(fpath);
 			*chPtr = '/';
 		}
