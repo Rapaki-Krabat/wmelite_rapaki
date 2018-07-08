@@ -4668,6 +4668,8 @@ HRESULT CBGame::Unfreeze()
 //////////////////////////////////////////////////////////////////////////
 bool CBGame::HandleKeypress(SDL_Event* event)
 {
+	bool escPressGenerated = false;
+
 #if defined(__ANDROID__) || defined(__WINRT__)
 	// hard-code transformation of the "back" key to the escape key on Android
 	// TODO don't know whether OnWindowClose() is the better choice...
@@ -4677,7 +4679,10 @@ bool CBGame::HandleKeypress(SDL_Event* event)
 		if (event->key.keysym.sym == SDLK_AC_BACK)
 		{
 			// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "Modified back key to escape key.");
-			event->key.keysym.sym = SDLK_ESCAPE;
+			
+			// simulate the ESC keycode
+			m_KeyboardState->GenerateESCProgrammatically();
+			escPressGenerated = true;
 		}
 	}
 
@@ -4687,7 +4692,11 @@ bool CBGame::HandleKeypress(SDL_Event* event)
 
 	if(IsVideoPlaying())
 	{
-		if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_ESCAPE) StopVideo();
+		// handle real and simulated ESC
+		if ((event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_ESCAPE) || (escPressGenerated == true))
+		{
+			StopVideo();
+		}
 		return true;
 	}
 
@@ -4706,12 +4715,16 @@ bool CBGame::HandleKeypress(SDL_Event* event)
 		return true;
 	}
 
-
-
-	m_KeyboardState->ReadKey(event);
+	// do not handle if we already simulated an ESC press
+	if (escPressGenerated == false)
+	{
+		m_KeyboardState->ReadKey(event);
+	}
 
 	if(m_FocusedWindow)
 	{
+		// TODO need to check whether any of these handlers evaluate ESC somehow
+		// in that case, the simulated ESC needs to be sent to these as well
 		if(!Game->m_FocusedWindow->HandleKeypress(event)){
 			if (event->type != SDL_TEXTINPUT)
 			{

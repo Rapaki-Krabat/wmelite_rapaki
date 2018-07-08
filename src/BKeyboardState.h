@@ -45,6 +45,7 @@ public:
 	CBKeyboardState(CBGame* inGame);
 	virtual ~CBKeyboardState();
 	HRESULT ReadKey(SDL_Event* event);
+	void    GenerateESCProgrammatically();
 
 	static bool IsShiftDown();
 	static bool IsControlDown();
