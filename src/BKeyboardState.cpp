@@ -205,6 +205,18 @@ HRESULT CBKeyboardState::ReadKey(SDL_Event* event)
 	return S_OK;
 }
 
+//////////////////////////////////////////////////////////////////////////
+void CBKeyboardState::GenerateESCProgrammatically()
+{
+	// assume ESC keycode is not printable
+	m_CurrentPrintable = false;
+
+	m_CurrentCharCode = SDLK_ESCAPE;
+
+	m_CurrentControl = false;
+	m_CurrentAlt = false;
+	m_CurrentShift = false;
+}
 
 //////////////////////////////////////////////////////////////////////////
 HRESULT CBKeyboardState::Persist(CBPersistMgr *PersistMgr)
