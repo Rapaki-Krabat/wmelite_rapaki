@@ -3,97 +3,25 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := freetype
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
-LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libfreetype.a
-else
-LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libfreetype.a
-endif
-
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := SDL2
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
-LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libSDL2.so
-else
-LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libSDL2.so
-endif
-
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := SDL2_mixer
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
-LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libSDL2_mixer.so
-else
-LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libSDL2_mixer.so
-endif
-
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := freeimage
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
-LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libfreeimage.so
-else
-LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libfreeimage.so
-endif
-
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := effectsprivate
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
-LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libeffectsprivate.so
-else
-LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libeffectsprivate.so
-endif
-
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := echo
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
-LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libecho.so
-else
-LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libecho.so
-endif
-
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := dcscomp
-ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
-LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libdcscomp.so
-else
-LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libdcscomp.so
-endif
-
-include $(PREBUILT_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-
 LOCAL_MODULE := main
 
-SDL_PATH := ../../../dependencies/SDL_merged/
+SDL_PATH := ../SDL2
+SDL_MIXER_PATH := ../SDL_mixer/
+LIBFREETYPE_PATH := ../libfreetype/
+LIBFREEIMAGE_PATH := ../libfreeimage/
+LIBEFFECTSPRIVATE_PATH := ../libeffectsprivate/
+LIBECHO_PATH := ../libecho/
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include \
-$(LOCAL_PATH)/$(SDL_PATH)/src/core/android/ \
-$(LOCAL_PATH)/$(SDL_PATH)/src/ \
-$(LOCAL_PATH)/../../../dependencies/SDL_mixer/jni/ \
-$(LOCAL_PATH)/../../../dependencies/freetype-2.6/include/ \
-$(LOCAL_PATH)/../../../dependencies/FreeImage3154/jni/Source/ \
-$(LOCAL_PATH)/../../../dependencies/libeffects-android/jni/ \
-$(LOCAL_PATH)/../../../dependencies/libeffects-android/jni/Reverb/lib/ \
-$(LOCAL_PATH)/../../../dependencies/libeffects-android/jni/Common/lib/ \
-$(LOCAL_PATH)/../../../dependencies/libecho/jni/ \
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include              \
+$(LOCAL_PATH)/$(SDL_PATH)/src/core/android/                        \
+$(LOCAL_PATH)/$(SDL_PATH)/src/                                     \
+$(LOCAL_PATH)/$(SDL_MIXER_PATH)/src/                               \
+$(LOCAL_PATH)/$(LIBFREETYPE_PATH)/include/                         \
+$(LOCAL_PATH)/$(LIBFREEIMAGE_PATH)/Source/                         \
+$(LOCAL_PATH)/$(LIBEFFECTSPRIVATE_PATH)/                           \
+$(LOCAL_PATH)/$(LIBEFFECTSPRIVATE_PATH)/Reverb/lib/                \
+$(LOCAL_PATH)/$(LIBEFFECTSPRIVATE_PATH)/Common/lib/                \
+$(LOCAL_PATH)/$(LIBECHO_PATH)/include/                             \
 $(LOCAL_PATH)/src/
 
 LOCAL_CFLAGS += -Wcast-align
@@ -228,7 +156,87 @@ LOCAL_SRC_FILES := ./src/android/SDL_android_main.c \
 
 LOCAL_SHARED_LIBRARIES := SDL2 freeimage SDL2_mixer effectsprivate echo
 LOCAL_STATIC_LIBRARIES := freetype
-LOCAL_LDLIBS := -lGLESv1_CM -llog -landroid -lz
+LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -llog -landroid -lz
 
 include $(BUILD_SHARED_LIBRARY)
 
+ifeq ($(DISABLE_PREBUILT_LIBRARIES_SPEC),reallyfalse)
+
+	include $(CLEAR_VARS)
+
+	LOCAL_MODULE := freetype
+	ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
+	LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libfreetype.a
+	else
+	LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libfreetype.a
+	endif
+
+	include $(PREBUILT_STATIC_LIBRARY)
+
+	include $(CLEAR_VARS)
+
+	LOCAL_MODULE := SDL2
+	ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
+	LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libSDL2.so
+	else
+	LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libSDL2.so
+	endif
+
+	include $(PREBUILT_SHARED_LIBRARY)
+
+	include $(CLEAR_VARS)
+
+	LOCAL_MODULE := SDL2_mixer
+	ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
+	LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libSDL2_mixer.so
+	else
+	LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libSDL2_mixer.so
+	endif
+
+	include $(PREBUILT_SHARED_LIBRARY)
+
+	include $(CLEAR_VARS)
+
+	LOCAL_MODULE := freeimage
+	ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
+	LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libfreeimage.so
+	else
+	LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libfreeimage.so
+	endif
+
+	include $(PREBUILT_SHARED_LIBRARY)
+
+	include $(CLEAR_VARS)
+
+	LOCAL_MODULE := effectsprivate
+	ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
+	LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libeffectsprivate.so
+	else
+	LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libeffectsprivate.so
+	endif
+
+	include $(PREBUILT_SHARED_LIBRARY)
+
+	include $(CLEAR_VARS)
+
+	LOCAL_MODULE := echo
+	ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
+	LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libecho.so
+	else
+	LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libecho.so
+	endif
+
+	include $(PREBUILT_SHARED_LIBRARY)
+
+	include $(CLEAR_VARS)
+
+	LOCAL_MODULE := dcscomp
+	ifeq ($(TARGET_ARCH_ABI),armeabi-v7a-hard)
+	LOCAL_SRC_FILES := ../../../prebuilt/android/armeabi-v7a/libdcscomp.so
+	else
+	LOCAL_SRC_FILES := ../../../prebuilt/android/$(TARGET_ARCH_ABI)/libdcscomp.so
+	endif
+
+	include $(PREBUILT_SHARED_LIBRARY)
+
+endif
