@@ -45,6 +45,7 @@ THE SOFTWARE.
 
 #ifdef __ANDROID__
 #	include "android/android.h"
+#   include <locale.h>
 #endif
 
 #ifdef __MACOSX__
