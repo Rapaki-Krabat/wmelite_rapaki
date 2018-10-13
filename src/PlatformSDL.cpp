@@ -245,9 +245,13 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 }
 
 #ifdef __EMSCRIPTEN__
+
+static SDL_Event mainLoopEvent;
+
+
 void emscripten_mainloop_wrapper(void)
 {
-	CBPlatform::MessageLoop();
+	CBPlatform::MessageLoopImpl();
 }
 #endif
 
@@ -266,7 +270,19 @@ int CBPlatform::Run(CBGame* inGame, int argc, char* argv[])
 		if (ret == 0)
 		{
 #ifdef __EMSCRIPTEN__
+			autoSaveOnExitMutex = SDL_CreateMutex();
+
             emscripten_set_main_loop(emscripten_mainloop_wrapper, 0, 1);
+
+#if 0            
+            SDL_DestroyMutex(autoSaveOnExitMutex);
+
+            if(Game)
+            {
+            	SAFE_DELETE(Game);
+            }
+#endif
+
 #else
 			ret = CBPlatform::MessageLoop();
 #endif
@@ -316,36 +332,15 @@ LONG CBPlatform::HandleCrashReport(CBGame* Game, EXCEPTION_POINTERS* pExPtrs)
 //////////////////////////////////////////////////////////////////////////
 int CBPlatform::MessageLoop()
 {
-	SDL_Event event;
 	bool done = false;
 
 	autoSaveOnExitMutex = SDL_CreateMutex();
 
 	while (!done)
 	{
-		SDL_LockMutex(autoSaveOnExitMutex);
-
-		while (SDL_PollEvent(&event))
-		{
-			HandleEvent(&event);
-		}
-
-		if(Game && Game->m_Renderer->m_Active && Game->m_Renderer->m_Ready)
-		{
-			Game->DisplayContent();
-			Game->DisplayQuickMsg();
-
-			Game->DisplayDebugInfo();
-
-			// ***** flip
-			if(!Game->m_SuspendedRendering) Game->m_Renderer->Flip();
-			if(Game->m_Loading) Game->LoadGame(Game->m_ScheduledLoadSlot);
-		}
-
-		SDL_UnlockMutex(autoSaveOnExitMutex);
+		CBPlatform::MessageLoopImpl();
 
 		if(Game->m_Quitting) break;
-
 	}
 
 	SDL_DestroyMutex(autoSaveOnExitMutex);
@@ -372,6 +367,31 @@ int CBPlatform::MessageLoop()
 		SAFE_DELETE(Game);
 	}
 	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+void CBPlatform::MessageLoopImpl()
+{
+	SDL_LockMutex(autoSaveOnExitMutex);
+
+	while (SDL_PollEvent(&mainLoopEvent))
+	{
+		HandleEvent(&mainLoopEvent);
+	}
+
+	if(Game && Game->m_Renderer->m_Active && Game->m_Renderer->m_Ready)
+	{
+		Game->DisplayContent();
+		Game->DisplayQuickMsg();
+
+		Game->DisplayDebugInfo();
+
+		// ***** flip
+		if(!Game->m_SuspendedRendering) Game->m_Renderer->Flip();
+		if(Game->m_Loading) Game->LoadGame(Game->m_ScheduledLoadSlot);
+	}
+
+	SDL_UnlockMutex(autoSaveOnExitMutex);
 }
 
 //////////////////////////////////////////////////////////////////////////

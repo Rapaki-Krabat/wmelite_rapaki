@@ -58,6 +58,7 @@ public:
 	static int Initialize(CBGame* inGame, int argc, char* argv[]);
 	static int Run(CBGame* inGame, int argc, char* argv[]);
 	static int MessageLoop();
+	static void MessageLoopImpl();
 	static void HandleEvent(SDL_Event* event);
 
 #ifdef __WIN32__
