@@ -45,7 +45,7 @@ public:
 	CBRegion* m_Region;
 	virtual HRESULT SaveAsText(CBDynBuffer *Buffer, int Indent);
 	virtual HRESULT Update();
-	virtual HRESULT Display();
+	virtual HRESULT Display(int OffsetX=0, int OffsetY=0);
 	CAdEntity(CBGame* inGame);
 	virtual ~CAdEntity();
 	HRESULT LoadFile(char * Filename);

@@ -69,7 +69,7 @@ private:
 
 	HRESULT DrawSprite(int X, int Y, RECT* Rect, float ZoomX, float ZoomY, DWORD Alpha, bool AlphaDisable, TSpriteBlendMode BlendMode, bool MirrorX, bool MirrorY, int offsetX = 0, int offsetY = 0, int originX = 0, int originY = 0, float angle = 0.0f);
 	void GenAlphaMask(SDL_Surface* surface);
-	Uint32 GetPixel(SDL_Surface *surface, int x, int y);
+	Uint32 GetSDLPixel(SDL_Surface *surface, int x, int y);
 
 	void* m_LockPixels;
 	int m_LockPitch;

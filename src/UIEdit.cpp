@@ -572,7 +572,7 @@ HRESULT CUIEdit::Display(int OffsetX, int OffsetY)
 	TTextEncoding OrigEncoding = Game->m_TextEncoding;
 	Game->m_TextEncoding = TEXT_ANSI;
 
-	if(m_Back) m_Back->Display(OffsetX + m_PosX, OffsetY + m_PosY, m_Width, m_Height);
+	if(m_Back) m_Back->DisplayUITiledImage(OffsetX + m_PosX, OffsetY + m_PosY, m_Width, m_Height);
 	if(m_Image) m_Image->Draw(OffsetX + m_PosX, OffsetY + m_PosY, NULL);
 
 	// prepare fonts

@@ -44,7 +44,7 @@ public:
 	virtual void GoTo(int X, int Y, TDirection AfterWalkDir=DI_NONE);
 	CBPoint* m_TargetPoint;
 	virtual HRESULT Update();
-	virtual HRESULT Display();
+	virtual HRESULT Display(int OffsetX=0, int OffsetY=0);
 	TDirection m_TargetDir;
 	TDirection m_AfterWalkDir;
 	virtual void TurnTo(TDirection dir);

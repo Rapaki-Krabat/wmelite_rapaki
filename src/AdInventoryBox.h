@@ -38,7 +38,7 @@ public:
 	int m_ItemHeight;
 	int m_ItemWidth;
 	bool m_Visible;
-	virtual HRESULT Display();
+	virtual HRESULT Display(int OffsetX=0, int OffsetY=0);
 	CUIButton* m_CloseButton;
 	int m_Spacing;
 	int m_ScrollOffset;

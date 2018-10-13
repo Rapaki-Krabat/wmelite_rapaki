@@ -1544,7 +1544,7 @@ CAdSceneState* CAdGame::GetSceneState(char* Filename, bool Saving)
 {
 	char* FilenameCor = new char[strlen(Filename)+1];
 	strcpy(FilenameCor, Filename);
-	for(int i=0; i<strlen(FilenameCor); i++)
+	for(size_t i=0; i<strlen(FilenameCor); i++)
 	{
 		if(FilenameCor[i]=='/') FilenameCor[i] = '\\';
 	}

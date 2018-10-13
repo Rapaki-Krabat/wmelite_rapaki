@@ -93,7 +93,7 @@ public:
 	DWORD m_ScrollTimeH;
 	DWORD m_LastTimeH;
 
-	virtual HRESULT Display();
+	virtual HRESULT Display(int OffsetX=0, int OffsetY=0);
 	DWORD m_PFMaxTime;
 	HRESULT InitLoop();
 	void PathFinderStep();

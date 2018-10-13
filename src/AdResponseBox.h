@@ -48,7 +48,7 @@ public:
 	} TResponseEvent;
 
 	HRESULT WeedResponses();
-	HRESULT Display();
+	HRESULT Display(int OffsetX=0, int OffsetY=0);
 	int m_Spacing;
 	int m_ScrollOffset;
 	CBFont* m_FontHover;

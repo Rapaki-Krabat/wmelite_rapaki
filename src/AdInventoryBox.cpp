@@ -89,7 +89,7 @@ HRESULT CAdInventoryBox::Listen(CBScriptHolder* param1, DWORD param2)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CAdInventoryBox::Display()
+HRESULT CAdInventoryBox::Display(int OffsetX, int OffsetY)
 {
 	CAdGame* AdGame = (CAdGame*)Game;
 

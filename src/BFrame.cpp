@@ -368,7 +368,7 @@ HRESULT CBFrame::SaveAsText(CBDynBuffer *Buffer, int Indent)
 	if(m_EditorExpanded)
 		Buffer->PutTextIndent(Indent+2, "EDITOR_EXPANDED=%s\n", m_EditorExpanded?"TRUE":"FALSE");
 
-	if(m_Subframes.GetSize()>0) m_Subframes[0]->SaveAsText(Buffer, Indent, false);
+	if(m_Subframes.GetSize()>0) m_Subframes[0]->SaveAsText(Buffer, Indent /* , false */);
 
 	int i;
 	for(i=1; i<m_Subframes.GetSize(); i++)

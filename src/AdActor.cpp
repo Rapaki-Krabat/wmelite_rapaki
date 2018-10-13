@@ -521,7 +521,7 @@ void CAdActor::GoTo(int X, int Y, TDirection AfterWalkDir)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CAdActor::Display()
+HRESULT CAdActor::Display(int OffsetX, int OffsetY)
 {	
 	if(m_Active) UpdateSounds();
 

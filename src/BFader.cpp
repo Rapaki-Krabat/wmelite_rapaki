@@ -79,7 +79,7 @@ HRESULT CBFader::Update()
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBFader::Display()
+HRESULT CBFader::Display(int OffsetX, int OffsetY)
 {
 	if(!m_Active) return S_OK;
 

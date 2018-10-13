@@ -38,7 +38,7 @@ public:
 	HRESULT LoadBuffer(BYTE * Buffer, bool Complete=true);
 	virtual HRESULT SaveAsText(CBDynBuffer* Buffer, int Indent);
 
-	HRESULT Display(int X, int Y, int Width, int Height);
+	HRESULT DisplayUITiledImage(int X, int Y, int Width, int Height);
 	CUITiledImage(CBGame* inGame=NULL);
 	virtual ~CUITiledImage();
 	CBSubFrame* m_Image;

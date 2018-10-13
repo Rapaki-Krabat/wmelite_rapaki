@@ -251,10 +251,10 @@ bool CBSubFrame::GetBoundingRect(LPRECT Rect, int X, int Y, float ScaleX, float 
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBSubFrame::SaveAsText(CBDynBuffer *Buffer, int Indent, bool Complete)
+HRESULT CBSubFrame::SaveAsText(CBDynBuffer *Buffer, int Indent/* , bool Complete */)
 {
-	if(Complete)
-		Buffer->PutTextIndent(Indent, "SUBFRAME {\n");
+	// if(Complete)
+	//	Buffer->PutTextIndent(Indent, "SUBFRAME {\n");
 
 	if(m_Surface && m_Surface->m_Filename != NULL)
 		Buffer->PutTextIndent(Indent+2, "IMAGE = \"%s\"\n", m_Surface->m_Filename);
@@ -298,8 +298,8 @@ HRESULT CBSubFrame::SaveAsText(CBDynBuffer *Buffer, int Indent, bool Complete)
 	CBBase::SaveAsText(Buffer, Indent+2);
 
 
-	if(Complete)
-		Buffer->PutTextIndent(Indent, "}\n\n");
+	// if(Complete)
+	//	Buffer->PutTextIndent(Indent, "}\n\n");
 
 	return S_OK;
 }

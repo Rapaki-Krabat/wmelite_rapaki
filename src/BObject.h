@@ -110,7 +110,7 @@ public:
 
 	// base
 	virtual HRESULT Update()  { return E_FAIL; };
-	virtual HRESULT Display() { return E_FAIL; };
+	virtual HRESULT Display(int OffsetX=0, int OffsetY=0) { return E_FAIL; };
 	virtual HRESULT InvalidateDeviceObjects()  { return S_OK; };
 	virtual HRESULT RestoreDeviceObjects()     { return S_OK; };
 	bool m_NonIntMouseEvents;

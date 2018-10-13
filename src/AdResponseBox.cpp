@@ -398,7 +398,7 @@ HRESULT CAdResponseBox::SaveAsText(CBDynBuffer* Buffer, int Indent)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CAdResponseBox::Display()
+HRESULT CAdResponseBox::Display(int OffsetX, int OffsetY)
 {
 	RECT rect = m_ResponseArea;
 	if(m_Window)

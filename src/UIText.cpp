@@ -55,7 +55,7 @@ HRESULT CUIText::Display(int OffsetX, int OffsetY)
 	CBFont* font = m_Font;
 	if(!font) font = Game->m_SystemFont;
 
-	if(m_Back) m_Back->Display(OffsetX + m_PosX, OffsetY + m_PosY, m_Width, m_Height);
+	if(m_Back) m_Back->DisplayUITiledImage(OffsetX + m_PosX, OffsetY + m_PosY, m_Width, m_Height);
 	if(m_Image) m_Image->Draw(OffsetX + m_PosX, OffsetY + m_PosY, NULL);
 
 	if(font && m_Text){

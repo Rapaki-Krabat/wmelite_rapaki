@@ -628,7 +628,7 @@ HRESULT CUIButton::Display(int OffsetX, int OffsetY)
 		ImageY += (m_Height - (rc.bottom-rc.top))/2;
 	}
 
-	if(back) back->Display(OffsetX + m_PosX, OffsetY + m_PosY, m_Width, m_Height);
+	if(back) back->DisplayUITiledImage(OffsetX + m_PosX, OffsetY + m_PosY, m_Width, m_Height);
 	//if(image) image->Draw(ImageX +((m_Press||m_OneTimePress)&&back?1:0), ImageY +((m_Press||m_OneTimePress)&&back?1:0), NULL);
 	if(image) image->Draw(ImageX +((m_Press||m_OneTimePress)&&back?1:0), ImageY +((m_Press||m_OneTimePress)&&back?1:0), m_PixelPerfect?this:NULL);
 

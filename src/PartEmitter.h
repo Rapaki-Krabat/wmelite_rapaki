@@ -99,7 +99,7 @@ public:
 	HRESULT Start();
 	
 	HRESULT Update();
-	HRESULT Display(CBRegion* Region=NULL);
+	HRESULT DisplayPartEmitter(CBRegion* Region=NULL);
 
 	HRESULT SortParticlesByZ();
 	HRESULT AddSprite(char* Filename);

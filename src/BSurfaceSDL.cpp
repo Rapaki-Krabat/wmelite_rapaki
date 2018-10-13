@@ -198,7 +198,7 @@ void CBSurfaceSDL::GenAlphaMask(SDL_Surface* surface)
 	{
 		for (int x = 0; x < surface->w; x++)
 		{
-			Uint32 pixel = GetPixel(surface, x, y);
+			Uint32 pixel = GetSDLPixel(surface, x, y);
 
 			Uint8 r, g, b, a;
 			SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
@@ -220,7 +220,7 @@ void CBSurfaceSDL::GenAlphaMask(SDL_Surface* surface)
 }
 
 //////////////////////////////////////////////////////////////////////////
-Uint32 CBSurfaceSDL::GetPixel(SDL_Surface *surface, int x, int y)
+Uint32 CBSurfaceSDL::GetSDLPixel(SDL_Surface *surface, int x, int y)
 {
 	int bpp = surface->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to retrieve */

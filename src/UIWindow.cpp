@@ -166,7 +166,7 @@ HRESULT CUIWindow::Display(int OffsetX, int OffsetY)
 	}
 
 	if(m_AlphaColor!=0) Game->m_Renderer->m_ForceAlphaColor = m_AlphaColor;
-	if(back) back->Display(m_PosX + OffsetX, m_PosY + OffsetY, m_Width, m_Height);
+	if(back) back->DisplayUITiledImage(m_PosX + OffsetX, m_PosY + OffsetY, m_Width, m_Height);
 	if(image) image->Draw(m_PosX + OffsetX, m_PosY + OffsetY, m_Transparent?NULL:this);
 
 	if(!CBPlatform::IsRectEmpty(&m_TitleRect) && font && m_Text)

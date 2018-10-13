@@ -301,7 +301,7 @@ HRESULT CPartEmitter::UpdateInternal(DWORD CurrentTime, DWORD TimerDelta)
 }
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CPartEmitter::Display(CBRegion* Region)
+HRESULT CPartEmitter::DisplayPartEmitter(CBRegion* Region)
 {
 	if(m_Sprites.GetSize() <= 1) Game->m_Renderer->StartSpriteBatch();
 

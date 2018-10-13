@@ -54,7 +54,7 @@ CUITiledImage::~CUITiledImage()
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CUITiledImage::Display(int X, int Y, int Width, int Height)
+HRESULT CUITiledImage::DisplayUITiledImage(int X, int Y, int Width, int Height)
 {
 	if(!m_Image) return E_FAIL;
 

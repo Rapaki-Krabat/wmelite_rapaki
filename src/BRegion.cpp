@@ -399,11 +399,13 @@ char* CBRegion::ScToString()
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBRegion::SaveAsText(CBDynBuffer *Buffer, int Indent, char* NameOverride)
+HRESULT CBRegion::SaveAsText(CBDynBuffer *Buffer, int Indent /* , char* NameOverride */ )
 {
-	if(!NameOverride) Buffer->PutTextIndent(Indent, "REGION {\n");
-	else Buffer->PutTextIndent(Indent, "%s {\n", NameOverride);
+	// if(!NameOverride) Buffer->PutTextIndent(Indent, "REGION {\n");
+	// else Buffer->PutTextIndent(Indent, "%s {\n", NameOverride);
 
+	Buffer->PutTextIndent(Indent, "REGION {\n");
+	
 	Buffer->PutTextIndent(Indent+2, "NAME=\"%s\"\n", m_Name);
 	Buffer->PutTextIndent(Indent+2, "CAPTION=\"%s\"\n", GetCaption());
 	Buffer->PutTextIndent(Indent+2, "ACTIVE=%s\n", m_Active?"TRUE":"FALSE");

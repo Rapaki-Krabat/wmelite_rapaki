@@ -476,7 +476,7 @@ HRESULT CAdEntity::LoadBuffer(BYTE * Buffer, bool Complete)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CAdEntity::Display()
+HRESULT CAdEntity::Display(int OffsetX, int OffsetY)
 {
 	if(m_Active)
 	{
@@ -529,7 +529,7 @@ HRESULT CAdEntity::Display()
 		}	
 		DisplaySpriteAttachments(false);
 
-		if(m_PartEmitter) m_PartEmitter->Display(m_Region);
+		if(m_PartEmitter) m_PartEmitter->DisplayPartEmitter(m_Region);
 
 	}
 	return S_OK;

@@ -37,7 +37,7 @@ public:
 	HRESULT FadeOut(DWORD TargetColor, DWORD Duration, bool System = false);
 	HRESULT FadeIn(DWORD SourceColor, DWORD Duration, bool System = false);
 	HRESULT Deactivate();
-	HRESULT Display();
+	HRESULT Display(int OffsetX=0, int OffsetY=0);
 	HRESULT Update();
 	DECLARE_PERSISTENT(CBFader, CBObject);
 	CBFader(CBGame* inGame);

@@ -1113,7 +1113,7 @@ HRESULT CAdScene::TraverseNodes(bool Update)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CAdScene::Display()
+HRESULT CAdScene::Display(int OffsetX, int OffsetY)
 {
 	return TraverseNodes(false);
 }

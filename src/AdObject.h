@@ -64,7 +64,7 @@ public:
 	CAdSentence* m_Sentence;
 	HRESULT SetFont(char* Filename);
 	virtual HRESULT Update();
-	virtual HRESULT Display();
+	virtual HRESULT Display(int OffsetX=0, int OffsetY=0);
 	bool m_Drawn;
 	bool m_Active;
 	virtual HRESULT PlayAnim(char* Filename);

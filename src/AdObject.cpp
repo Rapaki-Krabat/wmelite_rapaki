@@ -153,7 +153,7 @@ HRESULT CAdObject::PlayAnim(char *Filename)
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CAdObject::Display()
+HRESULT CAdObject::Display(int OffsetX, int OffsetY)
 {
 	return S_OK;
 }
@@ -1087,7 +1087,7 @@ bool CAdObject::GetExtendedFlag(char *FlagName)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdObject::SaveAsText(CBDynBuffer *Buffer, int Indent)
 {
-	if(m_BlockRegion) m_BlockRegion->SaveAsText(Buffer, Indent+2, "BLOCKED_REGION");
+	if(m_BlockRegion) m_BlockRegion->SaveAsText(Buffer, Indent+2 /* , "BLOCKED_REGION" */);
 	if(m_WptGroup) m_WptGroup->SaveAsText(Buffer, Indent+2);
 
 	CBBase::SaveAsText(Buffer, Indent+2);
