@@ -567,7 +567,7 @@ void CBGame::DEBUG_DebugDisable()
 void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 {
 #if !defined(__IPHONEOS__) && !defined(__ANDROID__) && !defined(__WINRT__)
-	if ((!m_DEBUG_DebugMode) && (!m_DEBUG_LogWriteMode)) return;
+	// if ((!m_DEBUG_DebugMode) && (!m_DEBUG_LogWriteMode)) return;
 #endif
 	time_t timeNow;
 	time(&timeNow);
@@ -591,6 +591,10 @@ void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 #endif
 
 #if defined(__WINRT__)
+	SDL_Log("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
+#endif
+
+#if defined(__EMSCRIPTEN__)
 	SDL_Log("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
 #endif
 

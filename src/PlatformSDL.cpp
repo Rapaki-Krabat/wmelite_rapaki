@@ -59,6 +59,11 @@ THE SOFTWARE.
 #   include "WinRTDetectPointers.h"
 #endif
 
+#ifdef __EMSCRIPTEN__
+#   include <locale.h>
+#   include <emscripten/emscripten.h>
+#endif
+
 CBGame* CBPlatform::Game = NULL;
 SDL_mutex *autoSaveOnExitMutex;
 
@@ -239,6 +244,13 @@ int CBPlatform::Initialize(CBGame* inGame, int argc, char* argv[])
 	return 0;
 }
 
+#ifdef __EMSCRIPTEN__
+void emscripten_mainloop_wrapper(void)
+{
+	CBPlatform::MessageLoop();
+}
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 int CBPlatform::Run(CBGame* inGame, int argc, char* argv[])
 {
@@ -253,7 +265,11 @@ int CBPlatform::Run(CBGame* inGame, int argc, char* argv[])
 		ret = CBPlatform::Initialize(inGame, argc, argv);
 		if (ret == 0)
 		{
+#ifdef __EMSCRIPTEN__
+            emscripten_set_main_loop(emscripten_mainloop_wrapper, 0, 1);
+#else
 			ret = CBPlatform::MessageLoop();
+#endif
 		}
 	}
 #if defined(__WIN32__) && !defined(__MINGW32__)
