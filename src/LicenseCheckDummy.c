@@ -34,6 +34,8 @@ int LicenseCheckResultStatus()
 
 void LicenseCheckResultDetail(char *str, int maxlen)
 {
-    strcpy(str, "dummy license check status");
+    int c;
+	strcpy(str, "dummy license check status");
+    c = maxlen;
 }
 

@@ -4,13 +4,13 @@ CC=emcc
 
 DEFINES=USE_SDL_MIXER
 
-CFLAGS=-I$(IDIR) -I. -O2 -I../dependencies/SDL_merged/include/ -I../dependencies/freetype-2.6/include/ -I../dependencies/freetype-2.6/include/freetype2/ -Wall -Wextra
+CFLAGS=-I$(IDIR) -I. -O2 -I../dependencies/SDL_merged/include/ -I../dependencies/freetype-2.6/include/ -I../dependencies/freetype-2.6/include/freetype2/ -Wall -Wextra -Werror
 
 CPP=em++
 CPPFLAGS=-I$(IDIR) -I. -I../dependencies/libeffects-android/ -I../dependencies/libeffects-android/Reverb/lib/ -I../dependencies/libeffects-android/Common/lib/ -I../dependencies/libecho/include/ -D$(DEFINES) -O2 \
 -I../dependencies/freetype-2.6/include/ -I../dependencies/freetype-2.6/include/freetype2/ -I../dependencies/SDL_merged/include/ -I../dependencies/SDL_mixer/src/ -I../dependencies/zlib-1.2.8/ \
 -I../dependencies/FreeImage3154/Source/ \
--Wall -Wextra -Wno-write-strings -Wno-unused -Wno-unused-parameter \
+-Wall -Wextra -Werror -Wno-write-strings -Wno-unused -Wno-unused-parameter \
 -fstrict-aliasing \
 -D__EXCLUDE_LIBTHEORA_PLAYER__ -DLIBEFFECTS_NO_EXPORT_DLL_SYMBOLS -DLIBECHO_NO_EXPORT_DLL_SYMBOLS
 
