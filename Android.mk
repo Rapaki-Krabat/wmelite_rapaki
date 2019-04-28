@@ -154,7 +154,7 @@ LOCAL_SRC_FILES := ./src/android/SDL_android_main.c \
 #./src/VidTheoraPlayer.cpp \
 
 
-LOCAL_SHARED_LIBRARIES := SDL2 freeimage SDL2_mixer effectsprivate echo
+LOCAL_SHARED_LIBRARIES := SDL2 freeimage SDL2_mixer effectsprivate echo theora
 LOCAL_STATIC_LIBRARIES := freetype
 LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -llog -landroid -lz
 
