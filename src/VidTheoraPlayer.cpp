@@ -27,8 +27,10 @@ THE SOFTWARE.
 #include "VidTheoraPlayer.h"
 #include "VidDataSource.h"
 #include "BSurfaceSDL.h"
-#include <theoraplayer/TheoraPlayer.h>
+#include <theoraplayer/theoraplayer.h>
+#include <theoraplayer/VideoFrame.h>
 
+using namespace theoraplayer;
 
 IMPLEMENT_PERSISTENT(CVidTheoraPlayer, false);
 
@@ -103,7 +105,7 @@ HRESULT CVidTheoraPlayer::Initialize(char* filename, char* subtitleFile)
 
 	if (filename != m_Filename) CBUtils::SetString(&m_Filename, filename);
 
-	m_Clip = Game->m_VideoMgr->GetTheora()->createVideoClip(new CVidDataSource(Game, m_File, m_Filename), TH_XBGR);
+	m_Clip = Game->m_VideoMgr->GetTheora()->createVideoClip(new CVidDataSource(Game, m_File, AnsiString(m_Filename)), FORMAT_XBGR);
 
 	if (m_Clip)
 	{
@@ -140,7 +142,7 @@ HRESULT CVidTheoraPlayer::Update()
 		return S_OK;
 	}
 
-	TheoraVideoFrame* frame = m_Clip->getNextFrame();
+	VideoFrame* frame = m_Clip->fetchNextFrame();
 	if (frame)
 	{
 		// transfer the frame pixels to your display device, texure, graphical context or whatever you use.

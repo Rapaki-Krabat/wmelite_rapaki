@@ -27,9 +27,12 @@ THE SOFTWARE.
 #define __WmeVidTheoraPlayer_H__
 
 #include "BBase.h"
+#include <theoraplayer/VideoClip.h>
+
+using namespace theoraplayer;
 
 class CBSurfaceSDL;
-class TheoraVideoClip;
+// class TheoraVideoClip;
 
 class CVidTheoraPlayer : public CBBase
 {
@@ -90,7 +93,7 @@ private:
 	int m_SavedState;
 	DWORD m_SavedPos;
 
-	TheoraVideoClip* m_Clip;
+	VideoClip* m_Clip;
 };
 
 #endif // __WmeVidTheoraPlayer_H__

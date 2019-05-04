@@ -11,6 +11,7 @@ LIBFREETYPE_PATH := ../libfreetype/
 LIBFREEIMAGE_PATH := ../libfreeimage/
 LIBEFFECTSPRIVATE_PATH := ../libeffectsprivate/
 LIBECHO_PATH := ../libecho/
+LIBTHEORAPLAYER_PATH := ../libtheoraplayer/
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include              \
 $(LOCAL_PATH)/$(SDL_PATH)/src/core/android/                        \
@@ -22,11 +23,12 @@ $(LOCAL_PATH)/$(LIBEFFECTSPRIVATE_PATH)/                           \
 $(LOCAL_PATH)/$(LIBEFFECTSPRIVATE_PATH)/Reverb/lib/                \
 $(LOCAL_PATH)/$(LIBEFFECTSPRIVATE_PATH)/Common/lib/                \
 $(LOCAL_PATH)/$(LIBECHO_PATH)/include/                             \
+$(LOCAL_PATH)/$(LIBTHEORAPLAYER_PATH)/include/                     \
 $(LOCAL_PATH)/src/
 
 # LOCAL_CFLAGS += -Wcast-align
 
-LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-write-strings -Wno-conversion-null -DUSE_SDL_MIXER -DFREEIMAGE_LITE_BUILD -DFREEIMAGE_NOT_SO_LITE_BUILD
+LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-write-strings -Wno-conversion-null -Wno-switch -DUSE_SDL_MIXER -DFREEIMAGE_LITE_BUILD -DFREEIMAGE_NOT_SO_LITE_BUILD
 
 # LOCAL_ARM_MODE := arm
 
@@ -149,12 +151,12 @@ LOCAL_SRC_FILES := ./src/android/SDL_android_main.c \
 ./src/UITiledImage.cpp \
 ./src/UIWindow.cpp \
 ./src/Vector2.cpp \
-#./src/VidDataSource.cpp \
-#./src/VidManager.cpp \
-#./src/VidTheoraPlayer.cpp \
+./src/VidDataSource.cpp \
+./src/VidManager.cpp \
+./src/VidTheoraPlayer.cpp
 
 
-LOCAL_SHARED_LIBRARIES := SDL2 freeimage SDL2_mixer effectsprivate echo theora
+LOCAL_SHARED_LIBRARIES := SDL2 freeimage SDL2_mixer effectsprivate echo ogg vorbisidec theora theoraplayer
 LOCAL_STATIC_LIBRARIES := freetype
 LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -llog -landroid -lz
 

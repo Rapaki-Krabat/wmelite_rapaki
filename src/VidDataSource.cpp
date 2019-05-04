@@ -25,11 +25,14 @@ THE SOFTWARE.
 
 #include "dcgf.h"
 #include "VidDataSource.h"
-#include <theoraplayer/TheoraPlayer.h>
+#include <theoraplayer/theoraplayer.h>
+#include <theoraplayer/FileDataSource.h>
 
+using namespace theoraplayer;
 
 //////////////////////////////////////////////////////////////////////////
-CVidDataSource::CVidDataSource(CBGame* inGame, CBFile* file, const char* fileName)
+// CVidDataSource::CVidDataSource(CBGame* inGame, CBFile* file, const char* fileName)
+CVidDataSource::CVidDataSource(CBGame* inGame, CBFile* file, const AnsiString& fileName):FileDataSource(fileName)
 {
 	m_Game = inGame;
 	m_Filename = fileName;

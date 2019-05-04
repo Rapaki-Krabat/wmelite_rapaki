@@ -26,13 +26,15 @@ THE SOFTWARE.
 #ifndef __WmeVidDataSource_H__
 #define __WmeVidDataSource_H__
 
-#include <theoraplayer/TheoraDataSource.h>
+#include <theoraplayer/FileDataSource.h>
 
+using namespace theoraplayer;
 
-class CVidDataSource : public TheoraDataSource
+class CVidDataSource : public FileDataSource
 {
 public:	
-	CVidDataSource(CBGame* inGame, CBFile* file, const char* fileName);
+	// CVidDataSource(CBGame* inGame, CBFile* file, const char* fileName);
+	CVidDataSource(CBGame* inGame, CBFile* file, const std::string& fileName);
 	virtual ~CVidDataSource();
 
 	int read(void* output,int nBytes);

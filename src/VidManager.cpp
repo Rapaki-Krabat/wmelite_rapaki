@@ -26,7 +26,8 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "VidManager.h"
 #include "VidTheoraPlayer.h"
-#include <theoraplayer/TheoraPlayer.h>
+#include <theoraplayer/theoraplayer.h>
+#include <theoraplayer/Manager.h>
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -60,7 +61,7 @@ HRESULT CVidManager::InitLoop()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CVidManager::Initialize()
 {
-	m_Theora = new TheoraVideoManager();
+	m_Theora = new Manager();
 	return S_OK;
 }
 

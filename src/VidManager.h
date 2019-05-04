@@ -27,8 +27,11 @@ THE SOFTWARE.
 #define __WmeVidManager_H__
 
 #include "BBase.h"
+#include <theoraplayer/Manager.h>
 
-class TheoraVideoManager;
+using namespace theoraplayer;
+
+// class TheoraVideoManager;
 class CVidTheoraPlayer;
 
 class CVidManager : public CBBase
@@ -40,7 +43,7 @@ public:
 	HRESULT InitLoop();
 	HRESULT Initialize();
 
-	TheoraVideoManager* GetTheora() const { return m_Theora; }
+	Manager* GetTheora() const { return m_Theora; }
 
 	HRESULT PauseAll();
 	HRESULT ResumeAll();
@@ -49,7 +52,7 @@ public:
 	void UnregisterPlayer(CVidTheoraPlayer* player);
 
 private:
-	TheoraVideoManager* m_Theora;
+	Manager* m_Theora;
 	DWORD m_PrevTime;
 
 	typedef std::set<CVidTheoraPlayer*> PlayerSet;
