@@ -27,7 +27,15 @@ THE SOFTWARE.
 #include "VidManager.h"
 #include "VidTheoraPlayer.h"
 #include <theoraplayer/theoraplayer.h>
-#include <theoraplayer/Manager.h>
+
+// need C-style pointer to Game object for logging
+static CBGame* gamePtr;
+
+//////////////////////////////////////////////////////////////////////////
+static void LogFunction(const std::string& msg)
+{
+	gamePtr->LOG(0, msg.c_str());
+}
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -35,12 +43,19 @@ CVidManager::CVidManager(CBGame* inGame):CBBase(inGame)
 {
 	m_Theora = NULL;
 	m_PrevTime = 0;
+	gamePtr = Game;
+	setLogFunction(&LogFunction);
+	// this function acquires a Manager object
+	theoraplayer::init();
 }
 
 //////////////////////////////////////////////////////////////////////////
 CVidManager::~CVidManager()
 {
-	SAFE_DELETE(m_Theora);
+	// only delete the reference to the manager object, destroy() will handle
+	// the object ifself
+	m_Theora = NULL;
+	theoraplayer::destroy();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -61,7 +76,8 @@ HRESULT CVidManager::InitLoop()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CVidManager::Initialize()
 {
-	m_Theora = new Manager();
+	// use the already acquired object
+	m_Theora = theoraplayer::manager;
 	return S_OK;
 }
 
