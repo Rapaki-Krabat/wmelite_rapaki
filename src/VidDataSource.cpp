@@ -26,7 +26,6 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "VidDataSource.h"
 #include <theoraplayer/theoraplayer.h>
-#include <theoraplayer/FileDataSource.h>
 
 using namespace theoraplayer;
 
@@ -64,21 +63,21 @@ std::string CVidDataSource::repr()
 }
 
 //////////////////////////////////////////////////////////////////////////
-void CVidDataSource::seek(unsigned long byte_index)
+void CVidDataSource::seek(int64_t byte_index)
 {
-	if (m_File) m_File->Seek(byte_index);
+	if (m_File) m_File->Seek((LONG) byte_index);
 }
 
 //////////////////////////////////////////////////////////////////////////
-unsigned long CVidDataSource::size()
+int64_t CVidDataSource::getSize()
 {
-	if (m_File) return m_File->GetSize();
+	if (m_File) return (int64_t) m_File->GetSize();
 	else return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
-unsigned long CVidDataSource::tell()
+int64_t CVidDataSource::getPosition()
 {
-	if (m_File) return m_File->GetPos();
+	if (m_File) return (int64_t) m_File->GetPos();
 	else return 0;
 }

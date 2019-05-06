@@ -39,9 +39,9 @@ public:
 
 	int read(void* output,int nBytes);
 	std::string repr();
-	void seek(unsigned long byte_index);
-	unsigned long size();
-	unsigned long tell();
+	void seek(int64_t byte_index);
+	int64_t getSize();
+	int64_t getPosition();
 
 private:
 	CBGame* m_Game;
