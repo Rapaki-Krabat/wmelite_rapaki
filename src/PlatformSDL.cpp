@@ -56,6 +56,7 @@ THE SOFTWARE.
 
 #ifdef __WINRT__
 #   include "WinRTDetectPointers.h"
+#include <locale.h>
 #endif
 
 #include "SDL_log.h"
