@@ -576,6 +576,13 @@ HRESULT CAdActor::Update()
 	{
 		if(m_AnimSprite)
 		{
+			// the object that is deleted might still be referenced by this variable, so remove the reference
+			// this should avoid the "fallthrough" at STATE_TALKING where the reference could be assigned to m_CurrentSprite
+			// without any further checks
+			if (m_TempSprite2 == m_AnimSprite)
+			{
+				m_TempSprite2 = NULL;
+			}
 			SAFE_DELETE(m_AnimSprite);
 		}
 		if(m_AnimSprite2)
