@@ -85,6 +85,7 @@ typedef void* (WINAPI *PERSISTBUILD)(void);
 typedef HRESULT (WINAPI *PERSISTLOAD)(void*, CBPersistMgr*);
 
 #define DECLARE_PERSISTENT(class_name, parent_class)\
+	static size_t alloc_mem_size;\
 	static const char m_ClassName[];\
 	static void* WINAPI PersistBuild(void);\
 	virtual const char* GetClassName();\
@@ -97,6 +98,7 @@ typedef HRESULT (WINAPI *PERSISTLOAD)(void*, CBPersistMgr*);
 
 #define IMPLEMENT_PERSISTENT(class_name, persistent_class)\
 	const char class_name::m_ClassName[] = #class_name;\
+	size_t class_name::alloc_mem_size;\
 	void* class_name::PersistBuild(){\
 		return ::new class_name(DYNAMIC_CONSTRUCTOR, DYNAMIC_CONSTRUCTOR);\
 	}\
@@ -114,11 +116,13 @@ typedef HRESULT (WINAPI *PERSISTLOAD)(void*, CBPersistMgr*);
 	void* class_name::operator new (size_t size){\
 		void* ret = ::operator new(size);\
 		CSysClassRegistry::GetInstance()->RegisterInstance(#class_name, ret);\
+		alloc_mem_size = size;\
 		return ret;\
 	}\
 	\
 	void class_name::operator delete (void* p){\
 		CSysClassRegistry::GetInstance()->UnregisterInstance(#class_name, p);\
+		memset(p, 0xA5, alloc_mem_size);\
 		::operator delete(p);\
 	}\
 
