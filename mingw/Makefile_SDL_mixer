@@ -6,7 +6,7 @@ DEFINES=USE_SDL_MIXER
 CFLAGS=-I$(IDIR) -I. -O2 -I../../SDL2/include/ -I../../libfreetype/include/ -I../../libfreetype/include/freetype2/ -Wall -Wextra
 
 CPP=i586-mingw32msvc-g++
-CPPFLAGS=-I$(IDIR) -I. -I../../libeffectsprivate/jni/ -I../../libeffectsprivate/jni/Reverb/lib/ -I../../libeffectsprivate/jni/Common/lib/ -I../../libecho/ -D$(DEFINES) -O2 \
+CPPFLAGS=-I$(IDIR) -I. -I../../libeffectsprivate/jni/ -I../../libeffectsprivate/jni/Reverb/lib/ -I../../libeffectsprivate/jni/Common/lib/ -I../../libecho/jni/ -D$(DEFINES) -O2 \
 -I../../libfreetype/include/ -I../../libfreetype/include/freetype2/ -I../../SDL2/include/ -I../../SDL_mixer/src/ -I../../zlib/ \
 -I../../libfreeimage/Dist/x32/ \
 -Wall -Wextra -Wno-write-strings -Wno-unused -Wno-unused-parameter \
