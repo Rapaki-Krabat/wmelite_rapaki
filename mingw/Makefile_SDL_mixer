@@ -8,7 +8,7 @@ CFLAGS=-I$(IDIR) -I. -O2 -I../../SDL2/include/ -I../../libfreetype/include/ -I..
 CPP=i586-mingw32msvc-g++
 CPPFLAGS=-I$(IDIR) -I. -I../../libeffectsprivate/jni/ -I../../libeffectsprivate/jni/Reverb/lib/ -I../../libeffectsprivate/jni/Common/lib/ -I../../libecho/jni/ -D$(DEFINES) -O2 \
 -I../../libfreetype/include/ -I../../libfreetype/include/freetype2/ -I../../SDL2/include/ -I../../SDL_mixer/src/ -I../../zlib/ \
--I../../libfreeimage/Dist/x32/ \
+-I../../libfreeimage/jni/Dist/ \
 -Wall -Wextra -Wno-write-strings -Wno-unused -Wno-unused-parameter \
 -fstrict-aliasing \
 -D__EXCLUDE_LIBTHEORA_PLAYER__ -DLIBEFFECTS_NO_EXPORT_DLL_SYMBOLS -DLIBECHO_NO_EXPORT_DLL_SYMBOLS
