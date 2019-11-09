@@ -21,13 +21,13 @@ ODIR=obj_sdl_mixer
 
 LIBS= ../../libecho/mingwout/libecho.a ../../libeffectsprivate/mingwout/libeffects.a \
 ../../SDL_mixer/src/libSDL_mixer.a \
-../../libfreeimage/jni/Dist/libFreeImage.a \
+-L../../libfreeimage/jni/Dist/ -lFreeImage \
 -L../../libfreetype/objs/.libs/ -lfreetype-6 \
 ../../SDL2/build/SDL_windows_main.o \
 -L../../SDL2/build/.libs/ -lSDL2 \
 -L../../zlib/ -lzlib1
 
-# -L../../libfreeimage/jni/Dist/ -lFreeImage \
+# ../../libfreeimage/jni/Dist/libFreeImage.a \
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o LicenseCheckDummy.o
 OBJC = $(patsubst %,$(ODIR)/%,$(_OBJC))
