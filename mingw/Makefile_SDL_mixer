@@ -11,7 +11,7 @@ CPPFLAGS=-I$(IDIR) -I. -I../../libeffectsprivate/jni/ -I../../libeffectsprivate/
 -I../../libfreeimage/jni/Dist/ \
 -Wall -Wextra -Wno-write-strings -Wno-unused -Wno-unused-parameter \
 -fstrict-aliasing \
--D__EXCLUDE_LIBTHEORA_PLAYER__ -DLIBEFFECTS_NO_EXPORT_DLL_SYMBOLS -DLIBECHO_NO_EXPORT_DLL_SYMBOLS
+-D__EXCLUDE_LIBTHEORA_PLAYER__ -DLIBEFFECTS_NO_EXPORT_DLL_SYMBOLS -DLIBECHO_NO_EXPORT_DLL_SYMBOLS -DFREEIMAGE_LIB
 
 
 SRCDIR=../src
