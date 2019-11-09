@@ -20,11 +20,12 @@ ODIR=obj_sdl_mixer
 
 LIBS= ../../libecho/mingwout/libecho.a ../../libeffectsprivate/mingwout/libeffects.a \
 ../../SDL_mixer/src/libSDL_mixer.a \
-../../SDL2/SDL2main.lib \
 -L../../libfreetype/objs/.libs/ -lfreetype-6 \
 -L../../libfreeimage/jni/Dist/ -lFreeImage \
 -L../../SDL2/build/.libs/ -lSDL2 \
 -L../../zlib/ -lzlib1
+
+# ../../SDL2/SDL2main.lib \
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o LicenseCheckDummy.o
 OBJC = $(patsubst %,$(ODIR)/%,$(_OBJC))
