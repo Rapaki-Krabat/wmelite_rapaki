@@ -23,9 +23,9 @@ LIBS= ../../libecho/mingwout/libecho.a ../../libeffectsprivate/mingwout/libeffec
 -L../../libfreetype/objs/.libs/ -lfreetype-6 \
 -L../../libfreeimage/jni/Dist/ -lFreeImage \
 -L../../SDL2/build/.libs/ -lSDL2 \
+../../SDL2/build/libSDL2main.a \
 -L../../zlib/ -lzlib1
 
-# ../../SDL2/SDL2main.lib \
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o LicenseCheckDummy.o
 OBJC = $(patsubst %,$(ODIR)/%,$(_OBJC))
