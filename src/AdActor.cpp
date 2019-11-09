@@ -576,6 +576,11 @@ HRESULT CAdActor::Update()
 	{
 		if(m_AnimSprite)
 		{
+            if (m_TempSprite2 == m_AnimSprite)
+            {
+            	Game->LOG(0, "Deleting instance that still has a pointer to it!");
+            }
+
 			SAFE_DELETE(m_AnimSprite);
 		}
 		if(m_AnimSprite2)
