@@ -22,7 +22,7 @@ LIBS= ../../libecho/mingwout/libecho.a ../../libeffectsprivate/mingwout/libeffec
 ../../SDL_mixer/src/libSDL_mixer.a \
 -L../../libfreetype/objs/.libs/ -lfreetype-6 \
 -L../../libfreeimage/jni/Dist/ -lFreeImage \
-../../SDL2/build/libSDL2main.a \
+../../SDL2/build/SDL_windows_main.o \
 -L../../SDL2/build/.libs/ -lSDL2 \
 -L../../zlib/ -lzlib1
 
