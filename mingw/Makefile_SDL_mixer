@@ -18,12 +18,12 @@ SRCDIR=../src
 
 ODIR=obj_sdl_mixer
 
-LIBS= ../../libecho/libecho.a ../../libeffectsprivate/libeffects.a \
-../../SDL_mixer/libSDL_mixer.a \
+LIBS= ../../libecho/mingwout/libecho.a ../../libeffectsprivate/mingwout/libeffects.a \
+../../SDL_mixer/src/libSDL_mixer.a \
 ../../SDL2/SDL2main.lib \
--L../../libfreetype/bin/ -lfreetype6 \
--L../../libfreeimage/Dist/x32/ -lFreeImage \
--L../../SDL2/ -lSDL2 \
+-L../../libfreetype/objs/.libs/ -lfreetype-6 \
+-L../../libfreeimage/jni/Dist/ -lFreeImage \
+-L../../SDL2/build/.libs/ -lSDL2 \
 -L../../zlib/ -lzlib1
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o LicenseCheckDummy.o
