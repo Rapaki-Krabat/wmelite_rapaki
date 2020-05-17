@@ -202,7 +202,7 @@ void android_getUTFString(char *inputString, char *encoding, char *buffer, int *
 
 	if (result != NULL) {
 		jsize retLen = (*env)->GetStringUTFLength(env, result);
-		jbyte *retBuffer = (*env)->GetStringUTFChars(env, result, NULL);
+		const char *retBuffer = (*env)->GetStringUTFChars(env, result, NULL);
 
 		if (retBuffer != NULL) {
 			if (retLen < (*length)) {
