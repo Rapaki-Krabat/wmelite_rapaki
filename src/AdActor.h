@@ -40,7 +40,7 @@ public:
 	TDirection AngleToDirection(int Angle);
 	DECLARE_PERSISTENT(CAdActor, CAdTalkHolder);	
 	virtual int GetHeight();
-	CBSprite* GetTalkStance(char* Stance);
+	wl_non_owning<CBSprite*>* GetTalkStance(char* Stance);
 	virtual void GoTo(int X, int Y, TDirection AfterWalkDir=DI_NONE);
 	CBPoint* m_TargetPoint;
 	virtual HRESULT Update();
@@ -83,9 +83,9 @@ public:
 
 private:
 	HRESULT SetDefaultAnimNames();	
-	CBSprite* GetTalkStanceOld(char *Stance);
+	wl_non_owning<CBSprite*>* GetTalkStanceOld(char *Stance);
 	HRESULT MergeAnims(char* AnimsFilename);
-	CBSprite* m_AnimSprite2;
+	wl_non_owning<CBSprite*>* m_AnimSprite2;
 
 	void InitLine(CBPoint StartPt, CBPoint EndPt);
 	void GetNextStep();
