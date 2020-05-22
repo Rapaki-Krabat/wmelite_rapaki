@@ -33,7 +33,7 @@ IMPLEMENT_PERSISTENT(CAdTalkDef, false);
 CAdTalkDef::CAdTalkDef(CBGame* inGame):CBObject(inGame)
 {
 	m_DefaultSpriteFilename = NULL;
-	m_DefaultSprite = NULL;
+	m_DefaultSprite.obj = NULL;
 
 	m_DefaultSpriteSetFilename = NULL;
 	m_DefaultSpriteSet = NULL;
@@ -47,7 +47,7 @@ CAdTalkDef::~CAdTalkDef()
 	m_Nodes.RemoveAll();
 
 	SAFE_DELETE_ARRAY(m_DefaultSpriteFilename);
-	SAFE_DELETE(m_DefaultSprite);
+	SAFE_DELETE(m_DefaultSprite.obj);
 
 	SAFE_DELETE_ARRAY(m_DefaultSpriteSetFilename);
 	SAFE_DELETE(m_DefaultSpriteSet);
@@ -163,12 +163,12 @@ HRESULT CAdTalkDef::LoadBuffer(BYTE * Buffer, bool Complete)
 		return E_FAIL;
 	}
 
-	SAFE_DELETE(m_DefaultSprite);
+	SAFE_DELETE(m_DefaultSprite.obj);
 	SAFE_DELETE(m_DefaultSpriteSet);
 
 	if(m_DefaultSpriteFilename){
-		m_DefaultSprite = new CBSprite(Game);
-		if(!m_DefaultSprite || FAILED(m_DefaultSprite->LoadFile(m_DefaultSpriteFilename))) return E_FAIL;
+		m_DefaultSprite.obj = new CBSprite(Game);
+		if(!m_DefaultSprite.obj || FAILED(m_DefaultSprite.obj->LoadFile(m_DefaultSpriteFilename))) return E_FAIL;
 	}
 
 	if(m_DefaultSpriteSetFilename){
@@ -186,7 +186,7 @@ HRESULT CAdTalkDef::Persist(CBPersistMgr* PersistMgr){
 
 	CBObject::Persist(PersistMgr);
 
-	PersistMgr->Transfer(TMEMBER(m_DefaultSprite));
+	PersistMgr->Transfer(TMEMBER(m_DefaultSprite.obj));
 	PersistMgr->Transfer(TMEMBER(m_DefaultSpriteFilename));
 	PersistMgr->Transfer(TMEMBER(m_DefaultSpriteSet));
 	PersistMgr->Transfer(TMEMBER(m_DefaultSpriteSetFilename));
@@ -221,10 +221,10 @@ HRESULT CAdTalkDef::SaveAsText(CBDynBuffer* Buffer, int Indent)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdTalkDef::LoadDefaultSprite()
 {
-	if(m_DefaultSpriteFilename && !m_DefaultSprite){
-		m_DefaultSprite = new CBSprite(Game);
-		if(!m_DefaultSprite || FAILED(m_DefaultSprite->LoadFile(m_DefaultSpriteFilename))){
-			SAFE_DELETE(m_DefaultSprite);
+	if(m_DefaultSpriteFilename && !m_DefaultSprite.obj){
+		m_DefaultSprite.obj = new CBSprite(Game);
+		if(!m_DefaultSprite.obj || FAILED(m_DefaultSprite.obj->LoadFile(m_DefaultSpriteFilename))){
+			SAFE_DELETE(m_DefaultSprite.obj);
 			return E_FAIL;
 		}
 		else return S_OK;
@@ -242,10 +242,10 @@ HRESULT CAdTalkDef::LoadDefaultSprite()
 
 
 //////////////////////////////////////////////////////////////////////////
-CBSprite* CAdTalkDef::GetDefaultSprite(TDirection Dir)
+wl_non_owning<CBSprite*>* CAdTalkDef::GetDefaultSprite(TDirection Dir)
 {
 	LoadDefaultSprite();
-	if(m_DefaultSprite)	return m_DefaultSprite;
+	if(m_DefaultSprite.obj)	return static_cast<wl_non_owning<CBSprite*>*> (&m_DefaultSprite);
 	else if(m_DefaultSpriteSet) return m_DefaultSpriteSet->GetSprite(Dir);
 	else return NULL;
 }

@@ -29,13 +29,14 @@ THE SOFTWARE.
 
 #include "BBase.h"
 #include "dctypes.h"	// Added by ClassView
+#include "wmelite_pointers.h"
 
 class CAdSentence : public CBBase  
 {
 public:	
 	bool m_Freezable;
 	bool m_FixedPos;
-	CBSprite* m_CurrentSprite;
+	wl_non_owning<CBSprite*>* m_CurrentSprite;
 	char* m_CurrentSkelAnim;
 	HRESULT Update(TDirection Dir=DI_DOWN);
 	HRESULT SetupTalkFile(char* SoundFilename);
