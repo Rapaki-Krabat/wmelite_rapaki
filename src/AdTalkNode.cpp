@@ -32,7 +32,7 @@ IMPLEMENT_PERSISTENT(CAdTalkNode, false);
 //////////////////////////////////////////////////////////////////////////
 CAdTalkNode::CAdTalkNode(CBGame* inGame):CBBase(inGame)
 {
-	m_Sprite = NULL;
+	m_Sprite.obj = NULL;
 	m_SpriteFilename = NULL;
 	m_SpriteSet = NULL;
 	m_SpriteSetFilename = NULL;
@@ -48,7 +48,7 @@ CAdTalkNode::CAdTalkNode(CBGame* inGame):CBBase(inGame)
 CAdTalkNode::~CAdTalkNode()
 {
 	SAFE_DELETE_ARRAY(m_SpriteFilename);
-	SAFE_DELETE(m_Sprite);
+	SAFE_DELETE(m_Sprite.obj);
 	SAFE_DELETE_ARRAY(m_SpriteSetFilename);
 	SAFE_DELETE(m_SpriteSet);
 	SAFE_DELETE_ARRAY(m_Comment);
@@ -157,9 +157,9 @@ HRESULT CAdTalkNode::LoadBuffer(BYTE * Buffer, bool Complete)
 	else m_PlayToEnd = false;
 
 	if(m_PreCache && m_SpriteFilename){
-		SAFE_DELETE(m_Sprite);
-		m_Sprite = new CBSprite(Game);
-		if(!m_Sprite || FAILED(m_Sprite->LoadFile(m_SpriteFilename))) return E_FAIL;
+		SAFE_DELETE(m_Sprite.obj);
+		m_Sprite.obj = new CBSprite(Game);
+		if(!m_Sprite.obj || FAILED(m_Sprite.obj->LoadFile(m_SpriteFilename))) return E_FAIL;
 	}
 
 	if(m_PreCache && m_SpriteSetFilename){
@@ -181,7 +181,7 @@ HRESULT CAdTalkNode::Persist(CBPersistMgr* PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_StartTime));
 	PersistMgr->Transfer(TMEMBER(m_EndTime));
 	PersistMgr->Transfer(TMEMBER(m_PlayToEnd));
-	PersistMgr->Transfer(TMEMBER(m_Sprite));
+	PersistMgr->Transfer(TMEMBER(m_Sprite.obj));
 	PersistMgr->Transfer(TMEMBER(m_SpriteFilename));
 	PersistMgr->Transfer(TMEMBER(m_SpriteSet));
 	PersistMgr->Transfer(TMEMBER(m_SpriteSetFilename));
@@ -213,10 +213,10 @@ HRESULT CAdTalkNode::SaveAsText(CBDynBuffer* Buffer, int Indent)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdTalkNode::LoadSprite()
 {
-	if(m_SpriteFilename && !m_Sprite){
-		m_Sprite = new CBSprite(Game);
-		if(!m_Sprite || FAILED(m_Sprite->LoadFile(m_SpriteFilename))){
-			SAFE_DELETE(m_Sprite);
+	if(m_SpriteFilename && !m_Sprite.obj){
+		m_Sprite.obj = new CBSprite(Game);
+		if(!m_Sprite.obj || FAILED(m_Sprite.obj->LoadFile(m_SpriteFilename))){
+			SAFE_DELETE(m_Sprite.obj);
 			return E_FAIL;
 		}
 		else return S_OK;
@@ -240,8 +240,8 @@ bool CAdTalkNode::IsInTimeInterval(DWORD Time, TDirection Dir)
 {
 	if(Time >= m_StartTime){
 		if(m_PlayToEnd){
-			if((m_SpriteFilename && m_Sprite==NULL) || (m_Sprite && m_Sprite->m_Finished==false)) return true;
-			else if((m_SpriteSetFilename && m_SpriteSet==NULL) || (m_SpriteSet && m_SpriteSet->GetSprite(Dir) && m_SpriteSet->GetSprite(Dir)->m_Finished==false)) return true;
+			if((m_SpriteFilename && (m_Sprite.obj == NULL)) || (m_Sprite.obj && m_Sprite.obj->m_Finished==false)) return true;
+			else if((m_SpriteSetFilename && m_SpriteSet==NULL) || (m_SpriteSet && m_SpriteSet->GetSprite(Dir) && m_SpriteSet->GetSprite(Dir)->obj && m_SpriteSet->GetSprite(Dir)->obj->m_Finished==false)) return true;
 			else return false;
 		}
 		else return m_EndTime >= Time;
@@ -251,10 +251,10 @@ bool CAdTalkNode::IsInTimeInterval(DWORD Time, TDirection Dir)
 
 
 //////////////////////////////////////////////////////////////////////////
-CBSprite* CAdTalkNode::GetSprite(TDirection Dir)
+wl_non_owning<CBSprite*>* CAdTalkNode::GetSprite(TDirection Dir)
 {
 	LoadSprite();
-	if(m_Sprite) return m_Sprite;
+	if(m_Sprite.obj) return static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
 	else if(m_SpriteSet) return m_SpriteSet->GetSprite(Dir);
 	else return NULL;
 }

@@ -26,16 +26,17 @@ THE SOFTWARE.
 #ifndef __WmeAdTalkHolder_H__
 #define __WmeAdTalkHolder_H__
 
+#include "wmelite_pointers.h"
 
 class CAdTalkHolder : public CAdObject  
 {
 public:
 	DECLARE_PERSISTENT(CAdTalkHolder, CAdObject);
-	virtual CBSprite* GetTalkStance(char *Stance);
+	virtual wl_non_owning<CBSprite*>* GetTalkStance(char *Stance);
 	virtual HRESULT SaveAsText(CBDynBuffer *Buffer, int Indent);
-	CBSprite* m_Sprite;
-	CBArray<CBSprite*, CBSprite*> m_TalkSprites;
-	CBArray<CBSprite*, CBSprite*> m_TalkSpritesEx;
+	wl_owning<CBSprite*> m_Sprite;
+	CBArray<wl_owning<CBSprite*>*, wl_owning<CBSprite*>*> m_TalkSprites;
+	CBArray<wl_owning<CBSprite*>*, wl_owning<CBSprite*>*> m_TalkSpritesEx;
 	CAdTalkHolder(CBGame* inGame);
 	virtual ~CAdTalkHolder();
 

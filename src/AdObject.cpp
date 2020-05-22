@@ -38,9 +38,7 @@ CAdObject::CAdObject(CBGame* inGame):CBObject(inGame)
 	m_Drawn = false;
 
 	m_CurrentSprite = NULL;
-	m_AnimSprite = NULL;
 	m_TempSprite2 = NULL;
-	m_DetectCorruptSprite = new CBSprite(Game, this);
 
 	m_Font = NULL;
 
@@ -82,10 +80,9 @@ CAdObject::CAdObject(CBGame* inGame):CBObject(inGame)
 CAdObject::~CAdObject()
 {
 	m_CurrentSprite = NULL; // reference only, don't delete
-	SAFE_DELETE(m_AnimSprite);
+	SAFE_DELETE(m_AnimSprite.obj);
 	SAFE_DELETE(m_Sentence);
 	SAFE_DELETE_ARRAY(m_ForcedTalkAnimName);
-	SAFE_DELETE(m_DetectCorruptSprite);
 
 	SAFE_DELETE(m_BlockRegion);
 	SAFE_DELETE(m_WptGroup);
@@ -125,25 +122,18 @@ CAdObject::~CAdObject()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdObject::PlayAnim(char *Filename)
 {
-	// the anim sprite will be deleted, but the current sprite ptr might still reference it
-	// try to detect that it is referenced (use after free)
-	if (m_CurrentSprite == m_AnimSprite)
-	{
-		m_CurrentSprite = m_DetectCorruptSprite;
-	}
-
-	SAFE_DELETE(m_AnimSprite);
-	m_AnimSprite = new CBSprite(Game, this);
-	if(!m_AnimSprite)
+	SAFE_DELETE(m_AnimSprite.obj);
+	m_AnimSprite.obj = new CBSprite(Game, this);
+	if(!m_AnimSprite.obj)
 	{
 		Game->LOG(0, "CAdObject::PlayAnim: error creating temp sprite (object:\"%s\" sprite:\"%s\")", m_Name, Filename);
 		return E_FAIL;
 	}
-	HRESULT res = m_AnimSprite->LoadFile(Filename);
+	HRESULT res = m_AnimSprite.obj->LoadFile(Filename);
 	if(FAILED(res))
 	{
 		Game->LOG(res, "CAdObject::PlayAnim: error loading temp sprite (object:\"%s\" sprite:\"%s\")", m_Name, Filename);
-		SAFE_DELETE(m_AnimSprite);
+		SAFE_DELETE(m_AnimSprite.obj);
 		return res;
 	}
 	m_State = STATE_PLAYING_ANIM;
@@ -840,16 +830,10 @@ HRESULT CAdObject::SetFont(char *Filename)
 //////////////////////////////////////////////////////////////////////////
 int CAdObject::GetHeight()
 {
-	if(!m_CurrentSprite) return 0;
+	if((!m_CurrentSprite) || (!(m_CurrentSprite->obj))) return 0;
 	else{
 
-		if (m_CurrentSprite == m_DetectCorruptSprite)
-		{
-			// Game->QuickMessage("Trying to dereference a corrupted sprite reference!");
-			return 0;
-		}
-
-		CBFrame* frame = m_CurrentSprite->m_Frames[m_CurrentSprite->m_CurrentFrame];
+		CBFrame* frame = m_CurrentSprite->obj->m_Frames[m_CurrentSprite->obj->m_CurrentFrame];
 		int ret = 0;
 		for(int i=0; i<frame->m_Subframes.GetSize(); i++){
 			ret = max(ret, frame->m_Subframes[i]->m_HotspotY);
@@ -985,9 +969,9 @@ void CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTe
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdObject::Reset()
 {
-	if(m_State==STATE_PLAYING_ANIM && m_AnimSprite!=NULL)
+	if((m_State==STATE_PLAYING_ANIM) && (m_AnimSprite.obj != NULL))
 	{
-		SAFE_DELETE(m_AnimSprite);
+		SAFE_DELETE(m_AnimSprite.obj);
 	}
 	else if(m_State==STATE_TALKING && m_Sentence)
 	{
@@ -1011,18 +995,18 @@ HRESULT CAdObject::Persist(CBPersistMgr *PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_BlockRegion));
 	PersistMgr->Transfer(TMEMBER(m_CurrentBlockRegion));
 	PersistMgr->Transfer(TMEMBER(m_CurrentWptGroup));
-	PersistMgr->Transfer(TMEMBER(m_CurrentSprite));	
+	PersistMgr->Transfer(TMEMBER(m_CurrentSprite));	     // non-owning
 	PersistMgr->Transfer(TMEMBER(m_Drawn));
 	PersistMgr->Transfer(TMEMBER(m_Font));
 	PersistMgr->Transfer(TMEMBER(m_IgnoreItems));
 	PersistMgr->Transfer(TMEMBER_INT(m_NextState));	
 	PersistMgr->Transfer(TMEMBER(m_Sentence));
 	PersistMgr->Transfer(TMEMBER_INT(m_State));
-	PersistMgr->Transfer(TMEMBER(m_AnimSprite));
+	PersistMgr->Transfer(TMEMBER(m_AnimSprite.obj));     // owning
 	PersistMgr->Transfer(TMEMBER(m_SceneIndependent));
 	PersistMgr->Transfer(TMEMBER(m_ForcedTalkAnimName));
 	PersistMgr->Transfer(TMEMBER(m_ForcedTalkAnimUsed));
-	PersistMgr->Transfer(TMEMBER(m_TempSprite2));
+	PersistMgr->Transfer(TMEMBER(m_TempSprite2));        // non-owning
 	PersistMgr->Transfer(TMEMBER_INT(m_Type));
 	PersistMgr->Transfer(TMEMBER(m_WptGroup));
 	PersistMgr->Transfer(TMEMBER(m_StickRegion));
@@ -1043,12 +1027,6 @@ HRESULT CAdObject::Persist(CBPersistMgr *PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_PartFollowParent));
 	PersistMgr->Transfer(TMEMBER(m_PartOffsetX));
 	PersistMgr->Transfer(TMEMBER(m_PartOffsetY));
-
-	// make sure this object reference is valid after load
-	if (!PersistMgr->m_Saving)
-	{
-		m_DetectCorruptSprite = new CBSprite(Game, this);
-	}
 
 	return S_OK;
 }
