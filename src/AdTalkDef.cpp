@@ -186,7 +186,7 @@ HRESULT CAdTalkDef::Persist(CBPersistMgr* PersistMgr){
 
 	CBObject::Persist(PersistMgr);
 
-	PersistMgr->Transfer(TMEMBER(m_DefaultSprite.obj));
+	PersistMgr->Transfer(TMEMBER(m_DefaultSprite));
 	PersistMgr->Transfer(TMEMBER(m_DefaultSpriteFilename));
 	PersistMgr->Transfer(TMEMBER(m_DefaultSpriteSet));
 	PersistMgr->Transfer(TMEMBER(m_DefaultSpriteSetFilename));

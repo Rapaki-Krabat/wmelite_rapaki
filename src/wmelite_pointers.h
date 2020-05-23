@@ -29,11 +29,6 @@ public:
 	bool operator==(const wl_owning<T>& other) = delete;
 	bool operator!=(const wl_owning<T>& other) = delete;
 
-	HRESULT Persist(CBPersistMgr *PersistMgr) {
-		PersistMgr->Transfer("Object", obj);
-		return S_OK;
-	}
-
 	/**
 	* Delete the object if non-NULL.
 	*/
