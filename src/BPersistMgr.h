@@ -28,8 +28,10 @@ THE SOFTWARE.
 
 
 #include "BBase.h"
+#include "wmelite_pointers.h"
 
 class Vector2;
+class CBSprite;
 
 class CBPersistMgr : public CBBase
 {
@@ -71,6 +73,7 @@ public:
 	HRESULT Transfer(const char* Name, char** Val);
 	HRESULT Transfer(const char* Name, Vector2* Val);
 	HRESULT Transfer(const char* Name, AnsiStringArray& Val);
+	HRESULT Transfer(const char* Name, wl_owning<CBSprite*>* Val);
 	CBPersistMgr(CBGame* inGame=NULL);
 	virtual ~CBPersistMgr();
 	bool CheckVersion(BYTE VerMajor, BYTE VerMinor, BYTE VerBuild);

@@ -26,13 +26,14 @@ THE SOFTWARE.
 #ifndef __WmeAdTalkDef_H__
 #define __WmeAdTalkDef_H__
 
+#include "wmelite_pointers.h"
 
 class CAdTalkDef : public CBObject  
 {
 public:
 	char* m_DefaultSpriteSetFilename;
 	CAdSpriteSet* m_DefaultSpriteSet;
-	CBSprite* GetDefaultSprite(TDirection Dir);
+	wl_non_owning<CBSprite*>* GetDefaultSprite(TDirection Dir);
 	HRESULT LoadDefaultSprite();
 	DECLARE_PERSISTENT(CAdTalkDef, CBObject);
 
@@ -42,7 +43,7 @@ public:
 	HRESULT LoadBuffer(BYTE* Buffer, bool Complete=true);
 	CBArray<CAdTalkNode*, CAdTalkNode*> m_Nodes;
 	char* m_DefaultSpriteFilename;
-	CBSprite* m_DefaultSprite;
+	wl_owning<CBSprite*> m_DefaultSprite;
 	virtual HRESULT SaveAsText(CBDynBuffer* Buffer, int Indent=0);
 };
 

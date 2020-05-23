@@ -130,8 +130,8 @@ HRESULT CAdNodeState::TransferEntity(CAdEntity* Entity, bool IncludingSprites, b
 		for(int i=0; i<7; i++){
 			if(Entity->m_Caption[i]) SetCaption(Entity->m_Caption[i], i);
 		}
-		if(!Entity->m_Region && Entity->m_Sprite && Entity->m_Sprite->m_Filename){
-			if(IncludingSprites) SetFilename(Entity->m_Sprite->m_Filename);
+		if(!Entity->m_Region && Entity->m_Sprite.obj && Entity->m_Sprite.obj->m_Filename){
+			if(IncludingSprites) SetFilename(Entity->m_Sprite.obj->m_Filename);
 			else SetFilename("");
 		}
 		if(Entity->m_Cursor && Entity->m_Cursor->m_Filename) SetCursor(Entity->m_Cursor->m_Filename);
@@ -143,7 +143,7 @@ HRESULT CAdNodeState::TransferEntity(CAdEntity* Entity, bool IncludingSprites, b
 			if(m_Caption[i]) Entity->SetCaption(m_Caption[i], i);
 		}
 		if(m_Filename && !Entity->m_Region && IncludingSprites && strcmp(m_Filename, "")!=0){
-			if(!Entity->m_Sprite || !Entity->m_Sprite->m_Filename || CBPlatform::stricmp(Entity->m_Sprite->m_Filename, m_Filename)!=0)
+			if(!Entity->m_Sprite.obj || !Entity->m_Sprite.obj->m_Filename || CBPlatform::stricmp(Entity->m_Sprite.obj->m_Filename, m_Filename)!=0)
 				Entity->SetSprite(m_Filename);
 		}
 		if(m_Cursor){

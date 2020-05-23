@@ -543,12 +543,12 @@ HRESULT CAdActor::Display()
 
 	if(m_Active) DisplaySpriteAttachments(true);
 
-	if(m_CurrentSprite && m_Active)
+	if(m_CurrentSprite && (m_CurrentSprite->obj) && m_Active)
 	{
 		bool Reg = m_Registrable;
 		if(m_IgnoreItems && ((CAdGame*)Game)->m_SelectedItem) Reg = false;
 		
-		m_CurrentSprite->Display(m_PosX,
+		m_CurrentSprite->obj->Display(m_PosX,
 									m_PosY,
 									Reg?m_RegisterAlias:NULL,
 									ScaleX,
@@ -574,9 +574,9 @@ HRESULT CAdActor::Update()
 
 	if(m_State==STATE_READY)
 	{
-		if(m_AnimSprite)
+		if(m_AnimSprite.obj)
 		{
-			SAFE_DELETE(m_AnimSprite);
+			SAFE_DELETE(m_AnimSprite.obj);
 		}
 		if(m_AnimSprite2)
 		{
@@ -585,14 +585,14 @@ HRESULT CAdActor::Update()
 	}
 
 	// finished playing animation?
-	if(m_State==STATE_PLAYING_ANIM && m_AnimSprite!=NULL && m_AnimSprite->m_Finished)
+	if((m_State==STATE_PLAYING_ANIM) && (m_AnimSprite.obj != NULL) && (m_AnimSprite.obj->m_Finished))
 	{
 		m_State = m_NextState;
 		m_NextState = STATE_READY;
-		m_CurrentSprite = m_AnimSprite;
+		m_CurrentSprite = m_AnimSprite.toNonOwning();
 	}
 
-	if(m_State==STATE_PLAYING_ANIM_SET && m_AnimSprite2!=NULL && m_AnimSprite2->m_Finished)
+	if((m_State==STATE_PLAYING_ANIM_SET) && (m_AnimSprite2 != NULL) && (m_AnimSprite2->obj != NULL) && (m_AnimSprite2->obj->m_Finished))
 	{
 		m_State = m_NextState;
 		m_NextState = STATE_READY;
@@ -604,7 +604,7 @@ HRESULT CAdActor::Update()
 	// default: stand animation
 	if(!m_CurrentSprite)
 	{
-		if(m_Sprite) m_CurrentSprite = m_Sprite;
+		if(m_Sprite.obj) m_CurrentSprite = m_Sprite.toNonOwning();
 		else
 		{
 			if(m_StandSprite)
@@ -625,7 +625,7 @@ HRESULT CAdActor::Update()
 	{
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_PLAYING_ANIM:
-			m_CurrentSprite = m_AnimSprite;
+			m_CurrentSprite = m_AnimSprite.toNonOwning();
 		break;
 
 		//////////////////////////////////////////////////////////////////////////
@@ -635,7 +635,7 @@ HRESULT CAdActor::Update()
 
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_TURNING_LEFT:
-			if(m_TempSprite2==NULL || m_TempSprite2->m_Finished)
+			if((m_TempSprite2 == NULL) || (m_TempSprite2->obj == NULL) || (m_TempSprite2->obj->m_Finished))
 			{
 				if (m_Dir > 0) m_Dir = (TDirection)(m_Dir - 1);
 				else m_Dir = (TDirection)(NUM_DIRECTIONS - 1);
@@ -658,10 +658,10 @@ HRESULT CAdActor::Update()
 						if(Anim) m_TempSprite2 = Anim->GetSprite(m_Dir);
 					}
 
-					if(m_TempSprite2)
+					if(m_TempSprite2 && m_TempSprite2->obj)
 					{
-						m_TempSprite2->Reset();
-						if(m_TempSprite2->m_Looping) m_TempSprite2->m_Looping = false;
+						m_TempSprite2->obj->Reset();
+						if(m_TempSprite2->obj->m_Looping) m_TempSprite2->obj->m_Looping = false;
 					}
 					m_CurrentSprite = m_TempSprite2;
 				}
@@ -672,7 +672,7 @@ HRESULT CAdActor::Update()
 
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_TURNING_RIGHT:
-			if(m_TempSprite2==NULL || m_TempSprite2->m_Finished)
+			if((m_TempSprite2 == NULL) || (m_TempSprite2->obj == NULL) || (m_TempSprite2->obj->m_Finished))
 			{
 				m_Dir = (TDirection)(m_Dir + 1);
 								
@@ -696,10 +696,10 @@ HRESULT CAdActor::Update()
 						if(Anim) m_TempSprite2 = Anim->GetSprite(m_Dir);
 					}
 
-					if(m_TempSprite2)
+					if(m_TempSprite2 && m_TempSprite2->obj)
 					{
-						m_TempSprite2->Reset();
-						if(m_TempSprite2->m_Looping) m_TempSprite2->m_Looping = false;
+						m_TempSprite2->obj->Reset();
+						if(m_TempSprite2->obj->m_Looping) m_TempSprite2->obj->m_Looping = false;
 					}
 					m_CurrentSprite = m_TempSprite2;
 				}
@@ -736,7 +736,7 @@ HRESULT CAdActor::Update()
 			if(m_Sentence->m_CurrentSprite) m_TempSprite2 = m_Sentence->m_CurrentSprite;
 
 			bool TimeIsUp = (m_Sentence->m_Sound && m_Sentence->m_SoundStarted && (!m_Sentence->m_Sound->IsPlaying()&&!m_Sentence->m_Sound->IsPaused())) || (!m_Sentence->m_Sound && m_Sentence->m_Duration <= Game->m_Timer - m_Sentence->m_StartTime);
-			if(m_TempSprite2==NULL || m_TempSprite2->m_Finished || (/*m_TempSprite2->m_Looping &&*/ TimeIsUp))
+			if((m_TempSprite2 == NULL) || (m_TempSprite2->obj == NULL) || (m_TempSprite2->obj->m_Finished) || (/*m_TempSprite2->m_Looping &&*/ TimeIsUp))
 			{
 				if(TimeIsUp)
 				{
@@ -748,9 +748,9 @@ HRESULT CAdActor::Update()
 				else
 				{
 					m_TempSprite2 = GetTalkStance(m_Sentence->GetNextStance());
-					if(m_TempSprite2)
+					if(m_TempSprite2 && m_TempSprite2->obj)
 					{
-						m_TempSprite2->Reset();
+						m_TempSprite2->obj->Reset();
 						m_CurrentSprite = m_TempSprite2;
 						((CAdGame*)Game)->AddSentence(m_Sentence);
 					}
@@ -766,9 +766,9 @@ HRESULT CAdActor::Update()
 
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_READY:
-			if(!m_AnimSprite && !m_AnimSprite2)
+			if( (!(m_AnimSprite.obj)) && ( !((m_AnimSprite2) || (m_AnimSprite2->obj)) ) )
 			{
-				if(m_Sprite) m_CurrentSprite = m_Sprite;
+				if(m_Sprite.obj) m_CurrentSprite = m_Sprite.toNonOwning();
 				else
 				{
 					if(m_StandSprite)
@@ -786,13 +786,13 @@ HRESULT CAdActor::Update()
 	}
 
 
-	if(m_CurrentSprite && !already_moved)
+	if(m_CurrentSprite && (m_CurrentSprite->obj) && !already_moved)
 	{
-		m_CurrentSprite->GetCurrentFrame(m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100, m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100);
-		if(m_CurrentSprite->m_Changed)
+		m_CurrentSprite->obj->GetCurrentFrame(m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100, m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100);
+		if(m_CurrentSprite->obj->m_Changed)
 		{
-			m_PosX += m_CurrentSprite->m_MoveX;
-			m_PosY += m_CurrentSprite->m_MoveY;
+			m_PosX += m_CurrentSprite->obj->m_MoveX;
+			m_PosY += m_CurrentSprite->obj->m_MoveY;
 			AfterMove();
 		}
 	}
@@ -850,15 +850,15 @@ void CAdActor::GetNextStep()
 		if(Anim) m_CurrentSprite = Anim->GetSprite(m_Dir);
 	}
 	
-	if(!m_CurrentSprite) return;
+	if(!m_CurrentSprite || !(m_CurrentSprite->obj)) return;
 
-	m_CurrentSprite->GetCurrentFrame(m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100, m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100);
-	if(!m_CurrentSprite->m_Changed) return;
+	m_CurrentSprite->obj->GetCurrentFrame(m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100, m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100);
+	if(!m_CurrentSprite->obj->m_Changed) return;
 
 		
 	int MaxStepX, MaxStepY;
-	MaxStepX = abs(m_CurrentSprite->m_MoveX);
-	MaxStepY = abs(m_CurrentSprite->m_MoveY);
+	MaxStepX = abs(m_CurrentSprite->obj->m_MoveX);
+	MaxStepY = abs(m_CurrentSprite->obj->m_MoveY);
 
 	MaxStepX = max(MaxStepX, MaxStepY);
 	MaxStepX = max(MaxStepX, 1);
@@ -1285,23 +1285,23 @@ char* CAdActor::ScToString()
 
 
 //////////////////////////////////////////////////////////////////////////
-CBSprite* CAdActor::GetTalkStance(char *Stance)
+wl_non_owning<CBSprite*>* CAdActor::GetTalkStance(char *Stance)
 {
 	// forced stance?
 	if(m_ForcedTalkAnimName && !m_ForcedTalkAnimUsed)
 	{
 		m_ForcedTalkAnimUsed = true;
-		SAFE_DELETE(m_AnimSprite);
-		m_AnimSprite = new CBSprite(Game, this);
-		if(m_AnimSprite)
+		SAFE_DELETE(m_AnimSprite.obj);
+		m_AnimSprite.obj = new CBSprite(Game, this);
+		if(m_AnimSprite.obj)
 		{
-			HRESULT res = m_AnimSprite->LoadFile(m_ForcedTalkAnimName);
+			HRESULT res = m_AnimSprite.obj->LoadFile(m_ForcedTalkAnimName);
 			if(FAILED(res))
 			{
 				Game->LOG(res, "CAdActor::GetTalkStance: error loading talk sprite (object:\"%s\" sprite:\"%s\")", m_Name, m_ForcedTalkAnimName);
-				SAFE_DELETE(m_AnimSprite);				
+				SAFE_DELETE(m_AnimSprite.obj);				
 			}
-			else return m_AnimSprite;
+			else return m_AnimSprite.toNonOwning();
 		}
 	}
 
@@ -1310,7 +1310,7 @@ CBSprite* CAdActor::GetTalkStance(char *Stance)
 		return GetTalkStanceOld(Stance);
 
 	// new way
-	CBSprite* Ret = NULL;
+	wl_non_owning<CBSprite*>* Ret = NULL;
 
 	// do we have an animation with this name?
 	CAdSpriteSet* Anim = GetAnimByName(Stance);
@@ -1345,9 +1345,9 @@ CBSprite* CAdActor::GetTalkStance(char *Stance)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CBSprite* CAdActor::GetTalkStanceOld(char *Stance)
+wl_non_owning<CBSprite*>* CAdActor::GetTalkStanceOld(char *Stance)
 {
-	CBSprite* ret = NULL;
+	wl_non_owning<CBSprite*>* ret = NULL;
 
 	if(Stance!=NULL)
 	{
@@ -1527,9 +1527,9 @@ HRESULT CAdActor::PlayAnim(char* Filename)
 	if(Anim)
 	{
 		m_AnimSprite2 = Anim->GetSprite(m_Dir);
-		if(m_AnimSprite2)
+		if(m_AnimSprite2 && m_AnimSprite2->obj)
 		{
-			m_AnimSprite2->Reset();
+			m_AnimSprite2->obj->Reset();
 			m_State = STATE_PLAYING_ANIM_SET;
 			return S_OK;
 		}
