@@ -3,6 +3,22 @@
 
 #include "BPersistMgr.h"
 
+template <typename T> class wl_owning;
+
+template <typename T> class wl_non_owning : public wl_owning<T>
+{
+public:
+	/**
+	* No objects allowed, just pointers.
+	*/
+	wl_non_owning<T>(void) = delete;
+
+	/**
+	* No objects allowed, just pointers.
+	*/
+	wl_non_owning<T>(const wl_non_owning<T>& ref) = delete;
+};
+
 template <typename T> class wl_owning
 {
 public:
@@ -30,23 +46,14 @@ public:
 	bool operator!=(const wl_owning<T>& other) = delete;
 
 	/**
+	* Return a non-owning pointer;
+	*/
+	wl_non_owning<T>* toNonOwning() { return static_cast<wl_non_owning<T>*> (this); };
+
+	/**
 	* Delete the object if non-NULL.
 	*/
 	virtual ~wl_owning<T>(void) { if (obj != NULL) delete obj; }
-};
-
-template <typename T> class wl_non_owning : public wl_owning<T> 
-{
-public:
-	/**
-	* No objects allowed, just pointers.
-	*/
-	wl_non_owning<T>(void) = delete;
-
-	/**
-	* No objects allowed, just pointers.
-	*/
-	wl_non_owning<T>(const wl_non_owning<T>& ref) = delete;
 };
 
 #endif // WMELITE_POINTERS_H
