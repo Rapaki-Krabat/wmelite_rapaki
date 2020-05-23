@@ -558,25 +558,25 @@ HRESULT CAdEntity::Update()
 	if((m_State==STATE_PLAYING_ANIM) && (m_AnimSprite.obj != NULL) && (m_AnimSprite.obj->m_Finished))
 	{
 		m_State = STATE_READY;
-		m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_AnimSprite);
+		m_CurrentSprite = m_AnimSprite.toNonOwning();
 	}
 
 	if(m_Sentence && m_State!=STATE_TALKING) m_Sentence->Finish();
 
 	// default: stand animation
-	if(!m_CurrentSprite) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+	if(!m_CurrentSprite) m_CurrentSprite = m_Sprite.toNonOwning();
 
 	switch(m_State)
 	{
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_PLAYING_ANIM:
-			m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_AnimSprite);
+			m_CurrentSprite = m_AnimSprite.toNonOwning();
 		break;
 
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_READY:
 			if(!m_AnimSprite.obj)
-				m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+				m_CurrentSprite = m_Sprite.toNonOwning();
 		break;
 
 		//////////////////////////////////////////////////////////////////////////
@@ -1036,7 +1036,7 @@ int CAdEntity::GetHeight()
 	}
 	else
 	{
-		if(m_CurrentSprite==NULL) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+		if(m_CurrentSprite==NULL) m_CurrentSprite = m_Sprite.toNonOwning();
 		 return CAdObject::GetHeight();
 	}
 }
@@ -1106,7 +1106,7 @@ HRESULT CAdEntity::SetSprite(char* Filename)
 	else
 	{
 		m_Sprite.obj = spr;
-		m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+		m_CurrentSprite = m_Sprite.toNonOwning();
 		return S_OK;
 	}
 }
