@@ -748,8 +748,8 @@ HRESULT CAdItem::Persist(CBPersistMgr* PersistMgr){
 	PersistMgr->Transfer(TMEMBER(m_CursorCombined));
 	PersistMgr->Transfer(TMEMBER(m_CursorHover));
 	PersistMgr->Transfer(TMEMBER(m_CursorNormal));
-	PersistMgr->Transfer(TMEMBER(m_SpriteHover.obj));
-	PersistMgr->Transfer(TMEMBER(m_SpriteSelected.obj));
+	PersistMgr->Transfer(TMEMBER(m_SpriteHover));
+	PersistMgr->Transfer(TMEMBER(m_SpriteSelected));
 	PersistMgr->Transfer(TMEMBER(m_InInventory));
 	PersistMgr->Transfer(TMEMBER(m_DisplayAmount));
 	PersistMgr->Transfer(TMEMBER(m_Amount));

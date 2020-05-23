@@ -1002,7 +1002,7 @@ HRESULT CAdObject::Persist(CBPersistMgr *PersistMgr)
 	PersistMgr->Transfer(TMEMBER_INT(m_NextState));	
 	PersistMgr->Transfer(TMEMBER(m_Sentence));
 	PersistMgr->Transfer(TMEMBER_INT(m_State));
-	PersistMgr->Transfer(TMEMBER(m_AnimSprite.obj));     // owning
+	PersistMgr->Transfer(TMEMBER(m_AnimSprite));         // owning
 	PersistMgr->Transfer(TMEMBER(m_SceneIndependent));
 	PersistMgr->Transfer(TMEMBER(m_ForcedTalkAnimName));
 	PersistMgr->Transfer(TMEMBER(m_ForcedTalkAnimUsed));

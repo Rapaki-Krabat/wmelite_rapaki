@@ -181,7 +181,7 @@ HRESULT CAdTalkNode::Persist(CBPersistMgr* PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_StartTime));
 	PersistMgr->Transfer(TMEMBER(m_EndTime));
 	PersistMgr->Transfer(TMEMBER(m_PlayToEnd));
-	PersistMgr->Transfer(TMEMBER(m_Sprite.obj));
+	PersistMgr->Transfer(TMEMBER(m_Sprite));
 	PersistMgr->Transfer(TMEMBER(m_SpriteFilename));
 	PersistMgr->Transfer(TMEMBER(m_SpriteSet));
 	PersistMgr->Transfer(TMEMBER(m_SpriteSetFilename));

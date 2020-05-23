@@ -209,7 +209,7 @@ HRESULT CAdSpriteSet::Persist(CBPersistMgr* PersistMgr){
 
 	PersistMgr->Transfer(TMEMBER(m_Owner));
 	for(int i=0; i<NUM_DIRECTIONS; i++){
-		PersistMgr->Transfer("", &(m_Sprites[i].obj));
+		PersistMgr->Transfer("", &(m_Sprites[i]));
 	}
 
 	return S_OK;

@@ -354,47 +354,9 @@ HRESULT CAdTalkHolder::Persist(CBPersistMgr *PersistMgr)
 {
 	CAdObject::Persist(PersistMgr);
 
-	PersistMgr->Transfer(TMEMBER(m_Sprite.obj));
-	
-	int i, j;
-
-	// m_TalkSprites.Persist(PersistMgr);
-	if (PersistMgr->m_Saving) {
-		j = m_TalkSprites.GetSize();
-		PersistMgr->Transfer("ArraySize", &j);
-		for (i = 0; i < j; i++) {
-			wl_owning<CBSprite*>* inst = m_TalkSprites.GetAt(i);
-			PersistMgr->Transfer("", &(inst->obj));
-		}
-	}
-	else {
-		m_TalkSprites.SetSize(0, -1);
-		PersistMgr->Transfer("ArraySize", &j);
-		for (i = 0; i < j; i++) {
-			wl_owning<CBSprite*>* inst = new wl_owning<CBSprite*>();
-			PersistMgr->Transfer("", &(inst->obj));
-			m_TalkSprites.Add(inst);
-		}
-	}
-	
-	// m_TalkSpritesEx.Persist(PersistMgr);
-	if (PersistMgr->m_Saving) {
-		j = m_TalkSpritesEx.GetSize();
-		PersistMgr->Transfer("ArraySize", &j);
-		for (i = 0; i < j; i++) {
-			wl_owning<CBSprite*>* inst = m_TalkSpritesEx.GetAt(i);
-			PersistMgr->Transfer("", &(inst->obj));
-		}
-	}
-	else {
-		m_TalkSpritesEx.SetSize(0, -1);
-		PersistMgr->Transfer("ArraySize", &j);
-		for (i = 0; i < j; i++) {
-			wl_owning<CBSprite*>* inst = new wl_owning<CBSprite*>();
-			PersistMgr->Transfer("", &(inst->obj));
-			m_TalkSpritesEx.Add(inst);
-		}
-	}
+	PersistMgr->Transfer(TMEMBER(m_Sprite));
+	m_TalkSprites.Persist(PersistMgr);
+	m_TalkSpritesEx.Persist(PersistMgr);
 
 	return S_OK;
 }
