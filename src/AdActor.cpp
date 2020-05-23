@@ -589,7 +589,7 @@ HRESULT CAdActor::Update()
 	{
 		m_State = m_NextState;
 		m_NextState = STATE_READY;
-		m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_AnimSprite);
+		m_CurrentSprite = m_AnimSprite.toNonOwning();
 	}
 
 	if((m_State==STATE_PLAYING_ANIM_SET) && (m_AnimSprite2 != NULL) && (m_AnimSprite2->obj != NULL) && (m_AnimSprite2->obj->m_Finished))
@@ -604,7 +604,7 @@ HRESULT CAdActor::Update()
 	// default: stand animation
 	if(!m_CurrentSprite)
 	{
-		if(m_Sprite.obj) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+		if(m_Sprite.obj) m_CurrentSprite = m_Sprite.toNonOwning();
 		else
 		{
 			if(m_StandSprite)
@@ -625,7 +625,7 @@ HRESULT CAdActor::Update()
 	{
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_PLAYING_ANIM:
-			m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_AnimSprite);
+			m_CurrentSprite = m_AnimSprite.toNonOwning();
 		break;
 
 		//////////////////////////////////////////////////////////////////////////
@@ -768,7 +768,7 @@ HRESULT CAdActor::Update()
 		case STATE_READY:
 			if((!(m_AnimSprite.obj)) && ((!(m_AnimSprite2)) || (m_AnimSprite2->obj)))
 			{
-				if(m_Sprite.obj) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+				if(m_Sprite.obj) m_CurrentSprite = m_Sprite.toNonOwning();
 				else
 				{
 					if(m_StandSprite)
@@ -1301,7 +1301,7 @@ wl_non_owning<CBSprite*>* CAdActor::GetTalkStance(char *Stance)
 				Game->LOG(res, "CAdActor::GetTalkStance: error loading talk sprite (object:\"%s\" sprite:\"%s\")", m_Name, m_ForcedTalkAnimName);
 				SAFE_DELETE(m_AnimSprite.obj);				
 			}
-			else return static_cast<wl_non_owning<CBSprite*>*> (&m_AnimSprite);
+			else return m_AnimSprite.toNonOwning();
 		}
 	}
 

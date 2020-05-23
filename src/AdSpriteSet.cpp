@@ -230,7 +230,7 @@ wl_non_owning<CBSprite*>* CAdSpriteSet::GetSprite(TDirection Direction)
 	int NumSteps = 0;
 	for(i=Dir, NumSteps=0; i>=0; i--){
 		if(m_Sprites[i].obj != NULL){
-			ret = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprites[i]);
+			ret = m_Sprites[i].toNonOwning();
 			NumSteps = Dir - i;
 			break;
 		}
@@ -238,7 +238,7 @@ wl_non_owning<CBSprite*>* CAdSpriteSet::GetSprite(TDirection Direction)
 
 	for(i=Dir; i<NUM_DIRECTIONS; i++){
 		if(m_Sprites[i].obj != NULL){
-			if((ret == NULL) || (NumSteps > (i - Dir))) return static_cast<wl_non_owning<CBSprite*>*> (&m_Sprites[i]);
+			if((ret == NULL) || (NumSteps > (i - Dir))) return m_Sprites[i].toNonOwning();
 			else return ret;
 		}
 	}

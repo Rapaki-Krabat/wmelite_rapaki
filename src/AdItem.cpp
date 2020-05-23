@@ -334,28 +334,28 @@ HRESULT CAdItem::Update()
 	// finished playing animation?
 	if((m_State==STATE_PLAYING_ANIM) && (m_AnimSprite.obj != NULL) && (m_AnimSprite.obj->m_Finished)) {		
 		m_State = STATE_READY;
-		m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_AnimSprite);
+		m_CurrentSprite = m_AnimSprite.toNonOwning();
 	}
 
 	if(m_Sentence && m_State!=STATE_TALKING) m_Sentence->Finish();
 
 	// default: stand animation
-	if(!m_CurrentSprite) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+	if(!m_CurrentSprite) m_CurrentSprite = m_Sprite.toNonOwning();
 
 	switch(m_State){
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_PLAYING_ANIM:
-			m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_AnimSprite);
+			m_CurrentSprite = m_AnimSprite.toNonOwning();
 		break;
 
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_READY:
 			if(!m_AnimSprite.obj){
 				if((Game->m_ActiveObject == this) && m_SpriteHover.obj)	m_CurrentSprite 
-					= static_cast<wl_non_owning<CBSprite*>*> (&m_SpriteHover);
+					= m_SpriteHover.toNonOwning();
 				else if ((((CAdGame*)Game)->m_SelectedItem == this) && m_SpriteSelected.obj) m_CurrentSprite 
-					= static_cast<wl_non_owning<CBSprite*>*> (&m_SpriteSelected);
-				else m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+					= m_SpriteSelected.toNonOwning();
+				else m_CurrentSprite = m_Sprite.toNonOwning();
 			}
 		break;
 
@@ -460,7 +460,7 @@ HRESULT CAdItem::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 		}
 		else {
 			m_SpriteHover.obj = spr;
-			if(SetCurrent) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_SpriteHover);
+			if(SetCurrent) m_CurrentSprite = m_SpriteHover.toNonOwning();
 			Stack->PushBool(true);
 		}
 		return S_OK;

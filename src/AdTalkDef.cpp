@@ -245,7 +245,7 @@ HRESULT CAdTalkDef::LoadDefaultSprite()
 wl_non_owning<CBSprite*>* CAdTalkDef::GetDefaultSprite(TDirection Dir)
 {
 	LoadDefaultSprite();
-	if(m_DefaultSprite.obj)	return static_cast<wl_non_owning<CBSprite*>*> (&m_DefaultSprite);
+	if(m_DefaultSprite.obj)	return m_DefaultSprite.toNonOwning();
 	else if(m_DefaultSpriteSet) return m_DefaultSpriteSet->GetSprite(Dir);
 	else return NULL;
 }

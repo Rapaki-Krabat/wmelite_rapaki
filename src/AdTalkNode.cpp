@@ -254,7 +254,7 @@ bool CAdTalkNode::IsInTimeInterval(DWORD Time, TDirection Dir)
 wl_non_owning<CBSprite*>* CAdTalkNode::GetSprite(TDirection Dir)
 {
 	LoadSprite();
-	if(m_Sprite.obj) return static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+	if(m_Sprite.obj) return m_Sprite.toNonOwning();
 	else if(m_SpriteSet) return m_SpriteSet->GetSprite(Dir);
 	else return NULL;
 }

@@ -67,7 +67,7 @@ wl_non_owning<CBSprite*>* CAdTalkHolder::GetTalkStance(char *Stance)
 				Game->LOG(res, "CAdTalkHolder::GetTalkStance: error loading talk sprite (object:\"%s\" sprite:\"%s\")", m_Name, m_ForcedTalkAnimName);
 				SAFE_DELETE(m_AnimSprite.obj);				
 			}
-			else return static_cast<wl_non_owning<CBSprite*>*> (&m_AnimSprite);
+			else return m_AnimSprite.toNonOwning();
 		}
 	}
 
@@ -76,7 +76,7 @@ wl_non_owning<CBSprite*>* CAdTalkHolder::GetTalkStance(char *Stance)
 		// search special talk stances
 		for(int i=0; i<m_TalkSpritesEx.GetSize(); i++){
 			if(CBPlatform::stricmp(m_TalkSpritesEx[i]->obj->m_Name, Stance)==0){
-				ret = static_cast<wl_non_owning<CBSprite*>*> (m_TalkSpritesEx[i]);
+				ret = m_TalkSpritesEx[i]->toNonOwning();
 				break;
 			}
 		}
@@ -84,7 +84,7 @@ wl_non_owning<CBSprite*>* CAdTalkHolder::GetTalkStance(char *Stance)
 			// serach generic talk stances
 			for(int i=0; i<m_TalkSprites.GetSize(); i++){
 				if(CBPlatform::stricmp(m_TalkSprites[i]->obj->m_Name, Stance)==0){
-					ret = static_cast<wl_non_owning<CBSprite*>*> (m_TalkSprites[i]);
+					ret = m_TalkSprites[i]->toNonOwning();
 					break;
 				}
 			}
@@ -93,11 +93,11 @@ wl_non_owning<CBSprite*>* CAdTalkHolder::GetTalkStance(char *Stance)
 
 	// not a valid stance? get a random one
 	if(ret==NULL){
-		if(m_TalkSprites.GetSize()<1) ret = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+		if(m_TalkSprites.GetSize()<1) ret = m_Sprite.toNonOwning();
 		else{
 			// TODO: remember last
 			int rnd = rand() % m_TalkSprites.GetSize();
-			ret = static_cast<wl_non_owning<CBSprite*>*> (m_TalkSprites[rnd]);
+			ret = m_TalkSprites[rnd]->toNonOwning();
 		}
 	}
 
@@ -139,7 +139,7 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 			}
 			else {
 				m_Sprite.obj = spr;
-				if(SetCurrent) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+				if(SetCurrent) m_CurrentSprite = m_Sprite.toNonOwning();
 				Stack->PushBool(true);
 			}
 		}
@@ -231,8 +231,8 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 		}
 
 		Stack->PushBool(true);
-		if(SetCurrent) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
-		if(SetTemp2) m_TempSprite2 = static_cast<wl_non_owning<CBSprite*>*> (&m_Sprite);
+		if(SetCurrent) m_CurrentSprite = m_Sprite.toNonOwning();
+		if(SetTemp2) m_TempSprite2 = m_Sprite.toNonOwning();
 
 		return S_OK;
 	}
@@ -281,8 +281,8 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 			else m_TalkSprites.Add(spriteOwner);
 			Stack->PushBool(true);
 
-			if(SetCurrent) m_CurrentSprite = static_cast<wl_non_owning<CBSprite*>*> (spriteOwner);
-			if(SetTemp2) m_TempSprite2 = static_cast<wl_non_owning<CBSprite*>*> (spriteOwner);
+			if(SetCurrent) m_CurrentSprite = spriteOwner->toNonOwning();
+			if(SetTemp2) m_TempSprite2 = spriteOwner->toNonOwning();
 		}
 		return S_OK;
 	}
