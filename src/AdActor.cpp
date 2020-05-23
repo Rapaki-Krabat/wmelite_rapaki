@@ -766,7 +766,10 @@ HRESULT CAdActor::Update()
 
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_READY:
-			if( (!(m_AnimSprite.obj)) && ( !((m_AnimSprite2) || (m_AnimSprite2->obj)) ) )
+			bool animSprite2Valid = (m_AnimSprite2 != NULL) ? true : false;
+			if (animSprite2Valid == true) animSprite2Valid = (m_AnimSprite2->obj != NULL) ? true : false;
+
+			if( (!(m_AnimSprite.obj)) && (animSprite2Valid == false))
 			{
 				if(m_Sprite.obj) m_CurrentSprite = m_Sprite.toNonOwning();
 				else
