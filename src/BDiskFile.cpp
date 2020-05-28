@@ -96,7 +96,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 
 			// Game->LOG(0, "File %s is compressed, size=%d!", Filename, CompSize);
 
-			BYTE* CompBuffer = new BYTE[CompSize];
+			std::unique_ptr<BYTE> CompBuffer{ new BYTE[CompSize] };
 			if(!CompBuffer)
 			{
 				Game->LOG(0, "Error allocating memory for compressed file '%s'", Filename);
@@ -108,7 +108,6 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			if(!m_Data)
 			{
 				Game->LOG(0, "Error allocating buffer for file '%s'", Filename);
-				delete [] CompBuffer;
 				Close();
 				return E_FAIL;
 			}
@@ -118,7 +117,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			{
 				Game->LOG(0, "Seeking in file %s failed!", Filename);
 			}
-			readSize = ops->file_read((char *) CompBuffer, CompSize, m_File);
+			readSize = ops->file_read((char *) CompBuffer.get(), CompSize, m_File);
 			if (readSize != CompSize)
 			{
 				Game->LOG(0, "Reading file %s failed! Expected %d but read %d", Filename, CompSize, readSize);
@@ -133,19 +132,17 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			SafeCompSize   = CompSize;
 			SafeUncompSize = UncompSize;
 
-			uncompStatus = uncompress(m_Data, &SafeUncompSize, CompBuffer, SafeCompSize);
+			uncompStatus = uncompress(m_Data, &SafeUncompSize, (Bytef*) CompBuffer.get(), SafeCompSize);
 
 			// Game->LOG(0, "Uncompressed size from zlib: %d", SafeUncompSize);
 
 			if(uncompStatus != Z_OK)
 			{
 				Game->LOG(0, "Error uncompressing file '%s' status=%d", Filename, uncompStatus);
-				delete [] CompBuffer;
 				Close();
 				return E_FAIL;
 			}
 
-			delete [] CompBuffer;
 			m_Size = UncompSize;
 			m_Pos = 0;
 			ops->file_close(m_File);
