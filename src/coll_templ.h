@@ -83,7 +83,7 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 template<class TYPE, class ARG_TYPE>
 inline int CBArray<TYPE, ARG_TYPE>::GetSize() const
-	{ return dataStorage.size(); }
+	{ return (int) dataStorage.size(); }
 template<class TYPE, class ARG_TYPE>
 inline void CBArray<TYPE, ARG_TYPE>::RemoveAll() {
 	dataStorage.clear();
@@ -106,7 +106,7 @@ inline TYPE* CBArray<TYPE, ARG_TYPE>::GetData()
 	{ return dataStorage.data(); }
 template<class TYPE, class ARG_TYPE>
 inline int CBArray<TYPE, ARG_TYPE>::Add(ARG_TYPE newElement) {
-	int nIndex = dataStorage.size();
+	int nIndex = (int) dataStorage.size();
 	dataStorage.push_back(newElement);
 	return nIndex;
 }
