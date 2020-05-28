@@ -35,7 +35,6 @@ THE SOFTWARE.
 CBDiskFile::CBDiskFile(CBGame* inGame):CBFile(inGame)
 {
 	m_File = NULL;
-	m_Data = NULL;
 	m_Compressed = false;
 	m_PrefixSize = 0;
 }
@@ -104,7 +103,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 				return E_FAIL;
 			}
 
-			m_Data = new BYTE[UncompSize];
+			m_Data = std::make_unique<BYTE[]>(UncompSize);
 			if(!m_Data)
 			{
 				Game->LOG(0, "Error allocating buffer for file '%s'", Filename);
@@ -132,7 +131,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 			SafeCompSize   = CompSize;
 			SafeUncompSize = UncompSize;
 
-			uncompStatus = uncompress(m_Data, &SafeUncompSize, (Bytef*) CompBuffer.get(), SafeCompSize);
+			uncompStatus = uncompress(m_Data.get(), &SafeUncompSize, (Bytef*) CompBuffer.get(), SafeCompSize);
 
 			// Game->LOG(0, "Uncompressed size from zlib: %d", SafeUncompSize);
 
@@ -174,7 +173,6 @@ HRESULT CBDiskFile::Close()
 	m_Pos = 0;
 	m_Size = 0;
 
-	SAFE_DELETE_ARRAY(m_Data);
 	m_Compressed = false;
 
 	return S_OK;
@@ -186,7 +184,7 @@ HRESULT CBDiskFile::Read(void *Buffer, DWORD Size)
 {
 	if(m_Compressed)
 	{
-		memcpy(Buffer, m_Data+m_Pos, Size);
+		memcpy(Buffer, m_Data.get()+m_Pos, Size);
 		m_Pos+=Size;
 		return S_OK;
 	}
