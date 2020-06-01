@@ -45,8 +45,7 @@ static generic_file_ops* ops;
 FILEHANDLE TiXmlFOpen( const char* filename, const char* mode )
 {
 	ops = PathUtil::GetFileAccessMethod(AnsiString(filename));
-	// return ops->file_open(filename, mode);
-	return _wfopen(WIN_UTF8ToString(filename), WIN_UTF8ToString(mode));
+	return ops->file_open(filename, mode);
 }
 
 void TiXmlBase::EncodeString( const TIXML_STRING& str, TIXML_STRING* outString )
