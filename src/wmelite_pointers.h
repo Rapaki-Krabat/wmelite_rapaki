@@ -17,6 +17,20 @@ public:
 	* No objects allowed, just pointers.
 	*/
 	wl_non_owning<T>(const wl_non_owning<T>& ref) = delete;
+
+	/**
+	* No objects allowed, just pointers.
+	*/
+	wl_non_owning<T>(wl_non_owning<T>&& ref) = delete;
+
+	/**
+	* Do not allow comparison.
+	*/
+	bool operator==(const wl_non_owning<T>& other) = delete;
+	bool operator!=(const wl_non_owning<T>& other) = delete;
+
+	bool operator==(int other) = delete;
+	bool operator!=(int other) = delete;
 };
 
 template <typename T> class wl_owning
@@ -35,9 +49,19 @@ public:
 	wl_owning<T>& operator=(const wl_owning<T>& ref) = delete;
 
 	/**
+	* Do not allow assignment to other objects.
+	*/
+	wl_owning<T>& operator=(wl_owning<T>&& ref) = delete;
+
+	/**
 	* No copy constructor.
 	*/
 	wl_owning<T>(const wl_owning<T>& ref) = delete;
+
+	/**
+	* No move constructor.
+	*/
+	wl_owning<T>(wl_owning<T>&& ref) = delete;
 
 	/**
 	* Do not allow comparison.
