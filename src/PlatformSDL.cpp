@@ -57,7 +57,14 @@ THE SOFTWARE.
 
 #ifdef __WINRT__
 #   include "WinRTDetectPointers.h"
+#include <locale.h>
 #endif
+
+#include "SDL_log.h"
+
+#include "SDL_stdinc.h"
+
+#define WIN_UTF8ToString(S) (wchar_t *)SDL_iconv_string("UTF-16LE", "UTF-8", (char *)(S), SDL_strlen(S)+1)
 
 CBGame* CBPlatform::Game = NULL;
 SDL_mutex *autoSaveOnExitMutex;
@@ -706,7 +713,11 @@ BOOL CBPlatform::ShowWindow(HWND hWnd, int nCmdShow)
 //////////////////////////////////////////////////////////////////////////
 bool CBPlatform::DeleteFile(const char* lpFileName)
 {
+#if defined(__WIN32__) || defined(__WINRT__)
+	return _wremove(WIN_UTF8ToString(lpFileName)) ? true : false;
+#else
 	return remove(lpFileName) ? true : false;
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -747,7 +758,16 @@ bool CBPlatform::CopyFile(const char* from, const char* to, bool failIfExists)
 bool CBPlatform::CreateDirectory(const char* path)
 {
 #ifdef _WIN32
-	int ret = _mkdir(path);
+	int ret = _wmkdir(WIN_UTF8ToString(path));
+
+	if (ret != 0)
+	{
+		// only print out unexpected errors to console
+		if (errno != EEXIST)
+		{
+			SDL_Log("Create (sub)dir '%s' errno=%d.\n", path, errno);
+		}
+	}
 #else
 	int ret = mkdir(path, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IXOTH);
 #endif

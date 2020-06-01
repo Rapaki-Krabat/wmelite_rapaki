@@ -30,6 +30,11 @@ THE SOFTWARE.
 #include "StringUtil.h"
 #include "tinyxml.h"
 
+#include "SDL_stdinc.h"
+
+#define WIN_UTF8ToString(S) (wchar_t *)SDL_iconv_string("UTF-16LE", "UTF-8", (char *)(S), SDL_strlen(S)+1)
+
+
 //////////////////////////////////////////////////////////////////////////
 CBRegistry::CBRegistry(CBGame* inGame):CBBase(inGame)
 {
@@ -236,7 +241,11 @@ void CBRegistry::SaveXml(const AnsiString fileName, PathValueMap& values)
 	doc.Accept(&printer);
 
 	std::ofstream stream;
+#if defined(__WIN32__) || defined(__WINRT__)
+	stream.open(WIN_UTF8ToString(fileName.c_str()));
+#else
 	stream.open(fileName.c_str());
+#endif
 
 	if (!stream.is_open()) return;
 	else

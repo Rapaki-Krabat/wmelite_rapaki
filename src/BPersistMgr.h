@@ -59,7 +59,7 @@ public:
 	bool m_Saving;
 
 	DWORD m_RichBufferSize;
-	BYTE* m_RichBuffer;
+	char* m_RichBuffer;
 
 	HRESULT Transfer(const char* Name, void* Val);
 	HRESULT Transfer(const char* Name, int* Val);

@@ -33,7 +33,7 @@ IMPLEMENT_PERSISTENT(CAdTalkDef, false);
 CAdTalkDef::CAdTalkDef(CBGame* inGame):CBObject(inGame)
 {
 	m_DefaultSpriteFilename = NULL;
-	m_DefaultSprite.obj = NULL;
+	m_DefaultSprite.invalidate();
 
 	m_DefaultSpriteSetFilename = NULL;
 	m_DefaultSpriteSet = NULL;
@@ -47,7 +47,7 @@ CAdTalkDef::~CAdTalkDef()
 	m_Nodes.RemoveAll();
 
 	SAFE_DELETE_ARRAY(m_DefaultSpriteFilename);
-	SAFE_DELETE(m_DefaultSprite.obj);
+	m_DefaultSprite.invalidate();
 
 	SAFE_DELETE_ARRAY(m_DefaultSpriteSetFilename);
 	SAFE_DELETE(m_DefaultSpriteSet);
@@ -163,12 +163,12 @@ HRESULT CAdTalkDef::LoadBuffer(BYTE * Buffer, bool Complete)
 		return E_FAIL;
 	}
 
-	SAFE_DELETE(m_DefaultSprite.obj);
+	m_DefaultSprite.invalidate();
 	SAFE_DELETE(m_DefaultSpriteSet);
 
 	if(m_DefaultSpriteFilename){
-		m_DefaultSprite.obj = new CBSprite(Game);
-		if(!m_DefaultSprite.obj || FAILED(m_DefaultSprite.obj->LoadFile(m_DefaultSpriteFilename))) return E_FAIL;
+		m_DefaultSprite.replace(new CBSprite(Game));
+		if(!m_DefaultSprite.isValid() || FAILED(m_DefaultSprite->LoadFile(m_DefaultSpriteFilename))) return E_FAIL;
 	}
 
 	if(m_DefaultSpriteSetFilename){
@@ -221,10 +221,10 @@ HRESULT CAdTalkDef::SaveAsText(CBDynBuffer* Buffer, int Indent)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdTalkDef::LoadDefaultSprite()
 {
-	if(m_DefaultSpriteFilename && !m_DefaultSprite.obj){
-		m_DefaultSprite.obj = new CBSprite(Game);
-		if(!m_DefaultSprite.obj || FAILED(m_DefaultSprite.obj->LoadFile(m_DefaultSpriteFilename))){
-			SAFE_DELETE(m_DefaultSprite.obj);
+	if(m_DefaultSpriteFilename && !m_DefaultSprite.isValid()){
+		m_DefaultSprite.replace(new CBSprite(Game));
+		if(!m_DefaultSprite.isValid() || FAILED(m_DefaultSprite->LoadFile(m_DefaultSpriteFilename))){
+			m_DefaultSprite.invalidate();
 			return E_FAIL;
 		}
 		else return S_OK;
@@ -245,7 +245,7 @@ HRESULT CAdTalkDef::LoadDefaultSprite()
 wl_non_owning<CBSprite*>* CAdTalkDef::GetDefaultSprite(TDirection Dir)
 {
 	LoadDefaultSprite();
-	if(m_DefaultSprite.obj)	return m_DefaultSprite.toNonOwning();
+	if(m_DefaultSprite.isValid()) return m_DefaultSprite.toNonOwning();
 	else if(m_DefaultSpriteSet) return m_DefaultSpriteSet->GetSprite(Dir);
 	else return NULL;
 }
