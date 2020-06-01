@@ -32,7 +32,7 @@ IMPLEMENT_PERSISTENT(CAdTalkNode, false);
 //////////////////////////////////////////////////////////////////////////
 CAdTalkNode::CAdTalkNode(CBGame* inGame):CBBase(inGame)
 {
-	m_Sprite.obj = NULL;
+	m_Sprite.invalidate();
 	m_SpriteFilename = NULL;
 	m_SpriteSet = NULL;
 	m_SpriteSetFilename = NULL;
@@ -48,7 +48,7 @@ CAdTalkNode::CAdTalkNode(CBGame* inGame):CBBase(inGame)
 CAdTalkNode::~CAdTalkNode()
 {
 	SAFE_DELETE_ARRAY(m_SpriteFilename);
-	SAFE_DELETE(m_Sprite.obj);
+	m_Sprite.invalidate();
 	SAFE_DELETE_ARRAY(m_SpriteSetFilename);
 	SAFE_DELETE(m_SpriteSet);
 	SAFE_DELETE_ARRAY(m_Comment);
@@ -157,9 +157,9 @@ HRESULT CAdTalkNode::LoadBuffer(BYTE * Buffer, bool Complete)
 	else m_PlayToEnd = false;
 
 	if(m_PreCache && m_SpriteFilename){
-		SAFE_DELETE(m_Sprite.obj);
-		m_Sprite.obj = new CBSprite(Game);
-		if(!m_Sprite.obj || FAILED(m_Sprite.obj->LoadFile(m_SpriteFilename))) return E_FAIL;
+		m_Sprite.invalidate();
+		m_Sprite.replace(new CBSprite(Game));
+		if(!m_Sprite.isValid() || FAILED(m_Sprite->LoadFile(m_SpriteFilename))) return E_FAIL;
 	}
 
 	if(m_PreCache && m_SpriteSetFilename){
@@ -213,10 +213,10 @@ HRESULT CAdTalkNode::SaveAsText(CBDynBuffer* Buffer, int Indent)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdTalkNode::LoadSprite()
 {
-	if(m_SpriteFilename && !m_Sprite.obj){
-		m_Sprite.obj = new CBSprite(Game);
-		if(!m_Sprite.obj || FAILED(m_Sprite.obj->LoadFile(m_SpriteFilename))){
-			SAFE_DELETE(m_Sprite.obj);
+	if(m_SpriteFilename && !m_Sprite.isValid()){
+		m_Sprite.replace(new CBSprite(Game));
+		if(!m_Sprite.isValid() || FAILED(m_Sprite->LoadFile(m_SpriteFilename))){
+			m_Sprite.invalidate();
 			return E_FAIL;
 		}
 		else return S_OK;
@@ -240,8 +240,8 @@ bool CAdTalkNode::IsInTimeInterval(DWORD Time, TDirection Dir)
 {
 	if(Time >= m_StartTime){
 		if(m_PlayToEnd){
-			if((m_SpriteFilename && (m_Sprite.obj == NULL)) || (m_Sprite.obj && m_Sprite.obj->m_Finished==false)) return true;
-			else if((m_SpriteSetFilename && m_SpriteSet==NULL) || (m_SpriteSet && m_SpriteSet->GetSprite(Dir) && m_SpriteSet->GetSprite(Dir)->obj && m_SpriteSet->GetSprite(Dir)->obj->m_Finished==false)) return true;
+			if((m_SpriteFilename && (!m_Sprite.isValid())) || (m_Sprite.isValid() && m_Sprite->m_Finished==false)) return true;
+			else if((m_SpriteSetFilename && m_SpriteSet==NULL) || (m_SpriteSet && m_SpriteSet->GetSprite(Dir) && m_SpriteSet->GetSprite(Dir)->isValid() && m_SpriteSet->GetSprite(Dir)->getObject()->m_Finished==false)) return true;
 			else return false;
 		}
 		else return m_EndTime >= Time;
@@ -254,7 +254,7 @@ bool CAdTalkNode::IsInTimeInterval(DWORD Time, TDirection Dir)
 wl_non_owning<CBSprite*>* CAdTalkNode::GetSprite(TDirection Dir)
 {
 	LoadSprite();
-	if(m_Sprite.obj) return m_Sprite.toNonOwning();
+	if(m_Sprite.isValid()) return m_Sprite.toNonOwning();
 	else if(m_SpriteSet) return m_SpriteSet->GetSprite(Dir);
 	else return NULL;
 }

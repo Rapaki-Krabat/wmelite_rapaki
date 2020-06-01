@@ -477,7 +477,7 @@ HRESULT CBPersistMgr::Transfer(const char* Name, AnsiStringArray& Val)
 // wl_owning<CBSprite*>
 HRESULT CBPersistMgr::Transfer(const char* Name, wl_owning<CBSprite*>* Val)
 {
-	return Transfer("Object", &(Val->obj));
+	return Transfer("Object", Val->getPersistentObjectAddress());
 }
 
 //////////////////////////////////////////////////////////////////////////

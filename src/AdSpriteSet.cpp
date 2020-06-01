@@ -35,7 +35,7 @@ CAdSpriteSet::CAdSpriteSet(CBGame* inGame, CBObject* Owner):CBObject(inGame)
 	m_Owner = Owner;
 
 	for(int i=0; i<NUM_DIRECTIONS; i++)
-		m_Sprites[i].obj = NULL;
+		m_Sprites[i].invalidate();
 }
 
 
@@ -43,7 +43,7 @@ CAdSpriteSet::CAdSpriteSet(CBGame* inGame, CBObject* Owner):CBObject(inGame)
 CAdSpriteSet::~CAdSpriteSet()
 {
 	for(int i=0; i<NUM_DIRECTIONS; i++){
-		SAFE_DELETE(m_Sprites[i].obj);
+		m_Sprites[i].invalidate();
 	}
 
 	m_Owner = NULL;
@@ -127,59 +127,59 @@ HRESULT CAdSpriteSet::LoadBuffer(BYTE * Buffer, bool Complete, int LifeTime, TSp
 			break;
 
 			case TOKEN_LEFT:
-				SAFE_DELETE(m_Sprites[DI_LEFT].obj);
+				m_Sprites[DI_LEFT].invalidate();
 				spr = new CBSprite(Game, m_Owner);
 				if(!spr || FAILED(spr->LoadFile((char*)params, LifeTime, CacheType))) cmd = PARSERR_GENERIC;
-				else m_Sprites[DI_LEFT].obj = spr;
+				else m_Sprites[DI_LEFT].replace(spr);
 			break;
 
 			case TOKEN_RIGHT:
-				SAFE_DELETE(m_Sprites[DI_RIGHT].obj);
+				m_Sprites[DI_RIGHT].invalidate();
 				spr = new CBSprite(Game, m_Owner);
 				if(!spr || FAILED(spr->LoadFile((char*)params, LifeTime, CacheType))) cmd = PARSERR_GENERIC;
-				else m_Sprites[DI_RIGHT].obj = spr;
+				else m_Sprites[DI_RIGHT].replace(spr);
 			break;
 
 			case TOKEN_UP:
-				SAFE_DELETE(m_Sprites[DI_UP].obj);
+				m_Sprites[DI_UP].invalidate();
 				spr = new CBSprite(Game, m_Owner);
 				if(!spr || FAILED(spr->LoadFile((char*)params, LifeTime, CacheType))) cmd = PARSERR_GENERIC;
-				else m_Sprites[DI_UP].obj = spr;
+				else m_Sprites[DI_UP].replace(spr);
 			break;
 
 			case TOKEN_DOWN:
-				SAFE_DELETE(m_Sprites[DI_DOWN].obj);
+				m_Sprites[DI_DOWN].invalidate();
 				spr = new CBSprite(Game, m_Owner);
 				if(!spr || FAILED(spr->LoadFile((char*)params, LifeTime, CacheType))) cmd = PARSERR_GENERIC;
-				else m_Sprites[DI_DOWN].obj = spr;
+				else m_Sprites[DI_DOWN].replace(spr);
 			break;
 
 			case TOKEN_UP_LEFT:
-				SAFE_DELETE(m_Sprites[DI_UPLEFT].obj);
+				m_Sprites[DI_UPLEFT].invalidate();
 				spr = new CBSprite(Game, m_Owner);
 				if(!spr || FAILED(spr->LoadFile((char*)params, LifeTime, CacheType))) cmd = PARSERR_GENERIC;
-				else m_Sprites[DI_UPLEFT].obj = spr;
+				else m_Sprites[DI_UPLEFT].replace(spr);
 			break;
 
 			case TOKEN_UP_RIGHT:
-				SAFE_DELETE(m_Sprites[DI_UPRIGHT].obj);
+				m_Sprites[DI_UPRIGHT].invalidate();
 				spr = new CBSprite(Game, m_Owner);
 				if(!spr || FAILED(spr->LoadFile((char*)params, LifeTime, CacheType))) cmd = PARSERR_GENERIC;
-				else m_Sprites[DI_UPRIGHT].obj = spr;
+				else m_Sprites[DI_UPRIGHT].replace(spr);
 			break;
 
 			case TOKEN_DOWN_LEFT:
-				SAFE_DELETE(m_Sprites[DI_DOWNLEFT].obj);
+				m_Sprites[DI_DOWNLEFT].invalidate();
 				spr = new CBSprite(Game, m_Owner);
 				if(!spr || FAILED(spr->LoadFile((char*)params, LifeTime, CacheType))) cmd = PARSERR_GENERIC;
-				else m_Sprites[DI_DOWNLEFT].obj = spr;
+				else m_Sprites[DI_DOWNLEFT].replace(spr);
 			break;
 
 			case TOKEN_DOWN_RIGHT:
-				SAFE_DELETE(m_Sprites[DI_DOWNRIGHT].obj);
+				m_Sprites[DI_DOWNRIGHT].invalidate();
 				spr = new CBSprite(Game, m_Owner);
 				if(!spr || FAILED(spr->LoadFile((char*)params, LifeTime, CacheType))) cmd = PARSERR_GENERIC;
-				else m_Sprites[DI_DOWNRIGHT].obj = spr;
+				else m_Sprites[DI_DOWNRIGHT].replace(spr);
 			break;
 
 			case TOKEN_EDITOR_PROPERTY:
@@ -229,7 +229,7 @@ wl_non_owning<CBSprite*>* CAdSpriteSet::GetSprite(TDirection Direction)
 	int i;
 	int NumSteps = 0;
 	for(i=Dir, NumSteps=0; i>=0; i--){
-		if(m_Sprites[i].obj != NULL){
+		if(m_Sprites[i].isValid()){
 			ret = m_Sprites[i].toNonOwning();
 			NumSteps = Dir - i;
 			break;
@@ -237,7 +237,7 @@ wl_non_owning<CBSprite*>* CAdSpriteSet::GetSprite(TDirection Direction)
 	}
 
 	for(i=Dir; i<NUM_DIRECTIONS; i++){
-		if(m_Sprites[i].obj != NULL){
+		if(m_Sprites[i].isValid()){
 			if((ret == NULL) || (NumSteps > (i - Dir))) return m_Sprites[i].toNonOwning();
 			else return ret;
 		}
@@ -254,16 +254,16 @@ HRESULT CAdSpriteSet::SaveAsText(CBDynBuffer* Buffer, int Indent)
 	Buffer->PutTextIndent(Indent, "SPRITESET {\n");
 	if(m_Name) Buffer->PutTextIndent(Indent+2, "NAME=\"%s\"\n", m_Name);
 	for(int i=0; i<NUM_DIRECTIONS; i++){
-		if(m_Sprites[i].obj){
+		if(m_Sprites[i].isValid()){
 			switch(i){
-				case DI_UP:        Buffer->PutTextIndent(Indent+2, "UP=\"%s\"\n",         m_Sprites[i].obj->m_Filename); break;
-				case DI_UPRIGHT:   Buffer->PutTextIndent(Indent+2, "UP_RIGHT=\"%s\"\n",   m_Sprites[i].obj->m_Filename); break;
-				case DI_RIGHT:     Buffer->PutTextIndent(Indent+2, "RIGHT=\"%s\"\n",      m_Sprites[i].obj->m_Filename); break;
-				case DI_DOWNRIGHT: Buffer->PutTextIndent(Indent+2, "DOWN_RIGHT=\"%s\"\n", m_Sprites[i].obj->m_Filename); break;
-				case DI_DOWN:      Buffer->PutTextIndent(Indent+2, "DOWN=\"%s\"\n",       m_Sprites[i].obj->m_Filename); break;
-				case DI_DOWNLEFT:  Buffer->PutTextIndent(Indent+2, "DOWN_LEFT=\"%s\"\n",  m_Sprites[i].obj->m_Filename); break;
-				case DI_LEFT:      Buffer->PutTextIndent(Indent+2, "LEFT=\"%s\"\n",       m_Sprites[i].obj->m_Filename); break;
-				case DI_UPLEFT:    Buffer->PutTextIndent(Indent+2, "UP_LEFT=\"%s\"\n",    m_Sprites[i].obj->m_Filename); break;
+				case DI_UP:        Buffer->PutTextIndent(Indent+2, "UP=\"%s\"\n",         m_Sprites[i]->m_Filename); break;
+				case DI_UPRIGHT:   Buffer->PutTextIndent(Indent+2, "UP_RIGHT=\"%s\"\n",   m_Sprites[i]->m_Filename); break;
+				case DI_RIGHT:     Buffer->PutTextIndent(Indent+2, "RIGHT=\"%s\"\n",      m_Sprites[i]->m_Filename); break;
+				case DI_DOWNRIGHT: Buffer->PutTextIndent(Indent+2, "DOWN_RIGHT=\"%s\"\n", m_Sprites[i]->m_Filename); break;
+				case DI_DOWN:      Buffer->PutTextIndent(Indent+2, "DOWN=\"%s\"\n",       m_Sprites[i]->m_Filename); break;
+				case DI_DOWNLEFT:  Buffer->PutTextIndent(Indent+2, "DOWN_LEFT=\"%s\"\n",  m_Sprites[i]->m_Filename); break;
+				case DI_LEFT:      Buffer->PutTextIndent(Indent+2, "LEFT=\"%s\"\n",       m_Sprites[i]->m_Filename); break;
+				case DI_UPLEFT:    Buffer->PutTextIndent(Indent+2, "UP_LEFT=\"%s\"\n",    m_Sprites[i]->m_Filename); break;
 			}
 		}
 	}

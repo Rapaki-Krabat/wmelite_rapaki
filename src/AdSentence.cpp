@@ -285,7 +285,7 @@ HRESULT CAdSentence::Update(TDirection Dir)
 			TalkNodeFound = true;
 
 			wl_non_owning<CBSprite*>* NewSprite = m_TalkDef->m_Nodes[i]->GetSprite(Dir);
-			if ((NewSprite != m_CurrentSprite) && (NewSprite->obj)) NewSprite->obj->Reset();
+			if ((NewSprite != m_CurrentSprite) && (NewSprite->isValid())) NewSprite->getObject()->Reset();
 			m_CurrentSprite = NewSprite;
 
 			if(!m_TalkDef->m_Nodes[i]->m_PlayToEnd) break;
@@ -296,8 +296,8 @@ HRESULT CAdSentence::Update(TDirection Dir)
 	// no talk node, try to use default sprite instead (if any)
 	if(!TalkNodeFound){
 		wl_non_owning<CBSprite*>* NewSprite = m_TalkDef->GetDefaultSprite(Dir);
-		if(NewSprite && NewSprite->obj){
-			if(NewSprite != m_CurrentSprite) NewSprite->obj->Reset();
+		if(NewSprite && NewSprite->isValid()){
+			if(NewSprite != m_CurrentSprite) NewSprite->getObject()->Reset();
 			m_CurrentSprite = NewSprite;
 		}
 		else m_CurrentSprite = NULL;
