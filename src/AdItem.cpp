@@ -32,9 +32,9 @@ IMPLEMENT_PERSISTENT(CAdItem, false);
 //////////////////////////////////////////////////////////////////////////
 CAdItem::CAdItem(CBGame* inGame):CAdTalkHolder(inGame)
 {
-	m_SpriteHover.obj = NULL;
+	m_SpriteHover.invalidate();
 	m_CursorNormal = m_CursorHover = NULL;
-	m_SpriteSelected.obj = NULL;
+	m_SpriteSelected.invalidate();
 
 	m_CursorCombined = true;
 	m_InInventory = false;
@@ -55,10 +55,10 @@ CAdItem::CAdItem(CBGame* inGame):CAdTalkHolder(inGame)
 //////////////////////////////////////////////////////////////////////////
 CAdItem::~CAdItem()
 {
-	SAFE_DELETE(m_SpriteHover.obj);
+	m_SpriteHover.invalidate();
 	SAFE_DELETE(m_CursorNormal);
 	SAFE_DELETE(m_CursorHover);
-	SAFE_DELETE(m_SpriteSelected.obj);
+	m_SpriteSelected.invalidate();
 
 	SAFE_DELETE_ARRAY(m_AmountString);
 }
@@ -184,29 +184,29 @@ HRESULT CAdItem::LoadBuffer(BYTE* Buffer, bool Complete)
 
 			case TOKEN_IMAGE:
 			case TOKEN_SPRITE:
-				SAFE_DELETE(m_Sprite.obj);
-				m_Sprite.obj = new CBSprite(Game, this);
-				if(!m_Sprite.obj || FAILED(m_Sprite.obj->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))){
-					SAFE_DELETE(m_Sprite.obj);
+				m_Sprite.invalidate();
+				m_Sprite.replace(new CBSprite(Game, this));
+				if(!m_Sprite.isValid() || FAILED(m_Sprite->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))){
+					m_Sprite.invalidate();
 					cmd = PARSERR_GENERIC;
 				}
 			break;
 
 			case TOKEN_IMAGE_HOVER:
 			case TOKEN_SPRITE_HOVER:
-				SAFE_DELETE(m_SpriteHover.obj);
-				m_SpriteHover.obj = new CBSprite(Game, this);
-				if (!m_SpriteHover.obj || FAILED(m_SpriteHover.obj->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))) {
-					SAFE_DELETE(m_SpriteHover.obj);
+				m_SpriteHover.invalidate();
+				m_SpriteHover.replace(new CBSprite(Game, this));
+				if (!m_SpriteHover.isValid() || FAILED(m_SpriteHover->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))) {
+					m_SpriteHover.invalidate();
 					cmd = PARSERR_GENERIC;
 				}
 				break;
 
 			case TOKEN_SPRITE_SELECTED:
-				SAFE_DELETE(m_SpriteSelected.obj);
-				m_SpriteSelected.obj = new CBSprite(Game, this);
-				if (!m_SpriteSelected.obj || FAILED(m_SpriteSelected.obj->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))) {
-					SAFE_DELETE(m_SpriteSelected.obj);
+				m_SpriteSelected.invalidate();
+				m_SpriteSelected.replace(new CBSprite(Game, this));
+				if (!m_SpriteSelected.isValid() || FAILED(m_SpriteSelected->LoadFile((char*)params, ((CAdGame*)Game)->m_TexItemLifeTime))) {
+					m_SpriteSelected.invalidate();
 					cmd = PARSERR_GENERIC;
 				}
 				break;
@@ -242,8 +242,7 @@ HRESULT CAdItem::LoadBuffer(BYTE* Buffer, bool Complete)
 				CBSprite* spr = new CBSprite(Game, this);
 				if(!spr || FAILED(spr->LoadFile((char*)params, ((CAdGame*)Game)->m_TexTalkLifeTime))) cmd = PARSERR_GENERIC;
 				else {
-					wl_owning<CBSprite*>* spriteOwner = new wl_owning<CBSprite*>();
-					spriteOwner->obj = spr;
+					wl_owning<CBSprite*>* spriteOwner = new wl_owning<CBSprite*>(spr);
 					m_TalkSprites.Add(spriteOwner);
 				}
 			}
@@ -254,8 +253,7 @@ HRESULT CAdItem::LoadBuffer(BYTE* Buffer, bool Complete)
 				CBSprite* spr = new CBSprite(Game, this);
 				if(!spr || FAILED(spr->LoadFile((char*)params, ((CAdGame*)Game)->m_TexTalkLifeTime))) cmd = PARSERR_GENERIC;
 				else {
-					wl_owning<CBSprite*>* spriteOwner = new wl_owning<CBSprite*>();
-					spriteOwner->obj = spr;
+					wl_owning<CBSprite*>* spriteOwner = new wl_owning<CBSprite*>(spr);
 					m_TalkSpritesEx.Add(spriteOwner);
 				}
 			}
@@ -327,12 +325,12 @@ HRESULT CAdItem::Update()
 {
 	m_CurrentSprite = NULL;
 
-	if((m_State == STATE_READY) && m_AnimSprite.obj){
-		SAFE_DELETE(m_AnimSprite.obj);
+	if((m_State == STATE_READY) && m_AnimSprite.isValid()){
+		m_AnimSprite.invalidate();
 	}
 
 	// finished playing animation?
-	if((m_State==STATE_PLAYING_ANIM) && (m_AnimSprite.obj != NULL) && (m_AnimSprite.obj->m_Finished)) {		
+	if((m_State==STATE_PLAYING_ANIM) && (m_AnimSprite.isValid()) && (m_AnimSprite->m_Finished)) {		
 		m_State = STATE_READY;
 		m_CurrentSprite = m_AnimSprite.toNonOwning();
 	}
@@ -350,10 +348,10 @@ HRESULT CAdItem::Update()
 
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_READY:
-			if(!m_AnimSprite.obj){
-				if((Game->m_ActiveObject == this) && m_SpriteHover.obj)	m_CurrentSprite 
+			if(!m_AnimSprite.isValid()){
+				if((Game->m_ActiveObject == this) && m_SpriteHover.isValid())	m_CurrentSprite 
 					= m_SpriteHover.toNonOwning();
-				else if ((((CAdGame*)Game)->m_SelectedItem == this) && m_SpriteSelected.obj) m_CurrentSprite 
+				else if ((((CAdGame*)Game)->m_SelectedItem == this) && m_SpriteSelected.isValid()) m_CurrentSprite 
 					= m_SpriteSelected.toNonOwning();
 				else m_CurrentSprite = m_Sprite.toNonOwning();
 			}
@@ -366,7 +364,7 @@ HRESULT CAdItem::Update()
 				if(m_Sentence->m_CurrentSprite) m_TempSprite2 = m_Sentence->m_CurrentSprite;
 
 				bool TimeIsUp = (m_Sentence->m_Sound && m_Sentence->m_SoundStarted && (!m_Sentence->m_Sound->IsPlaying()&&!m_Sentence->m_Sound->IsPaused())) || (!m_Sentence->m_Sound && m_Sentence->m_Duration <= Game->m_Timer - m_Sentence->m_StartTime);
-				if((m_TempSprite2 == NULL) || (m_TempSprite2->obj == NULL) || (m_TempSprite2->obj->m_Finished) || (/*m_TempSprite2->m_Looping &&*/ TimeIsUp)){
+				if((m_TempSprite2 == NULL) || (!m_TempSprite2->isValid()) || (m_TempSprite2->getObject()->m_Finished) || (/*m_TempSprite2->m_Looping &&*/ TimeIsUp)){
 					if(TimeIsUp){
 						m_Sentence->Finish();
 						m_TempSprite2 = NULL;
@@ -374,8 +372,8 @@ HRESULT CAdItem::Update()
 					}
 					else{
 						m_TempSprite2 = GetTalkStance(m_Sentence->GetNextStance());
-						if(m_TempSprite2 && m_TempSprite2->obj){
-							m_TempSprite2->obj->Reset();
+						if(m_TempSprite2 && m_TempSprite2->isValid()){
+							m_TempSprite2->getObject()->Reset();
 							m_CurrentSprite = m_TempSprite2;						
 						}
 						((CAdGame*)Game)->AddSentence(m_Sentence);
@@ -398,9 +396,9 @@ HRESULT CAdItem::Update()
 HRESULT CAdItem::Display(int X, int Y)
 {
 	int Width = 0;
-	if(m_CurrentSprite){
+	if(m_CurrentSprite && m_CurrentSprite->isValid()){
 		RECT rc;
-		m_CurrentSprite->obj->GetBoundingRect(&rc, 0, 0);
+		m_CurrentSprite->getObject()->GetBoundingRect(&rc, 0, 0);
 		Width = rc.right - rc.left;
 	}
 
@@ -408,7 +406,7 @@ HRESULT CAdItem::Display(int X, int Y)
 	m_PosY = Y;
 
 	HRESULT ret;
-	if(m_CurrentSprite) ret = m_CurrentSprite->obj->Draw(X, Y, this, 100, 100, m_AlphaColor);
+	if(m_CurrentSprite && m_CurrentSprite->isValid()) ret = m_CurrentSprite->getObject()->Draw(X, Y, this, 100, 100, m_AlphaColor);
 	else ret = S_OK;
 
 	if(m_DisplayAmount){
@@ -452,14 +450,14 @@ HRESULT CAdItem::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 
 		char* Filename = Stack->Pop()->GetString();
 
-		SAFE_DELETE(m_SpriteHover.obj);
+		m_SpriteHover.invalidate();
 		CBSprite* spr = new CBSprite(Game, this);
 		if(!spr || FAILED(spr->LoadFile(Filename))){
 			Stack->PushBool(false);
 			Script->RuntimeError("Item.SetHoverSprite failed for file '%s'", Filename);
 		}
 		else {
-			m_SpriteHover.obj = spr;
+			m_SpriteHover.replace(spr);
 			if(SetCurrent) m_CurrentSprite = m_SpriteHover.toNonOwning();
 			Stack->PushBool(true);
 		}
@@ -472,8 +470,8 @@ HRESULT CAdItem::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 	else if(strcmp(Name, "GetHoverSprite")==0){
 		Stack->CorrectParams(0);
 
-		if(!m_SpriteHover.obj || !m_SpriteHover.obj->m_Filename) Stack->PushNULL();
-		else Stack->PushString(m_SpriteHover.obj->m_Filename);
+		if(!m_SpriteHover.isValid() || !m_SpriteHover->m_Filename) Stack->PushNULL();
+		else Stack->PushString(m_SpriteHover->m_Filename);
 		return S_OK;
 	}
 
@@ -482,8 +480,8 @@ HRESULT CAdItem::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "GetHoverSpriteObject")==0){
 		Stack->CorrectParams(0);
-		if(!m_SpriteHover.obj) Stack->PushNULL();
-		else Stack->PushNative(m_SpriteHover.obj, true);
+		if(!m_SpriteHover.isValid()) Stack->PushNULL();
+		else Stack->PushNative(m_SpriteHover.operator->(), true);
 		return S_OK;
 	}
 
