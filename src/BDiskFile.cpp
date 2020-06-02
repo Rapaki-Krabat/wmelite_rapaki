@@ -27,6 +27,8 @@ THE SOFTWARE.
 #include "BDiskFile.h"
 #include "PathUtil.h"
 
+#include <memory>
+
 //////////////////////////////////////////////////////////////////////////
 CBDiskFile::CBDiskFile(CBGame* inGame):CBFile(inGame)
 {
