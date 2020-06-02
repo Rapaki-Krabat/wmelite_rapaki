@@ -20,6 +20,7 @@
 
 #else
 #	include <unistd.h>
+#   include <errno.h>
 #endif
 
 #include "FileOperations.h"
