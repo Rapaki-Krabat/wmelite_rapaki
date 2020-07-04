@@ -153,6 +153,7 @@ public:
 	bool m_MethodThread;
 	char* m_ThreadEvent;
 	bool m_IgnoreFreeze; // if set the script will still be executed e.g. in system exclusive mode
+	std::unique_ptr<AnsiString> m_FinishEvent;
 	CBScriptHolder* m_Owner;
 	CScScript::TExternalFunction* GetExternal(char* Name);
 	HRESULT ExternalCall(CScStack* Stack, CScStack* ThisStack, CScScript::TExternalFunction* Function);

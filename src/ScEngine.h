@@ -149,6 +149,21 @@ public:
 	DLL_DEFINE_FUNCTION ExtDefineFunction;
 	DLL_DEFINE_VARIABLE ExtDefineVariable;
 
+	// list of scripts of the ScEngine class hierarchy
+	// note that there is another list in the ScriptHolder class hierarchy
+	// this class diagram: CScEngine <-- CBBase 
+	//
+	// Ways to add a script to the list:
+	// CScEngine::RunScript(char *Filename, CBScriptHolder* Owner) --> called only from CBScriptHolder::AddScript(char* Filename)
+	// CScScript::InvokeEventHandler(const char *EventName, bool Unbreakable) --> clones existing script
+	// CBScriptHolder::InvokeMethodThread(char *MethodName) --> clones existing script
+	//
+	// scripts are deleted and removed from this list after each tick()/tickunbreakable() as soon as they reach
+	// the FINISHED or ERROR state
+	//
+	// this list owns the script memory of every script that was added
+	//
+	// TL;DR this list manages all scripts from all objects
 	CBArray<CScScript*, CScScript*> m_Scripts;
 
 	void EnableProfiling();

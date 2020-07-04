@@ -83,9 +83,11 @@ HRESULT CBScriptHolder::ApplyEvent(const char* EventName, bool Unbreakable)
 	{
 		if(!m_Scripts[i]->m_Thread)
 		{
+			// Game->LOG(0, "Search for event '%s' in script '%s'.\n", EventName, m_Scripts[i]->m_Filename);
 			CScScript* handler = m_Scripts[i]->InvokeEventHandler(EventName, Unbreakable);
 			if(handler)
 			{
+				// Game->LOG(0, "Event '%s' found!\n", EventName);
 				//m_Scripts.Add(handler);
 				NumHandlers++;
 				ret = S_OK;
@@ -221,23 +223,55 @@ HRESULT CBScriptHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStac
 	//////////////////////////////////////////////////////////////////////////
 	else if (strcmp(Name, "IgnoreFreeze") == 0)
 	{
-		Stack->CorrectParams(2);
-		char* Filename = Stack->Pop()->GetString();
-		bool freezeFlag = Stack->Pop()->GetBool();
-		bool ret = false;
-		for (int i = 0; i<m_Scripts.GetSize(); i++)
+	Stack->CorrectParams(2);
+	char* Filename = Stack->Pop()->GetString();
+	bool freezeFlag = Stack->Pop()->GetBool();
+	bool ret = false;
+	for (int i = 0; i < m_Scripts.GetSize(); i++)
+	{
+		if (CBPlatform::stricmp(m_Scripts[i]->m_Filename, Filename) == 0 && m_Scripts[i]->m_State != SCRIPT_FINISHED && m_Scripts[i]->m_State != SCRIPT_ERROR)
 		{
+			m_Scripts[i]->m_IgnoreFreeze = freezeFlag;
+			ret = true;
+			break;
+		}
+	}
+	Stack->PushBool(ret);
+
+	return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// SetScriptFinishEvent
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "SetScriptFinishEvent") == 0)
+	{
+		Stack->CorrectParams(2);
+		char* Filename  = Stack->Pop()->GetString();
+		char* EventName = Stack->Pop()->GetString();
+		bool ret = false;
+		for (int i = 0; i < m_Scripts.GetSize(); i++)
+		{
+			Game->LOG(0, "Script filename '%s' state=%d.\n", m_Scripts[i]->m_Filename, m_Scripts[i]->m_State);
 			if (CBPlatform::stricmp(m_Scripts[i]->m_Filename, Filename) == 0 && m_Scripts[i]->m_State != SCRIPT_FINISHED && m_Scripts[i]->m_State != SCRIPT_ERROR)
 			{
-				m_Scripts[i]->m_IgnoreFreeze = freezeFlag;
+				Game->LOG(0, "Successfully set finish event '%s' to script '%s'.\n", EventName, Filename);
+				m_Scripts[i]->m_FinishEvent.reset(new AnsiString(EventName));
 				ret = true;
 				break;
 			}
 		}
+
+		if (ret == false)
+		{
+			Game->LOG(0, "Could not find script '%s' to set finish event '%s' to!\n", Filename, EventName);
+		}
+
 		Stack->PushBool(ret);
 
 		return S_OK;
 	}
+
 	else return CBScriptable::ScCallMethod(Script, Stack, ThisStack, Name);
 }
 

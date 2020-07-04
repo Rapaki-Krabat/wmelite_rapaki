@@ -96,6 +96,18 @@ HRESULT CBDebugger::OnScriptMethodThreadInit(CScScript* Script, CScScript* Paren
 //////////////////////////////////////////////////////////////////////////
 HRESULT CBDebugger::OnScriptShutdown(CScScript* Script)
 {
+	if ((!Script->m_Thread) && (!Script->m_MethodThread)) 
+	{
+		Game->LOG(0, "Shutdown of script '%s' - main code path.\n", Script->m_Filename);
+	}
+	if ((Script->m_Thread) && (!Script->m_MethodThread))
+	{
+		Game->LOG(0, "Shutdown of script '%s' - event thread '%s'.\n", Script->m_Filename, Script->m_ThreadEvent);
+	}
+	if ((Script->m_Thread) && (Script->m_MethodThread))
+	{
+		Game->LOG(0, "Shutdown of script '%s' - method thread '%s'.\n", Script->m_Filename, Script->m_ThreadEvent);
+	}
 	return S_OK;
 }
 

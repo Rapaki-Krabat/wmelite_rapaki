@@ -51,6 +51,22 @@ public:
 	char* m_Filename;
 	bool m_Freezable;
 	bool m_Ready;
+
+	// list of scripts for the ScriptHolder class hierarchy
+	// note that there is another list in the ScEngine class hierarchy
+	// this class diagram: CBScriptHolder <-- CBScriptable <-- CBNamedObject <-- CBBase 
+	//                                                     <-- IWmeDebugObject
+	// CBScriptHolder --> CBSprite
+	//                --> CBObject
+	//
+	// Ways to add a script to this array:
+	// CBScriptHolder::AddScript(char* Filename)
+	//
+	// this list only holds pointers to script objects, it does not manage memory
+	// when the scripting engine removes a finished script, it will have it removed from this list also
+	// by calling RemoveScript(CScScript* Script) via the "CScScript->m_Owner" reference 
+	//
+	// TL;DR this list only holds the scripts attached to an engine object
 	CBArray<CScScript*, CScScript*> m_Scripts;
 
 	// scripting interface

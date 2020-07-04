@@ -92,6 +92,7 @@ CScScript::CScScript(CBGame* inGame, CScEngine* Engine):CBBase(inGame)
 	m_TracingMode = false;
 
 	m_IgnoreFreeze = false;
+	m_FinishEvent = nullptr;
 }
 
 
@@ -1191,6 +1192,11 @@ HRESULT CScScript::Finish(bool IncludingThreads)
 	}
 	else m_State = SCRIPT_FINISHED;
 	
+	if (m_FinishEvent)
+	{
+		Game->LOG(0, "Sending script finish event: %s.\n", m_FinishEvent->c_str());
+		Game->ApplyEvent(m_FinishEvent->c_str());
+	}
 	
 	return S_OK;
 }
@@ -1287,6 +1293,43 @@ HRESULT CScScript::Persist(CBPersistMgr* PersistMgr){
 	if(!PersistMgr->m_Saving) m_TracingMode = false;
 
 	PersistMgr->Transfer(TMEMBER(m_IgnoreFreeze));
+
+	// save/load the m_FinishEvent entry if already present
+	if (PersistMgr->CheckVersion(1, 2, 1))
+	{
+		char *eventName = NULL;
+
+		if (PersistMgr->m_Saving)
+		{
+			if (m_FinishEvent)
+			{
+				AnsiString* str = m_FinishEvent.release();
+				eventName = new char[str->length() + 1];
+				std::strcpy(eventName, str->c_str());
+			}
+
+			PersistMgr->Transfer("m_FinishEvent", &eventName);
+		}
+		else
+		{
+			PersistMgr->Transfer("m_FinishEvent", &eventName);
+
+			if (eventName != NULL)
+			{
+				m_FinishEvent.reset(new AnsiString(eventName));
+			}
+			else
+			{
+				m_FinishEvent.release();
+			}
+		}
+
+		SAFE_DELETE_ARRAY(eventName);
+	}
+	else
+	{
+		m_FinishEvent = nullptr;
+	}
 
 	return S_OK;
 }

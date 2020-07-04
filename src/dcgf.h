@@ -26,11 +26,19 @@ THE SOFTWARE.
 #ifndef _DCGF_H_
 #define _DCGF_H_
 
-
+//////////////////////////////////////////////////////////////////////////
+// Savegame version overview:
+// 1.0.0 --> minimum version
+// 1.0.1 --> addition of CBGame::m_Store
+// 1.0.2 --> addition of CAdGame::m_VideoSkipButton
+// 1.2.0 --> addition of CBGame::m_MouseEntryLeaveTouchQuirk
+// 1.2.1 --> addition of CScScript::m_FinishEvent
+//
+// use "if(PersistMgr->CheckVersion(1, X, Y))" to check version of savegame
 //////////////////////////////////////////////////////////////////////////
 #define DCGF_VER_MAJOR 1
 #define DCGF_VER_MINOR 2
-#define DCGF_VER_BUILD 0
+#define DCGF_VER_BUILD 1
 #define DCGF_VER_SUFFIX "rapaki"
 #define DCGF_VER_BETA true
 
