@@ -30,15 +30,34 @@ THE SOFTWARE.
 #include "BObject.h"
 #include "dctypes.h"	
 
-enum class GameAutomatorEventSource { ACTOR, SCENE };
+enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY };
 
 class GameAutomatorEvent
 {
 public:
-	GameAutomatorEvent(GameAutomatorEventSource source, TDirection turntoDir) : 
-		m_Source(source), m_TurntoDir(turntoDir) {}
+	GameAutomatorEvent(GameAutomatorEventSource source, char* name, TDirection turntoDir) : 
+		m_Source(source), m_TurntoDir(turntoDir) {
+		m_Name = new AnsiString(name); 
+	}
+	GameAutomatorEvent(GameAutomatorEventSource source, char* name, int X, int Y) :
+		m_Source(source), m_X(X), m_Y(Y) {
+		m_Name = new AnsiString(name);
+	}
+	GameAutomatorEvent(GameAutomatorEventSource source, char* name, char* text) :
+		m_Source(source) {
+		m_Name = new AnsiString(name);
+		m_Sentence = new AnsiString(text);
+	}
+	~GameAutomatorEvent() {
+		delete m_Name;
+		if (m_Sentence != NULL) delete m_Sentence;
+	}
 	GameAutomatorEventSource m_Source;
-	TDirection m_TurntoDir;
+	AnsiString* m_Name;
+	AnsiString* m_Sentence = NULL;
+	TDirection m_TurntoDir = DI_NONE;
+	int m_X = 0;
+	int m_Y = 0;
 };
 
 class GameAutomator : public CBObject

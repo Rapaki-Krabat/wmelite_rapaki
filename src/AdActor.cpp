@@ -498,7 +498,8 @@ void CAdActor::TurnTo(TDirection dir)
 
 	m_TempSprite2 = NULL;
 
-	Game->m_Automator->reportedEvents.push_back(new GameAutomatorEvent(GameAutomatorEventSource::ACTOR, dir));
+	Game->m_Automator->reportedEvents.push_back(
+		new GameAutomatorEvent(GameAutomatorEventSource::ACTOR, m_Name, dir));
 }
 
 
@@ -519,6 +520,8 @@ void CAdActor::GoTo(int X, int Y, TDirection AfterWalkDir)
 
 	m_State = STATE_SEARCHING_PATH;
 
+	Game->m_Automator->reportedEvents.push_back(
+		new GameAutomatorEvent(GameAutomatorEventSource::ACTOR, m_Name, X, Y));
 }
 
 

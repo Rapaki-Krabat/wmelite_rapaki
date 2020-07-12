@@ -140,11 +140,17 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
 			switch (reportedEvent->m_Source)
 			{
+			case GameAutomatorEventSource::NONE:
+				m_ScValue->SetString("none");
+				break;
 			case GameAutomatorEventSource::ACTOR:
 				m_ScValue->SetString("actor");
 				break;
 			case GameAutomatorEventSource::SCENE:
 				m_ScValue->SetString("scene");
+				break;
+			case GameAutomatorEventSource::ENTITY:
+				m_ScValue->SetString("entity");
 				break;
 			}
 
@@ -170,7 +176,86 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 		m_ScValue->SetInt(-1);
 		return m_ScValue;
 	}
-		
+
+	//////////////////////////////////////////////////////////////////////////
+	// ReportedEventName
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "ReportedEventName") == 0)
+	{
+		if (reportedEvents.size() > 0)
+		{
+			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
+			if (reportedEvent->m_Name != NULL)
+			{
+				m_ScValue->SetString(reportedEvent->m_Name->c_str());
+			}
+			else
+			{
+				m_ScValue->SetNULL();
+			}
+			return m_ScValue;
+		}
+
+		m_ScValue->SetInt(-1);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// ReportedEventSentence
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "ReportedEventSentence") == 0)
+	{
+		if (reportedEvents.size() > 0)
+		{
+			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
+			if (reportedEvent->m_Sentence != NULL)
+			{
+				m_ScValue->SetString(reportedEvent->m_Sentence->c_str());
+			}
+			else
+			{
+				m_ScValue->SetNULL();
+			}
+			return m_ScValue;
+		}
+
+		m_ScValue->SetInt(-1);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// ReportedEventX
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "ReportedEventX") == 0)
+	{
+	if (reportedEvents.size() > 0)
+	{
+		GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
+		m_ScValue->SetInt(reportedEvent->m_X);
+		return m_ScValue;
+	}
+
+	m_ScValue->SetInt(-1);
+	return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// ReportedEventY
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "ReportedEventY") == 0)
+	{
+	if (reportedEvents.size() > 0)
+	{
+		GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
+		m_ScValue->SetInt(reportedEvent->m_Y);
+		return m_ScValue;
+	}
+
+	m_ScValue->SetInt(-1);
+	return m_ScValue;
+	}
+
+
 	else return CBObject::ScGetProperty(Name);
 }
 

@@ -963,6 +963,23 @@ void CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTe
 	m_State = STATE_TALKING;
 
 	if(DeleteSound) delete [] Sound;
+
+	GameAutomatorEventSource evtSource;
+	switch (m_Type)
+	{
+	case OBJECT_ENTITY:
+		evtSource = GameAutomatorEventSource::ENTITY;
+		break;
+	case OBJECT_ACTOR:
+		evtSource = GameAutomatorEventSource::ACTOR;
+		break;
+	default:
+		// TODO add more if needed
+		evtSource = GameAutomatorEventSource::NONE;
+		break;
+	}
+	Game->m_Automator->reportedEvents.push_back(
+		new GameAutomatorEvent(evtSource, m_Name, Text));
 }
 
 
