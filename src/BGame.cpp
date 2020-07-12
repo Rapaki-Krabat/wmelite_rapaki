@@ -4600,7 +4600,7 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 	}
 	else
 	{
-		m_Automator = NULL;
+		m_Automator = new GameAutomator();
 	}
 
 	if (!PersistMgr->m_Saving) m_Quitting = false;

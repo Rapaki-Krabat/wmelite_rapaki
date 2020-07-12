@@ -30,6 +30,17 @@ THE SOFTWARE.
 #include "BObject.h"
 #include "dctypes.h"	
 
+enum class GameAutomatorEventSource { ACTOR, SCENE };
+
+class GameAutomatorEvent
+{
+public:
+	GameAutomatorEvent(GameAutomatorEventSource source, TDirection turntoDir) : 
+		m_Source(source), m_TurntoDir(turntoDir) {}
+	GameAutomatorEventSource m_Source;
+	TDirection m_TurntoDir;
+};
+
 class GameAutomator : public CBObject
 {
 public:
@@ -43,7 +54,8 @@ public:
 	virtual HRESULT ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name);
 	virtual char* ScToString();
 public:
-	std::vector<SDL_Event*> queuedEvents;
+	std::vector<SDL_Event*>          queuedEvents;
+	std::vector<GameAutomatorEvent*> reportedEvents;
 };
 
 #endif

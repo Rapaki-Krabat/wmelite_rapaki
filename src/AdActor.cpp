@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "AdActor.h"
 #include <math.h>
-
+#include "GameAutomator.h"
 
 IMPLEMENT_PERSISTENT(CAdActor, false);
 
@@ -497,6 +497,8 @@ void CAdActor::TurnTo(TDirection dir)
 	m_State = delta<0?STATE_TURNING_LEFT:STATE_TURNING_RIGHT;
 
 	m_TempSprite2 = NULL;
+
+	Game->m_Automator->reportedEvents.push_back(new GameAutomatorEvent(GameAutomatorEventSource::ACTOR, dir));
 }
 
 
