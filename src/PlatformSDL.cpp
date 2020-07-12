@@ -321,6 +321,17 @@ int CBPlatform::MessageLoop()
 			HandleEvent(&event);
 		}
 
+		if (Game)
+		{
+			while (Game->m_Automator->queuedEvents.size() > 0)
+			{
+				SDL_Event* queuedEvent = Game->m_Automator->queuedEvents.at(0);
+				HandleEvent(queuedEvent);
+				Game->m_Automator->queuedEvents.erase(Game->m_Automator->queuedEvents.begin());
+				delete queuedEvent;
+			}
+		}
+
 		if(Game && Game->m_Renderer->m_Active && Game->m_Renderer->m_Ready)
 		{
 			Game->DisplayContent();
