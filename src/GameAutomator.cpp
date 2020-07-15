@@ -200,6 +200,9 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 			case GameAutomatorEventSource::ENTITY:
 				m_ScValue->SetString("entity");
 				break;
+			case GameAutomatorEventSource::BUTTON:
+				m_ScValue->SetString("button");
+				break;
 			}
 
 			return m_ScValue;

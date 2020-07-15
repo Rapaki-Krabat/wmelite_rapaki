@@ -1977,6 +1977,25 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	// GetWindow
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "GetWindow") == 0)
+	{
+		Stack->CorrectParams(1);
+		CScValue* Val = Stack->Pop();
+		for (int i = 0; i < m_Windows.GetSize(); i++)
+		{
+			if (strcmp(m_Windows[i]->m_Name, Val->GetString()) == 0)
+			{
+				Stack->PushNative(m_Windows[i], true);
+				return S_OK;
+			}
+		}
+		Stack->PushNULL();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	// OpenDocument
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "OpenDocument")==0)

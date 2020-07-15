@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "BObject.h"
 #include "dctypes.h"	
 
-enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY };
+enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON };
 
 class GameAutomatorEvent
 {
@@ -47,6 +47,7 @@ public:
 	}
 	// from CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTextAlign Align)
 	// CAdGame::ChangeScene(char *Filename, bool FadeIn)
+	// CUIButton::Press()
 	GameAutomatorEvent(GameAutomatorEventSource source, char* name, char* text) :
 		m_Source(source) {
 		m_Name = new AnsiString(name);
