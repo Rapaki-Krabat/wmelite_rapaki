@@ -323,11 +323,10 @@ int CBPlatform::MessageLoop()
 
 		if (Game)
 		{
-			while (Game->m_Automator->queuedEvents.size() > 0)
+			SDL_Event* queuedEvent = NULL;
+			while ((queuedEvent = Game->m_Automator->GetOldestInputEvent()) != NULL)
 			{
-				SDL_Event* queuedEvent = Game->m_Automator->queuedEvents.at(0);
 				HandleEvent(queuedEvent);
-				Game->m_Automator->queuedEvents.erase(Game->m_Automator->queuedEvents.begin());
 				delete queuedEvent;
 			}
 		}

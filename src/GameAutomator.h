@@ -35,14 +35,18 @@ enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY };
 class GameAutomatorEvent
 {
 public:
+	// from CAdActor::TurnTo(TDirection dir)
 	GameAutomatorEvent(GameAutomatorEventSource source, char* name, TDirection turntoDir) : 
 		m_Source(source), m_TurntoDir(turntoDir) {
 		m_Name = new AnsiString(name); 
 	}
+	// from CAdActor::GoTo(int X, int Y, TDirection AfterWalkDir)
 	GameAutomatorEvent(GameAutomatorEventSource source, char* name, int X, int Y) :
 		m_Source(source), m_X(X), m_Y(Y) {
 		m_Name = new AnsiString(name);
 	}
+	// from CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTextAlign Align)
+	// CAdGame::ChangeScene(char *Filename, bool FadeIn)
 	GameAutomatorEvent(GameAutomatorEventSource source, char* name, char* text) :
 		m_Source(source) {
 		m_Name = new AnsiString(name);
@@ -67,12 +71,28 @@ public:
 	GameAutomator(CBGame* inGame = NULL);
 	virtual ~GameAutomator();
 
+	void AddInputEvent(SDL_Event* inputEvent) 
+	{ 
+		queuedEvents.push_back(inputEvent); 
+	}
+	SDL_Event* GetOldestInputEvent(void)
+	{
+		SDL_Event* evt = NULL;
+		if (queuedEvents.size() > 0)
+		{
+			evt = queuedEvents.at(0);
+			queuedEvents.erase(queuedEvents.begin());
+		}
+		return evt;
+	}
+	void AddAutomatorEvent(GameAutomatorEvent* evt) { reportedEvents.push_back(evt); }
+
 	// scripting interface
 	virtual CScValue* ScGetProperty(char* Name);
 	virtual HRESULT ScSetProperty(char *Name, CScValue *Value);
 	virtual HRESULT ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name);
 	virtual char* ScToString();
-public:
+private:
 	std::vector<SDL_Event*>          queuedEvents;
 	std::vector<GameAutomatorEvent*> reportedEvents;
 };

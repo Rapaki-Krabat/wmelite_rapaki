@@ -974,11 +974,11 @@ void CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTe
 		evtSource = GameAutomatorEventSource::ACTOR;
 		break;
 	default:
-		// TODO add more if needed
+		// TODO add more if needed (but not scene!)
 		evtSource = GameAutomatorEventSource::NONE;
 		break;
 	}
-	Game->m_Automator->reportedEvents.push_back(
+	Game->m_Automator->AddAutomatorEvent(
 		new GameAutomatorEvent(evtSource, m_Name, Text));
 }
 

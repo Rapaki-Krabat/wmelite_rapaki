@@ -48,32 +48,80 @@ GameAutomator::~GameAutomator()
 HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)
 {
 	//////////////////////////////////////////////////////////////////////////
-	// AddMouseEvent
+	// AddMouseButtonEvent
 	//////////////////////////////////////////////////////////////////////////
 	if (strcmp(Name, "AddMouseButtonEvent") == 0)
 	{
-		Stack->CorrectParams(3);
+		Stack->CorrectParams(4);
 		Sint32 XCoord = Stack->Pop()->GetInt(0);
 		Sint32 YCoord = Stack->Pop()->GetInt(0);
 		char* btn = Stack->Pop()->GetString();
+		char* upDown = Stack->Pop()->GetString();
 
 		Uint8 btnVal = SDL_BUTTON_LEFT;
 		if (strcmp(btn, "right") == 0) btnVal = SDL_BUTTON_RIGHT;
 		else if (strcmp(btn, "middle") == 0) btnVal = SDL_BUTTON_MIDDLE;
 
-		SDL_Event* downEvent = new SDL_Event();
-		downEvent->type = SDL_MOUSEBUTTONDOWN;
-		downEvent->button.x = XCoord;
-		downEvent->button.y = YCoord;
-		downEvent->button.button = btnVal;
-		queuedEvents.push_back(downEvent);
+		Uint32 upDownType = SDL_MOUSEBUTTONDOWN;
+		if (strcmp(upDown, "up") == 0) upDownType = SDL_MOUSEBUTTONUP;
 
-		SDL_Event* upEvent = new SDL_Event();
-		upEvent->type = SDL_MOUSEBUTTONUP;
-		upEvent->button.x = XCoord;
-		upEvent->button.y = YCoord;
-		upEvent->button.button = btnVal;
-		queuedEvents.push_back(upEvent);
+		SDL_Event* evt = new SDL_Event();
+		evt->type = upDownType;
+		evt->button.x = XCoord;
+		evt->button.y = YCoord;
+		evt->button.button = btnVal;
+		AddInputEvent(evt);
+
+		Stack->PushNULL();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// AddMouseMotionEvent
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "AddMouseMotionEvent") == 0)
+	{
+		Stack->CorrectParams(2);
+		Sint32 XCoord = Stack->Pop()->GetInt(0);
+		Sint32 YCoord = Stack->Pop()->GetInt(0);
+
+		SDL_Event* evt = new SDL_Event();
+		evt->type = SDL_MOUSEMOTION;
+		evt->motion.x = XCoord;
+		evt->motion.y = YCoord;
+		AddInputEvent(evt);
+
+		Stack->PushNULL();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// AddFingerMotionEvent
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "AddFingerMotionEvent") == 0)
+	{
+		Stack->CorrectParams(0);
+
+		SDL_Event* evt = new SDL_Event();
+		evt->type = SDL_FINGERMOTION;
+		AddInputEvent(evt);
+
+		Stack->PushNULL();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// AddKeyEvent
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "AddKeyEvent") == 0)
+	{
+		Stack->CorrectParams(1);
+		SDL_Keycode code = Stack->Pop()->GetInt(0);
+
+		SDL_Event* evt = new SDL_Event();
+		evt->type = SDL_KEYDOWN;
+		evt->key.keysym.sym = code;
+		AddInputEvent(evt);
 
 		Stack->PushNULL();
 		return S_OK;
