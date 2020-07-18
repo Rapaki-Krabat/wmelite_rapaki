@@ -261,7 +261,7 @@ HRESULT CAdGame::ChangeScene(char *Filename, bool FadeIn)
 		if(FadeIn) Game->m_TransMgr->Start(TRANSITION_FADE_IN);
 
 		Game->m_Automator->AddAutomatorEvent(
-			new GameAutomatorEvent(GameAutomatorEventSource::SCENE, m_Scene->m_Name, m_PrevSceneName));
+			new GameAutomatorEvent(Game, GameAutomatorEventSource::SCENE, m_Scene->m_Name, m_PrevSceneName));
 
 		return ret;
 	}

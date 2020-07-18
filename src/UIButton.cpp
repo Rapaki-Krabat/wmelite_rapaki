@@ -660,7 +660,7 @@ void CUIButton::Press()
 	if(m_ParentNotify && m_Parent) m_Parent->ApplyEvent(m_Name);
 
 	Game->m_Automator->AddAutomatorEvent(
-		new GameAutomatorEvent(GameAutomatorEventSource::BUTTON, m_Name, m_Text));
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::BUTTON, m_Name, m_Text));
 
 	m_OneTimePress = false;
 }

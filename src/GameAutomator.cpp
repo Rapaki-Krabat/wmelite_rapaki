@@ -132,16 +132,37 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	else if (strcmp(Name, "ClearReportedEvent") == 0)
 	{
-		Stack->CorrectParams(0);
+		Stack->CorrectParams(1);
+		size_t pos = Stack->Pop()->GetInt(0);
 
-		if (reportedEvents.size() > 0)
+		if (reportedEvents.size() > pos)
 		{
-			GameAutomatorEvent* repEvent = reportedEvents.at(0);
+			GameAutomatorEvent* repEvent = reportedEvents.at(pos);
 			delete repEvent;
-			reportedEvents.erase(reportedEvents.begin());
+			reportedEvents.erase(reportedEvents.begin() + pos);
 		}
 
 		Stack->PushNULL();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// GetReportedEvent
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "GetReportedEvent") == 0)
+	{
+		Stack->CorrectParams(1);
+		size_t pos = Stack->Pop()->GetInt(0);
+
+		if (reportedEvents.size() > pos)
+		{
+			GameAutomatorEvent* repEvent = reportedEvents.at(pos);
+			Stack->PushNative(repEvent, true);
+		}
+		else
+		{
+			Stack->PushNULL();
+		}
 		return S_OK;
 	}
 
@@ -175,153 +196,6 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 	else if (strcmp(Name, "ReportedEventSize") == 0)
 	{
 		m_ScValue->SetInt((int) reportedEvents.size());
-		return m_ScValue;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// ReportedEventType
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(Name, "ReportedEventType") == 0)
-	{
-		if (reportedEvents.size() > 0)
-		{
-			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-			switch (reportedEvent->m_Source)
-			{
-			case GameAutomatorEventSource::NONE:
-				m_ScValue->SetString("none");
-				break;
-			case GameAutomatorEventSource::ACTOR:
-				m_ScValue->SetString("actor");
-				break;
-			case GameAutomatorEventSource::SCENE:
-				m_ScValue->SetString("scene");
-				break;
-			case GameAutomatorEventSource::ENTITY:
-				m_ScValue->SetString("entity");
-				break;
-			case GameAutomatorEventSource::BUTTON:
-				m_ScValue->SetString("button");
-				break;
-			case GameAutomatorEventSource::INTERACTIVE:
-				m_ScValue->SetString("interactive");
-				break;
-			}
-
-			return m_ScValue;
-		}
-
-		m_ScValue->SetString("none");
-		return m_ScValue;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// ReportedEventTurnToDir
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(Name, "ReportedEventTurnToDir") == 0)
-	{
-		if (reportedEvents.size() > 0)
-		{
-			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-			m_ScValue->SetInt(static_cast<int>(reportedEvent->m_TurntoDir));
-			return m_ScValue;
-		}
-
-		m_ScValue->SetInt(-1);
-		return m_ScValue;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// ReportedEventName
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(Name, "ReportedEventName") == 0)
-	{
-		if (reportedEvents.size() > 0)
-		{
-			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-			if (reportedEvent->m_Name != NULL)
-			{
-				m_ScValue->SetString(reportedEvent->m_Name->c_str());
-			}
-			else
-			{
-				m_ScValue->SetNULL();
-			}
-			return m_ScValue;
-		}
-
-		m_ScValue->SetInt(-1);
-		return m_ScValue;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// ReportedEventSentence
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(Name, "ReportedEventSentence") == 0)
-	{
-		if (reportedEvents.size() > 0)
-		{
-			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-			if (reportedEvent->m_Sentence != NULL)
-			{
-				m_ScValue->SetString(reportedEvent->m_Sentence->c_str());
-			}
-			else
-			{
-				m_ScValue->SetNULL();
-			}
-			return m_ScValue;
-		}
-
-		m_ScValue->SetInt(-1);
-		return m_ScValue;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// ReportedEventX
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(Name, "ReportedEventX") == 0)
-	{
-		if (reportedEvents.size() > 0)
-		{
-			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-			m_ScValue->SetInt(reportedEvent->m_X);
-			return m_ScValue;
-		}
-
-		m_ScValue->SetInt(-1);
-		return m_ScValue;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// ReportedEventY
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(Name, "ReportedEventY") == 0)
-	{
-		if (reportedEvents.size() > 0)
-		{
-			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-			m_ScValue->SetInt(reportedEvent->m_Y);
-			return m_ScValue;
-		}
-
-		m_ScValue->SetInt(-1);
-		return m_ScValue;
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	// ReportedEventInteractive
-	//////////////////////////////////////////////////////////////////////////
-	else if (strcmp(Name, "ReportedEventInteractive") == 0)
-	{
-		if (reportedEvents.size() > 0)
-		{
-			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-			m_ScValue->SetBool(reportedEvent->m_Interactive);
-			return m_ScValue;
-		}
-
-		m_ScValue->SetBool(false);
 		return m_ScValue;
 	}
 

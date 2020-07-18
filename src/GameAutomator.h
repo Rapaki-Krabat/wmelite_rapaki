@@ -29,47 +29,7 @@ THE SOFTWARE.
 
 #include "BObject.h"
 #include "dctypes.h"	
-
-enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON, INTERACTIVE };
-
-class GameAutomatorEvent
-{
-public:
-	// from CAdActor::TurnTo(TDirection dir)
-	GameAutomatorEvent(GameAutomatorEventSource source, char* name, TDirection turntoDir) : 
-		m_Source(source), m_TurntoDir(turntoDir) {
-		m_Name = new AnsiString(name); 
-	}
-	// from CAdActor::GoTo(int X, int Y, TDirection AfterWalkDir)
-	GameAutomatorEvent(GameAutomatorEventSource source, char* name, int X, int Y) :
-		m_Source(source), m_X(X), m_Y(Y) {
-		m_Name = new AnsiString(name);
-	}
-	// from CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTextAlign Align)
-	// CAdGame::ChangeScene(char *Filename, bool FadeIn)
-	// CUIButton::Press()
-	GameAutomatorEvent(GameAutomatorEventSource source, char* name, char* text) :
-		m_Source(source) {
-		m_Name = new AnsiString(name);
-		m_Sentence = new AnsiString(text);
-	}
-	// from CBGame::ScSetProperty(char *Name, CScValue *Value)
-	GameAutomatorEvent(GameAutomatorEventSource source, char* name, bool interactive) :
-		m_Source(source), m_Interactive(interactive) {
-		m_Name = new AnsiString(name);
-	}
-	~GameAutomatorEvent() {
-		delete m_Name;
-		if (m_Sentence != NULL) delete m_Sentence;
-	}
-	GameAutomatorEventSource m_Source;
-	AnsiString* m_Name;
-	AnsiString* m_Sentence = NULL;
-	TDirection m_TurntoDir = DI_NONE;
-	int m_X = 0;
-	int m_Y = 0;
-	bool m_Interactive = true;
-};
+#include "GameAutomatorEvent.h"
 
 class GameAutomator : public CBObject
 {
