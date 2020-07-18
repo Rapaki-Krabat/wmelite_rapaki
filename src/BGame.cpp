@@ -3269,6 +3269,8 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 	else if(strcmp(Name, "Interactive")==0)
 	{
 		SetInteractive(Value->GetBool());
+		m_Automator->AddAutomatorEvent(
+			new GameAutomatorEvent(GameAutomatorEventSource::INTERACTIVE, "game", m_Interactive));
 		return S_OK;
 	}
 

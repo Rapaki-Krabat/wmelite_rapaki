@@ -203,6 +203,9 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 			case GameAutomatorEventSource::BUTTON:
 				m_ScValue->SetString("button");
 				break;
+			case GameAutomatorEventSource::INTERACTIVE:
+				m_ScValue->SetString("interactive");
+				break;
 			}
 
 			return m_ScValue;
@@ -279,15 +282,15 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if (strcmp(Name, "ReportedEventX") == 0)
 	{
-	if (reportedEvents.size() > 0)
-	{
-		GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-		m_ScValue->SetInt(reportedEvent->m_X);
-		return m_ScValue;
-	}
+		if (reportedEvents.size() > 0)
+		{
+			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
+			m_ScValue->SetInt(reportedEvent->m_X);
+			return m_ScValue;
+		}
 
-	m_ScValue->SetInt(-1);
-	return m_ScValue;
+		m_ScValue->SetInt(-1);
+		return m_ScValue;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -295,17 +298,32 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	else if (strcmp(Name, "ReportedEventY") == 0)
 	{
-	if (reportedEvents.size() > 0)
-	{
-		GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
-		m_ScValue->SetInt(reportedEvent->m_Y);
+		if (reportedEvents.size() > 0)
+		{
+			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
+			m_ScValue->SetInt(reportedEvent->m_Y);
+			return m_ScValue;
+		}
+
+		m_ScValue->SetInt(-1);
 		return m_ScValue;
 	}
 
-	m_ScValue->SetInt(-1);
-	return m_ScValue;
-	}
+	//////////////////////////////////////////////////////////////////////////
+	// ReportedEventInteractive
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "ReportedEventInteractive") == 0)
+	{
+		if (reportedEvents.size() > 0)
+		{
+			GameAutomatorEvent* reportedEvent = reportedEvents.at(0);
+			m_ScValue->SetBool(reportedEvent->m_Interactive);
+			return m_ScValue;
+		}
 
+		m_ScValue->SetBool(false);
+		return m_ScValue;
+	}
 
 	else return CBObject::ScGetProperty(Name);
 }

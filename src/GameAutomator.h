@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "BObject.h"
 #include "dctypes.h"	
 
-enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON };
+enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON, INTERACTIVE };
 
 class GameAutomatorEvent
 {
@@ -53,6 +53,11 @@ public:
 		m_Name = new AnsiString(name);
 		m_Sentence = new AnsiString(text);
 	}
+	// from CBGame::ScSetProperty(char *Name, CScValue *Value)
+	GameAutomatorEvent(GameAutomatorEventSource source, char* name, bool interactive) :
+		m_Source(source), m_Interactive(interactive) {
+		m_Name = new AnsiString(name);
+	}
 	~GameAutomatorEvent() {
 		delete m_Name;
 		if (m_Sentence != NULL) delete m_Sentence;
@@ -63,6 +68,7 @@ public:
 	TDirection m_TurntoDir = DI_NONE;
 	int m_X = 0;
 	int m_Y = 0;
+	bool m_Interactive = true;
 };
 
 class GameAutomator : public CBObject
