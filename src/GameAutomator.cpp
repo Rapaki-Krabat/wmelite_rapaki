@@ -31,6 +31,9 @@ IMPLEMENT_PERSISTENT(GameAutomator, false);
 //////////////////////////////////////////////////////////////////////////
 GameAutomator::GameAutomator(CBGame* inGame) :CBObject(inGame)
 {
+	m_Enable = false;
+	XOverride = 0;
+	YOverride = 0;
 	queuedEvents.clear();
 	reportedEvents.clear();
 }
@@ -58,6 +61,9 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 		char* btn = Stack->Pop()->GetString();
 		char* upDown = Stack->Pop()->GetString();
 
+		XOverride = XCoord;
+		YOverride = YCoord;
+
 		Uint8 btnVal = SDL_BUTTON_LEFT;
 		if (strcmp(btn, "right") == 0) btnVal = SDL_BUTTON_RIGHT;
 		else if (strcmp(btn, "middle") == 0) btnVal = SDL_BUTTON_MIDDLE;
@@ -70,7 +76,7 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 		evt->button.x = XCoord;
 		evt->button.y = YCoord;
 		evt->button.button = btnVal;
-		AddInputEvent(evt);
+		if (m_Enable == true) AddInputEvent(evt);
 
 		Stack->PushNULL();
 		return S_OK;
@@ -85,11 +91,14 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 		Sint32 XCoord = Stack->Pop()->GetInt(0);
 		Sint32 YCoord = Stack->Pop()->GetInt(0);
 
+		XOverride = XCoord;
+		YOverride = YCoord;
+
 		SDL_Event* evt = new SDL_Event();
 		evt->type = SDL_MOUSEMOTION;
 		evt->motion.x = XCoord;
 		evt->motion.y = YCoord;
-		AddInputEvent(evt);
+		if (m_Enable == true) AddInputEvent(evt);
 
 		Stack->PushNULL();
 		return S_OK;
@@ -104,7 +113,7 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 
 		SDL_Event* evt = new SDL_Event();
 		evt->type = SDL_FINGERMOTION;
-		AddInputEvent(evt);
+		if (m_Enable == true) AddInputEvent(evt);
 
 		Stack->PushNULL();
 		return S_OK;
@@ -121,7 +130,7 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 		SDL_Event* evt = new SDL_Event();
 		evt->type = SDL_KEYDOWN;
 		evt->key.keysym.sym = code;
-		AddInputEvent(evt);
+		if (m_Enable == true) AddInputEvent(evt);
 
 		Stack->PushNULL();
 		return S_OK;
@@ -191,6 +200,15 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	// Enable
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "Enable") == 0)
+	{
+		m_ScValue->SetBool(m_Enable);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	// ReportedEventSize
 	//////////////////////////////////////////////////////////////////////////
 	else if (strcmp(Name, "ReportedEventSize") == 0)
@@ -205,7 +223,15 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 //////////////////////////////////////////////////////////////////////////
 HRESULT GameAutomator::ScSetProperty(char *Name, CScValue *Value)
 {
-	return CBObject::ScSetProperty(Name, Value);
+	//////////////////////////////////////////////////////////////////////////
+	// Enable
+	//////////////////////////////////////////////////////////////////////////
+	if (strcmp(Name, "Enable") == 0) {
+		m_Enable = Value->GetBool();
+		return S_OK;
+	}
+
+	else return CBObject::ScSetProperty(Name, Value);
 }
 
 

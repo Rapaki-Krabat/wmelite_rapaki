@@ -40,7 +40,7 @@ public:
 
 	void AddInputEvent(SDL_Event* inputEvent) 
 	{ 
-		queuedEvents.push_back(inputEvent); 
+		if (m_Enable == true) queuedEvents.push_back(inputEvent);
 	}
 	SDL_Event* GetOldestInputEvent(void)
 	{
@@ -52,7 +52,9 @@ public:
 		}
 		return evt;
 	}
-	void AddAutomatorEvent(GameAutomatorEvent* evt) { reportedEvents.push_back(evt); }
+	void AddAutomatorEvent(GameAutomatorEvent* evt) { if (m_Enable == true) reportedEvents.push_back(evt); }
+	bool isEnabled() { return m_Enable; }
+	void GetMouseState(int* x, int* y) { *x = XOverride; *y = YOverride; }
 
 	// scripting interface
 	virtual CScValue* ScGetProperty(char* Name);
@@ -62,6 +64,9 @@ public:
 private:
 	std::vector<SDL_Event*>          queuedEvents;
 	std::vector<GameAutomatorEvent*> reportedEvents;
+	bool m_Enable;
+	int XOverride;
+	int YOverride;
 };
 
 #endif
