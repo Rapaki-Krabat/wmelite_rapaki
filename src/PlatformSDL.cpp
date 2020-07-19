@@ -677,12 +677,20 @@ BOOL CBPlatform::GetCursorPos(LPPOINT lpPoint)
 
 	int x, y;
 
-	if (Game->m_Automator->isEnabled()) Game->m_Automator->GetMouseState(&x, &y);
-	else SDL_GetMouseState(&x, &y);
-	lpPoint->x = x;
-	lpPoint->y = y;
+	if (Game->m_Automator->isEnabled())
+	{
+		Game->m_Automator->GetMouseState(&x, &y);
+		lpPoint->x = x;
+		lpPoint->y = y;
+	}
+	else
+	{
+		SDL_GetMouseState(&x, &y);
+		lpPoint->x = x;
+		lpPoint->y = y;
 
-	renderer->PointFromScreen(lpPoint);
+		renderer->PointFromScreen(lpPoint);
+	}
 
 	return TRUE;
 }
