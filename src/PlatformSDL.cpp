@@ -714,7 +714,7 @@ BOOL CBPlatform::TransformEventCoords(LPPOINT lpPoint)
 {
 	CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
 
-	renderer->PointFromScreen(lpPoint);
+	if (Game->m_Automator->isEnabled() == false) renderer->PointFromScreen(lpPoint);
 
 	return TRUE;
 }
