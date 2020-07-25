@@ -345,7 +345,8 @@ HRESULT CAdObject::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Th
 				// hide associated entities
 				((CAdGame*)Game)->m_Scene->HandleItemAssociations(ItemName, false);
 			}
-
+			Game->m_Automator->AddAutomatorEvent(
+				new GameAutomatorEvent(Game, GameAutomatorEventSource::NONE, GameAutomatorEventType::TAKEITEM, ItemName));
 		}
 		else Script->RuntimeError("TakeItem: item name expected");
 

@@ -97,6 +97,12 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventType::INTERACTIVE:
 			m_ScValue->SetString("interactive");
 			break;
+		case GameAutomatorEventType::PLAYANIM:
+			m_ScValue->SetString("playanim");
+			break;
+		case GameAutomatorEventType::TAKEITEM:
+			m_ScValue->SetString("takeitem");
+			break;
 		}
 
 		return m_ScValue;

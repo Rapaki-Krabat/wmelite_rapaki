@@ -1527,6 +1527,10 @@ HRESULT CAdActor::MergeAnims(char* AnimsFilename)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdActor::PlayAnim(char* Filename)
 {
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::ACTOR, GameAutomatorEventType::PLAYANIM, m_Name, Filename));
+
+
 	// if we have an anim with this name, use it
 	CAdSpriteSet* Anim = GetAnimByName(Filename);
 	if(Anim)

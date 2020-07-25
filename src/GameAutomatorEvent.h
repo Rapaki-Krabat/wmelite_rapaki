@@ -32,12 +32,13 @@ THE SOFTWARE.
 
 enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON, SETPROPERTY };
 
-enum class GameAutomatorEventType { NONE, GOTO, TURNTO, TALK, CHANGE, PRESS, INTERACTIVE };
+enum class GameAutomatorEventType { NONE, GOTO, TURNTO, TALK, CHANGE, PRESS, INTERACTIVE, PLAYANIM, TAKEITEM };
 
 class GameAutomatorEvent : public CBScriptable
 {
 public:
 	// generic constructor, needs to be called by all specific ctors
+	// CAdObject::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)
 	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, GameAutomatorEventType type, char* name) :
 		CBScriptable(inGame), m_Source(source), m_Type(type) {
 		m_Name = new AnsiString(name);
@@ -56,6 +57,7 @@ public:
 	// from CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTextAlign Align)
 	// CAdGame::ChangeScene(char *Filename, bool FadeIn)
 	// CUIButton::Press()
+	// CAdActor::PlayAnim(char* Filename)
 	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, GameAutomatorEventType type, char* name, char* text) :
 		GameAutomatorEvent(inGame, source, type, name) {
 		m_Sentence = new AnsiString(text);
