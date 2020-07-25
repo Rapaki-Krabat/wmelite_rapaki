@@ -40,9 +40,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	m_ScValue->SetNULL();
 
 	//////////////////////////////////////////////////////////////////////////
-	// Type
+	// Source
 	//////////////////////////////////////////////////////////////////////////
-	if (strcmp(Name, "Type") == 0)
+	if (strcmp(Name, "Source") == 0)
 	{
 		switch (m_Source)
 		{
@@ -61,7 +61,40 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventSource::BUTTON:
 			m_ScValue->SetString("button");
 			break;
-		case GameAutomatorEventSource::INTERACTIVE:
+		case GameAutomatorEventSource::SETPROPERTY:
+			m_ScValue->SetString("setproperty");
+			break;
+		}
+
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// Type
+	//////////////////////////////////////////////////////////////////////////
+	if (strcmp(Name, "Type") == 0)
+	{
+		switch (m_Type)
+		{
+		case GameAutomatorEventType::NONE:
+			m_ScValue->SetString("none");
+			break;
+		case GameAutomatorEventType::GOTO:
+			m_ScValue->SetString("goto");
+			break;
+		case GameAutomatorEventType::TURNTO:
+			m_ScValue->SetString("turnto");
+			break;
+		case GameAutomatorEventType::TALK:
+			m_ScValue->SetString("talk");
+			break;
+		case GameAutomatorEventType::CHANGE:
+			m_ScValue->SetString("change");
+			break;
+		case GameAutomatorEventType::PRESS:
+			m_ScValue->SetString("press");
+			break;
+		case GameAutomatorEventType::INTERACTIVE:
 			m_ScValue->SetString("interactive");
 			break;
 		}

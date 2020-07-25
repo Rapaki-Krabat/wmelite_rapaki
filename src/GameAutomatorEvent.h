@@ -30,33 +30,40 @@ THE SOFTWARE.
 #include "BScriptable.h"
 #include "dctypes.h"	
 
-enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON, INTERACTIVE };
+enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON, SETPROPERTY };
+
+enum class GameAutomatorEventType { NONE, GOTO, TURNTO, TALK, CHANGE, PRESS, INTERACTIVE };
 
 class GameAutomatorEvent : public CBScriptable
 {
 public:
+	// generic constructor, needs to be called by all specific ctors
+	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, GameAutomatorEventType type, char* name) :
+		CBScriptable(inGame), m_Source(source), m_Type(type) {
+		m_Name = new AnsiString(name);
+	}
 	// from CAdActor::TurnTo(TDirection dir)
-	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, char* name, TDirection turntoDir) : 
-		CBScriptable(inGame), m_Source(source), m_TurntoDir(turntoDir) {
-		m_Name = new AnsiString(name); 
+	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, GameAutomatorEventType type, char* name, TDirection turntoDir) :
+		GameAutomatorEvent(inGame, source, type, name) {
+		m_TurntoDir = turntoDir;
 	}
 	// from CAdActor::GoTo(int X, int Y, TDirection AfterWalkDir)
-	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, char* name, int X, int Y) :
-		CBScriptable(inGame), m_Source(source), m_X(X), m_Y(Y) {
-		m_Name = new AnsiString(name);
+	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, GameAutomatorEventType type, char* name, int X, int Y) :
+		GameAutomatorEvent(inGame, source, type, name) {
+		m_X = X;
+		m_Y = Y;
 	}
 	// from CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTextAlign Align)
 	// CAdGame::ChangeScene(char *Filename, bool FadeIn)
 	// CUIButton::Press()
-	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, char* name, char* text) :
-		CBScriptable(inGame), m_Source(source) {
-		m_Name = new AnsiString(name);
+	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, GameAutomatorEventType type, char* name, char* text) :
+		GameAutomatorEvent(inGame, source, type, name) {
 		m_Sentence = new AnsiString(text);
 	}
 	// from CBGame::ScSetProperty(char *Name, CScValue *Value)
-	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, char* name, bool interactive) :
-		CBScriptable(inGame), m_Source(source), m_Interactive(interactive) {
-		m_Name = new AnsiString(name);
+	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, GameAutomatorEventType type, char* name, bool interactive) :
+		GameAutomatorEvent(inGame, source, type, name)  {
+		m_Interactive = interactive;
 	}
 	~GameAutomatorEvent() {
 		delete m_Name;
@@ -69,7 +76,8 @@ public:
 	virtual char* ScToString();
 
 private:
-	GameAutomatorEventSource m_Source;
+	const GameAutomatorEventSource m_Source;
+	const GameAutomatorEventType   m_Type;
 	AnsiString* m_Name;
 	AnsiString* m_Sentence = NULL;
 	TDirection m_TurntoDir = DI_NONE;

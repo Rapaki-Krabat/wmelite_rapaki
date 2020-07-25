@@ -979,7 +979,7 @@ void CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTe
 		break;
 	}
 	Game->m_Automator->AddAutomatorEvent(
-		new GameAutomatorEvent(Game, evtSource, m_Name, Text));
+		new GameAutomatorEvent(Game, evtSource, GameAutomatorEventType::TALK, m_Name, Text));
 }
 
 

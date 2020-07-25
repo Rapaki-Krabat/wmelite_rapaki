@@ -3270,7 +3270,7 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 	{
 		SetInteractive(Value->GetBool());
 		m_Automator->AddAutomatorEvent(
-			new GameAutomatorEvent(this, GameAutomatorEventSource::INTERACTIVE, "game", m_Interactive));
+			new GameAutomatorEvent(this, GameAutomatorEventSource::SETPROPERTY, GameAutomatorEventType::INTERACTIVE, "game", m_Interactive));
 		return S_OK;
 	}
 
