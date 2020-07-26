@@ -733,18 +733,12 @@ HRESULT CAdActor::Update()
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_TALKING:
 		{	
-			bool dangerousFallThrough = true;
 			m_Sentence->Update(m_Dir);
-			if(m_Sentence->m_CurrentSprite) {
-				m_TempSprite2 = m_Sentence->m_CurrentSprite;
-				dangerousFallThrough = false;
-			}
+			if(m_Sentence->m_CurrentSprite) m_TempSprite2 = m_Sentence->m_CurrentSprite;
 
 			bool TimeIsUp = (m_Sentence->m_Sound && m_Sentence->m_SoundStarted && (!m_Sentence->m_Sound->IsPlaying()&&!m_Sentence->m_Sound->IsPaused())) || (!m_Sentence->m_Sound && m_Sentence->m_Duration <= Game->m_Timer - m_Sentence->m_StartTime);
 			if((m_TempSprite2 == NULL) || (!m_TempSprite2->isValid()) || (m_TempSprite2->getObject()->m_Finished) || (/*m_TempSprite2->m_Looping &&*/ TimeIsUp))
 			{
-				dangerousFallThrough = false;
-
 				if(TimeIsUp)
 				{
 					m_Sentence->Finish();
@@ -765,8 +759,6 @@ HRESULT CAdActor::Update()
 			}
 			else
 			{
-				if (dangerousFallThrough == true) Game->LOG(0, "Possible assignment of invalid reference in %s.", m_Name);
-
 				m_CurrentSprite = m_TempSprite2;
 				((CAdGame*)Game)->AddSentence(m_Sentence);
 			}
