@@ -46,8 +46,8 @@ public:
 	bool GetExtendedFlag(char *FlagName);
 	bool m_InInventory;
 	bool m_CursorCombined;
-	CBSprite* m_SpriteHover;
-	CBSprite* m_SpriteSelected;
+	wl_owning<CBSprite*> m_SpriteHover;
+	wl_owning<CBSprite*> m_SpriteSelected;
 	CBSprite* m_CursorNormal;
 	CBSprite* m_CursorHover;
 	CAdItem(CBGame* inGame);

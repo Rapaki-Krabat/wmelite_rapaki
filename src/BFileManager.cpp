@@ -133,14 +133,12 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 
 	BYTE* buffer=NULL;
 	
+	ops = PathUtil::GetFileAccessMethod(Filename);
+
 	// restore an older file if the current one does not exist (unsuccessful save operation)
 	if (testOldFile == true)
 	{
-#if defined(__WINRT__) || defined(__WIN32__)
-		tmpRes = _access(Filename, 0);
-#else
-		tmpRes = access(Filename, F_OK);
-#endif
+		tmpRes = ops->file_exists(Filename);
 
 		Game->LOG(0, "Load(1): Check file %s existance result=%d.", Filename, tmpRes);
 
@@ -154,7 +152,7 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 				strcat(oldFile, ".old");
 
 				// rename the possible old version to the current version
-				tmpRes = rename(oldFile, Filename);
+				tmpRes = ops->file_rename(oldFile, Filename);
 				Game->LOG(0, "Load(2): Rename old file %s to file %s result=%d.", oldFile, Filename, tmpRes);
 
 				delete[] oldFile;
@@ -203,10 +201,12 @@ BYTE* CBFileManager::ReadWholeFile(const char* Filename, DWORD* Size, bool MustE
 
 
 //////////////////////////////////////////////////////////////////////////
-HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, bool Compressed, BYTE* PrefixBuffer, DWORD PrefixSize)
+HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, bool Compressed, const char* PrefixBuffer, DWORD PrefixSize)
 {
 	int tmpRes;
 	size_t tmpFwrite;
+
+	ops = PathUtil::GetFileAccessMethod(Filename);
 
 	RestoreCurrentDir();
 
@@ -231,10 +231,10 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	strcat(oldFile, ".old");
 
 	// delete the old .tmp file
-	tmpRes = remove(tmpFile);
+	tmpRes = ops->file_remove(tmpFile);
 	Game->LOG(0, "Save(1): Remove .tmp file %s result=%d.", tmpFile, tmpRes);
 
-	FILE* f = fopen(tmpFile, "wb");
+	FILEHANDLE f = ops->file_open(tmpFile, "wb");
 	if(!f)
 	{
 		Game->LOG(0, "Error opening file '%s' for writing.", Filename);
@@ -248,8 +248,8 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 
 	if(PrefixBuffer && PrefixSize)
 	{
-		tmpFwrite = fwrite(PrefixBuffer, PrefixSize, 1, f);
-		if (tmpFwrite != 1) tmpRes = 1;
+		tmpFwrite = ops->file_write(PrefixBuffer, PrefixSize, f);
+		if (tmpFwrite != PrefixSize) tmpRes = 1;
 	}
 
 	BYTE* CompBuffer = NULL;
@@ -284,25 +284,25 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 			if (compStatus == Z_OK)
 			{
 				DWORD magic = DCGF_MAGIC;
-				tmpFwrite = fwrite(&magic, sizeof(DWORD), 1, f);
-				if (tmpFwrite != 1) tmpRes = 1;
+				tmpFwrite = ops->file_write((const char*) &magic, sizeof(DWORD), f);
+				if (tmpFwrite != sizeof(DWORD)) tmpRes = 1;
 
 				magic = COMPRESSED_FILE_MAGIC;
-				tmpFwrite = fwrite(&magic, sizeof(DWORD), 1, f);
-				if (tmpFwrite != 1) tmpRes = 1;
+				tmpFwrite = ops->file_write((const char*) &magic, sizeof(DWORD), f);
+				if (tmpFwrite != sizeof(DWORD)) tmpRes = 1;
 
 				DWORD DataOffset = 5*sizeof(DWORD);
-				tmpFwrite = fwrite(&DataOffset, sizeof(DWORD), 1, f);
-				if (tmpFwrite != 1) tmpRes = 1;
+				tmpFwrite = ops->file_write((const char*) &DataOffset, sizeof(DWORD), f);
+				if (tmpFwrite != sizeof(DWORD)) tmpRes = 1;
 
-				tmpFwrite = fwrite(&CompSize, sizeof(DWORD), 1, f);
-				if (tmpFwrite != 1) tmpRes = 1;
+				tmpFwrite = ops->file_write((const char*) &CompSize, sizeof(DWORD), f);
+				if (tmpFwrite != sizeof(DWORD)) tmpRes = 1;
 
-				tmpFwrite = fwrite(&BufferSize, sizeof(DWORD), 1, f);
-				if (tmpFwrite != 1) tmpRes = 1;
+				tmpFwrite = ops->file_write((const char*) &BufferSize, sizeof(DWORD), f);
+				if (tmpFwrite != sizeof(DWORD)) tmpRes = 1;
 
-				tmpFwrite = fwrite(CompBuffer, CompSize, 1, f);
-				if (tmpFwrite != 1) tmpRes = 1;
+				tmpFwrite = ops->file_write((const char*) CompBuffer, CompSize, f);
+				if (tmpFwrite != CompSize) tmpRes = 1;
 			}
 			else
 			{
@@ -315,48 +315,25 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	
 	if (!Compressed)
 	{
-		tmpFwrite = fwrite(Buffer, BufferSize, 1, f);
-		if (tmpFwrite != 1) tmpRes = 1;
+		tmpFwrite = ops->file_write((const char*) Buffer, BufferSize, f);
+		if (tmpFwrite != BufferSize) tmpRes = 1;
 	}
 
 	// Game->LOG(0, "Compressed=%s, file write status=%d resulting file size=%d", (Compressed) ? "TRUE" : "FALSE", tmpRes, ftell(f));
 
 	// flush data (shouldn't hurt)
 	int flush_status;
-	flush_status = fflush(f);
+	flush_status = ops->file_flush(f);
 	if (flush_status != 0)
 	{
-		Game->LOG(0, "Save(1,25): flush file failed, errno=%d", errno);
+		Game->LOG(0, "Save(1,25): flush file failed, errno=%d", flush_status);
 	}
 	else
 	{
 		Game->LOG(0, "Save(1,25): flush file");
 	}
 
-	// explicitly call fsync to make sure data makes it to disk
-	int descr = fileno(f);
-	if (descr != -1)
-	{
-#if defined(__WIN32__) || defined(__WINRT__) || defined(__MINGW32__)
-		flush_status = _commit(descr);
-#else
-		flush_status = fsync(descr);
-#endif
-		if (flush_status == 0)
-		{
-			Game->LOG(0, "Save(1,5): fsync file");
-		}
-		else
-		{
-			Game->LOG(0, "Save(1,5): fsync file failed with %d", errno);
-		}
-	}
-	else
-	{
-		Game->LOG(0, "Save(1,5): fsync file not possible due to invalid descriptor!");
-	}
-
-	fclose(f);
+	ops->file_close(f);
 
 	// delete the buffer only after save & flush is done
 	if (CompBuffer != NULL) delete [] CompBuffer;
@@ -373,15 +350,15 @@ HRESULT CBFileManager::SaveFile(char *Filename, BYTE *Buffer, DWORD BufferSize, 
 	}
 
 	// delete an existing .old file from a previous save operation
-	tmpRes = remove(oldFile);
+	tmpRes = ops->file_remove(oldFile);
 	Game->LOG(0, "Save(3): Remove .old file %s result=%d.", oldFile, tmpRes);
 
 	// move existing file to .old file
-	tmpRes = rename(Filename, oldFile);
+	tmpRes = ops->file_rename(Filename, oldFile);
 	Game->LOG(0, "Save(4): Move file %s to .old file %s result=%d.", Filename, oldFile, tmpRes);
 
 	// move .tmp file to final file
-	tmpRes = rename(tmpFile, Filename);
+	tmpRes = ops->file_rename(tmpFile, Filename);
 	Game->LOG(0, "Save(5): Move .tmp file %s to file %s result=%d.", tmpFile, Filename, tmpRes);
 
 	delete[] tmpFile;

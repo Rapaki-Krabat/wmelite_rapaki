@@ -32,14 +32,14 @@ IMPLEMENT_PERSISTENT(CAdTalkHolder, false);
 //////////////////////////////////////////////////////////////////////////
 CAdTalkHolder::CAdTalkHolder(CBGame* inGame):CAdObject(inGame)
 {
-	m_Sprite = NULL;
+	m_Sprite.invalidate();
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 CAdTalkHolder::~CAdTalkHolder()
 {
-	SAFE_DELETE(m_Sprite);
+	m_Sprite.invalidate();
 
 	int i;
 	for(i=0; i<m_TalkSprites.GetSize(); i++) delete m_TalkSprites[i];
@@ -50,24 +50,24 @@ CAdTalkHolder::~CAdTalkHolder()
 }
 
 //////////////////////////////////////////////////////////////////////////
-CBSprite* CAdTalkHolder::GetTalkStance(char *Stance)
+wl_non_owning<CBSprite*>* CAdTalkHolder::GetTalkStance(char *Stance)
 {
-	CBSprite* ret = NULL;
+	wl_non_owning<CBSprite*>* ret = NULL;
 
 
 	// forced stance?
 	if(m_ForcedTalkAnimName && !m_ForcedTalkAnimUsed)
 	{
 		m_ForcedTalkAnimUsed = true;
-		SAFE_DELETE(m_AnimSprite);
-		m_AnimSprite = new CBSprite(Game, this);
-		if(m_AnimSprite){
+		m_AnimSprite.invalidate();
+		m_AnimSprite.replace(new CBSprite(Game, this));
+		if(m_AnimSprite.isValid()){
 			HRESULT res = m_AnimSprite->LoadFile(m_ForcedTalkAnimName);
 			if(FAILED(res)){
 				Game->LOG(res, "CAdTalkHolder::GetTalkStance: error loading talk sprite (object:\"%s\" sprite:\"%s\")", m_Name, m_ForcedTalkAnimName);
-				SAFE_DELETE(m_AnimSprite);				
+				m_AnimSprite.invalidate();				
 			}
-			else return m_AnimSprite;
+			else return m_AnimSprite.toNonOwning();
 		}
 	}
 
@@ -75,16 +75,16 @@ CBSprite* CAdTalkHolder::GetTalkStance(char *Stance)
 	if(Stance!=NULL){
 		// search special talk stances
 		for(int i=0; i<m_TalkSpritesEx.GetSize(); i++){
-			if(CBPlatform::stricmp(m_TalkSpritesEx[i]->m_Name, Stance)==0){
-				ret = m_TalkSpritesEx[i];
+			if(CBPlatform::stricmp((*m_TalkSpritesEx[i])->m_Name, Stance)==0){
+				ret = m_TalkSpritesEx[i]->toNonOwning();
 				break;
 			}
 		}
 		if(ret==NULL){
 			// serach generic talk stances
 			for(int i=0; i<m_TalkSprites.GetSize(); i++){
-				if(CBPlatform::stricmp(m_TalkSprites[i]->m_Name, Stance)==0){
-					ret = m_TalkSprites[i];
+				if(CBPlatform::stricmp((*m_TalkSprites[i])->m_Name, Stance)==0){
+					ret = m_TalkSprites[i]->toNonOwning();
 					break;
 				}
 			}
@@ -93,11 +93,11 @@ CBSprite* CAdTalkHolder::GetTalkStance(char *Stance)
 
 	// not a valid stance? get a random one
 	if(ret==NULL){
-		if(m_TalkSprites.GetSize()<1) ret = m_Sprite;
+		if(m_TalkSprites.GetSize()<1) ret = m_Sprite.toNonOwning();
 		else{
 			// TODO: remember last
 			int rnd = rand() % m_TalkSprites.GetSize();
-			ret = m_TalkSprites[rnd];
+			ret = m_TalkSprites[rnd]->toNonOwning();
 		}
 	}
 
@@ -119,13 +119,13 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 		CScValue* Val = Stack->Pop();
 
 		bool SetCurrent = false;
-		if(m_CurrentSprite && m_CurrentSprite == m_Sprite) SetCurrent = true;
+		if(m_CurrentSprite && (m_CurrentSprite == &m_Sprite)) SetCurrent = true;
 
-		SAFE_DELETE(m_Sprite);
+		m_Sprite.invalidate();
 
 		if(Val->IsNULL())
 		{
-			m_Sprite = NULL;
+			m_Sprite.invalidate();
 			if(SetCurrent) m_CurrentSprite = NULL;
 			Stack->PushBool(true);
 		}
@@ -138,8 +138,8 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 				Stack->PushBool(false);
 			}
 			else {
-				m_Sprite = spr;
-				if(SetCurrent) m_CurrentSprite = m_Sprite;
+				m_Sprite.replace(spr);
+				if(SetCurrent) m_CurrentSprite = m_Sprite.toNonOwning();
 				Stack->PushBool(true);
 			}
 		}
@@ -152,7 +152,7 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	else if(strcmp(Name, "GetSprite")==0){
 		Stack->CorrectParams(0);
 
-		if(!m_Sprite || !m_Sprite->m_Filename) Stack->PushNULL();
+		if(!m_Sprite.isValid() || !m_Sprite->m_Filename) Stack->PushNULL();
 		else Stack->PushString(m_Sprite->m_Filename);
 		return S_OK;
 	}
@@ -163,8 +163,8 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	else if(strcmp(Name, "GetSpriteObject")==0){
 		Stack->CorrectParams(0);
 
-		if(!m_Sprite) Stack->PushNULL();
-		else Stack->PushNative(m_Sprite, true);
+		if(!m_Sprite.isValid()) Stack->PushNULL();
+		else Stack->PushNative(m_Sprite.operator->(), true);
 		return S_OK;
 	}
 
@@ -183,8 +183,10 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 			Script->RuntimeError("AddTalkSprite method failed for file '%s'", Filename);
 		}
 		else {
-			if(Ex) m_TalkSpritesEx.Add(spr);
-			else m_TalkSprites.Add(spr);
+			wl_owning<CBSprite*>* spriteOwner = new wl_owning<CBSprite*>(spr);
+
+			if(Ex) m_TalkSpritesEx.Add(spriteOwner);
+			else m_TalkSprites.Add(spriteOwner);
 			Stack->PushBool(true);			
 		}
 		return S_OK;
@@ -205,7 +207,7 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 
 		if(Ex){
 			for(i=0; i<m_TalkSpritesEx.GetSize(); i++){
-				if(CBPlatform::stricmp(m_TalkSpritesEx[i]->m_Filename, Filename)==0){
+				if(CBPlatform::stricmp((*m_TalkSpritesEx[i])->m_Filename, Filename)==0){
 					if(m_CurrentSprite==m_TalkSpritesEx[i]) SetCurrent = true;
 					if(m_TempSprite2==m_TalkSpritesEx[i]) SetTemp2 = true;
 					delete m_TalkSpritesEx[i];
@@ -216,7 +218,7 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 		}
 		else{
 			for(i=0; i<m_TalkSprites.GetSize(); i++){
-				if(CBPlatform::stricmp(m_TalkSprites[i]->m_Filename, Filename)==0){
+				if(CBPlatform::stricmp((*m_TalkSprites[i])->m_Filename, Filename)==0){
 					if(m_CurrentSprite==m_TalkSprites[i]) SetCurrent = true;
 					if(m_TempSprite2==m_TalkSprites[i]) SetTemp2 = true;
 					delete m_TalkSprites[i];
@@ -228,8 +230,8 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 		}
 
 		Stack->PushBool(true);
-		if(SetCurrent) m_CurrentSprite = m_Sprite;
-		if(SetTemp2) m_TempSprite2 = m_Sprite;
+		if(SetCurrent) m_CurrentSprite = m_Sprite.toNonOwning();
+		if(SetTemp2) m_TempSprite2 = m_Sprite.toNonOwning();
 
 		return S_OK;
 	}
@@ -251,6 +253,7 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 			Script->RuntimeError("SetTalkSprite method failed for file '%s'", Filename);
 		}
 		else {
+			wl_owning<CBSprite*>* spriteOwner = new wl_owning<CBSprite*>(spr);
 
 			// delete current
 			int i;
@@ -272,12 +275,12 @@ HRESULT CAdTalkHolder::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 			}
 
 			// set new
-			if(Ex) m_TalkSpritesEx.Add(spr);
-			else m_TalkSprites.Add(spr);
+			if(Ex) m_TalkSpritesEx.Add(spriteOwner);
+			else m_TalkSprites.Add(spriteOwner);
 			Stack->PushBool(true);
 
-			if(SetCurrent) m_CurrentSprite = spr;
-			if(SetTemp2) m_TempSprite2 = spr;
+			if(SetCurrent) m_CurrentSprite = spriteOwner->toNonOwning();
+			if(SetTemp2) m_TempSprite2 = spriteOwner->toNonOwning();
 		}
 		return S_OK;
 	}
@@ -331,13 +334,13 @@ HRESULT CAdTalkHolder::SaveAsText(CBDynBuffer *Buffer, int Indent)
 {
 	int i;
 	for(i=0; i<m_TalkSprites.GetSize(); i++){
-		if(m_TalkSprites[i]->m_Filename)
-			Buffer->PutTextIndent(Indent+2, "TALK=\"%s\"\n", m_TalkSprites[i]->m_Filename);
+		if((*m_TalkSprites[i])->m_Filename)
+			Buffer->PutTextIndent(Indent+2, "TALK=\"%s\"\n", (*m_TalkSprites[i])->m_Filename);
 	}
 
 	for(i=0; i<m_TalkSpritesEx.GetSize(); i++){
-		if(m_TalkSpritesEx[i]->m_Filename)
-			Buffer->PutTextIndent(Indent+2, "TALK_SPECIAL=\"%s\"\n", m_TalkSpritesEx[i]->m_Filename);
+		if((*m_TalkSpritesEx[i])->m_Filename)
+			Buffer->PutTextIndent(Indent+2, "TALK_SPECIAL=\"%s\"\n", (*m_TalkSpritesEx[i])->m_Filename);
 	}
 
 	return S_OK;

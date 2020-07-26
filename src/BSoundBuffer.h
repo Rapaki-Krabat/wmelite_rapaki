@@ -115,6 +115,10 @@ public:
 
 #else
 
+	void InvalidateChannelNumber(int finished_channel);
+
+private:
+
 	Mix_Chunk *m_chunk;
 	Mix_Music *m_music;
 	SDL_RWops *m_rwops;
@@ -123,8 +127,6 @@ public:
 	DWORD m_cachedPosition;
 	float m_cachedPanning; // remember panning setting as well, sometimes it is set before a channel is allocated
 	float m_currentPanning; // make sure to not call panning function if setting didn't change
-
-	void InvalidateChannelNumber(int finished_channel);
 
 	static Sint64 FileSizeImpl(SDL_RWops *ops);
 	static Sint64 FileSeekImpl(SDL_RWops *ops, Sint64 offset, int whence);
@@ -141,7 +143,6 @@ public:
 	static void EchoEffectFunction(int chan, void *stream, int len, void *udata);
 	static void EchoEffectDoneFunction(int chan, void *udata);
 
-private:
 	HRESULT InternalSetPan(float Pan);
 
 #endif
