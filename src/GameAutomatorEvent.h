@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON, SETPROPERTY };
 
-enum class GameAutomatorEventType { NONE, GOTO, TURNTO, TALK, CHANGE, PRESS, INTERACTIVE, PLAYANIM, TAKEITEM };
+enum class GameAutomatorEventType { NONE, GOTO, TURNTO, TALK, CHANGE, PRESS, INTERACTIVE, PLAYANIM, TAKEITEM, GETRESPONSE };
 
 class GameAutomatorEvent : public CBScriptable
 {

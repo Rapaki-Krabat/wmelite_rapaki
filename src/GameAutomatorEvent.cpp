@@ -103,6 +103,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventType::TAKEITEM:
 			m_ScValue->SetString("takeitem");
 			break;
+		case GameAutomatorEventType::GETRESPONSE:
+			m_ScValue->SetString("getresponse");
+			break;
 		}
 
 		return m_ScValue;
