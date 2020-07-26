@@ -1,11 +1,12 @@
 IDIR =../src
-CC=i586-mingw32msvc-gcc
+
+CC=i686-w64-mingw32-gcc
+CPP=i686-w64-mingw32-g++
 
 DEFINES=USE_SDL_MIXER
 
 CFLAGS=-I$(IDIR) -I. -O2 -I../../SDL2/include/ -I../../libfreetype/include/ -I../../libfreetype/include/freetype2/ -Wall -Wextra
 
-CPP=i586-mingw32msvc-g++
 CPPFLAGS=-I$(IDIR) -I. -I../../libeffectsprivate/jni/ -I../../libeffectsprivate/jni/Reverb/lib/ -I../../libeffectsprivate/jni/Common/lib/ -I../../libecho/jni/ -D$(DEFINES) -O2 \
 -I../../libfreetype/include/ -I../../libfreetype/include/freetype2/ -I../../SDL2/include/ -I../../SDL_mixer/src/ -I../../zlib/ \
 -I../../libfreeimage/jni/Dist/ \
