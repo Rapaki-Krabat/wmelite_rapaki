@@ -63,9 +63,9 @@ int main(int argc, char* argv[])
 #	endif
 #endif
 
-// #ifndef __WIN32__
+#if !defined(__WIN32__) || defined(__MINGW32__)
 	FreeImage_Initialise();
-// #endif
+#endif
 	int ret = 1;
 
 	Game = new CAdGame;
@@ -81,9 +81,9 @@ int main(int argc, char* argv[])
 //	}
 	ret = CBPlatform::Run(Game, argc, argv);
 
-// #ifndef __WIN32__
+#if !defined(__WIN32__) || defined(__MINGW32__)
 	FreeImage_DeInitialise();
-// #endif
+#endif
 
 
 
