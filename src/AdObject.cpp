@@ -345,7 +345,8 @@ HRESULT CAdObject::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Th
 				// hide associated entities
 				((CAdGame*)Game)->m_Scene->HandleItemAssociations(ItemName, false);
 			}
-
+			Game->m_Automator->AddAutomatorEvent(
+				new GameAutomatorEvent(Game, GameAutomatorEventSource::NONE, GameAutomatorEventType::TAKEITEM, ItemName));
 		}
 		else Script->RuntimeError("TakeItem: item name expected");
 
@@ -963,6 +964,23 @@ void CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTe
 	m_State = STATE_TALKING;
 
 	if(DeleteSound) delete [] Sound;
+
+	GameAutomatorEventSource evtSource;
+	switch (m_Type)
+	{
+	case OBJECT_ENTITY:
+		evtSource = GameAutomatorEventSource::ENTITY;
+		break;
+	case OBJECT_ACTOR:
+		evtSource = GameAutomatorEventSource::ACTOR;
+		break;
+	default:
+		// TODO add more if needed (but not scene!)
+		evtSource = GameAutomatorEventSource::NONE;
+		break;
+	}
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, evtSource, GameAutomatorEventType::TALK, m_Name, Text));
 }
 
 

@@ -321,6 +321,16 @@ int CBPlatform::MessageLoop()
 			HandleEvent(&event);
 		}
 
+		if (Game)
+		{
+			SDL_Event* queuedEvent = NULL;
+			while ((queuedEvent = Game->m_Automator->GetOldestInputEvent()) != NULL)
+			{
+				HandleEvent(queuedEvent);
+				delete queuedEvent;
+			}
+		}
+
 		if(Game && Game->m_Renderer->m_Active && Game->m_Renderer->m_Ready)
 		{
 			Game->DisplayContent();
@@ -667,11 +677,20 @@ BOOL CBPlatform::GetCursorPos(LPPOINT lpPoint)
 
 	int x, y;
 
-	SDL_GetMouseState(&x, &y);
-	lpPoint->x = x;
-	lpPoint->y = y;
+	if (Game->m_Automator->isEnabled())
+	{
+		Game->m_Automator->GetMouseState(&x, &y);
+		lpPoint->x = x;
+		lpPoint->y = y;
+	}
+	else
+	{
+		SDL_GetMouseState(&x, &y);
+		lpPoint->x = x;
+		lpPoint->y = y;
 
-	renderer->PointFromScreen(lpPoint);
+		renderer->PointFromScreen(lpPoint);
+	}
 
 	return TRUE;
 }
@@ -695,7 +714,7 @@ BOOL CBPlatform::TransformEventCoords(LPPOINT lpPoint)
 {
 	CBRenderSDL* renderer = static_cast<CBRenderSDL*>(Game->m_Renderer);
 
-	renderer->PointFromScreen(lpPoint);
+	if (Game->m_Automator->isEnabled() == false) renderer->PointFromScreen(lpPoint);
 
 	return TRUE;
 }
