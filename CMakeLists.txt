@@ -17,4 +17,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_subdirectory(lib/echo)
 add_subdirectory(lib/effects)
+add_subdirectory(lib/zlib)
+add_subdirectory(lib/freeimage)
 
