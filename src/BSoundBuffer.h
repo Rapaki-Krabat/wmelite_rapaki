@@ -35,12 +35,12 @@ THE SOFTWARE.
 #endif
 #else
 #include "SDL_mixer.h"
-#include "Wrapper/ReverbLibrary.h"
+#include "ReverbLibrary.h"
 #include "libecho.h"
 #endif
 
 #ifdef USE_LIBEFFECTS_REVERB
-#include "Wrapper/ReverbLibrary.h"
+#include "ReverbLibrary.h"
 #endif
 
 class CBSoundBuffer : public CBBase  
