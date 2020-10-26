@@ -3,21 +3,23 @@ CC=gcc
 
 DEFINES=USE_SDL_MIXER
 
-CFLAGS=-I$(IDIR) -I. -O2 `sdl2-config --cflags` `freetype-config --cflags` -Wall -Wextra
+CFLAGS=-I$(IDIR) -I. -I../../SDL2/include/ -O2 -Wall -Wextra
 
 CPP=g++
 CPPFLAGS=-I$(IDIR) -I. -I../../libeffectsprivate/jni/ \
 -I../../libeffectsprivate/jni/Reverb/lib/ \
 -I../../libeffectsprivate/jni/Common/lib/ \
+-I../../SDL2/include/ \
+-I../../SDL_mixer/src/ \
 -I../../libecho/jni/ -D$(DEFINES) -O2 \
-`freetype-config --cflags` `sdl2-config --cflags` \
+-I/usr/include/freetype2/ \
 -Wall -Wextra -Wno-write-strings -Wno-conversion-null -Wno-unused
 
 SRCDIR=../src
 
 ODIR=obj_sdl_mixer
 
-LIBS=`sdl2-config --libs` `freetype-config --libs` -lfreeimage -L. -lSDL2_mixer -lSDL2 -leffects -lecho -ldl -lz -lpthread
+LIBS=-lfreeimage -lfreetype -L. -lSDL2_mixer -lSDL2 -leffects -lecho -ldl -lz -lpthread
 
 _OBJC = ConvertUTF.o DirectoryOperations.o FileOperations.o LicenseCheckDummy.o
 OBJC = $(patsubst %,$(ODIR)/%,$(_OBJC))

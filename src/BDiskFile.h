@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 #include "BFile.h"
 #include "FileOperations.h"
+#include <memory>
 
 class CBDiskFile : public CBFile  
 {
