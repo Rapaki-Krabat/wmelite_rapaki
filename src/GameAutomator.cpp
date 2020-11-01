@@ -48,11 +48,22 @@ GameAutomator::~GameAutomator()
 //////////////////////////////////////////////////////////////////////////
 // high level scripting interface
 //////////////////////////////////////////////////////////////////////////
+/**
+* Game Automator scripting interface:
+*
+*/
 HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)
 {
 	//////////////////////////////////////////////////////////////////////////
 	// AddMouseButtonEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>AddMouseButtonEvent(int xCoordinate, int yCoordinate, string nameOfButton, string pressRelease);</b>
+    * @param xCoordinate - Mouse/Touch event X coordinate
+    * @param yCoordinate - Mouse/Touch event Y coordinate
+    * @param nameOfButton - Either "left", "middle" or "up"
+    * @param pressRelease - Either "down" or "up"
+    */
 	if (strcmp(Name, "AddMouseButtonEvent") == 0)
 	{
 		Stack->CorrectParams(4);
@@ -85,6 +96,11 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// AddMouseMotionEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>AddMouseMotionEvent(int xCoordinate, int yCoordinate);</b>
+    * @param xCoordinate - Mouse/Touch event X coordinate
+    * @param yCoordinate - Mouse/Touch event Y coordinate
+    */
 	else if (strcmp(Name, "AddMouseMotionEvent") == 0)
 	{
 		Stack->CorrectParams(2);
