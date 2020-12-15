@@ -23,6 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/**
+* @file GameAutomator.h
+*
+*/
+
 #ifndef __WmeGameAutomator_H__
 #define __WmeGameAutomator_H__
 
