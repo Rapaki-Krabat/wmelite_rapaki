@@ -23,6 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/**
+* @file GameAutomator.cpp
+*
+*/
+
 #include "dcgf.h"
 #include "GameAutomator.h"
 
@@ -49,7 +54,7 @@ GameAutomator::~GameAutomator()
 // high level scripting interface
 //////////////////////////////////////////////////////////////////////////
 /**
-* Game Automator scripting interface:
+* Game Automator scripting interface: Methods.
 *
 * <b>All coordinates are in game dimensions (not screen, not points vs pixels...)!</b>
 */
@@ -62,7 +67,7 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
     * @brief <b>AddMouseButtonEvent(int xCoordinate, int yCoordinate, string nameOfButton, string pressRelease);</b>
     * @param xCoordinate - Mouse/Touch event X coordinate
     * @param yCoordinate - Mouse/Touch event Y coordinate
-    * @param nameOfButton - Either "left", "middle" or "up"
+    * @param nameOfButton - Either "left", "middle" or "right"
     * @param pressRelease - Either "down" or "up"
     */
 	if (strcmp(Name, "AddMouseButtonEvent") == 0)
@@ -211,6 +216,10 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 }
 
 //////////////////////////////////////////////////////////////////////////
+/**
+* Game Automator scripting interface: Properties.
+*
+*/
 CScValue* GameAutomator::ScGetProperty(char *Name)
 {
 	m_ScValue->SetNULL();
@@ -257,6 +266,10 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 }
 
 //////////////////////////////////////////////////////////////////////////
+/**
+* Game Automator scripting interface: Properties.
+*
+*/
 HRESULT GameAutomator::ScSetProperty(char *Name, CScValue *Value)
 {
 	//////////////////////////////////////////////////////////////////////////

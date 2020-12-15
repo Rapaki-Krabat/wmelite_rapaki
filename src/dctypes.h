@@ -23,6 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/**
+* @file dctypes.h
+*
+*/
+
 #ifndef DCTYPES_H
 #define DCTYPES_H
 
@@ -64,10 +69,22 @@ typedef enum{
 	VAL_TOP=0, VAL_CENTER, VAL_BOTTOM, NUM_VERTICAL_ALIGN
 }TVerticalAlign;
 
-
-typedef enum{
-	DI_UP=0, DI_UPRIGHT=1, DI_RIGHT=2, DI_DOWNRIGHT=3, DI_DOWN=4, DI_DOWNLEFT=5, DI_LEFT=6, DI_UPLEFT=7, NUM_DIRECTIONS=8, DI_NONE=9
-}TDirection;
+/**
+* Enum for specifying character directions.
+*/
+typedef enum
+{
+	DI_UP=0,  /*!< up a.k.a. north = 0 */
+	DI_UPRIGHT=1, /*!< up right a.k.a. northeast = 1*/
+	DI_RIGHT=2, /*!< right a.k.a. east = 2 */
+	DI_DOWNRIGHT=3, /*!< down right a.k.a. south east = 3 */
+	DI_DOWN=4, /*!< down a.k.a. south = 4 */
+	DI_DOWNLEFT=5, /*!< down left a.k.a. south west = 5 */
+	DI_LEFT=6, /*!< left a.k.a. west = 6 */
+	DI_UPLEFT=7, /*!< up left a.k.a. north west = 7 */
+	NUM_DIRECTIONS=8, 
+	DI_NONE=9
+} TDirection;
 
 
 typedef enum{

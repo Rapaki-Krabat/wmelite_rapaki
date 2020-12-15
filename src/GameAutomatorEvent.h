@@ -23,6 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/**
+* @file GameAutomatorEvent.h
+*
+*/
+
 #ifndef __WmeGameAutomatorEvent_H__
 #define __WmeGameAutomatorEvent_H__
 
@@ -30,9 +35,35 @@ THE SOFTWARE.
 #include "BScriptable.h"
 #include "dctypes.h"	
 
-enum class GameAutomatorEventSource { NONE, ACTOR, SCENE, ENTITY, BUTTON, SETPROPERTY };
+/**
+* Source of the engine event.
+*/
+enum class GameAutomatorEventSource 
+{ 
+NONE,  /*!< none */
+ACTOR, /*!< actor */
+SCENE, /*!< scene */
+ENTITY, /*!< entity */
+BUTTON, /*!< button */
+SETPROPERTY /*!< setproperty */
+};
 
-enum class GameAutomatorEventType { NONE, GOTO, TURNTO, TALK, CHANGE, PRESS, INTERACTIVE, PLAYANIM, TAKEITEM, GETRESPONSE };
+/**
+* Type of the engine event.
+*/
+enum class GameAutomatorEventType 
+{ 
+NONE, /*!< none */
+GOTO, /*!< goto */
+TURNTO, /*!< turnto */
+TALK, /*!< talk */
+CHANGE, /*!< change */
+PRESS, /*!< press */
+INTERACTIVE, /*!< interactive */
+PLAYANIM, /*!< playanim */
+TAKEITEM, /*!< takeitem */
+GETRESPONSE /*!< getresponse */
+};
 
 class GameAutomatorEvent : public CBScriptable
 {
