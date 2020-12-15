@@ -51,6 +51,7 @@ GameAutomator::~GameAutomator()
 /**
 * Game Automator scripting interface:
 *
+* <b>All coordinates are in game dimensions (not screen, not points vs pixels...)!</b>
 */
 HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)
 {
@@ -123,6 +124,9 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// AddFingerMotionEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>AddFingerMotionEvent();</b>
+    */
 	else if (strcmp(Name, "AddFingerMotionEvent") == 0)
 	{
 		Stack->CorrectParams(0);
@@ -138,6 +142,10 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// AddKeyEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>AddKeyEvent(int keycode);</b>
+    * @param keycode - Keycode as defined in SDL_Keycode struct
+    */
 	else if (strcmp(Name, "AddKeyEvent") == 0)
 	{
 		Stack->CorrectParams(1);
@@ -155,6 +163,10 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// ClearReportedEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>ClearReportedEvent(int position);</b>
+    * @param position - which engine event in the queue to delete (== 0 if omitted)
+    */
 	else if (strcmp(Name, "ClearReportedEvent") == 0)
 	{
 		Stack->CorrectParams(1);
@@ -174,6 +186,10 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// GetReportedEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>GetReportedEvent(int position);</b>
+    * @param position - which engine event in the queue to return (== 0 if omitted)
+    */
 	else if (strcmp(Name, "GetReportedEvent") == 0)
 	{
 		Stack->CorrectParams(1);
@@ -227,6 +243,10 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// ReportedEventSize
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.ReportedEventSize (R/O)</b>
+    * @param int - size of the engine event queue
+    */
 	else if (strcmp(Name, "ReportedEventSize") == 0)
 	{
 		m_ScValue->SetInt((int) reportedEvents.size());
@@ -242,6 +262,10 @@ HRESULT GameAutomator::ScSetProperty(char *Name, CScValue *Value)
 	//////////////////////////////////////////////////////////////////////////
 	// Enable
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.Enable (R/W)</b>
+    * @param bool - enable (true) or disable (false) game automator
+    */
 	if (strcmp(Name, "Enable") == 0) {
 		m_Enable = Value->GetBool();
 		return S_OK;
