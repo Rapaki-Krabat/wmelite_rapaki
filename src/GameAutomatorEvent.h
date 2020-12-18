@@ -45,7 +45,8 @@ ACTOR, /*!< actor */
 SCENE, /*!< scene */
 ENTITY, /*!< entity */
 BUTTON, /*!< button */
-SETPROPERTY /*!< setproperty */
+SETPROPERTY, /*!< setproperty */
+WINDOW /*!< window */
 };
 
 /**
@@ -62,7 +63,8 @@ PRESS, /*!< press */
 INTERACTIVE, /*!< interactive */
 PLAYANIM, /*!< playanim */
 TAKEITEM, /*!< takeitem */
-GETRESPONSE /*!< getresponse */
+GETRESPONSE, /*!< getresponse */
+SYSEXCLUSIVE /*!< sysexclusive */
 };
 
 /**
@@ -79,6 +81,8 @@ public:
          * Called directly from:
          * 
          * <b>CAdObject::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)</b> for script method call <b>"TakeItem"</b>.
+         *
+         * <b>CUIWindow::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)</b> for script method call <b>"GoSystemExclusive"</b>.
          *
 	  * This generic constructor is also implicitly called by all other specific ctors.
 	  */

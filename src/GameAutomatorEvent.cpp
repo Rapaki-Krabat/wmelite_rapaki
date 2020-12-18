@@ -77,6 +77,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventSource::SETPROPERTY:
 			m_ScValue->SetString("setproperty");
 			break;
+		case GameAutomatorEventSource::WINDOW:
+			m_ScValue->SetString("window");
+			break;
 		}
 
 		return m_ScValue;
@@ -122,6 +125,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 			break;
 		case GameAutomatorEventType::GETRESPONSE:
 			m_ScValue->SetString("getresponse");
+			break;
+		case GameAutomatorEventType::SYSEXCLUSIVE:
+			m_ScValue->SetString("sysexclusive");
 			break;
 		}
 
