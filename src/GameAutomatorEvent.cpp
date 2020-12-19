@@ -80,6 +80,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventSource::WINDOW:
 			m_ScValue->SetString("window");
 			break;
+		default:
+			m_ScValue->SetString("ERROR");
+			break;
 		}
 
 		return m_ScValue;
@@ -128,6 +131,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 			break;
 		case GameAutomatorEventType::SYSEXCLUSIVE:
 			m_ScValue->SetString("sysexclusive");
+			break;
+		default:
+			m_ScValue->SetString("ERROR");
 			break;
 		}
 
