@@ -158,6 +158,30 @@ public:
 		GameAutomatorEvent(inGame, source, type, name)  {
 		m_Interactive = interactive;
 	}
+
+	/**
+	* Copy constructor to create an element to be passed around in scripts.
+	*/
+	GameAutomatorEvent(const GameAutomatorEvent& orig)
+		: CBScriptable(orig.Game), m_Source(orig.m_Source), m_Type(orig.m_Type), 
+		m_Sentence(orig.m_Sentence), m_TurntoDir(orig.m_TurntoDir), m_X(orig.m_X), m_Y(orig.m_Y),
+		m_Interactive(orig.m_Interactive)
+	{ 
+		m_Name = new AnsiString(orig.m_Name->c_str());
+		if (orig.m_Sentence != NULL)
+		{
+			m_Sentence = new AnsiString(orig.m_Sentence->c_str());
+		}
+		else
+		{
+			m_Sentence = NULL;
+		}
+	}
+
+	// delete all unused constructors and assignment operators explicitly, just in case...
+	GameAutomatorEvent(const GameAutomatorEvent&& orig) = delete;
+	GameAutomatorEvent& operator=(const GameAutomatorEvent& orig) = delete;
+	GameAutomatorEvent& operator=(GameAutomatorEvent&& orig) = delete;
 	
 	~GameAutomatorEvent() {
 		delete m_Name;
