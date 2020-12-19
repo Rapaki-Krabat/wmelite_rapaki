@@ -56,6 +56,7 @@ THE SOFTWARE.
 
 #ifdef __WINRT__
 #   include "WinRTDetectPointers.h"
+#include <locale.h>
 #endif
 
 #include "SDL_log.h"
@@ -711,7 +712,11 @@ BOOL CBPlatform::ShowWindow(HWND hWnd, int nCmdShow)
 //////////////////////////////////////////////////////////////////////////
 bool CBPlatform::DeleteFile(const char* lpFileName)
 {
+#if defined(__WIN32__) || defined(__WINRT__)
 	return _wremove(WIN_UTF8ToString(lpFileName)) ? true : false;
+#else
+	return remove(lpFileName) ? true : false;
+#endif
 }
 
 //////////////////////////////////////////////////////////////////////////

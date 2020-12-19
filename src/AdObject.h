@@ -26,6 +26,7 @@ THE SOFTWARE.
 #ifndef __WmeAdObject_H__
 #define __WmeAdObject_H__
 
+#include "wmelite_pointers.h"
 
 class CAdWaypointGroup;
 class CAdRegion;
@@ -68,15 +69,15 @@ public:
 	bool m_Drawn;
 	bool m_Active;
 	virtual HRESULT PlayAnim(char* Filename);
-	CBSprite* m_AnimSprite;
-	CBSprite* m_CurrentSprite;
+	wl_owning<CBSprite*>      m_AnimSprite;
+	wl_non_owning<CBSprite*>* m_CurrentSprite;
 	TObjectState m_State;
 	TObjectState m_NextState;
 	TObjectType m_Type;
 	CAdObject(CBGame* inGame);
 	virtual ~CAdObject();
 	CBFont* m_Font;
-	CBSprite* m_TempSprite2;
+	wl_non_owning <CBSprite*>* m_TempSprite2;
 	CBRegion* m_BlockRegion;
 	CAdWaypointGroup* m_WptGroup;
 	CBRegion* m_CurrentBlockRegion;
@@ -103,7 +104,6 @@ public:
 private:
 	HRESULT DisplaySpriteAttachment(CAdObject* Attachment);
 	CAdInventory* m_Inventory;
-	CBSprite* m_DetectCorruptSprite;
 
 protected:
 	HRESULT GetScale(float* ScaleX, float* ScaleY);

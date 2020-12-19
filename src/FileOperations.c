@@ -14,6 +14,10 @@
 #if defined(__WIN32__) || defined(__WINRT__)
 #	include <direct.h>
 #	include <io.h>
+#   include "SDL_stdinc.h"
+
+#define WIN_UTF8ToString(S) (wchar_t *)SDL_iconv_string("UTF-16LE", "UTF-8", (char *)(S), SDL_strlen(S)+1)
+
 #else
 #	include <unistd.h>
 #endif
@@ -34,6 +38,9 @@ static int        file_putc_plain(int character, FILEHANDLE handle);
 static int        file_seek_plain(FILEHANDLE handle, off_t offset, int whence);
 static long       file_tell_plain(FILEHANDLE handle);
 static int        file_error_plain(FILEHANDLE handle);
+static int        file_rename_plain(const char *oldname, const char *newname);
+static int        file_remove_plain(const char *name);
+static int        file_flush_plain(FILEHANDLE handle);
 static int        file_close_plain(FILEHANDLE handle);
 
 #ifdef __ANDROID__
@@ -49,6 +56,9 @@ static int        file_putc_android_asset(int character, FILEHANDLE handle);
 static int        file_seek_android_asset(FILEHANDLE handle, off_t offset, int whence);
 static long       file_tell_android_asset(FILEHANDLE handle);
 static int        file_error_android_asset(FILEHANDLE handle);
+static int        file_rename_android_asset(const char *oldname, const char *newname);
+static int        file_remove_android_asset(const char *name);
+static int        file_flush_android_asset(FILEHANDLE handle);
 static int        file_close_android_asset(FILEHANDLE handle);
 
 static int        file_exists_android_obb_plain(const char *name);
@@ -60,6 +70,9 @@ static int        file_putc_android_obb_plain(int character, FILEHANDLE handle);
 static int        file_seek_android_obb_plain(FILEHANDLE handle, off_t offset, int whence);
 static long       file_tell_android_obb_plain(FILEHANDLE handle);
 static int        file_error_android_obb_plain(FILEHANDLE handle);
+static int        file_rename_android_obb_plain(const char *oldname, const char *newname);
+static int        file_remove_android_obb_plain(const char *name);
+static int        file_flush_android_obb_plain(FILEHANDLE handle);
 static int        file_close_android_obb_plain(FILEHANDLE handle);
 
 static int        file_exists_android_obb_mount(const char *name);
@@ -71,6 +84,9 @@ static int        file_putc_android_obb_mount(int character, FILEHANDLE handle);
 static int        file_seek_android_obb_mount(FILEHANDLE handle, off_t offset, int whence);
 static long       file_tell_android_obb_mount(FILEHANDLE handle);
 static int        file_error_android_obb_mount(FILEHANDLE handle);
+static int        file_rename_android_obb_mount(const char *oldname, const char *newname);
+static int        file_remove_android_obb_mount(const char *name);
+static int        file_flush_android_obb_mount(FILEHANDLE handle);
 static int        file_close_android_obb_mount(FILEHANDLE handle);
 
 #endif
@@ -87,6 +103,9 @@ generic_file_ops file_ops_plain =
 	file_seek_plain,
 	file_tell_plain,
 	file_error_plain,
+	file_rename_plain,
+	file_remove_plain,
+	file_flush_plain,
 	file_close_plain
 };
 
@@ -103,6 +122,9 @@ generic_file_ops file_ops_android_asset =
   .file_seek   = file_seek_android_asset,
   .file_tell   = file_tell_android_asset,
   .file_error  = file_error_android_asset,
+  .file_rename = file_rename_android_asset,
+  .file_rename = file_remove_android_asset,
+  .file_flush  = file_flush_android_asset,
   .file_close  = file_close_android_asset
 };
 
@@ -117,6 +139,9 @@ generic_file_ops file_ops_android_obb_plain =
   .file_seek   = file_seek_android_obb_plain,
   .file_tell   = file_tell_android_obb_plain,
   .file_error  = file_error_android_obb_plain,
+  .file_rename = file_rename_android_obb_plain,
+  .file_rename = file_remove_android_obb_plain,
+  .file_flush  = file_flush_android_obb_plain,
   .file_close  = file_close_android_obb_plain
 };
 
@@ -131,6 +156,9 @@ generic_file_ops file_ops_android_obb_mount =
   .file_seek   = file_seek_android_obb_mount,
   .file_tell   = file_tell_android_obb_mount,
   .file_error  = file_error_android_obb_mount,
+  .file_rename = file_rename_android_obb_mount,
+  .file_rename = file_remove_android_obb_mount,
+  .file_flush  = file_flush_android_obb_mount,
   .file_close  = file_close_android_obb_mount
 };
 
@@ -171,7 +199,7 @@ generic_file_ops *get_file_operations(file_access_variant access_variant)
 static int        file_exists_plain(const char *name)
 {
 #if defined(__WIN32__) || defined(__WINRT__)
-	return _access(name, 0);
+	return _waccess(WIN_UTF8ToString(name), 0);
 #else
 	return access(name, R_OK);
 #endif
@@ -179,7 +207,11 @@ static int        file_exists_plain(const char *name)
 
 static FILEHANDLE file_open_plain(const char *name, const char *mode)
 {
+#if defined(__WIN32__) || defined(__WINRT__)
+	return (FILEHANDLE) _wfopen(WIN_UTF8ToString(name), WIN_UTF8ToString(mode));
+#else
 	return (FILEHANDLE) fopen(name, mode);
+#endif
 }
 
 static long       file_read_plain(char *buffer, long size, FILEHANDLE handle)
@@ -227,9 +259,63 @@ static int        file_error_plain(FILEHANDLE handle)
 	return ferror((FILE*) handle);
 }
 
+static int        file_rename_plain(const char *oldname, const char *newname)
+{
+#if defined(__WIN32__) || defined(__WINRT__)
+	return _wrename(WIN_UTF8ToString(oldname), WIN_UTF8ToString(newname));
+#else
+	return rename(oldname, newname);
+#endif
+}
+
+static int        file_remove_plain(const char *name)
+{
+#if defined(__WIN32__) || defined(__WINRT__)
+	return _wremove(WIN_UTF8ToString(name));
+#else
+	return remove(name);
+#endif
+}
+
+static int        file_flush_plain(FILEHANDLE handle)
+{
+	int flush_status;
+	flush_status = fflush(handle);
+	if (flush_status != 0)
+	{
+		flush_status = errno;
+	}
+
+	// explicitly call fsync to make sure data makes it to disk
+	int fsync_status;
+#if defined(__WIN32__) || defined(__WINRT__)
+	int descr = _fileno(handle);
+#else
+	int descr = fileno(handle);
+#endif
+	if (descr != -1)
+	{
+#if defined(__WIN32__) || defined(__WINRT__) || defined(__MINGW32__)
+		fsync_status = _commit(descr);
+#else
+		fsync_status = fsync(descr);
+#endif
+		if (fsync_status != 0)
+		{
+			fsync_status = errno;
+		}
+	}
+	else
+	{
+		fsync_status = 0;
+	}
+
+	return (flush_status != 0) ? flush_status : (fsync_status != 0) ? fsync_status : 0;
+}
+
 static int        file_close_plain(FILEHANDLE handle)
 {
-	return fclose((FILE*) handle);
+	return fclose((FILE*)handle);
 }
 
 #ifdef __ANDROID__
@@ -361,10 +447,28 @@ static int        file_error_android_asset(FILEHANDLE handle)
 	return 0;
 }
 
+static int        file_rename_android_asset(const char *oldname, const char *newname)
+{
+	// renaming is not possible
+	return 0;
+}
+
+static int        file_remove_android_asset(const char *name)
+{
+	// removing is not possible
+	return 0;
+}
+
+static int        file_flush_android_asset(FILEHANDLE handle)
+{
+	// flushing not possible
+	return 0;
+}
+
 static int        file_close_android_asset(FILEHANDLE handle)
 {
-    AAsset_close((AAsset *) handle);
-    return 0;
+	AAsset_close((AAsset *)handle);
+	return 0;
 }
 
 static int        file_exists_android_obb_plain(const char *name)
@@ -453,6 +557,24 @@ static long       file_tell_android_obb_plain(FILEHANDLE handle)
 static int        file_error_android_obb_plain(FILEHANDLE handle)
 {
   return ferror((FILE*) handle);
+}
+
+static int        file_rename_android_obb_plain(const char *oldname, const char *newname)
+{
+	// renaming is not possible
+	return 0;
+}
+
+static int        file_remove_android_obb_plain(const char *name)
+{
+	// removing is not possible
+	return 0;
+}
+
+static int        file_flush_android_obb_plain(FILEHANDLE handle)
+{
+	// flushing not possible
+	return 0;
 }
 
 static int        file_close_android_obb_plain(FILEHANDLE handle)
@@ -548,6 +670,24 @@ static long       file_tell_android_obb_mount(FILEHANDLE handle)
 static int        file_error_android_obb_mount(FILEHANDLE handle)
 {
   return ferror((FILE*) handle);
+}
+
+static int        file_rename_android_obb_mount(const char *oldname, const char *newname)
+{
+	// renaming is not possible
+	return 0;
+}
+
+static int        file_remove_android_obb_mount(const char *name)
+{
+	// removing is not possible
+	return 0;
+}
+
+static int        file_flush_android_obb_mount(FILEHANDLE handle)
+{
+	// flushing not possible
+	return 0;
 }
 
 static int        file_close_android_obb_mount(FILEHANDLE handle)

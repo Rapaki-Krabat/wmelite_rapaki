@@ -42,7 +42,7 @@ public:
 private:
 	void CorrectSlashes(char* fileName);
 	FILEHANDLE m_File;
-	BYTE* m_Data;
+	std::unique_ptr<BYTE[]> m_Data;
 	bool m_Compressed;
 	DWORD m_PrefixSize;
 	generic_file_ops *ops;

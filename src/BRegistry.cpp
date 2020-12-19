@@ -241,7 +241,11 @@ void CBRegistry::SaveXml(const AnsiString fileName, PathValueMap& values)
 	doc.Accept(&printer);
 
 	std::ofstream stream;
+#if defined(__WIN32__) || defined(__WINRT__)
 	stream.open(WIN_UTF8ToString(fileName.c_str()));
+#else
+	stream.open(fileName.c_str());
+#endif
 
 	if (!stream.is_open()) return;
 	else

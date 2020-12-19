@@ -38,6 +38,9 @@ typedef struct generic_file_ops_t
 	int        (*file_seek)   (FILEHANDLE handle, off_t offset, int whence);
 	long       (*file_tell)   (FILEHANDLE handle);
 	int        (*file_error)  (FILEHANDLE handle);
+	int        (*file_rename) (const char *oldname, const char *newname);
+	int        (*file_remove) (const char *name);
+	int        (*file_flush)  (FILEHANDLE handle);
 	int        (*file_close)  (FILEHANDLE handle);
 } generic_file_ops;
 

@@ -209,10 +209,10 @@ HRESULT CAdEntity::LoadBuffer(BYTE * Buffer, bool Complete)
 
 			case TOKEN_SPRITE:
 			{
-				SAFE_DELETE(m_Sprite);
+				m_Sprite.invalidate();
 				spr = new CBSprite(Game, this);
 				if(!spr || FAILED(spr->LoadFile((char*)params))) cmd = PARSERR_GENERIC;
-				else m_Sprite = spr;
+				else m_Sprite.replace(spr);
 			}
 			break;
 
@@ -220,7 +220,10 @@ HRESULT CAdEntity::LoadBuffer(BYTE * Buffer, bool Complete)
 			{
 				spr = new CBSprite(Game, this);
 				if(!spr || FAILED(spr->LoadFile((char*)params, AdGame->m_TexTalkLifeTime))) cmd = PARSERR_GENERIC;
-				else m_TalkSprites.Add(spr);
+				else {
+					wl_owning<CBSprite*>* spriteOwner = new wl_owning<CBSprite*>(spr);
+					m_TalkSprites.Add(spriteOwner);
+				}
 			}
 			break;
 
@@ -228,7 +231,10 @@ HRESULT CAdEntity::LoadBuffer(BYTE * Buffer, bool Complete)
 			{
 				spr = new CBSprite(Game, this);
 				if(!spr || FAILED(spr->LoadFile((char*)params, AdGame->m_TexTalkLifeTime))) cmd = PARSERR_GENERIC;
-				else m_TalkSpritesEx.Add(spr);
+				else {
+					wl_owning<CBSprite*>* spriteOwner = new wl_owning<CBSprite*>(spr);
+					m_TalkSpritesEx.Add(spriteOwner);
+				}
 			}
 			break;
 
@@ -367,12 +373,12 @@ HRESULT CAdEntity::LoadBuffer(BYTE * Buffer, bool Complete)
 			{
 				if(CBPlatform::stricmp((char*)params, "sound")==0)
 				{
-					SAFE_DELETE(m_Sprite);
+					m_Sprite.invalidate();
 					if(Game->m_EditorMode)
 					{
 						spr = new CBSprite(Game, this);
 						if(!spr || FAILED(spr->LoadFile("entity_sound.sprite"))) cmd = PARSERR_GENERIC;
-						else m_Sprite = spr;
+						else m_Sprite.replace(spr);
 					}
 					if(Game->m_EditorMode) m_EditorOnly = true;
 					m_Zoomable = false;
@@ -455,7 +461,7 @@ HRESULT CAdEntity::LoadBuffer(BYTE * Buffer, bool Complete)
 		return E_FAIL;
 	}
 
-	if(m_Region && m_Sprite)
+	if(m_Region && (m_Sprite.isValid()))
 	{
 		Game->LOG(0, "Warning: Entity '%s' has both sprite and region.", m_Name);
 	}
@@ -515,9 +521,9 @@ HRESULT CAdEntity::Display()
 		else 
 #endif
 		{
-			if(m_CurrentSprite)
+			if(m_CurrentSprite && (m_CurrentSprite->isValid()))
 			{
-				m_CurrentSprite->Display(m_PosX,
+				m_CurrentSprite->getObject()->Display(m_PosX,
 											m_PosY,
 											(Reg||m_EditorAlwaysRegister)?m_RegisterAlias:NULL,
 											ScaleX,
@@ -541,34 +547,34 @@ HRESULT CAdEntity::Update()
 {
 	m_CurrentSprite = NULL;
 
-	if(m_State==STATE_READY && m_AnimSprite)
+	if((m_State==STATE_READY) && (m_AnimSprite.isValid()))
 	{
-		SAFE_DELETE(m_AnimSprite);
+		m_AnimSprite.invalidate();
 	}
 
 	// finished playing animation?
-	if(m_State==STATE_PLAYING_ANIM && m_AnimSprite!=NULL && m_AnimSprite->m_Finished)
+	if((m_State==STATE_PLAYING_ANIM) && (m_AnimSprite.isValid()) && (m_AnimSprite->m_Finished))
 	{
 		m_State = STATE_READY;
-		m_CurrentSprite = m_AnimSprite;
+		m_CurrentSprite = m_AnimSprite.toNonOwning();
 	}
 
 	if(m_Sentence && m_State!=STATE_TALKING) m_Sentence->Finish();
 
 	// default: stand animation
-	if(!m_CurrentSprite) m_CurrentSprite = m_Sprite;
+	if(!m_CurrentSprite) m_CurrentSprite = m_Sprite.toNonOwning();
 
 	switch(m_State)
 	{
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_PLAYING_ANIM:
-			m_CurrentSprite = m_AnimSprite;
+			m_CurrentSprite = m_AnimSprite.toNonOwning();
 		break;
 
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_READY:
-			if(!m_AnimSprite)
-				m_CurrentSprite = m_Sprite;
+			if(!m_AnimSprite.isValid())
+				m_CurrentSprite = m_Sprite.toNonOwning();
 		break;
 
 		//////////////////////////////////////////////////////////////////////////
@@ -578,7 +584,7 @@ HRESULT CAdEntity::Update()
 			if(m_Sentence->m_CurrentSprite) m_TempSprite2 = m_Sentence->m_CurrentSprite;
 
 			bool TimeIsUp = (m_Sentence->m_Sound && m_Sentence->m_SoundStarted && (!m_Sentence->m_Sound->IsPlaying()&&!m_Sentence->m_Sound->IsPaused())) || (!m_Sentence->m_Sound && m_Sentence->m_Duration <= Game->m_Timer - m_Sentence->m_StartTime);
-			if(m_TempSprite2==NULL || m_TempSprite2->m_Finished || (/*m_TempSprite2->m_Looping &&*/ TimeIsUp))
+			if((m_TempSprite2 == NULL) || (!m_TempSprite2->isValid()) || (m_TempSprite2->getObject()->m_Finished) || (/*m_TempSprite2->m_Looping &&*/ TimeIsUp))
 			{
 				if(TimeIsUp)
 				{
@@ -589,9 +595,9 @@ HRESULT CAdEntity::Update()
 				else
 				{
 					m_TempSprite2 = GetTalkStance(m_Sentence->GetNextStance());
-					if(m_TempSprite2)
+					if(m_TempSprite2 && m_TempSprite2->isValid())
 					{
-						m_TempSprite2->Reset();
+						m_TempSprite2->getObject()->Reset();
 						m_CurrentSprite = m_TempSprite2;						
 					}
 					((CAdGame*)Game)->AddSentence(m_Sentence);
@@ -607,13 +613,14 @@ HRESULT CAdEntity::Update()
 	}
 
 
-	if(m_CurrentSprite)
+	if(m_CurrentSprite && m_CurrentSprite->isValid())
 	{
-		m_CurrentSprite->GetCurrentFrame(m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100);
-		if(m_CurrentSprite->m_Changed)
+		CBSprite* tmpSpr = m_CurrentSprite->getObject();
+		tmpSpr->GetCurrentFrame(m_Zoomable?((CAdGame*)Game)->m_Scene->GetZoomAt(m_PosX, m_PosY):100);
+		if(tmpSpr->m_Changed)
 		{
-			m_PosX += m_CurrentSprite->m_MoveX;
-			m_PosY += m_CurrentSprite->m_MoveY;
+			m_PosX += tmpSpr->m_MoveX;
+			m_PosY += tmpSpr->m_MoveY;
 		}
 	}
 
@@ -976,7 +983,7 @@ HRESULT CAdEntity::SaveAsText(CBDynBuffer *Buffer, int Indent)
 		Buffer->PutTextIndent(Indent+2, "SCRIPT=\"%s\"\n", m_Scripts[i]->m_Filename);
 	}
 
-	if(m_Subtype==ENTITY_NORMAL && m_Sprite && m_Sprite->m_Filename)
+	if(m_Subtype==ENTITY_NORMAL && m_Sprite.isValid() && m_Sprite->m_Filename)
 		Buffer->PutTextIndent(Indent+2, "SPRITE=\"%s\"\n", m_Sprite->m_Filename);
 
 	if(m_Subtype==ENTITY_SOUND && m_SFX && m_SFX->m_SoundFilename)
@@ -1022,13 +1029,13 @@ HRESULT CAdEntity::SaveAsText(CBDynBuffer *Buffer, int Indent)
 //////////////////////////////////////////////////////////////////////////
 int CAdEntity::GetHeight()
 {
-	if(m_Region && !m_Sprite)
+	if(m_Region && !m_Sprite.isValid())
 	{
 		return m_Region->m_Rect.bottom - m_Region->m_Rect.top;
 	}
 	else
 	{
-		if(m_CurrentSprite==NULL) m_CurrentSprite = m_Sprite;
+		if(m_CurrentSprite==NULL) m_CurrentSprite = m_Sprite.toNonOwning();
 		 return CAdObject::GetHeight();
 	}
 }
@@ -1037,7 +1044,7 @@ int CAdEntity::GetHeight()
 //////////////////////////////////////////////////////////////////////////
 void CAdEntity::UpdatePosition()
 {
-	if(m_Region && !m_Sprite)
+	if(m_Region && !m_Sprite.isValid())
 	{
 		m_PosX = m_Region->m_Rect.left + (m_Region->m_Rect.right - m_Region->m_Rect.left) / 2;
 		m_PosY = m_Region->m_Rect.bottom;		
@@ -1082,23 +1089,23 @@ void CAdEntity::SetItem(char *ItemName)
 HRESULT CAdEntity::SetSprite(char* Filename)
 {
 	bool SetCurrent = false;
-	if(m_CurrentSprite == m_Sprite)
+	if(m_CurrentSprite == &m_Sprite) // TODO does it work due to implicit downcasting?
 	{
 		m_CurrentSprite = NULL;
 		SetCurrent = true;
 	}
 
-	SAFE_DELETE(m_Sprite);
+	m_Sprite.invalidate();
 	CBSprite* spr = new CBSprite(Game, this);
 	if(!spr || FAILED(spr->LoadFile(Filename)))
 	{
-		SAFE_DELETE(m_Sprite);
+		m_Sprite.invalidate();
 		return E_FAIL;
 	}
 	else
 	{
-		m_Sprite = spr;
-		m_CurrentSprite = m_Sprite;
+		m_Sprite.replace(spr);
+		m_CurrentSprite = m_Sprite.toNonOwning();
 		return S_OK;
 	}
 }

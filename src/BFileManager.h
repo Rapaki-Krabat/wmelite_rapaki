@@ -57,7 +57,7 @@ public:
 	} TPathType;
 	HRESULT AddPath(TPathType Type, const char* Path);
 	HRESULT RequestCD(int CD, char* PackageFile, char* Filename);
-	HRESULT SaveFile(char* Filename, BYTE* Buffer, DWORD BufferSize, bool Compressed=false, BYTE* PrefixBuffer=NULL, DWORD PrefixSize=0);
+	HRESULT SaveFile(char* Filename, BYTE* Buffer, DWORD BufferSize, bool Compressed=false, const char* PrefixBuffer=NULL, DWORD PrefixSize=0);
 	BYTE* ReadWholeFile(const char* Filename, DWORD* Size=NULL, bool MustExist=true, bool testOldFile=false);
 	CBFileManager(CBGame* inGame=NULL);
 	virtual ~CBFileManager();
@@ -79,7 +79,7 @@ private:
 	map<string, CBFileEntry*>::iterator m_FilesIter;
 #endif
 	bool IsValidPackage(const AnsiString& fileName) const;
-	
+	generic_file_ops *ops;
 };
 
 #endif

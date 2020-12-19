@@ -27,8 +27,6 @@ THE SOFTWARE.
 #include "PlatformSDL.h"
 #include "PathUtil.h"
 
-#include "SDL_log.h"
-
 //////////////////////////////////////////////////////////////////////
 static inline unsigned Sqr (int x)
 {
