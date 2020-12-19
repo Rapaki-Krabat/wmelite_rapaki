@@ -23,6 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/**
+* @file GameAutomator.cpp
+*
+*/
+
 #include "dcgf.h"
 #include "GameAutomator.h"
 
@@ -48,11 +53,23 @@ GameAutomator::~GameAutomator()
 //////////////////////////////////////////////////////////////////////////
 // high level scripting interface
 //////////////////////////////////////////////////////////////////////////
+/**
+* Game Automator scripting interface: Methods.
+*
+* <b>All coordinates are in game dimensions (not screen, not points vs pixels...)!</b>
+*/
 HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)
 {
 	//////////////////////////////////////////////////////////////////////////
 	// AddMouseButtonEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>AddMouseButtonEvent(int xCoordinate, int yCoordinate, string nameOfButton, string pressRelease);</b>
+    * @param xCoordinate - Mouse/Touch event X coordinate
+    * @param yCoordinate - Mouse/Touch event Y coordinate
+    * @param nameOfButton - Either "left", "middle" or "right"
+    * @param pressRelease - Either "down" or "up"
+    */
 	if (strcmp(Name, "AddMouseButtonEvent") == 0)
 	{
 		Stack->CorrectParams(4);
@@ -85,6 +102,11 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// AddMouseMotionEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>AddMouseMotionEvent(int xCoordinate, int yCoordinate);</b>
+    * @param xCoordinate - Mouse/Touch event X coordinate
+    * @param yCoordinate - Mouse/Touch event Y coordinate
+    */
 	else if (strcmp(Name, "AddMouseMotionEvent") == 0)
 	{
 		Stack->CorrectParams(2);
@@ -107,6 +129,9 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// AddFingerMotionEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>AddFingerMotionEvent();</b>
+    */
 	else if (strcmp(Name, "AddFingerMotionEvent") == 0)
 	{
 		Stack->CorrectParams(0);
@@ -122,6 +147,10 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// AddKeyEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>AddKeyEvent(int keycode);</b>
+    * @param keycode - Keycode as defined in SDL_Keycode struct
+    */
 	else if (strcmp(Name, "AddKeyEvent") == 0)
 	{
 		Stack->CorrectParams(1);
@@ -139,6 +168,10 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// ClearReportedEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>ClearReportedEvent(int position);</b>
+    * @param position - which engine event in the queue to delete (== 0 if omitted)
+    */
 	else if (strcmp(Name, "ClearReportedEvent") == 0)
 	{
 		Stack->CorrectParams(1);
@@ -158,6 +191,10 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 	//////////////////////////////////////////////////////////////////////////
 	// GetReportedEvent
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>GetReportedEvent(int position);</b>
+    * @param position - which engine event in the queue to return (== 0 if omitted)
+    */
 	else if (strcmp(Name, "GetReportedEvent") == 0)
 	{
 		Stack->CorrectParams(1);
@@ -179,6 +216,10 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 }
 
 //////////////////////////////////////////////////////////////////////////
+/**
+* Game Automator scripting interface: Properties.
+*
+*/
 CScValue* GameAutomator::ScGetProperty(char *Name)
 {
 	m_ScValue->SetNULL();
@@ -211,6 +252,10 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// ReportedEventSize
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.ReportedEventSize (R/O)</b>
+    * @param int - size of the engine event queue
+    */
 	else if (strcmp(Name, "ReportedEventSize") == 0)
 	{
 		m_ScValue->SetInt((int) reportedEvents.size());
@@ -221,11 +266,19 @@ CScValue* GameAutomator::ScGetProperty(char *Name)
 }
 
 //////////////////////////////////////////////////////////////////////////
+/**
+* Game Automator scripting interface: Properties.
+*
+*/
 HRESULT GameAutomator::ScSetProperty(char *Name, CScValue *Value)
 {
 	//////////////////////////////////////////////////////////////////////////
 	// Enable
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.Enable (R/W)</b>
+    * @param bool - enable (true) or disable (false) game automator
+    */
 	if (strcmp(Name, "Enable") == 0) {
 		m_Enable = Value->GetBool();
 		return S_OK;

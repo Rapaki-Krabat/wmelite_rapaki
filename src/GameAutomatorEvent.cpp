@@ -23,6 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+/**
+* @file GameAutomatorEvent.cpp
+*
+*/
+
 #include "dcgf.h"
 #include "GameAutomatorEvent.h"
 
@@ -35,6 +40,10 @@ HRESULT GameAutomatorEvent::ScCallMethod(CScScript* Script, CScStack *Stack, CSc
 }
 
 //////////////////////////////////////////////////////////////////////////
+/**
+* Game Automator event scripting interface: Properties.
+*
+*/
 CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 {
 	m_ScValue->SetNULL();
@@ -42,6 +51,10 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// Source
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.Source (R/O)</b>
+    * @param string - lower case name of the ::GameAutomatorEventSource enum
+    */
 	if (strcmp(Name, "Source") == 0)
 	{
 		switch (m_Source)
@@ -64,6 +77,12 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventSource::SETPROPERTY:
 			m_ScValue->SetString("setproperty");
 			break;
+		case GameAutomatorEventSource::WINDOW:
+			m_ScValue->SetString("window");
+			break;
+		default:
+			m_ScValue->SetString("ERROR");
+			break;
 		}
 
 		return m_ScValue;
@@ -72,6 +91,10 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// Type
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.Type (R/O)</b>
+    * @param string - lower case name of the ::GameAutomatorEventType enum
+    */
 	if (strcmp(Name, "Type") == 0)
 	{
 		switch (m_Type)
@@ -106,6 +129,12 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventType::GETRESPONSE:
 			m_ScValue->SetString("getresponse");
 			break;
+		case GameAutomatorEventType::SYSEXCLUSIVE:
+			m_ScValue->SetString("sysexclusive");
+			break;
+		default:
+			m_ScValue->SetString("ERROR");
+			break;
 		}
 
 		return m_ScValue;
@@ -114,6 +143,10 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// TurnToDir
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.TurnToDir (R/O)</b>
+    * @param int - integer value of the direction of the ::TDirection command
+    */
 	else if (strcmp(Name, "TurnToDir") == 0)
 	{
 		m_ScValue->SetInt(static_cast<int>(m_TurntoDir));
@@ -123,6 +156,10 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// Name
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.Name (R/O)</b>
+    * @param string - name of the object that generated the event
+    */
 	else if (strcmp(Name, "Name") == 0)
 	{
 		if (m_Name != NULL)
@@ -139,6 +176,10 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// Sentence
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.Sentence (R/O)</b>
+    * @param string - the sentence that is being displayed / spoken
+    */
 	else if (strcmp(Name, "Sentence") == 0)
 	{
 		if (m_Sentence != NULL)
@@ -155,6 +196,10 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// X
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.X (R/O)</b>
+    * @param int - X coordinate
+    */
 	else if (strcmp(Name, "X") == 0)
 	{
 		m_ScValue->SetInt(m_X);
@@ -164,6 +209,10 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// Y
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.Y (R/O)</b>
+    * @param int - Y coordinate
+    */
 	else if (strcmp(Name, "Y") == 0)
 	{
 		m_ScValue->SetInt(m_Y);
@@ -173,6 +222,10 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	//////////////////////////////////////////////////////////////////////////
 	// Interactive
 	//////////////////////////////////////////////////////////////////////////
+    /**
+    * @brief <b>.Interactive (R/O)</b>
+    * @param bool - value of Game.Interactive
+    */
 	else if (strcmp(Name, "Interactive") == 0)
 	{
 		m_ScValue->SetBool(m_Interactive);

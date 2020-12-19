@@ -3,10 +3,10 @@ CC=gcc
 
 DEFINES=USE_SDL_MIXER
 
-CFLAGS=-I$(IDIR) -I. -O2 `sdl2-config --cflags` `freetype-config --cflags` -Wall -Wextra
+CFLAGS=-I$(IDIR) -I. -g -O2 `sdl2-config --cflags` `freetype-config --cflags` -Wall -Wextra
 
 CPP=g++
-CPPFLAGS=-I$(IDIR) -I. -I../dependencies/libeffects-android/jni/ -I../dependencies/libeffects-android/jni/Reverb/lib/ -I../dependencies/libeffects-android/jni/Common/lib/ -I../dependencies/libecho/jni/ -D$(DEFINES) -O2 `freetype-config --cflags` `sdl2-config --cflags` -Wall -Wextra -Wno-write-strings -Wno-conversion-null -Wno-unused
+CPPFLAGS=-I$(IDIR) -I. -g -I../../libeffectsprivate/ -I../../libeffectsprivate/Reverb/lib/ -I../../libeffectsprivate/Common/lib/ -I../../libecho/include/ -D$(DEFINES) -O2 `freetype-config --cflags` `sdl2-config --cflags` -Wall -Wextra -Wno-write-strings -Wno-conversion-null -Wno-unused
 
 SRCDIR=../src
 
