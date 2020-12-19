@@ -202,8 +202,8 @@ HRESULT GameAutomator::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack
 
 		if (reportedEvents.size() > pos)
 		{
-			GameAutomatorEvent* repEvent = reportedEvents.at(pos);
-			Stack->PushNative(repEvent, true);
+			GameAutomatorEvent* repEvent = new GameAutomatorEvent(*reportedEvents.at(pos));
+			Stack->PushNative(repEvent, false);
 		}
 		else
 		{
