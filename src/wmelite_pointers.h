@@ -26,7 +26,7 @@ public:
 	/**
 	* Return the object from the owner.
 	*/
-	const T getObject(void) const { return obj; }
+	const T getObject(void) const { return this->obj; }
 
 };
 

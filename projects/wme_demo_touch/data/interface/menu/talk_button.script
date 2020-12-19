@@ -1,9 +1,0 @@
-#include "scripts\base.inc"
-
-global WinMenu;
-
-on "ButtonRelease"
-{
-	WinMenu.ApplyEvent("Talk");	
-}
-
