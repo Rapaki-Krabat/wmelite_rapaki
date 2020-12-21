@@ -499,7 +499,7 @@ void CSXStore::OnRestoreFinished(bool error)
 	}
 	Game->m_Automator->AddAutomatorEvent(
 		new GameAutomatorEvent(Game, GameAutomatorEventSource::STORE, GameAutomatorEventType::STOREEVENT, 
-		(error == true) ? "TransactionsRestoreFailed" : "TransactionsRestoreFinished"));
+		(error == true) ? const_cast<char*>("TransactionsRestoreFailed") : const_cast<char*>("TransactionsRestoreFinished")));
 
 }
 
