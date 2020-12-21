@@ -46,7 +46,8 @@ SCENE, /*!< scene */
 ENTITY, /*!< entity */
 BUTTON, /*!< button */
 SETPROPERTY, /*!< setproperty */
-WINDOW /*!< window */
+WINDOW, /*!< window */
+STORE /*!< store */
 };
 
 /**
@@ -64,7 +65,8 @@ INTERACTIVE, /*!< interactive */
 PLAYANIM, /*!< playanim */
 TAKEITEM, /*!< takeitem */
 GETRESPONSE, /*!< getresponse */
-SYSEXCLUSIVE /*!< sysexclusive */
+SYSEXCLUSIVE, /*!< sysexclusive */
+STOREEVENT /*!< storeevent */
 };
 
 /**
@@ -83,6 +85,12 @@ public:
          * <b>CAdObject::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)</b> for script method call <b>"TakeItem"</b>.
          *
          * <b>CUIWindow::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)</b> for script method call <b>"GoSystemExclusive"</b>.
+		 *
+		 * <b>CSXStore::ReceiveProductsEnd()</b> for event <b>"ProductsValidated"</b>.
+		 *
+		 * <b>CSXStore::OnRestoreFinished(bool error)</b> for events <b>"TransactionsRestoreFailed"</b> resp <b>"TransactionsRestoreFinished"</b>.
+		 *
+		 * <b>CSXStore::ReceiveTransactionsEnd()</b> for event <b>"TransactionsUpdated"</b>.
          *
 	  * This generic constructor is also implicitly called by all other specific ctors.
 	  */
