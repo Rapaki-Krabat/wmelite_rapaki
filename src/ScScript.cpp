@@ -295,6 +295,8 @@ HRESULT CScScript::CreateThread(CScScript *Original, DWORD InitIP, const char* E
 	m_Engine = Original->m_Engine;
 	m_ParentScript = Original;
 
+	m_IgnoreFreeze = Original->m_IgnoreFreeze;
+
 	return S_OK;
 }
 
@@ -341,6 +343,8 @@ HRESULT CScScript::CreateMethodThread(CScScript *Original, const char* MethodNam
 
 	m_Engine = Original->m_Engine;
 	m_ParentScript = Original;
+
+	m_IgnoreFreeze = Original->m_IgnoreFreeze;
 
 	return S_OK;
 }
