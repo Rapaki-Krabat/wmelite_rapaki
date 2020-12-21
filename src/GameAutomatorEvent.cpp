@@ -80,6 +80,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventSource::WINDOW:
 			m_ScValue->SetString("window");
 			break;
+		case GameAutomatorEventSource::STORE:
+			m_ScValue->SetString("store");
+			break;
 		default:
 			m_ScValue->SetString("ERROR");
 			break;
@@ -131,6 +134,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 			break;
 		case GameAutomatorEventType::SYSEXCLUSIVE:
 			m_ScValue->SetString("sysexclusive");
+			break;
+		case GameAutomatorEventType::STOREEVENT:
+			m_ScValue->SetString("storeevent");
 			break;
 		default:
 			m_ScValue->SetString("ERROR");
