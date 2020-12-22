@@ -124,7 +124,7 @@ generic_file_ops file_ops_android_asset =
   .file_tell   = file_tell_android_asset,
   .file_error  = file_error_android_asset,
   .file_rename = file_rename_android_asset,
-  .file_rename = file_remove_android_asset,
+  .file_remove = file_remove_android_asset,
   .file_flush  = file_flush_android_asset,
   .file_close  = file_close_android_asset
 };
@@ -141,7 +141,7 @@ generic_file_ops file_ops_android_obb_plain =
   .file_tell   = file_tell_android_obb_plain,
   .file_error  = file_error_android_obb_plain,
   .file_rename = file_rename_android_obb_plain,
-  .file_rename = file_remove_android_obb_plain,
+  .file_remove = file_remove_android_obb_plain,
   .file_flush  = file_flush_android_obb_plain,
   .file_close  = file_close_android_obb_plain
 };
@@ -158,7 +158,7 @@ generic_file_ops file_ops_android_obb_mount =
   .file_tell   = file_tell_android_obb_mount,
   .file_error  = file_error_android_obb_mount,
   .file_rename = file_rename_android_obb_mount,
-  .file_rename = file_remove_android_obb_mount,
+  .file_remove = file_remove_android_obb_mount,
   .file_flush  = file_flush_android_obb_mount,
   .file_close  = file_close_android_obb_mount
 };
