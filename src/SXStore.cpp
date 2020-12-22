@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include "StoreKit_functions.h"
 #include "StoreKit_callbacks.h"
 
+#include "GameAutomator.h"
+
 IMPLEMENT_PERSISTENT(CSXStore, false);
 
 //////////////////////////////////////////////////////////////////////////
@@ -392,6 +394,8 @@ void CSXStore::ReceiveProductsStart()
 void CSXStore::ReceiveProductsEnd()
 {
 	if (m_LastProductRequestOwner) m_LastProductRequestOwner->ApplyEvent("ProductsValidated");
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::STORE, GameAutomatorEventType::STOREEVENT, "ProductsValidated"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -423,6 +427,8 @@ void CSXStore::ReceiveTransactionsEnd()
 {
 	if (m_LastPurchaseOwner) m_LastPurchaseOwner->ApplyEvent("TransactionsUpdated");
 	else Game->ApplyEvent("TransactionsUpdated");    
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::STORE, GameAutomatorEventType::STOREEVENT, "TransactionsUpdated"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -491,6 +497,10 @@ void CSXStore::OnRestoreFinished(bool error)
 		if (error) m_LastRestoreOwner->ApplyEvent("TransactionsRestoreFailed");
 		else m_LastRestoreOwner->ApplyEvent("TransactionsRestoreFinished");
 	}
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::STORE, GameAutomatorEventType::STOREEVENT, 
+		(error == true) ? const_cast<char*>("TransactionsRestoreFailed") : const_cast<char*>("TransactionsRestoreFinished")));
+
 }
 
 //////////////////////////////////////////////////////////////////////////

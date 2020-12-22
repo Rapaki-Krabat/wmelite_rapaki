@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "BSaveThumbHelper.h"
 #include "SXStore.h"
 #include "SDL.h"
+#include "GameAutomator.h"
 
 typedef void (*ENGINE_LOG_CALLBACK)(char* Text, HRESULT Result, void* Data);
 
@@ -378,7 +379,8 @@ private:
 
 	void FileSystemTests();
 
-
+public:
+	GameAutomator* m_Automator;
 
 protected:
 	// WME Lite specific

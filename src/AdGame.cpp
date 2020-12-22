@@ -259,6 +259,10 @@ HRESULT CAdGame::ChangeScene(char *Filename, bool FadeIn)
 			m_Scene->LoadState();
 		}
 		if(FadeIn) Game->m_TransMgr->Start(TRANSITION_FADE_IN);
+
+		Game->m_Automator->AddAutomatorEvent(
+			new GameAutomatorEvent(Game, GameAutomatorEventSource::SCENE, GameAutomatorEventType::CHANGE, m_Scene->m_Name, m_PrevSceneName));
+
 		return ret;
 	}
 	else return E_FAIL;
@@ -536,7 +540,10 @@ HRESULT CAdGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 			m_ResponseBox->m_WaitingScript = Script;
 			Script->WaitForExclusive(m_ResponseBox);
 			m_State = GAME_SEMI_FROZEN;
-			m_StateEx = GAME_WAITING_RESPONSE;			
+			m_StateEx = GAME_WAITING_RESPONSE;
+
+			Game->m_Automator->AddAutomatorEvent(
+				new GameAutomatorEvent(Game, GameAutomatorEventSource::NONE, GameAutomatorEventType::GETRESPONSE, Script->m_Filename));
 		}
 		else{			
 			Script->RuntimeError("Game.GetResponse: response box is not defined");
@@ -557,6 +564,50 @@ HRESULT CAdGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *This
 		}
 		else{			
 			Script->RuntimeError("Game.GetNumResponses: response box is not defined");
+			Stack->PushNULL();
+		}
+		return S_OK;
+	}
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// GetNumResponseButtons
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "GetNumResponseButtons") == 0) {
+		Stack->CorrectParams(0);
+		if (m_ResponseBox) {
+			// better don't touch the responses, as this is meant to query the responses during display
+			// m_ResponseBox->WeedResponses();
+			Stack->PushInt(m_ResponseBox->m_RespButtons.GetSize());
+		}
+		else {
+			Script->RuntimeError("Game.GetNumResponseButtons: response box is not defined");
+			Stack->PushNULL();
+		}
+		return S_OK;
+	}
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// GetResponseButton
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "GetResponseButton") == 0) {
+		Stack->CorrectParams(1);
+		int index = Stack->Pop()->GetInt(0);
+		if (m_ResponseBox) {
+			// better don't touch the responses, as this is meant to query the responses during display
+			// m_ResponseBox->WeedResponses();
+			if (index >= 0 && index < m_ResponseBox->m_RespButtons.GetSize())
+			{
+				Stack->PushNative(m_ResponseBox->m_RespButtons[index], true);
+			}
+			else
+			{
+				Stack->PushNULL();
+			}
+		}
+		else {
+			Script->RuntimeError("Game.GetNumResponseButtons: response box is not defined");
 			Stack->PushNULL();
 		}
 		return S_OK;

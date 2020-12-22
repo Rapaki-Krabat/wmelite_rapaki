@@ -283,6 +283,7 @@ CBGame::CBGame():CBObject(this)
 
 	m_Store = NULL;
 
+	m_Automator = new GameAutomator(this);
 }
 
 
@@ -299,6 +300,8 @@ CBGame::~CBGame()
 	m_Registry->WriteBool("System", "LastRun", true);
 
 	Cleanup();
+
+	SAFE_DELETE(m_Automator);
 
 	SAFE_DELETE_ARRAY(m_LocalSaveDir);
 	SAFE_DELETE_ARRAY(m_SettingsGameFile);
@@ -1974,6 +1977,25 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+	// GetWindow
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "GetWindow") == 0)
+	{
+		Stack->CorrectParams(1);
+		CScValue* Val = Stack->Pop();
+		for (int i = 0; i < m_Windows.GetSize(); i++)
+		{
+			if (strcmp(m_Windows[i]->m_Name, Val->GetString()) == 0)
+			{
+				Stack->PushNative(m_Windows[i], true);
+				return S_OK;
+			}
+		}
+		Stack->PushNULL();
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 	// OpenDocument
 	//////////////////////////////////////////////////////////////////////////
 	else if(strcmp(Name, "OpenDocument")==0)
@@ -3175,6 +3197,15 @@ CScValue* CBGame::ScGetProperty(char *Name)
 		return m_ScValue;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
+	// GameAutomator
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "GameAutomator") == 0)
+	{
+		m_ScValue->SetNative(m_Automator, true);
+		return m_ScValue;
+	}
+
 	else return CBObject::ScGetProperty(Name);
 }
 
@@ -3238,6 +3269,8 @@ HRESULT CBGame::ScSetProperty(char *Name, CScValue *Value)
 	else if(strcmp(Name, "Interactive")==0)
 	{
 		SetInteractive(Value->GetBool());
+		m_Automator->AddAutomatorEvent(
+			new GameAutomatorEvent(this, GameAutomatorEventSource::SETPROPERTY, GameAutomatorEventType::INTERACTIVE, "game", m_Interactive));
 		return S_OK;
 	}
 
@@ -4581,6 +4614,15 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 		m_MouseEntryLeaveTouchQuirk = false;
 	}
 
+	// version check for the game automator
+	if (PersistMgr->CheckVersion(1, 2, 2))
+	{
+		PersistMgr->Transfer(TMEMBER(m_Automator));
+	}
+	else
+	{
+		m_Automator = new GameAutomator();
+	}
 
 	if (!PersistMgr->m_Saving) m_Quitting = false;
 
@@ -4591,6 +4633,8 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 		SetKeepDisplayOn((m_ForceScreenOnState == true) ? 1 : 0);
 	}
 #endif
+
+
 
 	return S_OK;
 }
