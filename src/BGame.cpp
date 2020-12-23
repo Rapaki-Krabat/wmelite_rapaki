@@ -89,9 +89,7 @@ CBGame::CBGame():CBObject(this)
 
 	m_MathClass = NULL;
 
-	m_DEBUG_LogFile = NULL;
 	m_DEBUG_DebugMode = false;
-	m_DEBUG_LogWriteMode = false;
 	m_DEBUG_AbsolutePathWarning = true;
 	m_DEBUG_ShowFPS = false;
 
@@ -284,6 +282,7 @@ CBGame::CBGame():CBObject(this)
 	m_Store = NULL;
 
 	m_Automator = new GameAutomator(this);
+	m_Logger = new Logger();
 }
 
 
@@ -331,6 +330,8 @@ CBGame::~CBGame()
 
 
 	DEBUG_DebugDisable();
+	SAFE_DELETE(m_Logger);
+
 	CBPlatform::OutputDebugString("--- shutting down normally ---\n");
 }
 
@@ -511,16 +512,14 @@ HRESULT CBGame::Initialize3() // renderer is initialized
 //////////////////////////////////////////////////////////////////////
 void CBGame::DEBUG_DebugEnable(const char* Filename, bool writeLogOnly)
 {
-	if (writeLogOnly)
-	{
-		m_DEBUG_LogWriteMode = true;
-	}
-	else
+	if (!writeLogOnly)
 	{
 		m_DEBUG_DebugMode = true;
 	}
+	m_Logger->switchLogging(true, Filename);
 
 #ifndef __IPHONEOS__
+#if 0
 	if(Filename)m_DEBUG_LogFile = fopen(Filename, "a+");
 	else m_DEBUG_LogFile = fopen("./zz_debug.log", "a+");
 
@@ -531,6 +530,7 @@ void CBGame::DEBUG_DebugEnable(const char* Filename, bool writeLogOnly)
 	}
 
 	if(m_DEBUG_LogFile!=NULL) fprintf(m_DEBUG_LogFile, "\n");
+#endif
 #endif
 
 	time_t timeNow;
@@ -555,70 +555,30 @@ void CBGame::DEBUG_DebugEnable(const char* Filename, bool writeLogOnly)
 //////////////////////////////////////////////////////////////////////
 void CBGame::DEBUG_DebugDisable()
 {
-	if(m_DEBUG_LogFile != NULL)
-	{
-		LOG(0, "********** DEBUG LOG CLOSED ********************************************");
-		fclose(m_DEBUG_LogFile);
-		m_DEBUG_LogFile = NULL;
-	}
 	m_DEBUG_DebugMode = false;
-	m_DEBUG_LogWriteMode = false;
+	m_Logger->switchLogging(false, "");
 }
 
 
 //////////////////////////////////////////////////////////////////////
 void CBGame::LOG(HRESULT res, LPCSTR fmt, ...)
 {
-#if !defined(__IPHONEOS__) && !defined(__ANDROID__) && !defined(__WINRT__)
-	if ((!m_DEBUG_DebugMode) && (!m_DEBUG_LogWriteMode)) return;
-#endif
-	time_t timeNow;
-	time(&timeNow);
-	struct tm* tm = localtime(&timeNow);
-
 	char buff[512];
-	va_list va;
+	va_list args;
+	va_start(args, fmt);
 
-	va_start(va, fmt);
-	vsprintf(buff, fmt, va);
-	va_end(va);
-
-#if defined(__MACOSX__)
-	printf("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
-	fflush(stdout);
-#else
-
-#ifdef __ANDROID__
-	// that one should not have performance impact
-	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
-#endif
-
-#if defined(__WINRT__)
-	SDL_Log("%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
-#endif
-
-#if defined(__IPHONEOS__)
-	// one shows log info also when run on "other" devices
-
-	os_log_info(OS_LOG_DEFAULT, "%02d:%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
-	// os_log_info(OS_LOG_DEFAULT, "%02d:%02d:%02d: %{public}s\n", tm->tm_hour, tm->tm_min, tm->tm_sec, buff);
-#endif
-
-	// this still assurres ios wont write anything to file
-	if (m_DEBUG_LogFile == NULL) return;
+	vsprintf(buff, fmt, args);
 
 	// redirect to an engine's own callback
-	if(m_EngineLogCallback)
+	if (m_EngineLogCallback)
 	{
 		m_EngineLogCallback(buff, res, m_EngineLogCallbackData);
 	}
-	if(m_DebugMgr) m_DebugMgr->OnLog(res, buff);
+	if (m_DebugMgr) m_DebugMgr->OnLog(res, buff);
 
-	fprintf(m_DEBUG_LogFile, "%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, buff);
-	fflush(m_DEBUG_LogFile);
-#endif
 
-	//QuickMessage(buff);
+	if (m_Logger) m_Logger->LOG(res, fmt, buff);
+	va_end(args);
 }
 
 
