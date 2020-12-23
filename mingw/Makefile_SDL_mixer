@@ -41,7 +41,7 @@ BEvent.o BFader.o BFile.o BFileEntry.o BFileManager.o BFontBitmap.o BFont.o BFon
 BGame.o BImage.o BKeyboardState.o BNamedObject.o BObject.o BPackage.o BParser.o BPersistMgr.o BPkgFile.o BPoint.o \
 BQuickMsg.o BRegion.o BRegistry.o BRenderer.o BRenderSDL.o BResourceFile.o BResources.o BSaveThumbFile.o BSaveThumbHelper.o \
 BScriptable.o BScriptHolder.o BSound.o BSprite.o BStringTable.o BSubFrame.o BSurface.o BSurfaceSDL.o BSurfaceStorage.o \
-BTransitionMgr.o BViewport.o crc.o FontGlyphCache.o GameAutomator.o GameAutomatorEvent.o InAppSimulator.o \ 
+BTransitionMgr.o BViewport.o crc.o FontGlyphCache.o GameAutomator.o GameAutomatorEvent.o InAppSimulator.o \
 Logger.o main.o MathUtil.o Matrix4.o PartEmitter.o PartForce.o \
 PartParticle.o PathUtil.o PlatformSDL.o ScEngine.o ScScript.o ScStack.o ScValue.o SdlUtil.o StringUtil.o SXArray.o SXDate.o \
 SXFile.o SXMath.o SXMemBuffer.o SxObject.o SXStore.o SXString.o SysClass.o SysClassRegistry.o SysInstance.o tinyxml.o \
