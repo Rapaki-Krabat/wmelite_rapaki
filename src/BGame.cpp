@@ -2387,8 +2387,14 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 		Stack->CorrectParams(1);
 		int keepOn = Stack->Pop()->GetInt();
 #if defined(__ANDROID__) || defined(__IPHONEOS__) || defined(__WINRT__)
-		SetKeepDisplayOn(keepOn);
-		m_ForceScreenOnState = (keepOn != 0) ? true : false;
+		// ignore requests to setting this to "off" while Game Automator is running
+		// this way the Automator can enforce the screen to stay on for the whole time of the automation
+		// it is up to the Automator scripts to set up a reasonable state after execution
+		if ((keepOn != 0) || (m_Automator->isEnabled() == false))
+		{
+			SetKeepDisplayOn(keepOn);
+			m_ForceScreenOnState = (keepOn != 0) ? true : false;
+		}
 #endif
 		Stack->PushNULL();
 
