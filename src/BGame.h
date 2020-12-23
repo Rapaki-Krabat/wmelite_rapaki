@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "SXStore.h"
 #include "SDL.h"
 #include "GameAutomator.h"
+#include "Logger.h"
 
 typedef void (*ENGINE_LOG_CALLBACK)(char* Text, HRESULT Result, void* Data);
 
@@ -167,9 +168,7 @@ public:
 	void DEBUG_DebugDisable();
 	void DEBUG_DebugEnable(const char* Filename=NULL, bool writeLogOnly=false);
 	bool m_DEBUG_DebugMode;
-	bool m_DEBUG_LogWriteMode;
 	bool m_DEBUG_AbsolutePathWarning;
-	FILE* m_DEBUG_LogFile;
 	int m_Sequence;
 	virtual HRESULT LoadFile(const char * Filename);
 	virtual HRESULT LoadBuffer(BYTE * Buffer, bool Complete=true);
@@ -393,7 +392,8 @@ protected:
 public:
 	void AutoSaveOnExit();
 
-
+private:
+	Logger* m_Logger;
 };
 
 #endif
