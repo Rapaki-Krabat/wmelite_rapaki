@@ -118,6 +118,7 @@ LOCAL_SRC_FILES := ./src/android/SDL_android_main.c \
 ./src/FontGlyphCache.cpp \
 ./src/GameAutomator.cpp \
 ./src/GameAutomatorEvent.cpp \
+./src/Logger.cpp \
 ./src/main.cpp \
 ./src/MathUtil.cpp \
 ./src/Matrix4.cpp \
