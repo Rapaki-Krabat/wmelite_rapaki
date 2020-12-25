@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include "StringUtil.h"
 #include "DisplayConfig.h"
 #include "LicenseCheck.h"
+#include "SendEMail.h"
 
 #ifdef __IPHONEOS__
 #	include "ios_utils.h"
@@ -2475,6 +2476,20 @@ HRESULT CBGame::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisS
 		LicenseCheckResultDetail(resultString, 1024);
 
 		Stack->PushString(resultString);
+
+		return S_OK;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// SendSupportEmail
+	//////////////////////////////////////////////////////////////////////////
+	else if (strcmp(Name, "SendSupportEmail") == 0)
+	{
+		Stack->CorrectParams(0);
+
+		SendEmail::SendMailWithAttachments(PathUtil::GetUserDirectory(), GetDataDir());
+
+		Stack->PushNULL();
 
 		return S_OK;
 	}
