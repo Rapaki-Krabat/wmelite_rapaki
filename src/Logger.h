@@ -41,15 +41,23 @@ THE SOFTWARE.
 
 #include <cstdio>
 
+#include "FileOperations.h"
+
 class Logger
 {
 public:
-	Logger() : m_WriteLog(false), m_DEBUG_LogFile(NULL) {}
+	Logger() : m_WriteLog(false), m_DEBUG_LogFile(NULL) 
+	{
+		m_WriteLog = false;
+		ops = get_file_operations(FILE_ACCESS_VARIANT_PLAIN);
+		m_DEBUG_LogFile = NULL;
+	}
 	void LOG(HRESULT res, LPCSTR fmt, char* buff);
-	void switchLogging(bool on, const char* Filename);
+	void switchLogging(bool on, const char* FilenameBase);
 private:
 	bool m_WriteLog;
-	FILE* m_DEBUG_LogFile;
+	generic_file_ops* ops;
+	FILEHANDLE m_DEBUG_LogFile;
 };
 
 #endif // __WmeLogger_H__
