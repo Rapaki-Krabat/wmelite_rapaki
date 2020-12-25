@@ -52,7 +52,7 @@ void Logger::switchLogging(bool on, const char* FilenameBase)
 	{
 		// rotate older logs / delete old log files
 		AnsiStringList fileList;
-		PathUtil::GetFilesInDirectory(userDir, AnsiString(FilenameBase) + AnsiString("*"), fileList);
+		PathUtil::GetFilesInDirectory(userDir, AnsiString(FilenameBase) + AnsiString("*") + AnsiString(".log"), fileList);
 		fileList.sort();
 		while (fileList.size() > 10)
 		{
