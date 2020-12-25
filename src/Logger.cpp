@@ -33,26 +33,40 @@ THE SOFTWARE.
 #include <ctime>
 
 #include "dctypes.h"
-#include "FileOperations.h"
-#include "DirectoryOperations.h"
 #include "PathUtil.h"
 
-void Logger::switchLogging(bool on, const char* Filename)
+void Logger::switchLogging(bool on, const char* FilenameBase)
 {
+	AnsiString userDir = PathUtil::GetUserDirectory();
+
 	if (m_DEBUG_LogFile != NULL)
 	{
 		LOG(0, "%s", "********** DEBUG LOG CLOSED ********************************************");
-		fclose(m_DEBUG_LogFile);
+		ops->file_flush(m_DEBUG_LogFile);
+		ops->file_close(m_DEBUG_LogFile);
 		m_DEBUG_LogFile = NULL;
+		m_WriteLog = false;
 	}
 
 	if (on == true)
 	{
-		AnsiString userDir = PathUtil::GetUserDirectory();
-		AnsiString logFile = PathUtil::Combine(userDir, Filename);
+		// rotate older logs / delete old log files
+		AnsiStringList fileList;
+		PathUtil::GetFilesInDirectory(userDir, AnsiString(FilenameBase) + AnsiString("*"), fileList);
+		fileList.sort();
+		while (fileList.size() > 10)
+		{
+			AnsiString oldFile = fileList.front();
+			SDL_Log("Trying to remove file '%s' from folder '%s'.\n", oldFile.c_str(), userDir.c_str());
+			ops->file_remove((userDir + oldFile).c_str());
+			fileList.erase(fileList.begin());
+		}
+		
+		AnsiString logFile = PathUtil::Combine(userDir, FilenameBase + PathUtil::GetTimeStamp() + AnsiString(".log"));
 		SDL_Log("Trying to open log file: %s.\n", logFile.c_str());
 
-		m_DEBUG_LogFile = fopen(logFile.c_str(), "w");
+		m_DEBUG_LogFile = ops->file_open(logFile.c_str(), "a+");
+		m_WriteLog = true;
 	}
 }
 
@@ -93,8 +107,8 @@ void Logger::LOG(HRESULT res, LPCSTR fmt, char* buff)
 	// don't write to any file that is not open
 	if (m_DEBUG_LogFile == NULL) return;
 
-	fprintf(m_DEBUG_LogFile, "%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, buff);
-	fflush(m_DEBUG_LogFile);
+	ops->file_print(m_DEBUG_LogFile, "%02d:%02d: %s\n", tm->tm_hour, tm->tm_min, buff);
+	ops->file_flush(m_DEBUG_LogFile);
 
 // #endif
 
