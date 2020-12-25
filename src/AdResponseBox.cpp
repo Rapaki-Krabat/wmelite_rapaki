@@ -152,6 +152,8 @@ HRESULT CAdResponseBox::CreateButtons()
 				btn->m_Width = m_ResponseArea.right - m_ResponseArea.left;
 				if(btn->m_Width<=0) btn->m_Width = Game->m_Renderer->m_Width;
 			}
+			// FIXME will only work if the Listen() method is updated which checks for the exact string
+			// btn->SetName(const_cast<char*>((AnsiString("response_") + std::to_string(i)).c_str()));
 			btn->SetName("response");
 			btn->CorrectSize();
 

@@ -34,6 +34,7 @@ THE SOFTWARE.
 
 #include "dctypes.h"
 #include "FileOperations.h"
+#include "DirectoryOperations.h"
 #include "PathUtil.h"
 
 void Logger::switchLogging(bool on, const char* Filename)
