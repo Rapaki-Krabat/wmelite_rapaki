@@ -40,6 +40,8 @@ void android_getPlatformIdentifierString(char *buffer, int length);
 
 void android_getAppVersionString(char *buffer, int length);
 
+void android_sendSupportEmail(const char* logfileDir, const char* savegameDir);
+
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddValidProductCallback(JNIEnv* env, jobject o, jstring id, jstring name, jstring desc, jstring price);
 
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_IAPAddInvalidProductCallback(JNIEnv* env, jobject o, jstring id);

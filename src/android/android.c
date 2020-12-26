@@ -292,6 +292,22 @@ void android_getAppVersionString(char *buffer, int length)
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getAppVersionString() returns %s", buffer);
 }
 
+void android_sendSupportEmail(const char* logfileDir, const char* savegameDir)
+{
+       JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "sendSupportEmail", "(Ljava/lang/String;Ljava/lang/String;)V");
+
+	jstring logfileDirString = (*env)->NewStringUTF(env, logfileDir);
+	jstring savegameDirString = (*env)->NewStringUTF(env, savegameDir);
+	
+	(*env)->CallVoidMethod(env, callbackObject, callbackID, logfileDirString, savegameDirString);	
+
+	(*env)->DeleteLocalRef(env, logfileDirString);
+	(*env)->DeleteLocalRef(env, savegameDirString);
+	(*env)->DeleteLocalRef(env, cls);
+}
+
 // already supported by SDL itself
 void SetKeepDisplayOn(int keepOn)
 {

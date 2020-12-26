@@ -33,6 +33,7 @@ LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-switch -Wno-write-strings -Wno-conver
 # Add your application source files here...
 LOCAL_SRC_FILES := ./src/android/SDL_android_main.c \
 ./src/android/android.c \
+./src/android/AndroidSendEmail.cpp \
 ./src/utils.cpp \
 ./src/BFileManager.cpp \
 ./src/PlatformSDL.cpp \
