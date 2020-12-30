@@ -166,7 +166,32 @@ private:
 
 	typedef std::map<std::string, DWORD> ScriptTimes;
 	ScriptTimes m_ScriptTimes;
+	const char* TScriptStateToString(TScriptState state)
+	{
+		switch (state)
+		{
+		case SCRIPT_RUNNING:
+			return "RUNNING";
+		case SCRIPT_WAITING:
+			return "WAITING";
+		case SCRIPT_SLEEPING:
+			return "SLEEPING";
+		case SCRIPT_FINISHED:
+			return "FINISHED";
+		case SCRIPT_PERSISTENT:
+			return "PERSISTENT";
+		case SCRIPT_ERROR:
+			return "ERROR";
+		case SCRIPT_PAUSED:
+			return "PAUSED";
+		case SCRIPT_WAITING_SCRIPT:
+			return "WAITING_SCRIPT";
+		case SCRIPT_THREAD_FINISHED:
+			return "THREAD_FINISHED";
+		}
 
+		return "ERROR!";
+	}
 };
 
 #endif

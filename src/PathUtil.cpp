@@ -264,6 +264,7 @@ AnsiString PathUtil::GetUserDirectory()
 	AnsiString userDir = "./";
 
 #if defined(__WIN32__)
+#if 0
 	char buffer[MAX_PATH];
 	buffer[0] = '\0';
 	LPITEMIDLIST pidl = NULL;
@@ -278,6 +279,19 @@ AnsiString PathUtil::GetUserDirectory()
 		pMalloc->Free(pidl);
 		userDir = AnsiString(buffer);
 	}
+#else
+	// try to use SDL instead of our own impl
+
+	char path[MAX_PATH];
+	char *tmp = SDL_GetPrefPath("Rapaki", "KaPSK");
+	if (tmp != NULL)
+	{
+		strncpy_s(path, tmp, MAX_PATH);
+		SDL_free(tmp);
+		userDir = AnsiString(path);
+	}
+
+#endif
 #elif __MACOSX__
 	FSRef fileRef;
 	OSStatus error = FSFindFolder(kUserDomain, kApplicationSupportFolderType, true, &fileRef);

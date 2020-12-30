@@ -17,6 +17,50 @@ static jobject callbackObject;
 
 AAssetManager *assetManager;
 
+static void copyJavaStringToCArray(JNIEnv* env, const jstring str, const int maxLength, char *buffer) {
+	jsize length;
+	const char *tmp;
+
+	// at first try to get access to the array
+	tmp = (*env)->GetStringUTFChars(env, str, NULL);
+
+	if (tmp != NULL)
+	{
+		// use the JNI function for required length of byte buffer, instead of strnlen()
+		length = (*env)->GetStringUTFLength(env, str);
+		if (length > 0)
+		{
+			// clear the whole buffer to assure null-termination of string
+			memset(buffer, 0, maxLength);
+
+			// rather use memcpy instead of strncpy, the latter might choke on UTF-8?
+			memcpy(buffer, tmp, (length < (maxLength - 1)) ? length : (maxLength - 1));
+		} else {
+			// length == 0 ???
+			buffer[0] = 0;
+		}
+
+		(*env)->ReleaseStringUTFChars(env, str, tmp);
+
+	} else {
+		// could not get byte buffer access at all
+		buffer[0] = 0;
+	}
+}
+
+static void returnStringFromJavaCall(char *buffer, int length, const char *name, const char *sig)
+{
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, name, sig);
+	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
+
+	copyJavaStringToCArray(env, str, length, buffer);
+
+	(*env)->DeleteLocalRef(env, cls);
+	(*env)->DeleteLocalRef(env, str);
+}
+
 JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_nativeInit(JNIEnv* env, jobject o, jobject assetMgr)
 {
 
@@ -32,226 +76,58 @@ JNIEXPORT void JNICALL Java_org_deadcode_wmelite_WMELiteFunctions_nativeInit(JNI
 
 void android_getLogFileDirectory(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getLogFileDirectory", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getLogFileDirectory", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getLogFileDirectory() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getPrivateFilesPath(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getPrivateFilesPath", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getPrivateFilesPath", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getPrivateFilesPath() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getDeviceTypeHint(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getDeviceTypeHint", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getDeviceTypeHint", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getDeviceTypeHint() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getGamePackagePath(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-
-	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() env=%s", (env == NULL) ? "NULL" : "OK");
-
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getGamePackagePath", "()Ljava/lang/String;");
-
-	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() callbackid=%d", callbackID);
-
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() jstring=%s", (str == NULL) ? "NULL" : "OK");
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getGamePackagePath", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getGamePackagePatchPath(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-
-	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() env=%s", (env == NULL) ? "NULL" : "OK");
-
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getGamePackagePatchPath", "()Ljava/lang/String;");
-
-	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() callbackid=%d", callbackID);
-
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	// __android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePath() jstring=%s", (str == NULL) ? "NULL" : "OK");
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getGamePackagePatchPath", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGamePackagePatchPath() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getGameFilePath(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getGameFilePath", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getGameFilePath", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getGameFilePath() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getFontPath(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getFontPath", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getFontPath", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getFontPath() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getLocalSettingsPath(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getLocalSettingsPath", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getLocalSettingsPath", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getLocalSettingsPath() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getEncodedString(char *inputString, char *encoding, char *buffer, int *length)
@@ -326,7 +202,7 @@ void android_getUTFString(char *inputString, char *encoding, char *buffer, int *
 
 	if (result != NULL) {
 		jsize retLen = (*env)->GetStringUTFLength(env, result);
-		jbyte *retBuffer = (*env)->GetStringUTFChars(env, result, NULL);
+		const char *retBuffer = (*env)->GetStringUTFChars(env, result, NULL);
 
 		if (retBuffer != NULL) {
 			if (retLen < (*length)) {
@@ -404,54 +280,16 @@ int android_advertisementShow(char *key, int number)
 
 void android_getPlatformIdentifierString(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getPlatformIdentifierString", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getPlatformIdentifierString", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getPlatformIdentifierString() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 void android_getAppVersionString(char *buffer, int length)
 {
-	const char *tmp;
-
-	// get the proper jni env from SDL
-	// JNIEnv *env = Android_JNI_GetEnv();
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "getAppVersionString", "()Ljava/lang/String;");
-	jstring str = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, str, NULL);
-
-	if (strnlen(tmp, length) < length) {
-		strncpy(buffer, tmp, length);
-	} else {
-		buffer[0] = 0;
-	}
+	returnStringFromJavaCall(buffer, length, "getAppVersionString", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "android_getAppVersionString() returns %s", buffer);
-
-	(*env)->ReleaseStringUTFChars(env, str, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	(*env)->DeleteLocalRef(env, str);
 }
 
 // already supported by SDL itself
@@ -523,28 +361,9 @@ int LicenseCheckResultStatus()
 
 void LicenseCheckResultDetail(char *str, int maxlen)
 {
-	const char *tmp;
-
-	JNIEnv *env = Android_JNI_GetEnv();
-	jclass cls = (*env)->GetObjectClass(env, callbackObject);
-	jmethodID callbackID = (*env)->GetMethodID(env, cls, "licenseCheckResultDetail", "()Ljava/lang/String;");
-	jstring retStr = (*env)->CallObjectMethod(env, callbackObject, callbackID);
-
-	tmp = (*env)->GetStringUTFChars(env, retStr, NULL);
-
-	if (strnlen(tmp, maxlen) < maxlen) {
-		strncpy(str, tmp, maxlen);
-	} else {
-		str[0] = 0;
-	}
+	returnStringFromJavaCall(str, maxlen, "licenseCheckResultDetail", "()Ljava/lang/String;");
 
 	__android_log_print(ANDROID_LOG_VERBOSE, "org.libsdl.app", "licenseCheckResultDetail() returns %s", str);
-
-	(*env)->ReleaseStringUTFChars(env, retStr, tmp);
-	(*env)->DeleteLocalRef(env, cls);
-	
-	// not a local reference (?)
-	// (*env)->DeleteLocalRef(env, retStr);
 }
 
 static void *callbackObj;

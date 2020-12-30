@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 #include "dcgf.h"
 #include "UIWindow.h"
-
+#include "GameAutomator.h"
 
 IMPLEMENT_PERSISTENT(CUIWindow, false);
 
@@ -832,6 +832,8 @@ HRESULT CUIWindow::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Th
 		GoSystemExclusive();
 		Script->WaitFor(this);
 		Stack->PushNULL();
+		Game->m_Automator->AddAutomatorEvent(
+		    new GameAutomatorEvent(Game, GameAutomatorEventSource::WINDOW, GameAutomatorEventType::SYSEXCLUSIVE, m_Name));
 		return S_OK;
 	}
 
