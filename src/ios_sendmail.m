@@ -23,5 +23,85 @@
  THE SOFTWARE.
  */
 
+#import <UIKit/UIViewController.h>
+#import <UIKit/UIPopoverPresentationController.h>
+#include "ios_sendmail.h"
+#include "SendEmailIOSITF.h"
+#include "SDL_syswm.h"
 
+void IOS_SendMailWithAttachments(const char** logfiles, const int nrLogFiles, const char** savegames, const int nrSaveGames)
+{
+    [[SendEmailMgr sharedSendEmailMgr] SendMailWithAttachments:logfiles arg1:nrLogFiles arg2:savegames arg3:nrSaveGames];
+}
+
+void IOS_SetWindowForMailDialogue(SDL_Window* wind)
+{
+    [[SendEmailMgr sharedSendEmailMgr] SetSDLWindow:wind];
+}
+
+@implementation SendEmailMgr
+
+static SendEmailMgr* _sharedSendEmailMgr = nil;
+
+SDL_Window* window;
+
++ (SendEmailMgr*)sharedSendEmailMgr
+{
+    @synchronized([SendEmailMgr class])
+    {
+        if (!_sharedSendEmailMgr)
+            [[self alloc] init];
+        
+        return _sharedSendEmailMgr;
+    }
+    return nil;
+}
+
+-(void) SetSDLWindow:(void*) win
+{
+    window = (SDL_Window*) win;
+}
+
+-(void) SendMailWithAttachments:(const char**)logfiles arg1:(const int)nrLogFiles arg2:(const char**) savegames arg3:(const int) nrSaveGames
+{
+    SDL_SysWMinfo info;
+    SDL_VERSION(&info.version);
+
+    if (SDL_GetWindowWMInfo(window, &info))
+    {
+        UIWindow* uiWindow = (UIWindow*)info.info.uikit.window;
+        UIView* view = [uiWindow.subviews objectAtIndex:0];
+        id nextResponder = [view nextResponder];
+        if( [nextResponder isKindOfClass:[UIViewController class]] )
+        {
+            NSLog(@"Found root view controller!");
+            UIViewController* rootViewController = (UIViewController*) nextResponder;
+
+
+            UIViewController *contentViewController = [[UIViewController alloc] init];
+
+            // Present the view controller using the popover style.
+            contentViewController.modalPresentationStyle = UIModalPresentationPopover;
+            [rootViewController presentViewController:contentViewController
+                               animated:YES
+                             completion:nil];
+
+            // Get the popover presentation controller and configure it.
+            UIPopoverPresentationController *presentationController =[contentViewController popoverPresentationController];
+            presentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+            presentationController.sourceView = rootViewController.view;
+            presentationController.sourceRect = rootViewController.view.frame;
+        }
+        else
+        {
+            NSLog(@"Nextresponder is not of expected class.");
+        }
+    }
+    else
+    {
+        NSLog(@"GetWindowWMInfo failed!");
+    }
+}
+
+@end
 
