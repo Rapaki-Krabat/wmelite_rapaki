@@ -57,6 +57,27 @@ SDL_Window* window;
     return nil;
 }
 
++(id)alloc
+{
+    @synchronized([SendEmailMgr class])
+    {
+        NSAssert(_sharedSendEmailMgr == nil, @"Attempted to allocate a second instance of a singleton.");
+        _sharedSendEmailMgr = [super alloc];
+        return _sharedSendEmailMgr;
+    }
+    return nil;
+}
+
+-(id) init
+{
+    return self;
+}
+
+- (void) dealloc
+{
+    [super dealloc];
+}
+
 -(void) SetSDLWindow:(void*) win
 {
     window = (SDL_Window*) win;
@@ -69,33 +90,23 @@ SDL_Window* window;
 
     if (SDL_GetWindowWMInfo(window, &info))
     {
-        UIWindow* uiWindow = (UIWindow*)info.info.uikit.window;
-        UIView* view = [uiWindow.subviews objectAtIndex:0];
-        id nextResponder = [view nextResponder];
-        if( [nextResponder isKindOfClass:[UIViewController class]] )
-        {
-            NSLog(@"Found root view controller!");
-            UIViewController* rootViewController = (UIViewController*) nextResponder;
+        UIWindow* appWindow = (UIWindow*)info.info.uikit.window;
+        
+        UIViewController* rootViewController = appWindow.rootViewController;
+        
+        UIViewController *contentViewController = [[UIViewController alloc] init];
 
+        // Present the view controller using the popover style.
+        contentViewController.modalPresentationStyle = UIModalPresentationPopover;
+        [rootViewController presentViewController:contentViewController
+                           animated:YES
+                         completion:nil];
 
-            UIViewController *contentViewController = [[UIViewController alloc] init];
-
-            // Present the view controller using the popover style.
-            contentViewController.modalPresentationStyle = UIModalPresentationPopover;
-            [rootViewController presentViewController:contentViewController
-                               animated:YES
-                             completion:nil];
-
-            // Get the popover presentation controller and configure it.
-            UIPopoverPresentationController *presentationController =[contentViewController popoverPresentationController];
-            presentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
-            presentationController.sourceView = rootViewController.view;
-            presentationController.sourceRect = rootViewController.view.frame;
-        }
-        else
-        {
-            NSLog(@"Nextresponder is not of expected class.");
-        }
+        // Get the popover presentation controller and configure it.
+        UIPopoverPresentationController *presentationController =[contentViewController popoverPresentationController];
+        presentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+        presentationController.sourceView = rootViewController.view;
+        presentationController.sourceRect = rootViewController.view.frame;
     }
     else
     {
