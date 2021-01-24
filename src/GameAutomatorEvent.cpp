@@ -83,6 +83,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventSource::STORE:
 			m_ScValue->SetString("store");
 			break;
+		case GameAutomatorEventSource::OBJECT:
+			m_ScValue->SetString("object");
+			break;
 		default:
 			m_ScValue->SetString("ERROR");
 			break;
