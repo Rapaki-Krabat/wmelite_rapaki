@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 #include "dcgf.h"
 #include "AdObject.h"
+#include "GameAutomator.h"
 
 IMPLEMENT_PERSISTENT(CAdObject, false);
 
@@ -122,7 +123,10 @@ CAdObject::~CAdObject()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdObject::PlayAnim(char *Filename)
 {
-	m_AnimSprite.invalidate();
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::OBJECT, GameAutomatorEventType::PLAYANIM, m_Name, Filename));
+    
+       m_AnimSprite.invalidate();
 	m_AnimSprite.replace(new CBSprite(Game, this));
 	if(!m_AnimSprite.isValid())
 	{
