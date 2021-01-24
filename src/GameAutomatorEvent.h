@@ -47,7 +47,8 @@ ENTITY, /*!< entity */
 BUTTON, /*!< button */
 SETPROPERTY, /*!< setproperty */
 WINDOW, /*!< window */
-STORE /*!< store */
+STORE, /*!< store */
+OBJECT /*!< object */
 };
 
 /**
@@ -145,7 +146,7 @@ public:
          *
          * <b>CUIButton::Press()</b>
          *
-         * <b>CAdActor::PlayAnim(char* Filename)</b>
+         * <b>CAdObject::PlayAnim(char* Filename)</b>
 	  */
 	GameAutomatorEvent(CBGame* inGame, GameAutomatorEventSource source, GameAutomatorEventType type, char* name, char* text) :
 		GameAutomatorEvent(inGame, source, type, name) {
