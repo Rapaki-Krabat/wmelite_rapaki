@@ -29,7 +29,7 @@
 #include "SendEmailIOSITF.h"
 #include "SDL_syswm.h"
 
-void IOS_SendMailWithAttachments(const char** logfiles, const int nrLogFiles, const char** savegames, const int nrSaveGames)
+void IOS_SendMailWithAttachments(char** logfiles, const int nrLogFiles, char** savegames, const int nrSaveGames)
 {
     [[SendEmailMgr sharedSendEmailMgr] SendMailWithAttachments:logfiles arg1:nrLogFiles arg2:savegames arg3:nrSaveGames];
 }
@@ -83,7 +83,7 @@ SDL_Window* window;
     window = (SDL_Window*) win;
 }
 
--(void) SendMailWithAttachments:(const char**)logfiles arg1:(const int)nrLogFiles arg2:(const char**) savegames arg3:(const int) nrSaveGames
+-(void) SendMailWithAttachments:(char**)logfiles arg1:(const int)nrLogFiles arg2:(char**) savegames arg3:(const int) nrSaveGames
 {
     SDL_SysWMinfo systemWindowInfo;
     SDL_VERSION(&systemWindowInfo.version);
@@ -92,11 +92,43 @@ SDL_Window* window;
     {
         UIWindow * appWindow = systemWindowInfo.info.uikit.window;
         UIViewController * rootViewController = appWindow.rootViewController;
-
         
-        NSString *myString = @"Test sharing.";
+        NSString *myString = @"Export data.";
         
-        NSArray *activityItems = @[myString];
+        NSMutableArray *activityItems = [[NSMutableArray alloc] init];
+        
+        [activityItems addObject:myString];
+        
+        NSLog(@"Nr logfiles: %d", nrLogFiles);
+        
+        for (int i = 0; i < nrLogFiles; i++)
+        {
+            NSString *filepath = @(logfiles[i]);
+            
+            NSLog(@"Adding file=%@", filepath);
+            
+            // NSData *myData = [NSData dataWithContentsOfFile:filepath];
+            
+            NSURL *myUrl = [NSURL fileURLWithPath:filepath isDirectory:NO];
+            
+            [activityItems addObject:myUrl]; // was myData
+        }
+        
+        NSLog(@"Nr savegames: %d", nrSaveGames);
+        
+        for (int i = 0; i < nrSaveGames; i++)
+        {
+            NSString *filepath = @(savegames[i]);
+            
+            NSLog(@"Adding file=%@", filepath);
+            
+            // NSData *myData = [NSData dataWithContentsOfFile:filepath];
+            
+            NSURL *myUrl = [NSURL fileURLWithPath:filepath isDirectory:NO];
+            
+            [activityItems addObject:myUrl]; // was myData
+        }
+        
         UIActivityViewController *activityViewControntroller = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
         activityViewControntroller.excludedActivityTypes = @[];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -105,6 +137,7 @@ SDL_Window* window;
         }
         [rootViewController presentViewController:activityViewControntroller animated:true completion:nil];
         
+        // [activityItems release];
         
 #if 0
         UIWindow* appWindow = (UIWindow*)info.info.uikit.window;

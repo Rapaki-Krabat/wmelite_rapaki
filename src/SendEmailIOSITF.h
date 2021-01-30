@@ -10,7 +10,7 @@ extern "C" {
 
 void IOS_SetWindowForMailDialogue(SDL_Window* wind);
 
-void IOS_SendMailWithAttachments(const char** logfiles, const int nrLogFiles, const char** savegames, const int nrSaveGames);
+void IOS_SendMailWithAttachments(char** logfiles, const int nrLogFiles, char** savegames, const int nrSaveGames);
 
 #ifdef __cplusplus
 }

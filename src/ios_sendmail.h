@@ -34,7 +34,7 @@ THE SOFTWARE.
 }
 +(SendEmailMgr*)sharedSendEmailMgr;
 -(void) SetSDLWindow:(void*) win;
--(void) SendMailWithAttachments:(const char**)logfiles arg1:(const int)nrLogFiles arg2:(const char**)savegames arg3:(const int)nrSaveGames;
+-(void) SendMailWithAttachments:(char**)logfiles arg1:(const int)nrLogFiles arg2:(char**)savegames arg3:(const int)nrSaveGames;
 @end
 
 #endif // __WmeIosSendMail_H__
