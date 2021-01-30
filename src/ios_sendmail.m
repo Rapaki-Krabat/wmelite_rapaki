@@ -85,11 +85,28 @@ SDL_Window* window;
 
 -(void) SendMailWithAttachments:(const char**)logfiles arg1:(const int)nrLogFiles arg2:(const char**) savegames arg3:(const int) nrSaveGames
 {
-    SDL_SysWMinfo info;
-    SDL_VERSION(&info.version);
+    SDL_SysWMinfo systemWindowInfo;
+    SDL_VERSION(&systemWindowInfo.version);
 
-    if (SDL_GetWindowWMInfo(window, &info))
+    if (SDL_GetWindowWMInfo(window, &systemWindowInfo))
     {
+        UIWindow * appWindow = systemWindowInfo.info.uikit.window;
+        UIViewController * rootViewController = appWindow.rootViewController;
+
+        
+        NSString *myString = @"Test sharing.";
+        
+        NSArray *activityItems = @[myString];
+        UIActivityViewController *activityViewControntroller = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+        activityViewControntroller.excludedActivityTypes = @[];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            activityViewControntroller.popoverPresentationController.sourceView = rootViewController.view;
+            activityViewControntroller.popoverPresentationController.sourceRect = CGRectMake(rootViewController.view.bounds.size.width/2, rootViewController.view.bounds.size.height/4, 0, 0);
+        }
+        [rootViewController presentViewController:activityViewControntroller animated:true completion:nil];
+        
+        
+#if 0
         UIWindow* appWindow = (UIWindow*)info.info.uikit.window;
         
         UIViewController* rootViewController = appWindow.rootViewController;
@@ -107,6 +124,8 @@ SDL_Window* window;
         presentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
         presentationController.sourceView = rootViewController.view;
         presentationController.sourceRect = rootViewController.view.frame;
+#endif
+        
     }
     else
     {
