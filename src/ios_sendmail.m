@@ -93,7 +93,7 @@ SDL_Window* window;
         UIWindow * appWindow = systemWindowInfo.info.uikit.window;
         UIViewController * rootViewController = appWindow.rootViewController;
         
-        NSString *myString = @"Export data.";
+        NSString *myString = @"Log files and savegames.";
         
         NSMutableArray *activityItems = [[NSMutableArray alloc] init];
         

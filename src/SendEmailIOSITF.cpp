@@ -28,6 +28,8 @@ void SendEmail::SendMailWithAttachments(const AnsiString& logfileDir, const Ansi
         size_t logFileNameLength = strlen(fullFileName.c_str());
         logFiles[i] = new char[logFileNameLength + 1]();
         strcpy(logFiles[i], fullFileName.c_str());
+        
+        logFileIter++;
     }
     
     ssize_t savegameFileListLength = saveGameList.size();
@@ -43,6 +45,8 @@ void SendEmail::SendMailWithAttachments(const AnsiString& logfileDir, const Ansi
         size_t savegameFileNameLength = strlen(fullFileName.c_str());
         savegameFiles[i] = new char[savegameFileNameLength + 1]();
         strcpy(savegameFiles[i], fullFileName.c_str());
+        
+        savegameFileIter++;
     }
     
     IOS_SendMailWithAttachments(logFiles, (int) logFileListLength, savegameFiles, (int) savegameFileListLength);
