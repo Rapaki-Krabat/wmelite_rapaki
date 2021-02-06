@@ -481,6 +481,24 @@ HRESULT CBPersistMgr::Transfer(const char* Name, wl_owning<CBSprite*>* Val)
 }
 
 //////////////////////////////////////////////////////////////////////////
+// C_TObjectState&
+HRESULT CBPersistMgr::Transfer(const char* Name, C_TObjectState& Val)
+{
+	DWORD tmp;
+	if (m_Saving)
+	{
+		tmp = (DWORD) Val.getCurrentState();
+		return PutBytes((BYTE*) &tmp, sizeof(DWORD));
+	}
+	else
+	{
+		HRESULT res = GetBytes((BYTE*) &tmp, sizeof(DWORD));
+		Val = (TObjectState) tmp;
+		return res;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
 // BYTE
 HRESULT CBPersistMgr::Transfer(const char* Name, BYTE* Val)
 {

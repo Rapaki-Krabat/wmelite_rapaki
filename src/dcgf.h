@@ -124,6 +124,7 @@ typedef HRESULT (WINAPI *PERSISTLOAD)(void*, CBPersistMgr*);
 
 #define TMEMBER(member_name) #member_name, &member_name
 #define TMEMBER_INT(member_name) #member_name, (int*)&member_name
+#define TMEMBER_REF(member_name) #member_name, member_name
 
 typedef void (*SYS_INSTANCE_CALLBACK)(void* Instance, void* Data);
 

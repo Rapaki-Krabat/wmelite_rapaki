@@ -71,7 +71,7 @@ public:
 	virtual HRESULT PlayAnim(char* Filename);
 	wl_owning<CBSprite*>      m_AnimSprite;
 	wl_non_owning<CBSprite*>* m_CurrentSprite;
-	TObjectState m_State;
+	C_TObjectState m_State;
 	TObjectState m_NextState;
 	TObjectType m_Type;
 	CAdObject(CBGame* inGame);
