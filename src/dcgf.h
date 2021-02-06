@@ -22,6 +22,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+/**
+* @file dcgf.h
+*/
 
 #ifndef _DCGF_H_
 #define _DCGF_H_
@@ -42,6 +45,13 @@ THE SOFTWARE.
 #define SAVEGAME_VER_MINOR 0
 #define SAVEGAME_VER_BUILD 0
 //////////////////////////////////////////////////////////////////////////
+
+/**
+* Savegame versions:
+* 1.0.1: SxStore added
+* 1.0.2: m_VideoSkipButton added
+* 1.2.0: m_MouseEntryLeaveTouchQuirk added
+*/
 
 #define COMPRESSED_FILE_MAGIC 0x504D435A // ZCMP
 
