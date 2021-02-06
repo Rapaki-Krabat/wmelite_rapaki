@@ -27,6 +27,8 @@ THE SOFTWARE.
 #include "SysClass.h"
 
 
+#include "SDL.h"
+#define DEBUG_LOAD_GAME(...) SDL_Log(__VA_ARGS__)
 
 //////////////////////////////////////////////////////////////////////////
 CSysClass::CSysClass(const AnsiString& name, PERSISTBUILD build, PERSISTLOAD load, bool persistent_class)
@@ -145,16 +147,20 @@ void CSysClass::SaveTable(CBGame* Game, CBPersistMgr* PersistMgr)
 }
 
 //////////////////////////////////////////////////////////////////////////
-void CSysClass::LoadTable(CBGame* Game, CBPersistMgr* PersistMgr)
+int CSysClass::LoadTable(CBGame* Game, CBPersistMgr* PersistMgr)
 {
 	m_SavedID = PersistMgr->GetDWORD();
 	int numInstances = PersistMgr->GetDWORD();
+
+	DEBUG_LOAD_GAME("Class id=%d numInstances=%d\n", m_SavedID, numInstances);
 
 	for (int i = 0; i < numInstances; i++)
 	{
 		if (m_Persistent)
 		{
 			int instId = PersistMgr->GetDWORD();
+
+			DEBUG_LOAD_GAME("Persistent class instId=%d\n", instId);
 
 			if (i > 0)
 			{
@@ -174,10 +180,14 @@ void CSysClass::LoadTable(CBGame* Game, CBPersistMgr* PersistMgr)
 		else
 		{
 			void* emptyObject = m_Build();
-			AddInstance(emptyObject, CSysClassRegistry::GetInstance()->GetNextID(), PersistMgr->GetDWORD());
+			int instId = PersistMgr->GetDWORD();
+			DEBUG_LOAD_GAME("Non-persistent class instId=%d\n", instId);
+			AddInstance(emptyObject, CSysClassRegistry::GetInstance()->GetNextID(), instId);
 		}
 
 	}
+
+	return numInstances;
 }
 
 //////////////////////////////////////////////////////////////////////////

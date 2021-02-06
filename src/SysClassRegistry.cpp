@@ -26,6 +26,8 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "SysClassRegistry.h"
 
+#include "SDL.h"
+#define DEBUG_LOAD_GAME(...) SDL_Log(__VA_ARGS__)
 
 //////////////////////////////////////////////////////////////////////////
 CSysClassRegistry::CSysClassRegistry()
@@ -203,6 +205,8 @@ HRESULT CSysClassRegistry::LoadTable(CBGame* Game, CBPersistMgr* PersistMgr)
 
 	int numClasses = PersistMgr->GetDWORD();
 
+	DEBUG_LOAD_GAME("Number classes to load: %d\n", numClasses);
+	int nrInstances = 0;
 	for (int i = 0; i < numClasses; i++)
 	{
 		Game->m_IndicatorProgress = 50.0f / (float)((float)numClasses / (float)i);
@@ -211,8 +215,14 @@ HRESULT CSysClassRegistry::LoadTable(CBGame* Game, CBPersistMgr* PersistMgr)
 
 		char* className = PersistMgr->GetString();
 		NameMap::iterator mapIt = m_NameMap.find(className);
-		if (mapIt != m_NameMap.end()) (*mapIt).second->LoadTable(Game, PersistMgr);
+		DEBUG_LOAD_GAME("Loading class: %s\n", className);
+		if (mapIt != m_NameMap.end())
+		{
+			nrInstances += (*mapIt).second->LoadTable(Game, PersistMgr);
+		}
 	}
+
+	DEBUG_LOAD_GAME("Total number instances to load: %d\n", nrInstances);
 
 	return S_OK;
 }
@@ -262,6 +272,8 @@ HRESULT CSysClassRegistry::LoadInstances(CBGame* Game, CBPersistMgr *PersistMgr)
 	// get total instances
 	int numInstances = PersistMgr->GetDWORD();
 
+	DEBUG_LOAD_GAME("Number instances to load: %d\n", numInstances);
+
 	for (int i = 0; i < numInstances; i++)
 	{
 		if (i % 20 == 0)
@@ -275,15 +287,30 @@ HRESULT CSysClassRegistry::LoadInstances(CBGame* Game, CBPersistMgr *PersistMgr)
 		int instanceID = PersistMgr->GetDWORD();
 		void* instance = IDToPointer(classID, instanceID);
 
+		DEBUG_LOAD_GAME("Instance %d classid=%d instanceid=%d validptr=%s\n", i, classID, instanceID, (instance != NULL) ? "true" : "false");
 
 		Classes::iterator it;
+		DWORD nrInits = 0;
 		for (it = m_Classes.begin(); it != m_Classes.end(); ++it)
 		{
 			if ((*it)->GetSavedID() == classID)
 			{
-				(*it)->LoadInstance(instance, PersistMgr);
+				if (instance != NULL)
+				{
+					(*it)->LoadInstance(instance, PersistMgr);
+					nrInits++;
+				}
+				else
+				{
+					uint8_t dummybuffer[10000];
+					DEBUG_LOAD_GAME("Skip Instance %d load, no pointer found!\n", i);
+					(*it)->LoadInstance(dummybuffer, PersistMgr);
+					nrInits++;
+				}
 			}
 		}
+
+		DEBUG_LOAD_GAME("Instance %d nrInits=%d\n", i, nrInits);
 	}
 
 	m_SavedInstanceMap.clear();

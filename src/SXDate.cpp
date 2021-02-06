@@ -251,6 +251,8 @@ HRESULT CSXDate::Persist(CBPersistMgr* PersistMgr){
 	else
 		PersistMgr->GetBytes((BYTE*)&m_tm, sizeof(m_tm));
 
+	PersistMgr->GetBytes((BYTE*)&m_tm, 12);
+
 	return S_OK;
 }
 

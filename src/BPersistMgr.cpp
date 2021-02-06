@@ -43,6 +43,7 @@ THE SOFTWARE.
 #define PERSIST_MGR_MAKEWORD(a,b) (WORD)(((a)&0xff)|((b)<<8))
 #define PERSIST_MGR_MAKELONG(a,b) (DWORD)(((a)&0xffff)|((b)<<16))
 
+#define DEBUG_LOAD_GAME(...) Game->LOG(0,__VA_ARGS__)
 
 //////////////////////////////////////////////////////////////////////////
 CBPersistMgr::CBPersistMgr(CBGame* inGame):CBBase(inGame)
@@ -203,7 +204,11 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 		Magic = GetDWORD();
 		if(Magic != DCGF_MAGIC) goto init_fail;
 
+		DEBUG_LOAD_GAME("Savegame DCGF Magic=%08X", Magic);
+
 		Magic = GetDWORD();
+
+		DEBUG_LOAD_GAME("Savegame Save Magic=0x%08X", Magic);
 
 		if(Magic==SAVE_MAGIC || Magic==SAVE_MAGIC_2)
 		{
@@ -212,6 +217,8 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 			m_SavedVerMinor = PERSIST_MGR_HIBYTE(PERSIST_MGR_LOWORD(Version));
 			m_SavedExtMajor = PERSIST_MGR_LOBYTE(PERSIST_MGR_HIWORD(Version));
 			m_SavedExtMinor = PERSIST_MGR_HIBYTE(PERSIST_MGR_HIWORD(Version));
+
+			DEBUG_LOAD_GAME("Savegame Save version=0x%08X", Version);
 
 			if(Magic==SAVE_MAGIC_2)
 			{
@@ -223,6 +230,8 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 					Game->LOG(0, "ERROR: Saved game name doesn't match current game");
 					goto init_fail;
 				}
+
+				DEBUG_LOAD_GAME("Savegame Save name=%s", SavedName);
 
 				// load thumbnail
 				m_ThumbnailDataSize = GetDWORD();
@@ -236,6 +245,8 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 					}
 					else m_ThumbnailDataSize = 0;
 				}
+
+				DEBUG_LOAD_GAME("Thumbnail size=%u", m_ThumbnailDataSize);
 			}
 			else m_SavedVerBuild = 35; // last build with ver1 savegames
 
@@ -275,6 +286,9 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 
 		m_SavedDescription = GetString();
 		m_SavedTimestamp = (time_t)GetDWORD();
+
+		char* timestampstr = ctime(&m_SavedTimestamp);
+		DEBUG_LOAD_GAME("Savegame descr=%s timestamp=%s", m_SavedDescription, timestampstr);
 
 		m_Offset = DataOffset;
 

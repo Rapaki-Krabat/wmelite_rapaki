@@ -55,7 +55,7 @@ public:
 	AnsiString GetName() const { return m_Name; }
 
 	void SaveTable(CBGame* Game, CBPersistMgr* PersistMgr);
-	void LoadTable(CBGame* Game, CBPersistMgr* PersistMgr);
+	int LoadTable(CBGame* Game, CBPersistMgr* PersistMgr);
 
 	void SaveInstances(CBGame* Game, CBPersistMgr* PersistMgr);
 	void LoadInstance(void* instance, CBPersistMgr* PersistMgr);

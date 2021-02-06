@@ -31,6 +31,36 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "GameAutomator.h"
 
+#undef IMPLEMENT_PERSISTENT
+
+#define IMPLEMENT_PERSISTENT(class_name, persistent_class)\
+	const char class_name::m_ClassName[] = #class_name;\
+	void* class_name::PersistBuild(){\
+		return ::new class_name(DYNAMIC_CONSTRUCTOR, DYNAMIC_CONSTRUCTOR);\
+	}\
+	\
+	HRESULT class_name::PersistLoad(void* Instance, CBPersistMgr* PersistMgr){\
+		DEBUG_LOAD_GAME("Loading class %s.\n", class_name::m_ClassName);\
+		return ((class_name*)Instance)->Persist(PersistMgr);\
+	}\
+	\
+	const char* class_name::GetClassName(){\
+		return #class_name;\
+	}\
+	\
+	/* CSysClass Register##class_name(class_name::m_ClassName, class_name::PersistBuild, class_name::PersistLoad, persistent_class); */\
+	\
+	void* class_name::operator new (size_t size){\
+		void* ret = ::operator new(size);\
+		/* CSysClassRegistry::GetInstance()->RegisterInstance(#class_name, ret); */\
+		return ret;\
+	}\
+	\
+	void class_name::operator delete (void* p){\
+		/* CSysClassRegistry::GetInstance()->UnregisterInstance(#class_name, p); */\
+		::operator delete(p);\
+	}\
+
 IMPLEMENT_PERSISTENT(GameAutomator, false);
 
 //////////////////////////////////////////////////////////////////////////

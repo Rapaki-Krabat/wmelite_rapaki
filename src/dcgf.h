@@ -80,6 +80,8 @@ THE SOFTWARE.
 
 class CBPersistMgr;
 
+#define DEBUG_LOAD_GAME(...) SDL_Log(__VA_ARGS__)
+
 // persistence support
 typedef void* (WINAPI *PERSISTBUILD)(void);
 typedef HRESULT (WINAPI *PERSISTLOAD)(void*, CBPersistMgr*);
@@ -102,6 +104,7 @@ typedef HRESULT (WINAPI *PERSISTLOAD)(void*, CBPersistMgr*);
 	}\
 	\
 	HRESULT class_name::PersistLoad(void* Instance, CBPersistMgr* PersistMgr){\
+		DEBUG_LOAD_GAME("Loading class %s.\n", class_name::m_ClassName);\
 		return ((class_name*)Instance)->Persist(PersistMgr);\
 	}\
 	\
