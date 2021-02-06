@@ -170,11 +170,12 @@ public:
 
 	/**
 	* Copy constructor to create an element to be passed around in scripts.
+	* Must include repetitions for a 1:1 copy.
 	*/
 	GameAutomatorEvent(const GameAutomatorEvent& orig)
 		: CBScriptable(orig.Game), m_Source(orig.m_Source), m_Type(orig.m_Type), 
 		m_Sentence(orig.m_Sentence), m_TurntoDir(orig.m_TurntoDir), m_X(orig.m_X), m_Y(orig.m_Y),
-		m_Interactive(orig.m_Interactive)
+		m_Interactive(orig.m_Interactive), m_Repetitions(orig.m_Repetitions)
 	{ 
 		m_Name = new AnsiString(orig.m_Name->c_str());
 		if (orig.m_Sentence != NULL)
