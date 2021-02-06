@@ -192,6 +192,10 @@ public:
 	GameAutomatorEvent& operator=(const GameAutomatorEvent& orig) = delete;
 	GameAutomatorEvent& operator=(GameAutomatorEvent&& orig) = delete;
 	
+	void addRepetition(void) { m_Repetitions++; }
+
+	friend bool operator==(const GameAutomatorEvent& lhs, const GameAutomatorEvent& rhs);
+
 	~GameAutomatorEvent() {
 		delete m_Name;
 		if (m_Sentence != NULL) delete m_Sentence;
@@ -211,6 +215,7 @@ private:
 	int m_X = 0;
 	int m_Y = 0;
 	bool m_Interactive = true;
+	int m_Repetitions = 0;
 };
 
 #endif
