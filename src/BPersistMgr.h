@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #include "BBase.h"
 #include "wmelite_pointers.h"
-#include "AdTypes.h"
+#include "AdObjectState.h"
 
 class Vector2;
 class CBSprite;

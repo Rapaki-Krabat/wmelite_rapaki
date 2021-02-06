@@ -67,7 +67,8 @@ PLAYANIM, /*!< playanim */
 TAKEITEM, /*!< takeitem */
 GETRESPONSE, /*!< getresponse */
 SYSEXCLUSIVE, /*!< sysexclusive */
-STOREEVENT /*!< storeevent */
+STOREEVENT, /*!< storeevent */
+READY /*!< ready */
 };
 
 /**
@@ -92,6 +93,8 @@ public:
 		 * <b>CSXStore::OnRestoreFinished(bool error)</b> for events <b>"TransactionsRestoreFailed"</b> resp <b>"TransactionsRestoreFinished"</b>.
 		 *
 		 * <b>CSXStore::ReceiveTransactionsEnd()</b> for event <b>"TransactionsUpdated"</b>.
+		 *
+		 * <b>CAdObject::triggerGameAutomatorCallback()</b> for event <b>"Object is ready"</b>.
          *
 	  * This generic constructor is also implicitly called by all other specific ctors.
 	  */

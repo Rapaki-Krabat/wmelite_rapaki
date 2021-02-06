@@ -62,28 +62,6 @@ typedef enum
 	STATE_PLAYING_ANIM_SET,
 } TObjectState;
 
-class C_TObjectState
-{
-public:
-	C_TObjectState(void) : m_State(STATE_NONE) {}
-
-	TObjectState& operator=(const TObjectState& newState) { m_State = newState; return m_State; }
-
-	bool operator==(const TObjectState& other) const { return m_State == other; }
-	bool operator!=(const TObjectState& other) const { return !(m_State == other); }
-
-	const TObjectState getCurrentState(void) const { return m_State; }
-
-	C_TObjectState(const C_TObjectState& orig) = delete;
-	C_TObjectState(C_TObjectState&& orig) = delete;
-	C_TObjectState operator=(const C_TObjectState& orig) = delete;
-	C_TObjectState operator=(C_TObjectState&& orig) = delete;
-	~C_TObjectState(void) = default;
-
-private:
-	TObjectState m_State;
-};
-
 typedef enum
 {
 	DIRECT_WALK_NONE, DIRECT_WALK_FW, DIRECT_WALK_BK

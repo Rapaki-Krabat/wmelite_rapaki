@@ -178,6 +178,9 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventType::STOREEVENT:
 			m_ScValue->SetString("storeevent");
 			break;
+		case GameAutomatorEventType::READY:
+			m_ScValue->SetString("ready");
+			break;
 		default:
 			m_ScValue->SetString("ERROR");
 			break;

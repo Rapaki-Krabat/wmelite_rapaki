@@ -35,6 +35,8 @@ CAdObject::CAdObject(CBGame* inGame):CBObject(inGame)
 	m_Type = OBJECT_NONE;
 	m_State = m_NextState = STATE_NONE;
 
+	m_State.updateAutomatorCallbackProps(this);
+
 	m_Active = true;
 	m_Drawn = false;
 
@@ -80,6 +82,8 @@ CAdObject::CAdObject(CBGame* inGame):CBObject(inGame)
 //////////////////////////////////////////////////////////////////////////
 CAdObject::~CAdObject()
 {
+	m_State.updateAutomatorCallbackProps(); // deletes the ptr to this
+
 	m_CurrentSprite = NULL; // reference only, don't delete
 	m_AnimSprite.invalidate();
 	SAFE_DELETE(m_Sentence);
@@ -1282,4 +1286,12 @@ HRESULT CAdObject::UpdatePartEmitter()
 		m_PartEmitter->m_PosY = m_PosY + (ScaleY / 100.0f) * m_PartOffsetY;
 	}
 	return m_PartEmitter->Update();
+}
+
+//////////////////////////////////////////////////////////////////////////
+void CAdObject::triggerGameAutomatorCallback()
+{
+	Game->m_Automator->AddAutomatorEvent(new GameAutomatorEvent(
+		Game, GameAutomatorEventSource::OBJECT, GameAutomatorEventType::READY, m_Name
+	));
 }
