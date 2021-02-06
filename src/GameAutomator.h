@@ -57,7 +57,7 @@ public:
 		}
 		return evt;
 	}
-	void AddAutomatorEvent(GameAutomatorEvent* evt) { if (m_Enable == true) reportedEvents.push_back(evt); }
+	void AddAutomatorEvent(GameAutomatorEvent* evt);
 	bool isEnabled() { return m_Enable; }
 	void GetMouseState(int* x, int* y) { *x = XOverride; *y = YOverride; }
 
