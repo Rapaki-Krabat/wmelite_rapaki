@@ -4595,16 +4595,6 @@ HRESULT CBGame::Persist(CBPersistMgr *PersistMgr)
 		m_MouseEntryLeaveTouchQuirk = false;
 	}
 
-	// version check for the game automator
-	if (PersistMgr->CheckVersion(1, 2, 2))
-	{
-		PersistMgr->Transfer(TMEMBER(m_Automator));
-	}
-	else
-	{
-		m_Automator = new GameAutomator();
-	}
-
 	if (!PersistMgr->m_Saving) m_Quitting = false;
 
 #if defined(__ANDROID__) || defined(__IPHONEOS__) || defined(__WINRT__)
