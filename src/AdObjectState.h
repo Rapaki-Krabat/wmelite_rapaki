@@ -46,7 +46,8 @@ public:
 
 	TObjectState& operator=(const TObjectState& newState) 
 	{ 
-		if ((m_State != STATE_READY) && (newState == STATE_READY))
+		// trigger event if going to ready, except from none (set at object construction time)
+		if ((m_State != STATE_READY) && (m_State != STATE_NONE) && (newState == STATE_READY))
 		{
 			if (m_CallbackITF != nullptr)
 			{
