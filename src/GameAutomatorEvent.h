@@ -68,7 +68,8 @@ TAKEITEM, /*!< takeitem */
 GETRESPONSE, /*!< getresponse */
 SYSEXCLUSIVE, /*!< sysexclusive */
 STOREEVENT, /*!< storeevent */
-READY /*!< ready */
+READY, /*!< ready */
+FINISHSCROLL /*!< finishscroll */
 };
 
 /**
@@ -95,6 +96,8 @@ public:
 		 * <b>CSXStore::ReceiveTransactionsEnd()</b> for event <b>"TransactionsUpdated"</b>.
 		 *
 		 * <b>CAdObject::triggerGameAutomatorCallback()</b> for event <b>"Object is ready"</b>.
+		 *
+		 * <b>CAdScene::TraverseNodes(bool Update)</b> for event <b>"Scene finished scrolling"</b>.
          *
 	  * This generic constructor is also implicitly called by all other specific ctors.
 	  */

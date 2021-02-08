@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include <math.h>
 #include <limits.h>
 
-
+#include "GameAutomator.h"
+#include "GameAutomatorEvent.h"
 
 IMPLEMENT_PERSISTENT(CAdScene, false);
 
@@ -981,7 +982,12 @@ HRESULT CAdScene::TraverseNodes(bool Update)
 				}
 			}
 
-			if(m_OffsetTop == m_TargetOffsetTop && m_OffsetLeft == m_TargetOffsetLeft) m_Ready = true;
+			if (m_OffsetTop == m_TargetOffsetTop && m_OffsetLeft == m_TargetOffsetLeft)
+			{
+				Game->m_Automator->AddAutomatorEvent(new GameAutomatorEvent(
+					Game, GameAutomatorEventSource::SCENE, GameAutomatorEventType::FINISHSCROLL, m_Name));
+				m_Ready = true;
+			}
 		}
 		else m_Ready = true; // not scrolling, i.e. always ready
 	}
