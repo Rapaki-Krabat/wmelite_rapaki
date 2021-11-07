@@ -35,6 +35,7 @@ THE SOFTWARE.
 #ifdef __IPHONEOS__
 	#include "SDL_syswm.h"
 	#include "ios_utils.h"
+    #include "SendEmailIOSITF.h"
 	// #define EMULATE_VIEWPORT_SETTING
 #endif
 
@@ -354,6 +355,8 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
         
         IOS_GetSafeLayoutLogicalOffsets(&wmInfo, m_NewLogicalWidth, m_NewLogicalHeight, &m_LogicalBorderOffsetLeft, &m_LogicalBorderOffsetTop, &m_LogicalBorderOffsetRight, &m_LogicalBorderOffsetBottom);
     }
+    
+    IOS_SetWindowForMailDialogue(m_Win);
     
 #endif
     
