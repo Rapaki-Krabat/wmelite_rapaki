@@ -490,9 +490,19 @@ void StoreKit_RestoreTransactions(TTextEncoding encoding)
 
 int StoreKit_FinishTransaction(const char* transId, TTextEncoding encoding)
 {
-  updateTextEncoding(encoding);
-  
-  // dummy
+  	updateTextEncoding(encoding);
+
+	JNIEnv *env = Android_JNI_GetEnv();
+	jclass cls = (*env)->GetObjectClass(env, callbackObject);
+	jmethodID callbackID = (*env)->GetMethodID(env, cls, "iapPurchaseAcknowledge", "(Ljava/lang/String;)V");
+
+	jstring javaString = createJavaString(env, transId);
+
+	(*env)->CallVoidMethod(env, callbackObject, callbackID, javaString);
+
+	(*env)->DeleteLocalRef(env, javaString);
+	(*env)->DeleteLocalRef(env, cls);
+
 	return 1;
 }
 
