@@ -165,19 +165,28 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
     
     for (SKPaymentTransaction* transaction in transactions)
     {
+        // according to docs, transactionIdentifier is only
+        // valid in states "purchased" and "restored"
+        // thus don't try to print it when in any other state
+        //
+        // strange enough that the original code tried to read this field
+        // also when in failed state - we rather use a dummy
         switch (transaction.transactionState)
         {
             case SKPaymentTransactionStatePurchased:
-            case SKPaymentTransactionStateFailed:
             case SKPaymentTransactionStateRestored:
                 STOREKIT_LOG_2("Transaction ID recorded from update call: %s.\n", [transaction.transactionIdentifier UTF8String]);
                 [dictTransactions setObject:transaction forKey:transaction.transactionIdentifier];
                 break;
+            case SKPaymentTransactionStateFailed:
+                STOREKIT_LOG_1("Transaction ID NOT recorded from update call (failed state), dummy generated");
+                [dictTransactions setObject:transaction forKey:@"transFailed"];
+                break;
             case SKPaymentTransactionStatePurchasing:
-                STOREKIT_LOG_2("Transaction ID NOT recorded from update call (purchasing state) : %s.\n", [transaction.transactionIdentifier UTF8String]);
+                STOREKIT_LOG_1("Transaction ID NOT recorded from update call (purchasing state)");
                 break;
             case SKPaymentTransactionStateDeferred:
-                STOREKIT_LOG_2("Transaction ID NOT recorded from update call (deferred state) : %s.\n", [transaction.transactionIdentifier UTF8String]);
+                STOREKIT_LOG_1("Transaction ID NOT recorded from update call (deferred state).\n");
                 break;
         }
     }
