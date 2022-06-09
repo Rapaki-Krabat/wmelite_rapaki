@@ -179,8 +179,9 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
                 [dictTransactions setObject:transaction forKey:transaction.transactionIdentifier];
                 break;
             case SKPaymentTransactionStateFailed:
-                STOREKIT_LOG_1("Transaction ID NOT recorded from update call (failed state), dummy generated");
-                [dictTransactions setObject:transaction forKey:@"transFailed"];
+                STOREKIT_LOG_1("Transaction ID NOT recorded from update call (failed state)");
+                // do not fake a transaction with dummy data, it adds no value and cannot be finished anyway 
+                // [dictTransactions setObject:transaction forKey:@"transFailed"];
                 break;
             case SKPaymentTransactionStatePurchasing:
                 STOREKIT_LOG_1("Transaction ID NOT recorded from update call (purchasing state)");
@@ -209,6 +210,7 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
 -(void)processTransaction:(SKPaymentTransaction*)transaction
 {
     NSString* state = @"";
+    NSString* transactionID = @"transDummy";
     
     switch (transaction.transactionState)
     {
@@ -216,6 +218,7 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
             STOREKIT_LOG_1("Process transaction status purchased.\n");
             
             state = @"purchased";
+            transactionID = transaction.transactionIdentifier;
             break;
         
         case SKPaymentTransactionStateFailed:
@@ -237,6 +240,7 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
             STOREKIT_LOG_1("Process transaction status restored.\n");
             
             state = @"restored";
+            transactionID = transaction.transactionIdentifier;
             break;
             
         case SKPaymentTransactionStateDeferred:
@@ -254,7 +258,7 @@ static StoreKitMgr* _sharedStoreKitMgr = nil;
     
     
     
-    StoreKit_AddTransactionCallback([transaction.transactionIdentifier UTF8String], [transaction.payment.productIdentifier UTF8String], [state UTF8String], externalData);
+    StoreKit_AddTransactionCallback([transactionID UTF8String], [transaction.payment.productIdentifier UTF8String], [state UTF8String], externalData);
 }
 
 -(void)validateProducts:(const char*)ids
