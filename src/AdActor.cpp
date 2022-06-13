@@ -620,7 +620,7 @@ HRESULT CAdActor::Update()
 
 	bool already_moved = false;
 
-	switch(m_State)
+	switch(m_State.getCurrentState())
 	{
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_PLAYING_ANIM:

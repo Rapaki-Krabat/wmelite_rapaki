@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "GameAutomator.h"
 
-IMPLEMENT_PERSISTENT(GameAutomator, false);
+IMPLEMENT_PERSISTENT(GameAutomator, true);
 
 //////////////////////////////////////////////////////////////////////////
 GameAutomator::GameAutomator(CBGame* inGame) :CBObject(inGame)

@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include <math.h>
 #include <limits.h>
 
-
+#include "GameAutomator.h"
+#include "GameAutomatorEvent.h"
 
 IMPLEMENT_PERSISTENT(CAdScene, false);
 
@@ -949,6 +950,8 @@ HRESULT CAdScene::TraverseNodes(bool Update)
 
 		if(m_AutoScroll)
 		{
+			bool scrollValuesWereAdjusted = false;
+
 			// adjust horizontal scroll
 			if(Game->m_Timer - m_LastTimeH >= m_ScrollTimeH)
 			{
@@ -957,11 +960,13 @@ HRESULT CAdScene::TraverseNodes(bool Update)
 				{
 					m_OffsetLeft += m_ScrollPixelsH;
 					m_OffsetLeft = min(m_OffsetLeft, m_TargetOffsetLeft);
+					scrollValuesWereAdjusted = true;
 				}
 				else if(m_OffsetLeft > m_TargetOffsetLeft)
 				{
 					m_OffsetLeft-=m_ScrollPixelsH;
 					m_OffsetLeft = max(m_OffsetLeft, m_TargetOffsetLeft);
+					scrollValuesWereAdjusted = true;
 				}
 			}
 
@@ -973,15 +978,25 @@ HRESULT CAdScene::TraverseNodes(bool Update)
 				{
 					m_OffsetTop+=m_ScrollPixelsV;
 					m_OffsetTop = min(m_OffsetTop, m_TargetOffsetTop);
+					scrollValuesWereAdjusted = true;
 				}
 				else if(m_OffsetTop > m_TargetOffsetTop)
 				{
 					m_OffsetTop-=m_ScrollPixelsV;
 					m_OffsetTop = max(m_OffsetTop, m_TargetOffsetTop);
+					scrollValuesWereAdjusted = true;
 				}
 			}
 
-			if(m_OffsetTop == m_TargetOffsetTop && m_OffsetLeft == m_TargetOffsetLeft) m_Ready = true;
+			if (m_OffsetTop == m_TargetOffsetTop && m_OffsetLeft == m_TargetOffsetLeft)
+			{
+				if (scrollValuesWereAdjusted == true)
+				{
+					Game->m_Automator->AddAutomatorEvent(new GameAutomatorEvent(
+						Game, GameAutomatorEventSource::SCENE, GameAutomatorEventType::FINISHSCROLL, m_Name));
+				}
+				m_Ready = true;
+			}
 		}
 		else m_Ready = true; // not scrolling, i.e. always ready
 	}

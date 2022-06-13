@@ -67,7 +67,9 @@ PLAYANIM, /*!< playanim */
 TAKEITEM, /*!< takeitem */
 GETRESPONSE, /*!< getresponse */
 SYSEXCLUSIVE, /*!< sysexclusive */
-STOREEVENT /*!< storeevent */
+STOREEVENT, /*!< storeevent */
+READY, /*!< ready */
+FINISHSCROLL /*!< finishscroll */
 };
 
 /**
@@ -92,6 +94,10 @@ public:
 		 * <b>CSXStore::OnRestoreFinished(bool error)</b> for events <b>"TransactionsRestoreFailed"</b> resp <b>"TransactionsRestoreFinished"</b>.
 		 *
 		 * <b>CSXStore::ReceiveTransactionsEnd()</b> for event <b>"TransactionsUpdated"</b>.
+		 *
+		 * <b>CAdObject::triggerGameAutomatorCallback()</b> for event <b>"Object is ready"</b>.
+		 *
+		 * <b>CAdScene::TraverseNodes(bool Update)</b> for event <b>"Scene finished scrolling"</b>.
          *
 	  * This generic constructor is also implicitly called by all other specific ctors.
 	  */
@@ -170,11 +176,12 @@ public:
 
 	/**
 	* Copy constructor to create an element to be passed around in scripts.
+	* Must include repetitions for a 1:1 copy.
 	*/
 	GameAutomatorEvent(const GameAutomatorEvent& orig)
 		: CBScriptable(orig.Game), m_Source(orig.m_Source), m_Type(orig.m_Type), 
 		m_Sentence(orig.m_Sentence), m_TurntoDir(orig.m_TurntoDir), m_X(orig.m_X), m_Y(orig.m_Y),
-		m_Interactive(orig.m_Interactive)
+		m_Interactive(orig.m_Interactive), m_Repetitions(orig.m_Repetitions)
 	{ 
 		m_Name = new AnsiString(orig.m_Name->c_str());
 		if (orig.m_Sentence != NULL)
