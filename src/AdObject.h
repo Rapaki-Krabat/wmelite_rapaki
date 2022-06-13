@@ -27,13 +27,14 @@ THE SOFTWARE.
 #define __WmeAdObject_H__
 
 #include "wmelite_pointers.h"
+#include "AdObjectState.h"
 
 class CAdWaypointGroup;
 class CAdRegion;
 
 #define MAX_NUM_REGIONS 10
 
-class CAdObject : public CBObject
+class CAdObject : public CBObject,C_AdObjectCallbackITF
 {
 public:
 	CPartEmitter* m_PartEmitter;
@@ -71,7 +72,7 @@ public:
 	virtual HRESULT PlayAnim(char* Filename);
 	wl_owning<CBSprite*>      m_AnimSprite;
 	wl_non_owning<CBSprite*>* m_CurrentSprite;
-	TObjectState m_State;
+	C_TObjectState m_State;
 	TObjectState m_NextState;
 	TObjectType m_Type;
 	CAdObject(CBGame* inGame);
@@ -101,6 +102,7 @@ public:
 	HRESULT UpdateSpriteAttachments();
 	HRESULT DisplaySpriteAttachments(bool PreDisplay);	
 	CAdObject* m_RegisterAlias;
+	void triggerGameAutomatorCallback() final;
 private:
 	HRESULT DisplaySpriteAttachment(CAdObject* Attachment);
 	CAdInventory* m_Inventory;

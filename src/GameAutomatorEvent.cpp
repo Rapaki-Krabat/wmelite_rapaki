@@ -32,6 +32,43 @@ THE SOFTWARE.
 #include "GameAutomatorEvent.h"
 
 //////////////////////////////////////////////////////////////////////////
+/**
+* Comparison of two events, excluding the repetition counter.
+*
+*/
+bool operator==(const GameAutomatorEvent& lhs, const GameAutomatorEvent& rhs)
+{
+	// compare fields of primitive datatypes first 
+	if ((lhs.m_Source == rhs.m_Source) && (lhs.m_Type == rhs.m_Type)
+		&& (lhs.m_TurntoDir == rhs.m_TurntoDir) && (lhs.m_X == rhs.m_X)
+		&& (lhs.m_Y == rhs.m_Y) && (lhs.m_Interactive == rhs.m_Interactive)
+		)
+	{
+		// name is mandatory so no nullptr check
+		if (*(lhs.m_Name) == *(rhs.m_Name))
+		{
+			// both sentences NULL --> equal
+			if ((lhs.m_Sentence == NULL) && (rhs.m_Sentence == NULL))
+			{
+				return true;
+			}
+
+			// both not NULL and equal content --> equal
+			if ((lhs.m_Sentence != NULL) && (rhs.m_Sentence != NULL))
+			{
+				if (*(lhs.m_Sentence) == *(rhs.m_Sentence))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	
+	// default case, events not equal
+	return false;
+}
+
+//////////////////////////////////////////////////////////////////////////
 // high level scripting interface
 //////////////////////////////////////////////////////////////////////////
 HRESULT GameAutomatorEvent::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *ThisStack, char *Name)
@@ -141,6 +178,12 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 		case GameAutomatorEventType::STOREEVENT:
 			m_ScValue->SetString("storeevent");
 			break;
+		case GameAutomatorEventType::READY:
+			m_ScValue->SetString("ready");
+			break;
+		case GameAutomatorEventType::FINISHSCROLL:
+			m_ScValue->SetString("finishscroll");
+			break;
 		default:
 			m_ScValue->SetString("ERROR");
 			break;
@@ -238,6 +281,19 @@ CScValue* GameAutomatorEvent::ScGetProperty(char *Name)
 	else if (strcmp(Name, "Interactive") == 0)
 	{
 		m_ScValue->SetBool(m_Interactive);
+		return m_ScValue;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// Repetitions
+	//////////////////////////////////////////////////////////////////////////
+	/**
+	* @brief <b>.Repetitions (R/O)</b>
+	* @param int - Number of repetitions of this event in a row
+	*/
+	else if (strcmp(Name, "Repetitions") == 0)
+	{
+		m_ScValue->SetInt(m_Repetitions);
 		return m_ScValue;
 	}
 

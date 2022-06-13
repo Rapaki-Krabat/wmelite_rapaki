@@ -340,7 +340,7 @@ HRESULT CAdItem::Update()
 	// default: stand animation
 	if(!m_CurrentSprite) m_CurrentSprite = m_Sprite.toNonOwning();
 
-	switch(m_State){
+	switch(m_State.getCurrentState()){
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_PLAYING_ANIM:
 			m_CurrentSprite = m_AnimSprite.toNonOwning();

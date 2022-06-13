@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "GameAutomator.h"
 
-IMPLEMENT_PERSISTENT(GameAutomator, false);
+IMPLEMENT_PERSISTENT(GameAutomator, true);
 
 //////////////////////////////////////////////////////////////////////////
 GameAutomator::GameAutomator(CBGame* inGame) :CBObject(inGame)
@@ -48,6 +48,32 @@ GameAutomator::~GameAutomator()
 {
 	queuedEvents.clear();
 	reportedEvents.clear();
+}
+
+//////////////////////////////////////////////////////////////////////////
+void GameAutomator::AddAutomatorEvent(GameAutomatorEvent* evt) 
+{ 
+	if (m_Enable == true)
+	{
+		// if same event is already the most recent in the queue, just increase the repetition counter
+		if (reportedEvents.size() > 0)
+		{
+			GameAutomatorEvent* lastEvt = reportedEvents.back();
+
+			if (*lastEvt == *evt)
+			{
+				lastEvt->addRepetition();
+				delete(evt);
+				evt = NULL;
+			}
+		}
+
+		// if event has not been deleted, it is not a duplicate and needs to be added
+		if (evt != NULL)
+		{
+			reportedEvents.push_back(evt);
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
