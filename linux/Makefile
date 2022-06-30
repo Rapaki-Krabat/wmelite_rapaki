@@ -34,7 +34,7 @@ BSurface.o BSurfaceSDL.o BSurfaceStorage.o BTransitionMgr.o BViewport.o crc.o Fo
 PartEmitter.o PartForce.o PartParticle.o PathUtil.o PlatformSDL.o ScEngine.o ScScript.o ScStack.o ScValue.o SdlUtil.o StringUtil.o SXArray.o \
 SXDate.o SXFile.o SXMath.o SXMemBuffer.o SxObject.o SXStore.o SXString.o SysClass.o SysClassRegistry.o SysInstance.o tinyxml.o tinyxmlerror.o \
 tinyxmlparser.o UIButton.o UIEdit.o UIEntity.o UIObject.o UIText.o UITiledImage.o UIWindow.o utils.o Vector2.o GameAutomator.o GameAutomatorEvent.o \
-Logger.o SendEmailDummy.o
+Logger.o SendEmailDummy.o LogDebugClient.o
 # VidDataSource.o VidManager.o VidTheoraPlayer.o
 OBJCPP = $(patsubst %,$(ODIR)/%,$(_OBJCPP))
 

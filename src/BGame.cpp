@@ -56,6 +56,10 @@ THE SOFTWARE.
 #   include "WinRTVersionInfo.h"
 #endif
 
+#ifdef ENABLE_DEBUG_DUMP_VARIABLES
+#include "LogDebugClient.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -284,6 +288,9 @@ CBGame::CBGame():CBObject(this)
 
 	m_Automator = new GameAutomator(this);
 	m_Logger = new Logger();
+#ifdef ENABLE_DEBUG_DUMP_VARIABLES
+	m_LogDebugClient = new LogDebugClient(m_Logger);
+#endif
 }
 
 
@@ -332,6 +339,10 @@ CBGame::~CBGame()
 
 	DEBUG_DebugDisable();
 	SAFE_DELETE(m_Logger);
+
+#ifdef ENABLE_DEBUG_DUMP_VARIABLES
+	SAFE_DELETE(m_LogDebugClient);
+#endif
 
 	CBPlatform::OutputDebugString("--- shutting down normally ---\n");
 }
@@ -4721,6 +4732,14 @@ bool CBGame::HandleKeypress(SDL_Event* event)
 	{
 		OnWindowClose();
 		return true;
+	}
+#endif
+
+	// enable event to dump debug info into logfile
+#ifdef ENABLE_DEBUG_DUMP_VARIABLES
+	if (event->type == SDL_KEYDOWN && event->key.keysym.sym == SDLK_F1)
+	{
+		m_ScEngine->DbgSendScripts(m_LogDebugClient);
 	}
 #endif
 
