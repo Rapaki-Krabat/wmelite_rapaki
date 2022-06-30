@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 #include "dcgf.h"
 #include "AdObject.h"
+#include "GameAutomator.h"
 
 IMPLEMENT_PERSISTENT(CAdObject, false);
 
@@ -33,6 +34,8 @@ CAdObject::CAdObject(CBGame* inGame):CBObject(inGame)
 {
 	m_Type = OBJECT_NONE;
 	m_State = m_NextState = STATE_NONE;
+
+	m_State.updateAutomatorCallbackProps(this);
 
 	m_Active = true;
 	m_Drawn = false;
@@ -79,6 +82,8 @@ CAdObject::CAdObject(CBGame* inGame):CBObject(inGame)
 //////////////////////////////////////////////////////////////////////////
 CAdObject::~CAdObject()
 {
+	m_State.updateAutomatorCallbackProps(); // deletes the ptr to this
+
 	m_CurrentSprite = NULL; // reference only, don't delete
 	m_AnimSprite.invalidate();
 	SAFE_DELETE(m_Sentence);
@@ -122,7 +127,10 @@ CAdObject::~CAdObject()
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdObject::PlayAnim(char *Filename)
 {
-	m_AnimSprite.invalidate();
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::OBJECT, GameAutomatorEventType::PLAYANIM, m_Name, Filename));
+    
+       m_AnimSprite.invalidate();
 	m_AnimSprite.replace(new CBSprite(Game, this));
 	if(!m_AnimSprite.isValid())
 	{
@@ -345,7 +353,8 @@ HRESULT CAdObject::ScCallMethod(CScScript* Script, CScStack *Stack, CScStack *Th
 				// hide associated entities
 				((CAdGame*)Game)->m_Scene->HandleItemAssociations(ItemName, false);
 			}
-
+			Game->m_Automator->AddAutomatorEvent(
+				new GameAutomatorEvent(Game, GameAutomatorEventSource::NONE, GameAutomatorEventType::TAKEITEM, ItemName));
 		}
 		else Script->RuntimeError("TakeItem: item name expected");
 
@@ -963,6 +972,23 @@ void CAdObject::Talk(char *Text, char* Sound, DWORD Duration, char *Stances, TTe
 	m_State = STATE_TALKING;
 
 	if(DeleteSound) delete [] Sound;
+
+	GameAutomatorEventSource evtSource;
+	switch (m_Type)
+	{
+	case OBJECT_ENTITY:
+		evtSource = GameAutomatorEventSource::ENTITY;
+		break;
+	case OBJECT_ACTOR:
+		evtSource = GameAutomatorEventSource::ACTOR;
+		break;
+	default:
+		// TODO add more if needed (but not scene!)
+		evtSource = GameAutomatorEventSource::NONE;
+		break;
+	}
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, evtSource, GameAutomatorEventType::TALK, m_Name, Text));
 }
 
 
@@ -1001,7 +1027,7 @@ HRESULT CAdObject::Persist(CBPersistMgr *PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_IgnoreItems));
 	PersistMgr->Transfer(TMEMBER_INT(m_NextState));	
 	PersistMgr->Transfer(TMEMBER(m_Sentence));
-	PersistMgr->Transfer(TMEMBER_INT(m_State));
+	PersistMgr->Transfer(TMEMBER_REF(m_State));
 	PersistMgr->Transfer(TMEMBER(m_AnimSprite));         // owning
 	PersistMgr->Transfer(TMEMBER(m_SceneIndependent));
 	PersistMgr->Transfer(TMEMBER(m_ForcedTalkAnimName));
@@ -1260,4 +1286,12 @@ HRESULT CAdObject::UpdatePartEmitter()
 		m_PartEmitter->m_PosY = m_PosY + (ScaleY / 100.0f) * m_PartOffsetY;
 	}
 	return m_PartEmitter->Update();
+}
+
+//////////////////////////////////////////////////////////////////////////
+void CAdObject::triggerGameAutomatorCallback()
+{
+	Game->m_Automator->AddAutomatorEvent(new GameAutomatorEvent(
+		Game, GameAutomatorEventSource::OBJECT, GameAutomatorEventType::READY, m_Name
+	));
 }

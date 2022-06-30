@@ -738,7 +738,7 @@ HRESULT CScEngine::PauseAll()
 	{
 		if (m_Scripts[i] != m_CurrentScript)
 		{
-			// skip scripts that declared not to be paused
+			// pause scripts that did not declare "not to be paused"
 			if (m_Scripts[i]->m_IgnoreFreeze == false)
 			{
 				m_Scripts[i]->Pause();
@@ -747,7 +747,19 @@ HRESULT CScEngine::PauseAll()
 			{
 				// transition for sleeping scripts from game time to platform time --> make them runnable once
 				// otherwise the mismatch game time / platform time can have funny effects
-				m_Scripts[i]->Run();
+				
+				//Game->LOG(0, "Pause: Running script %s (%s:%s) once, which was in state %s before!",
+				//	m_Scripts[i]->m_Filename,
+				//	((m_Scripts[i]->m_Thread == true) ? ((m_Scripts[i]->m_MethodThread == true) ? "method thread" : "event thread") : "parent script"),
+				//	((m_Scripts[i]->m_Thread == true) || (m_Scripts[i]->m_MethodThread == true)) ? m_Scripts[i]->m_ThreadEvent : "n/a",
+				//	TScriptStateToString(m_Scripts[i]->m_State));
+				
+				// ONLY kick those scripts that are in state SLEEPING!!! 
+				// Running scripts that are in other states will corrupt the scripting engine!
+				if (m_Scripts[i]->m_State == SCRIPT_SLEEPING)
+				{
+					m_Scripts[i]->Run();
+				}
 			}
 		}
 	}
@@ -770,7 +782,19 @@ HRESULT CScEngine::ResumeAll()
 		{
 			// transition for sleeping scripts from platform time to game time --> make them runnable once
 			// otherwise the mismatch game time / platform time can have funny effects
-			m_Scripts[i]->Run();
+
+			//Game->LOG(0, "Resume: Running script %s (%s:%s) once, which was in state %s before!", 
+			//	m_Scripts[i]->m_Filename, 
+			//	((m_Scripts[i]->m_Thread == true) ? ((m_Scripts[i]->m_MethodThread == true) ? "method thread" : "event thread") : "parent script"),
+			//	((m_Scripts[i]->m_Thread == true) || (m_Scripts[i]->m_MethodThread == true)) ? m_Scripts[i]->m_ThreadEvent : "n/a", 
+			//	TScriptStateToString(m_Scripts[i]->m_State));
+
+			// ONLY kick those scripts that are in state SLEEPING!!! 
+			// Running scripts that are in other states will corrupt the scripting engine!
+			if (m_Scripts[i]->m_State == SCRIPT_SLEEPING)
+			{
+				m_Scripts[i]->Run();
+			}
 		}
 	}
 

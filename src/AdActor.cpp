@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "dcgf.h"
 #include "AdActor.h"
 #include <math.h>
-
+#include "GameAutomator.h"
 
 IMPLEMENT_PERSISTENT(CAdActor, false);
 
@@ -497,6 +497,9 @@ void CAdActor::TurnTo(TDirection dir)
 	m_State = delta<0?STATE_TURNING_LEFT:STATE_TURNING_RIGHT;
 
 	m_TempSprite2 = NULL;
+
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::ACTOR, GameAutomatorEventType::TURNTO, m_Name, dir));
 }
 
 
@@ -517,6 +520,8 @@ void CAdActor::GoTo(int X, int Y, TDirection AfterWalkDir)
 
 	m_State = STATE_SEARCHING_PATH;
 
+	Game->m_Automator->AddAutomatorEvent(
+		new GameAutomatorEvent(Game, GameAutomatorEventSource::ACTOR, GameAutomatorEventType::GOTO, m_Name, X, Y));
 }
 
 
@@ -615,7 +620,7 @@ HRESULT CAdActor::Update()
 
 	bool already_moved = false;
 
-	switch(m_State)
+	switch(m_State.getCurrentState())
 	{
 		//////////////////////////////////////////////////////////////////////////
 		case STATE_PLAYING_ANIM:
@@ -1522,6 +1527,8 @@ HRESULT CAdActor::MergeAnims(char* AnimsFilename)
 //////////////////////////////////////////////////////////////////////////
 HRESULT CAdActor::PlayAnim(char* Filename)
 {
+
+
 	// if we have an anim with this name, use it
 	CAdSpriteSet* Anim = GetAnimByName(Filename);
 	if(Anim)

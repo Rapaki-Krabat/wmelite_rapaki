@@ -24,15 +24,16 @@ $(LOCAL_PATH)/$(LIBEFFECTSPRIVATE_PATH)/Common/lib/                \
 $(LOCAL_PATH)/$(LIBECHO_PATH)/include/                             \
 $(LOCAL_PATH)/src/
 
-LOCAL_CFLAGS += -Wcast-align
+LOCAL_CFLAGS += 
 
-LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-write-strings -Wno-conversion-null -DUSE_SDL_MIXER -DFREEIMAGE_LITE_BUILD -DFREEIMAGE_NOT_SO_LITE_BUILD -Wcast-align
+LOCAL_CPPFLAGS += -fexceptions -frtti -Wno-switch -Wno-write-strings -Wno-conversion-null -DUSE_SDL_MIXER -DFREEIMAGE_LITE_BUILD -DFREEIMAGE_NOT_SO_LITE_BUILD
 
 # LOCAL_ARM_MODE := arm
 
 # Add your application source files here...
 LOCAL_SRC_FILES := ./src/android/SDL_android_main.c \
 ./src/android/android.c \
+./src/android/AndroidSendEmail.cpp \
 ./src/utils.cpp \
 ./src/BFileManager.cpp \
 ./src/PlatformSDL.cpp \
@@ -116,6 +117,9 @@ LOCAL_SRC_FILES := ./src/android/SDL_android_main.c \
 ./src/DirectoryOperations.c \
 ./src/FileOperations.c \
 ./src/FontGlyphCache.cpp \
+./src/GameAutomator.cpp \
+./src/GameAutomatorEvent.cpp \
+./src/Logger.cpp \
 ./src/main.cpp \
 ./src/MathUtil.cpp \
 ./src/Matrix4.cpp \

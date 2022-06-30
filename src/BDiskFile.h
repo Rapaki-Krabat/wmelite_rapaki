@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "FileOperations.h"
 #include <memory>
 
+#include <memory>
+
 class CBDiskFile : public CBFile  
 {
 public:
