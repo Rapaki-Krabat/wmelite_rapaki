@@ -66,7 +66,8 @@ THE SOFTWARE.
 #	pragma warning (disable: 4200) // nonstandard extension used : zero-sized array in struct/union
 #endif
 
-
+// enable only if you want to dump stuff during a running game
+#define ENABLE_DEBUG_DUMP_VARIABLES
 
 #include "PlatformSDL.h"
 

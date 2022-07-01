@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "SDL.h"
 #include "GameAutomator.h"
 #include "Logger.h"
+#include "LogDebugClient.h"
 
 typedef void (*ENGINE_LOG_CALLBACK)(char* Text, HRESULT Result, void* Data);
 
@@ -394,6 +395,7 @@ public:
 
 private:
 	Logger* m_Logger;
+	LogDebugClient* m_LogDebugClient;
 };
 
 #endif
