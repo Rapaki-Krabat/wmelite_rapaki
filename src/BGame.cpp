@@ -5765,6 +5765,12 @@ void CBGame::AutoSaveOnExit()
 		// points to the autosaved game
 		m_Registry->SaveValues();
 	}
+
+    // dump on going-to-background for touch platforms
+#ifdef ENABLE_DEBUG_DUMP_VARIABLES
+    m_ScEngine->DbgSendScripts(m_LogDebugClient);
+#endif
+
 }
 
 //////////////////////////////////////////////////////////////////////////
