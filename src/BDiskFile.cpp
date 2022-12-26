@@ -93,7 +93,7 @@ HRESULT CBDiskFile::Open(const char* Filename)
 
 			// Game->LOG(0, "File %s is compressed, size=%d!", Filename, CompSize);
 
-			std::unique_ptr<BYTE> CompBuffer{ new BYTE[CompSize] };
+			std::unique_ptr<BYTE[]> CompBuffer{ new BYTE[CompSize] };
 			if(!CompBuffer)
 			{
 				Game->LOG(0, "Error allocating memory for compressed file '%s'", Filename);
