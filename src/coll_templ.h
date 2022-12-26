@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include <vector>
 #include "BPersistMgr.h"
 
+#include <type_traits>
+
 /////////////////////////////////////////////////////////////////////////////
 // CBArray<TYPE, ARG_TYPE>
 /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +49,12 @@ public:
 // Operations
 	// Clean up
 	void RemoveAll();
-	HRESULT Persist(CBPersistMgr *PersistMgr);
+	
+	template<class Q = TYPE>
+	typename std::enable_if<!std::is_same<Q, wl_owning<CBSprite*>*>::value, HRESULT>::type Persist(CBPersistMgr *PersistMgr);
+	
+	template<class Q = TYPE>
+	typename std::enable_if<std::is_same<Q, wl_owning<CBSprite*>*>::value, HRESULT>::type Persist(CBPersistMgr *PersistMgr);
 
 	// Accessing elements
 	TYPE GetAt(int nIndex) const;
@@ -176,7 +183,7 @@ void CBArray<TYPE, ARG_TYPE>::RemoveAt(int nIndex, int nCount)
 
 /////////////////////////////////////////////////////////////////////////////
 template<class TYPE, class ARG_TYPE>
-HRESULT CBArray<TYPE, ARG_TYPE>::Persist(CBPersistMgr *PersistMgr)
+template<class Q> typename std::enable_if<!std::is_same<Q, wl_owning<CBSprite*>*>::value, HRESULT>::type CBArray<TYPE, ARG_TYPE>::Persist(CBPersistMgr *PersistMgr)
 {
 	int i,j;
 	if(PersistMgr->m_Saving){
@@ -199,5 +206,29 @@ HRESULT CBArray<TYPE, ARG_TYPE>::Persist(CBPersistMgr *PersistMgr)
 	return S_OK;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+template<class TYPE, class ARG_TYPE>
+template<class Q> typename std::enable_if<std::is_same<Q, wl_owning<CBSprite*>*>::value, HRESULT>::type CBArray<TYPE, ARG_TYPE>::Persist(CBPersistMgr *PersistMgr)
+{
+	int i,j;
+	if(PersistMgr->m_Saving){
+		j = GetSize();
+		PersistMgr->Transfer("ArraySize", &j);
+		for(i=0; i<j; i++){
+			wl_owning<CBSprite*>* obj = GetAt(i);
+			PersistMgr->Transfer("", obj->getPersistentObjectAddress());
+		}
+	}
+	else{
+		SetSize(0, -1);
+		PersistMgr->Transfer("ArraySize", &j);
+		for(i=0; i<j; i++){
+			wl_owning<CBSprite*>* obj = new wl_owning<CBSprite*>();
+			PersistMgr->Transfer("", obj->getPersistentObjectAddress());
+			Add(obj);
+		}
+	}
+	return S_OK;
+}
 
 #endif // COLL_TEMPL_H

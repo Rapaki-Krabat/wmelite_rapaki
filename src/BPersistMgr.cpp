@@ -251,6 +251,7 @@ HRESULT CBPersistMgr::InitLoad(char* Filename)
 			}
 			
 			// if save is older than the minimal version we support
+			// compiler warning occurs as long as defines are set to "0" (cannot be smaller than 0)
 			if( m_SavedVerMajor <  SAVEGAME_VER_MAJOR ||
 				(m_SavedVerMajor == SAVEGAME_VER_MAJOR && m_SavedVerMinor <  SAVEGAME_VER_MINOR) ||
 				(m_SavedVerMajor == SAVEGAME_VER_MAJOR && m_SavedVerMinor == SAVEGAME_VER_MINOR && m_SavedVerBuild < SAVEGAME_VER_BUILD)
