@@ -51,6 +51,8 @@ THE SOFTWARE.
 * 1.0.1: SxStore added
 * 1.0.2: m_VideoSkipButton added
 * 1.2.0: m_MouseEntryLeaveTouchQuirk added
+*
+* grep sourcecode for "CheckVersion" to find where the versions are checked
 */
 
 #define COMPRESSED_FILE_MAGIC 0x504D435A // ZCMP

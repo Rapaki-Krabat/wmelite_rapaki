@@ -482,6 +482,56 @@ HRESULT CBPersistMgr::Transfer(const char* Name, wl_owning<CBSprite*>* Val)
 }
 
 //////////////////////////////////////////////////////////////////////////
+// wl_non_owning<CBSprite*>
+HRESULT CBPersistMgr::Transfer(const char* Name, wl_non_owning<CBSprite*>** Val)
+{
+	// this object needs special handling if it is NULL
+	if (m_Saving)
+	{
+		// always transfer *something* (IDs) to the savegame
+		
+		// non-owning could still point to a (now empty) object, so check this also
+		if ((*Val != NULL) && ((*Val)->isValid()))
+		{
+			CBSprite **SaveVal = (*Val)->getPersistentObjectAddress();
+			Game->LOG(0, "wl_non_owning %s has address=%08X.", Name, (unsigned long long) (*SaveVal));
+			return Transfer("Object", SaveVal);
+		}
+		else
+		{
+			void* tmp = NULL;
+			Game->LOG(0, "wl_non_owning %s is NULL.", Name);
+			return Transfer("Object", &tmp);
+		}
+	}
+	else
+	{
+		void* LoadVal;
+		Transfer("Object", &LoadVal);
+		
+		// if there was a valid ptr to an owning object, do sth.
+		if (LoadVal != NULL)
+		{
+			// TBD how to find the owning object? create a memleak here.
+			Game->LOG(0, "wl_non_owning %s setting to address=%08X.", Name, (unsigned long long) LoadVal);
+
+			wl_owning<CBSprite*>* leak = new wl_owning<CBSprite*>();
+			CBSprite **objPtr = leak->getPersistentObjectAddress();
+			*objPtr = (CBSprite*) LoadVal;
+			Game->LOG(0, "wl_non_owning %s resulting address=%08X.", Name, (unsigned long long) *(leak->getPersistentObjectAddress()));
+			*Val = leak->toNonOwning();
+		}
+		else
+		{
+			Game->LOG(0, "wl_non_owning %s setting to NULL.", Name);
+			*Val = NULL;	
+		}
+	}
+	
+	return S_OK;
+}
+
+//////////////////////////////////////////////////////////////////////////
 // C_TObjectState&
 HRESULT CBPersistMgr::Transfer(const char* Name, C_TObjectState& Val)
 {
