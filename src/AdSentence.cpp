@@ -211,7 +211,7 @@ HRESULT CAdSentence::Persist(CBPersistMgr* PersistMgr){
 
 	PersistMgr->Transfer(TMEMBER_INT(m_Align));
 	PersistMgr->Transfer(TMEMBER(m_CurrentStance));
-	PersistMgr->Transfer(TMEMBER(m_CurrentSprite));
+	PersistMgr->Transfer(TMEMBER(m_CurrentSprite)); // wl_non_owning
 	PersistMgr->Transfer(TMEMBER(m_CurrentSkelAnim));
 	PersistMgr->Transfer(TMEMBER(m_Duration));
 	PersistMgr->Transfer(TMEMBER(m_Font));

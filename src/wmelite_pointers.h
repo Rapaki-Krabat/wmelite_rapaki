@@ -83,6 +83,9 @@ public:
 
 	/**
 	* Return a non-owning pointer;
+	*
+	* TDB: This probably works because the derived class does not add any variables
+	* and no overloaded functions. But it is dirty!
 	*/
 	wl_non_owning<T>* toNonOwning() { return static_cast<wl_non_owning<T>*> (this); };
 
