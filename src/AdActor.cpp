@@ -1416,7 +1416,7 @@ HRESULT CAdActor::Persist(CBPersistMgr *PersistMgr)
 	PersistMgr->Transfer(TMEMBER(m_TurnRightSprite));
 	PersistMgr->Transfer(TMEMBER(m_WalkSprite));
 
-	PersistMgr->Transfer(TMEMBER(m_AnimSprite2));
+	PersistMgr->Transfer(TMEMBER(m_AnimSprite2)); // wl_non_owning
 	PersistMgr->Transfer(TMEMBER(m_TalkAnimName));
 	PersistMgr->Transfer(TMEMBER(m_IdleAnimName));
 	PersistMgr->Transfer(TMEMBER(m_WalkAnimName));

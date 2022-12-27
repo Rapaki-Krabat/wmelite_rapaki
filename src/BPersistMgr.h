@@ -75,6 +75,7 @@ public:
 	HRESULT Transfer(const char* Name, Vector2* Val);
 	HRESULT Transfer(const char* Name, AnsiStringArray& Val);
 	HRESULT Transfer(const char* Name, wl_owning<CBSprite*>* Val);
+	HRESULT Transfer(const char* Name, wl_non_owning<CBSprite*>** Val);
 	HRESULT Transfer(const char* Name, C_TObjectState& Val);
 	CBPersistMgr(CBGame* inGame=NULL);
 	virtual ~CBPersistMgr();
