@@ -1,7 +1,7 @@
 
 #include "WinRTVersionInfo.h"
 
-#include <cvt/wstring>
+// #include <cvt/wstring>
 #include <codecvt>
 
 #include <string.h>
@@ -11,7 +11,8 @@ extern "C" void WinRTVersionInfo(char *info, int maxlen)
 	using namespace Windows::System::Profile;
 
 	size_t currLen = 0;
-	stdext::cvt::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
+	// stdext::cvt::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
 
 	AnalyticsVersionInfo ^ versionInfo = AnalyticsInfo::VersionInfo;
 
@@ -57,7 +58,8 @@ extern "C" void WinRTAppInfo(char *info, int maxlen)
 	using namespace Windows::ApplicationModel;
 
 	size_t currLen = 0;
-	stdext::cvt::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
+	// stdext::cvt::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> convert;
 
 	Package^ package = Windows::ApplicationModel::Package::Current;
 	PackageId^ packageId = package->Id;
