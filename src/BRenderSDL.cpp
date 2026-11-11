@@ -149,6 +149,24 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 			current = &bestResolution;
 		}
 	}	
+
+#ifdef __IPHONEOS__
+	// iOS: since iPadOS 27 the scene may be portrait or resized even for a landscape
+	// game, so do not insist on a landscape mode - start with the desktop mode (which
+	// follows the current scene orientation). The real window size is applied after
+	// the window has been created, later changes arrive as window resize events.
+	{
+		SDL_DisplayMode desktopMode;
+		if (SDL_GetDesktopDisplayMode(deviceNumber, &desktopMode) == 0)
+		{
+			bestResolution     = desktopMode;
+			current            = &bestResolution;
+			m_NewLogicalWidth  = desktopMode.w;
+			m_NewLogicalHeight = desktopMode.h;
+			Game->LOG(0, "iOS desktop mode x=%d y=%d.", desktopMode.w, desktopMode.h);
+		}
+	}
+#endif
 #else
 	// windows/linux: search a resolution with same screen width/height ratio
 	// inspired by Jan Kavan (wmelite julia branch)
@@ -274,6 +292,12 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 	// mobile platforms would want the native/desktop/onlyonesupported resolution
 	if (desktopModeRequested == true) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
+#ifdef __IPHONEOS__
+	// allow all orientations, SDL restricts them to what Info.plist declares for the
+	// device (iPhone: landscape, iPad: all four - required for iPadOS 27)
+	SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight Portrait PortraitUpsideDown");
+#endif
+
 	m_Win = SDL_CreateWindow("WME Lite",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
@@ -285,7 +309,28 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
 		return E_FAIL;
 	}
 
+#ifdef __IPHONEOS__
+	{
+		// use the real window (scene) size, it may differ from the screen mode
+		int winW = 0;
+		int winH = 0;
+		SDL_GetWindowSize(m_Win, &winW, &winH);
+		if ((winW > 0) && (winH > 0))
+		{
+			m_NewLogicalWidth  = winW;
+			m_NewLogicalHeight = winH;
+		}
+		Game->LOG(0, "iOS window size x=%d y=%d.", winW, winH);
+	}
+
+	// setting a mode with the other orientation fails on iOS anyway
+	if ((current != NULL) && ((current->w > current->h) == (m_NewLogicalWidth > m_NewLogicalHeight)))
+	{
+		SDL_SetWindowDisplayMode(m_Win, current);
+	}
+#else
 	SDL_SetWindowDisplayMode(m_Win, current);	
+#endif
 
 	if (m_DebugAlwaysShowPlatformCursor == false)
 	{
@@ -353,7 +398,7 @@ HRESULT CBRenderSDL::InitRenderer(int width, int height, bool windowed, float up
         // info.info.uikit.window;
         // Game->LOG(0, "get wm info success!\n");
         
-        IOS_GetSafeLayoutLogicalOffsets(&wmInfo, m_NewLogicalWidth, m_NewLogicalHeight, &m_LogicalBorderOffsetLeft, &m_LogicalBorderOffsetTop, &m_LogicalBorderOffsetRight, &m_LogicalBorderOffsetBottom);
+        // (safe area offsets are now queried in UpdateWindowScaling(), also after rotation/resize)
     }
     
     IOS_SetWindowForMailDialogue(m_Win);
@@ -454,6 +499,18 @@ void CBRenderSDL::WindowResized(int x, int y)
 void CBRenderSDL::UpdateWindowScaling()
 {
 #ifdef __IPHONEOS__
+    // safe layout area depends on orientation and window size -> query it for the new size
+    {
+        SDL_SysWMinfo wmInfo;
+        SDL_VERSION(&wmInfo.version);
+
+        m_LogicalBorderOffsetLeft = m_LogicalBorderOffsetTop = m_LogicalBorderOffsetRight = m_LogicalBorderOffsetBottom = 0;
+
+        if (m_Win && SDL_GetWindowWMInfo(m_Win, &wmInfo)) {
+            IOS_GetSafeLayoutLogicalOffsets(&wmInfo, m_NewLogicalWidth, m_NewLogicalHeight, &m_LogicalBorderOffsetLeft, &m_LogicalBorderOffsetTop, &m_LogicalBorderOffsetRight, &m_LogicalBorderOffsetBottom);
+        }
+    }
+
     // if a high DPI window was created, we need to query sites in pixels from the current renderer
 	// make sure that this function is not called when the renderer is set for offscreen rendering
     int rendererX;

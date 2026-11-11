@@ -593,10 +593,9 @@ void CBPlatform::HandleEvent(SDL_Event* event)
 			Game->LOG(0, "Window resize event received: x=%d y=%d.", event->window.data1, event->window.data2);
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
 			Game->LOG(0, "Window sizechange event received: x=%d y=%d.", event->window.data1, event->window.data2);
-			// exclude ios for the moment because of the difficulty to query the renderer's dimensions
-#if !defined(__IPHONEOS__)
+			// iOS too: rotation and iPadOS 27 scene resizing must update the letterboxing
+			// (the renderer's pixel size is queried in UpdateWindowScaling())
             Game->m_Renderer->WindowResized(event->window.data1, event->window.data2);
-#endif
             break;
 		}
 		break;
