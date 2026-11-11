@@ -535,6 +535,19 @@ void CBRenderSDL::UpdateWindowScaling()
 	m_PhysicalHeight = m_NewLogicalHeight;
 #endif
 
+	// transient empty sizes (scene transitions, minimized windows): keep the
+	// previous scaling instead of dividing by zero
+	if ((m_NewLogicalWidth <= 0) || (m_NewLogicalHeight <= 0) || (m_PhysicalWidth <= 0) || (m_PhysicalHeight <= 0) || (m_Width <= 0) || (m_Height <= 0))
+	{
+		Game->LOG(0, "UpdateWindowScaling: ignoring invalid size logical %dx%d physical %dx%d.", m_NewLogicalWidth, m_NewLogicalHeight, m_PhysicalWidth, m_PhysicalHeight);
+		if ((m_LogicalWidth > 0) && (m_LogicalHeight > 0))
+		{
+			m_NewLogicalWidth  = m_LogicalWidth;
+			m_NewLogicalHeight = m_LogicalHeight;
+		}
+		return;
+	}
+
 	m_LogicalWidth  = m_NewLogicalWidth;
 	m_LogicalHeight = m_NewLogicalHeight;
 
@@ -651,11 +664,15 @@ void CBRenderSDL::UpdateWindowScaling()
 	Game->LOG(0, "Update screen: Physical BorderLeft=%d BorderRight=%d BorderTop=%d BorderBottom=%d",
 			m_PhysicalBorderLeft, m_PhysicalBorderRight, m_PhysicalBorderTop, m_PhysicalBorderBottom);
 
-	// in case of pixelperfect rendering, the viewport coords need to be updated
+	// in case of pixelperfect rendering, the viewport coords need to be updated;
+	// the target is the area inside the borders (incl. safe area offsets),
+	// otherwise the picture is pushed off-screen / cropped at the bottom and right
 	m_PixelPerfectTargetRect.x = m_PhysicalBorderLeft;
 	m_PixelPerfectTargetRect.y = m_PhysicalBorderTop;
-	m_PixelPerfectTargetRect.w = m_PhysicalWidth;
-	m_PixelPerfectTargetRect.h = m_PhysicalHeight;
+	m_PixelPerfectTargetRect.w = m_PhysicalWidth  - m_PhysicalBorderLeft - m_PhysicalBorderRight;
+	m_PixelPerfectTargetRect.h = m_PhysicalHeight - m_PhysicalBorderTop  - m_PhysicalBorderBottom;
+	if (m_PixelPerfectTargetRect.w < 1) m_PixelPerfectTargetRect.w = 1;
+	if (m_PixelPerfectTargetRect.h < 1) m_PixelPerfectTargetRect.h = 1;
 }
 
 /////////////////////////////////////////////////////
@@ -1115,19 +1132,22 @@ float CBRenderSDL::GetAlignedUpscalingRatio(float ratio, float stepping)
 {
 	float newRatio = 1.0;
 
-	// sort out unreasonable values
-	if (stepping < 0.001)
+	// sort out unreasonable values (zero/negative sizes, inf, NaN)
+	if (!isfinite(ratio) || (ratio <= 0.0f))
+	{
+		return 1.0f;
+	}
+	if (!isfinite(stepping) || (stepping < 0.001))
 	{
 		return ratio;
 	}
 
-	while ((newRatio + stepping) < ratio)
+	// bounded: with float accumulation a huge ratio would never be reached
+	int guard = 0;
+	while (((newRatio + stepping) < ratio) && (guard++ < 100000))
 	{
 		// only increase newRatio until it is at most equal to the old one
-		if ((newRatio + stepping) <= ratio)
-		{
-			newRatio += stepping;
-		}
+		newRatio += stepping;
 	}
 
 	return newRatio;
@@ -1138,13 +1158,18 @@ float CBRenderSDL::GetAlignedDownscalingRatio(float ratio, float stepping)
 {
 	float newRatio = 1.0;
 
-	// sort out unreasonable values
-	if (stepping < 0.001)
+	// sort out unreasonable values (zero/negative sizes, inf, NaN)
+	if (!isfinite(ratio) || (ratio <= 0.0f))
+	{
+		return 1.0f;
+	}
+	if (!isfinite(stepping) || (stepping < 0.001))
 	{
 		return ratio;
 	}
 
-	while ((newRatio - stepping) > ratio)
+	int guard = 0;
+	while (((newRatio - stepping) > ratio) && (guard++ < 100000))
 	{
 		// decrease until newRatio is equal or lower than ratio
 		newRatio -= stepping;

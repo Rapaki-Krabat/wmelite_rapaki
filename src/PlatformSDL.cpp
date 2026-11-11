@@ -342,6 +342,15 @@ int CBPlatform::MessageLoop()
 			if(!Game->m_SuspendedRendering) Game->m_Renderer->Flip();
 			if(Game->m_Loading) Game->LoadGame(Game->m_ScheduledLoadSlot);
 		}
+#ifdef __IPHONEOS__
+		else
+		{
+			// inactive (no focus / in background): don't poll events in a busy loop
+			SDL_UnlockMutex(autoSaveOnExitMutex);
+			SDL_Delay(10);
+			SDL_LockMutex(autoSaveOnExitMutex);
+		}
+#endif
 
 		SDL_UnlockMutex(autoSaveOnExitMutex);
 
